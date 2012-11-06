@@ -5,15 +5,14 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Slider;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.*;
 import javafx.stage.FileChooser;
@@ -24,39 +23,47 @@ import javafx.stage.Stage;
  *
  * @author psupaong
  */
+
+//Problems:
+//- new line recognition
+//- page spliting? (into arrays?)
+//- implement touch
+
 public class Project_1st_attempt extends Application {
+
+    private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+    private Text text = new Text();
 
     @Override
     public void start(Stage primaryStage) {
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        final Slider page_slider = new Slider(0, 1, 1);
-        File file = init_file_chooser(primaryStage);
+        setText(primaryStage);
 
-        //create text with chosen file
-        Text text = new Text();
-        text.setFont(new Font(18));
-        text.setWrappingWidth(screenBounds.getWidth() - screenBounds.getWidth() * 0.35);
-        text.setTextAlignment(TextAlignment.JUSTIFY);
-
-        text.setText(readFile(file));
-        BorderPane root = new BorderPane();
-
-        StackPane content = new StackPane();
-        content.getChildren().add(text);
-
-        root.setCenter(content);
-        root.setBottom(page_slider);
-
+        StackPane root = new StackPane();
+        root.setAlignment(Pos.TOP_CENTER);
+        root.getChildren().add(text);
         //create scene in full screen
-        Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
 
+        Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
+        setSceneEvents(scene);
         primaryStage.setTitle("Flow Reader");
-        primaryStage.setFullScreen(true);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    //http://java-buddy.blogspot.co.uk/2012/05/read-text-file-with-javafx-filechooser.html
 
-    private File init_file_chooser(Stage primaryStage) {
+    private void setText(Stage primaryStage) {
+        //http://docs.oracle.com/javafx/2/text/jfxpub-text.htm
+        //create text with chosen file
+        text.setFont(new Font("Verdana", 16));
+        text.setEffect(null);
+        text.setFontSmoothingType(FontSmoothingType.LCD);
+        text.setWrappingWidth(screenBounds.getWidth() - screenBounds.getWidth() * 0.35);
+        text.setTextAlignment(TextAlignment.JUSTIFY);
+        text.setText(readFile(startFileChooser(primaryStage)));
+
+    }
+
+    private File startFileChooser(Stage primaryStage) {
 
         //start file chooser
         File f = new File(System.getProperty("user.dir"));
@@ -70,12 +77,11 @@ public class Project_1st_attempt extends Application {
 
         //Show save file dialog
         File file = fileChooser.showOpenDialog(primaryStage);
-
         return file;
+
     }
 
     private String readFile(File file) {
-        //got from http://java-buddy.blogspot.co.uk/2012/05/read-text-file-with-javafx-filechooser.html
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
 
@@ -101,6 +107,48 @@ public class Project_1st_attempt extends Application {
         }
 
         return stringBuffer.toString();
+    }
+
+    private void setSceneEvents(Scene scene) {
+        //make text scale accordingly when resized
+        //http://www.drdobbs.com/jvm/javafx-20-binding/231903245
+        scene.widthProperty().addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                        Double width = (Double) newValue;
+                        text.setWrappingWidth(width * 0.65);
+                    }
+                });
+
+        scene.setOnKeyPressed(
+                new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(final KeyEvent event) {
+                        if (event.getCode().toString().equals("HOME")) {
+                            text.setTranslateY(0.0);
+                        }
+                        if (event.getCode().toString().equals("END")) {
+                            System.out.println("END PRESSED");
+                        }
+                        event.consume();
+                    }
+                });
+
+        scene.setOnScroll(
+                new EventHandler<ScrollEvent>() {
+                    @Override
+                    public synchronized void handle(ScrollEvent event) {
+                        System.out.println("text.getTranslateY(): " + text.getTranslateY());
+                        if (text.getTranslateY() == 0.0 && event.getDeltaY() > 0) {
+
+                            System.out.println("Top of file!");
+                        } else {
+                            text.setTranslateY(text.getTranslateY() + event.getDeltaY());
+                        }
+                        event.consume();
+                    }
+                });
     }
 
     /**
