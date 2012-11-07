@@ -25,7 +25,6 @@ import javafx.stage.Stage;
  */
 
 //Problems:
-//- new line recognition
 //- page spliting? (into arrays?)
 //- implement touch
 
@@ -49,7 +48,6 @@ public class Project_1st_attempt extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    //http://java-buddy.blogspot.co.uk/2012/05/read-text-file-with-javafx-filechooser.html
 
     private void setText(Stage primaryStage) {
         //http://docs.oracle.com/javafx/2/text/jfxpub-text.htm
@@ -80,7 +78,8 @@ public class Project_1st_attempt extends Application {
         return file;
 
     }
-
+    
+    //http://java-buddy.blogspot.co.uk/2012/05/read-text-file-with-javafx-filechooser.html
     private String readFile(File file) {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
@@ -91,7 +90,7 @@ public class Project_1st_attempt extends Application {
 
             String text;
             while ((text = bufferedReader.readLine()) != null) {
-                stringBuffer.append(text);
+                stringBuffer.append(text+"\n");
             }
 
         } catch (FileNotFoundException ex) {
@@ -138,7 +137,7 @@ public class Project_1st_attempt extends Application {
         scene.setOnScroll(
                 new EventHandler<ScrollEvent>() {
                     @Override
-                    public synchronized void handle(ScrollEvent event) {
+                    public void handle(ScrollEvent event) {
                         System.out.println("text.getTranslateY(): " + text.getTranslateY());
                         if (text.getTranslateY() == 0.0 && event.getDeltaY() > 0) {
 
