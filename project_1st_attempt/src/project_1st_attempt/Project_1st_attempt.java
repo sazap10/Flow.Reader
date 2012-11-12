@@ -11,16 +11,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
@@ -54,7 +50,7 @@ public class Project_1st_attempt extends Application {
     Label page_number = new Label();
     int array_size = 0;
     int MAX_LINES_PER_PAGE = 28;
-    int MAX_CHARACTERS_PER_LINE = 75;
+    int MAX_CHARACTERS_PER_LINE = 85;
 
     @Override
     public void start(Stage primaryStage) {
@@ -71,8 +67,6 @@ public class Project_1st_attempt extends Application {
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.getChildren().add(text);
 
-        //stackPane.setAlignment(Pos.TOP_CENTER);
-
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(page_number);
         borderPane.setCenter(anchorPane);
@@ -88,13 +82,14 @@ public class Project_1st_attempt extends Application {
 
     }
 
+//http://docs.oracle.com/javafx/2/text/jfxpub-text.htm
     private void setText(Stage primaryStage) {
-        //http://docs.oracle.com/javafx/2/text/jfxpub-text.htm
+
         //create text with chosen file
         text.setFont(Font.font(null, 20));
 
         text.setX(screenBounds.getWidth() * 0.35 / 2);
-        //text.setY(200);
+        text.setY(scrnsize.height * 0.04444);
         //text.setEffect(null);
         text.setTextAlignment(TextAlignment.JUSTIFY);
         //text.setWrappingWidth(Text_Area.getWidth()-text.getFont().getSize()*10);
@@ -145,45 +140,63 @@ public class Project_1st_attempt extends Application {
             }
 
             FileWriter fw = new FileWriter(new_file.getAbsoluteFile());
-            PrintWriter pw = new PrintWriter(fw);
-
-            while ((temp_int = bufferedReader.read()) != -1) {
-                temp_text = (char) temp_int;
-                if (temp_text == '\n') {
-                    count_line++;
-                    pw.write(String.valueOf(temp_text));
-                    count_char = 0;
-                } else {
-                    if (count_char < MAX_CHARACTERS_PER_LINE) {
-                        if (temp_text == ' ') {
+            try (PrintWriter pw = new PrintWriter(fw)) {
+                while ((temp_int = bufferedReader.read()) != -1) {
+                    temp_text = (char) temp_int;
+                    if (temp_text == '\n') {
+                        count_line++;
+                        pw.write(String.valueOf(temp_text));
+                        count_char = 0;
+                    } else {
+                        if (count_char < MAX_CHARACTERS_PER_LINE) {
                             count_char++;
                             pw.write(String.valueOf(temp_text));
                         } else {
-                            count_char++;
-                            pw.write(String.valueOf(temp_text));
+                            count_line++;
+                            count_char = 0;
+
+                            temp_int = bufferedReader.read();
+                            if (temp_int != -1) {
+                                //32 is space
+                                if (temp_int != 32) {
+                                    if (temp_text != ' ') {
+                                        pw.write("–");
+                                        pw.println();
+                                        pw.write(String.valueOf(temp_text));
+                                        temp_text = (char) temp_int;
+                                        pw.write(String.valueOf(temp_text));
+                                    } else {
+                                        pw.println();
+                                        temp_text = (char) temp_int;
+                                        pw.write(String.valueOf(temp_text));
+                                    }
+                                } else {
+                                    pw.write(String.valueOf(temp_text));
+                                    pw.println();
+                                }
+                            } else {
+                                break;
+                            }
                         }
-                    } else {
-                        count_line++;
-                        count_char = 0;
-                        pw.println();
-                        pw.write(String.valueOf(temp_text));
                     }
                 }
+                pw.write(content);
             }
-            pw.write(content);
-            pw.close();
-            //bw.write(content);
-            //bw.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Project_1st_attempt.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Project_1st_attempt.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Project_1st_attempt.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Project_1st_attempt.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 bufferedReader.close();
+
+
             } catch (IOException ex) {
-                Logger.getLogger(Project_1st_attempt.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Project_1st_attempt.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
         return new_file;
@@ -200,11 +213,11 @@ public class Project_1st_attempt extends Application {
             int count_line = 0;
             while ((temp_text = bufferedReader.readLine()) != null) {
 
-                if (count_line < MAX_LINES_PER_PAGE-1) {
+                if (count_line < MAX_LINES_PER_PAGE - 1) {
                     stringBuffer.append(temp_text).append("\n");
                     count_line++;
                 } else {
-                                        stringBuffer.append(temp_text).append("\n");
+                    stringBuffer.append(temp_text).append("\n");
                     array.add(stringBuffer.toString());
                     stringBuffer = new StringBuilder();
                     count_line = 0;
@@ -212,15 +225,22 @@ public class Project_1st_attempt extends Application {
             }
             array.add(stringBuffer.toString());
 
+
+
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Project_1st_attempt.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Project_1st_attempt.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Project_1st_attempt.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Project_1st_attempt.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 bufferedReader.close();
+
+
             } catch (IOException ex) {
-                Logger.getLogger(Project_1st_attempt.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Project_1st_attempt.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -238,6 +258,9 @@ public class Project_1st_attempt extends Application {
                     }
                 });
 
+        //handles UP, DOWN, LEFT, RIGHT key presses
+        //LEFT and RIGHT turn page to the left or right respectively
+        //UP takes you to the beginning and DOWN takes you to the end
         scene.setOnKeyPressed(
                 new EventHandler<KeyEvent>() {
                     @Override
@@ -270,6 +293,7 @@ public class Project_1st_attempt extends Application {
                     }
                 });
 
+        //handles mouse scrolling
         scene.setOnScroll(
                 new EventHandler<ScrollEvent>() {
                     @Override
