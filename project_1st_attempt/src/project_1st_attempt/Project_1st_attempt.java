@@ -124,7 +124,7 @@ public class Project_1st_attempt extends Application {
     private File parsefile(File file) {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
-        File new_file = new File("edited_" + file.getName());
+        File new_file = new File("edited_" + file.getName());//why are u creating a new file?
         try {
 
             bufferedReader = new BufferedReader(new FileReader(file));
