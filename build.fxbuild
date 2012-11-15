@@ -1,0 +1,2 @@
+jfx.build.stagingdir = ${workspace}/Flow.Reader/build
+jfx.build.apptitle = Flow.Reader
