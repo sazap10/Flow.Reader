@@ -160,7 +160,7 @@ public class Project_1st_attempt extends Application {
                                 //32 is space
                                 if (temp_int != 32) {
                                     if (temp_text != ' ') {
-                                        pw.write("–");
+                                        pw.write("–");//whats this for?
                                         pw.println();
                                         pw.write(String.valueOf(temp_text));
                                         temp_text = (char) temp_int;
@@ -277,13 +277,13 @@ public class Project_1st_attempt extends Application {
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
                             if (event.getCode().toString().equals("RIGHT")) {
-                                text.setText(array.get(current_page + 1));
-                                current_page++;
+                                text.setText(array.get(current_page==(array.size() - 1)?(array.size() - 1):++current_page ));
+                                //current_page++;
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
                             if (event.getCode().toString().equals("LEFT")) {
-                                text.setText(array.get(current_page - 1));
-                                current_page--;
+                                text.setText(array.get(current_page==0?0:--current_page ));
+                                //current_page--;
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
                             event.consume();
@@ -300,14 +300,14 @@ public class Project_1st_attempt extends Application {
                     public void handle(ScrollEvent event) {
                         if ((event.getDeltaY() > 0)) {
                             if ((current_page > 0)) {
-                                text.setText(array.get(current_page - 1));
-                                current_page--;
+                                text.setText(array.get(--current_page ));
+                                //current_page--;
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
                         } else {
                             if (current_page < array.size() - 1) {
-                                text.setText(array.get(current_page + 1));
-                                current_page++;
+                                text.setText(array.get(++current_page));
+                                //current_page++;
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
                         }
