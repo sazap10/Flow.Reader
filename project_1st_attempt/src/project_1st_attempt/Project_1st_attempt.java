@@ -44,7 +44,7 @@ public class Project_1st_attempt extends Application {
     private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     // Get the current screen size
     Toolkit toolkit = Toolkit.getDefaultToolkit();
-    Dimension scrnsize = toolkit.getScreenSize();
+    //Dimension scrnsize = toolkit.getScreenSize();
     private Text text = new Text();
     ArrayList<String> array = new ArrayList<>();
     int current_page = 0;
@@ -55,8 +55,8 @@ public class Project_1st_attempt extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
-        System.out.println("Screen size : " + scrnsize);
+        setPageProperties(screenBounds.getWidth(), screenBounds.getHeight());
+        
 
         text = TextBuilder.create().text("\nHello there, you have not selected a file to read! Why not?").build();
         setText(primaryStage);
@@ -83,17 +83,22 @@ public class Project_1st_attempt extends Application {
 
     }
 
+    private void setPageProperties(double width, double height) {
+    }
 //http://docs.oracle.com/javafx/2/text/jfxpub-text.htm
+
     private void setText(Stage primaryStage) {
 
         //create text with chosen file
         text.setFont(Font.font(null, 20));
 
-        text.setX(screenBounds.getWidth() * 0.35 / 2);
-        text.setY(scrnsize.height * 0.04444);
+        text.setX((screenBounds.getWidth() / 2) - 0.2 * screenBounds.getWidth());
+
+        //text.setWrappingWidth(screenBounds.getWidth() * 0.35 / 2);
+        text.setY(50);
         //text.setEffect(null);
         text.setTextAlignment(TextAlignment.JUSTIFY);
-        //text.setWrappingWidth(Text_Area.getWidth()-text.getFont().getSize()*10);
+        //
         //text.setTextOrigin(VPos.TOP);
         File f = startFileChooser(primaryStage);
         if (f != null) {
@@ -249,12 +254,16 @@ public class Project_1st_attempt extends Application {
     private void setSceneEvents(final Scene scene) {
         //make text scale accordingly when resized
         //http://www.drdobbs.com/jvm/javafx-20-binding/231903245
+
         scene.widthProperty().addListener(
                 new ChangeListener() {
                     @Override
                     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                         Double width = (Double) newValue;
-                        text.setWrappingWidth(width * 0.60);
+
+                        text.setX((width / 2) - 0.2 * width);
+                        text.setWrappingWidth(width * 0.40);
+                        System.out.println("width: " + width);
                         System.out.println("Height: " + scene.getHeight() + " Width: " + scene.getWidth());
                     }
                 });
