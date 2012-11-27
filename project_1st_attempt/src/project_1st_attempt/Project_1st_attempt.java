@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.SwipeEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.*;
@@ -277,12 +278,12 @@ public class Project_1st_attempt extends Application {
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
                             if (event.getCode().toString().equals("RIGHT")) {
-                                text.setText(array.get(current_page==(array.size() - 1)?(array.size() - 1):++current_page ));
+                                text.setText(array.get(current_page == (array.size() - 1) ? (array.size() - 1) : ++current_page));
                                 //current_page++;
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
                             if (event.getCode().toString().equals("LEFT")) {
-                                text.setText(array.get(current_page==0?0:--current_page ));
+                                text.setText(array.get(current_page == 0 ? 0 : --current_page));
                                 //current_page--;
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
@@ -300,7 +301,7 @@ public class Project_1st_attempt extends Application {
                     public void handle(ScrollEvent event) {
                         if ((event.getDeltaY() > 0)) {
                             if ((current_page > 0)) {
-                                text.setText(array.get(--current_page ));
+                                text.setText(array.get(--current_page));
                                 //current_page--;
                                 page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
                             }
@@ -315,6 +316,30 @@ public class Project_1st_attempt extends Application {
                         event.consume();
                     }
                 });
+
+        scene.setOnSwipeRight(new EventHandler<SwipeEvent>() {
+            @Override
+            public void handle(SwipeEvent event) {
+                if ((current_page > 0)) {
+                    text.setText(array.get(--current_page));
+                    //current_page--;
+                    page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
+                }
+                event.consume();
+            }
+        });
+
+        scene.setOnSwipeRight(new EventHandler<SwipeEvent>() {
+            @Override
+            public void handle(SwipeEvent event) {
+                if (current_page < array.size() - 1) {
+                    text.setText(array.get(++current_page));
+                    //current_page++;
+                    page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
+                }
+                event.consume();
+            }
+        });
     }
 
     /**
