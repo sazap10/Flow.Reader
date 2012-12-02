@@ -46,13 +46,15 @@ public class Project_1st_attempt extends Application {
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     //Dimension scrnsize = toolkit.getScreenSize();
     private Text text = new Text();
-    ArrayList<String> array = new ArrayList<>();
+    ArrayList<String> array = new ArrayList<>(); //stores each page of the file
     int current_page = 0;
     Label page_number = new Label();
     int array_size = 0;
     int MAX_LINES_PER_PAGE = 28;
     int MAX_CHARACTERS_PER_LINE = 85;
-
+    WordCounter wordCounter = new WordCounter(); //counts the words for wordCloud
+    
+    
     @Override
     public void start(Stage primaryStage) {
         setPageProperties(screenBounds.getWidth(), screenBounds.getHeight());
@@ -103,7 +105,8 @@ public class Project_1st_attempt extends Application {
         File f = startFileChooser(primaryStage);
         if (f != null) {
             readFile(parsefile(f));           
-            text.setText(array.get(current_page));
+           // text.setText(array.get(current_page));
+            text.setText(wordCounter.getWordCount());
         } else {
             System.out.println("File chosen is null");
         }
@@ -212,7 +215,7 @@ public class Project_1st_attempt extends Application {
     private void readFile(File file) {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
-        WordCounter wordCounter = new WordCounter();
+       
         try {
             bufferedReader = new BufferedReader(new FileReader(file));
             String temp_text;
