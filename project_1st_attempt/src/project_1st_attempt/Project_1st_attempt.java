@@ -102,7 +102,7 @@ public class Project_1st_attempt extends Application {
         //text.setTextOrigin(VPos.TOP);
         File f = startFileChooser(primaryStage);
         if (f != null) {
-            readFile(parsefile(f));
+            readFile(parsefile(f));           
             text.setText(array.get(current_page));
         } else {
             System.out.println("File chosen is null");
@@ -212,7 +212,7 @@ public class Project_1st_attempt extends Application {
     private void readFile(File file) {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
-
+        WordCounter wordCounter = new WordCounter();
         try {
             bufferedReader = new BufferedReader(new FileReader(file));
             String temp_text;
@@ -221,6 +221,7 @@ public class Project_1st_attempt extends Application {
 
                 if (count_line < MAX_LINES_PER_PAGE - 1) {
                     stringBuffer.append(temp_text).append("\n");
+                    wordCounter.readLine(temp_text);
                     count_line++;
                 } else {
                     stringBuffer.append(temp_text).append("\n");
