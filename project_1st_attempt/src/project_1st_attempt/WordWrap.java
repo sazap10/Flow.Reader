@@ -1,12 +1,12 @@
 package project_1st_attempt;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
@@ -28,42 +28,43 @@ public class WordWrap extends Application {
     	double spaceWidth = new Text(" ").getBoundsInLocal().getWidth();
     	double lineHeight = new Text("").getBoundsInLocal().getWidth();
     	pages.add( new Text(""));
-    	File file = new File("./test.txt");
+    	//File file = new File("./test.txt");
     	int i = 0;
-    	
-    	Scanner sc = null;
 		try {
-			sc = new Scanner(file);
-			String s;
+			LineNumberReader r = new LineNumberReader(new FileReader("test.txt"));
+			String l, s;
 			Text temp= new Text();
-	    	while(sc.hasNext())
-	    	{
-	    		s=sc.next();
-	    		temp.setText(s);
-	    		double wordWidth = temp.getBoundsInLocal().getWidth();
-	    		if(wordWidth+spaceWidth>spaceLeft){
-	    			if(pages.get(i).getBoundsInLocal().getHeight()+lineHeight>boundHeight){
-	    				//System.out.println(wordWrapped.getText());
-	    				pages.add(new Text());
-	    				i++;
-	    			}else{
-	    				pages.get(i).setText(pages.get(i).getText()+"\n");
-	    			}
-	    			spaceLeft = boundWidth-wordWidth;
-	    		}else{
-	    			spaceLeft = spaceLeft - (wordWidth + spaceWidth);
-	    		}
-	    		pages.get(i).setText(pages.get(i).getText()+s+ " ");
-	    		//System.out.print(s+ " ");
-	    	}
-	    	//System.out.println(wordWrapped.getText());
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			sc.close();
+			while ((l = r.readLine()) != null) {
+				Scanner sc = new Scanner(l);			
+		    	while(sc.hasNext())
+		    	{
+		    		s=sc.next();
+		    		temp.setText(s);
+		    		double wordWidth = temp.getBoundsInLocal().getWidth();
+		    		if(wordWidth+spaceWidth>spaceLeft){
+		    			if(pages.get(i).getBoundsInLocal().getHeight()+lineHeight>boundHeight){
+		    				pages.add(new Text());
+		    				i++;
+		    			}else{
+		    				pages.get(i).setText(pages.get(i).getText()+"\n");
+		    			}
+		    			spaceLeft = boundWidth-wordWidth;
+		    		}else{
+		    			spaceLeft = spaceLeft - (wordWidth + spaceWidth);
+		    		}
+		    		pages.get(i).setText(pages.get(i).getText()+s+ " ");
+		    	}
+			    if(!((pages.get(i).getBoundsInLocal().getHeight()+lineHeight)>boundHeight)){
+			    	pages.get(i).setText(pages.get(i).getText()+"\n");
+			    	spaceLeft = boundWidth;
+		    	}
+		    	sc.close();
+	
+			}
+			r.close();
+		} catch (IOException e) {
+				e.printStackTrace();
 		}
-    	
     	return pages;
     }
     @Override
@@ -76,7 +77,6 @@ public class WordWrap extends Application {
         flow.setHgap(4);
         r.setFill(Color.WHITE);
         r.setStroke(Color.BLACK);
-        //System.out.println(r.getX()+ " "+r.getY());
         ArrayList<Text> pages = readFile(r);
         	flow.getChildren().addAll(pages);
         root.getChildren().add(flow);
