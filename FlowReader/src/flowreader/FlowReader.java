@@ -4,6 +4,7 @@
  */
 package flowreader;
 
+import flowreader.core.Page;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +18,8 @@ import javafx.stage.Stage;
 import flowreader.data.FileReader;
 import flowreader.data.TextFileReader;
 import flowreader.view.RibbonView;
+import java.util.ArrayList;
+import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -27,7 +30,7 @@ public class FlowReader extends Application {
     // Background
     private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     RibbonView ribbon;
-    FileReader fileReader;
+    TextFileReader fileReader;
 
     @Override
     public void start(Stage primaryStage) {
@@ -35,7 +38,6 @@ public class FlowReader extends Application {
         primaryStage.setFullScreen(true);
 
         ribbon = new RibbonView();
-        ribbon.buildRibbon();
 
         fileReader = new TextFileReader();
 
@@ -58,6 +60,16 @@ public class FlowReader extends Application {
             @Override
             public void handle(ActionEvent e) {
                 fileReader.startFileChooser(primaryStage);
+                try {
+                    Page page = new Page(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
+                    ArrayList<String> pages = new ArrayList<>();
+                    pages = fileReader.readFile(page.getTextBound());
+                    ribbon.buildRibbon(pages.size());
+                    ribbon.setTexttoPages(pages);
+
+                } catch (Exception exception) {
+                    System.out.println(exception);
+                }
             }
         });
     }
