@@ -20,6 +20,20 @@ import javafx.stage.Stage;
  * @author D-Day
  */
 public class TextFileReader implements FileReader {
- 
-    
+
+    public void startFileChooser(Stage primaryStage) {
+        //start file chooser
+        File f = new File(System.getProperty("user.dir"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Please choose a text file to read");
+        fileChooser.setInitialDirectory(f);
+
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        //Show save file dialog
+        File file = fileChooser.showOpenDialog(primaryStage);
+
+    }
 }
