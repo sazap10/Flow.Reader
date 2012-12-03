@@ -22,7 +22,7 @@ public class WordWrap {
 		boundWidth = bounds.getWidth();
 		boundHeight = bounds.getHeight();
 		spaceWidth = new Text(" ").getBoundsInLocal().getWidth();
-		lineHeight = new Text("").getBoundsInLocal().getWidth();
+		lineHeight = new Text("").getBoundsInLocal().getHeight();
 	}
 
 	public ArrayList<String> readFile() throws IOException {
