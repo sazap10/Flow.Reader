@@ -25,7 +25,6 @@ public class RibbonView {
     int pagesNumber = 30;
     
     public RibbonView(){
-        this.buildRibbon();
     }
     
     public void buildRibbon(){

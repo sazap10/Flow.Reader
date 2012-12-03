@@ -9,5 +9,5 @@ package flowreader.data;
  * @author D-Day
  */
 public interface FileReader {
-    
+
 }
