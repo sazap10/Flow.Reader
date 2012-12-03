@@ -5,7 +5,7 @@
 package flowreader.core;
 
 import javafx.scene.Group;
-import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
@@ -20,6 +20,7 @@ public class Page{
     
     public Page(Rectangle boundary){
     	pageBoundary = boundary;
+    	pageBoundary.setFill(Color.FLORALWHITE);
     	textBound = new Rectangle(boundary.getWidth()*0.8,boundary.getHeight()*0.8);
     	pageText = new Text();
     	pageText.setX(pageBoundary.getX()+((pageBoundary.getWidth()-textBound.getWidth())*0.5));

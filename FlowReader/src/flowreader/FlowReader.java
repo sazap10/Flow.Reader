@@ -5,24 +5,18 @@
 package flowreader;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.Button;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.SwipeEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import flowreader.view.*;
-import flowreader.data.*;
-import java.io.File;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.stage.FileChooser;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import flowreader.data.FileReader;
+import flowreader.data.TextFileReader;
+import flowreader.view.RibbonView;
 
 /**
  *
