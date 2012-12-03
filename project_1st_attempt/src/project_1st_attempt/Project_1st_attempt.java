@@ -169,7 +169,7 @@ public class Project_1st_attempt extends Application {
                                 //32 is space
                                 if (temp_int != 32) {
                                     if (temp_text != ' ') {
-                                        pw.write("–");//whats this for?
+                                        pw.write("-");//whats this for?
                                         pw.println();
                                         pw.write(String.valueOf(temp_text));
                                         temp_text = (char) temp_int;
