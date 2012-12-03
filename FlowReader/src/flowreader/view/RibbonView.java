@@ -19,10 +19,14 @@ public class RibbonView {
     
     private ArrayList<Rectangle> pages;
     Group root;
-    int pageWidth = 100;
-    int pageHeight = 100;
+    int pageWidth = 200;
+    int pageHeight = 200;
     int pageInterval = 5;
     int pagesNumber = 30;
+    int maxPageWidth = 700;
+    int maxPageHeight = 700;
+    int minPageWidth = 200;
+    int minPageHeight = 200;
     
     public RibbonView(){
     }
@@ -51,28 +55,32 @@ public class RibbonView {
     } 
     
     public void zoomIn(){
-        pageWidth = pageWidth + 10;
-        pageHeight = pageHeight + 10;
-        pageInterval = pageWidth + 5;
-        int x = 0;
-        for (int i=0; i<pages.size(); i++){
-            pages.get(i).setHeight(pageHeight);
-            pages.get(i).setWidth(pageWidth);
-            x = x + pageInterval;
-            pages.get(i).setX(x);
+        if(pageWidth<this.maxPageWidth && pageHeight<this.maxPageHeight){
+            pageWidth = pageWidth + 10;
+            pageHeight = pageHeight + 10;
+            pageInterval = pageWidth + 5;
+            int x = 0;
+            for (int i=0; i<pages.size(); i++){
+                pages.get(i).setHeight(pageHeight);
+                pages.get(i).setWidth(pageWidth);
+                x = x + pageInterval;
+                pages.get(i).setX(x);
+            }
         }
     }
     
     public void zoomOut(){
-        pageWidth = pageWidth - 10;
-        pageHeight = pageHeight - 10;
-        pageInterval = pageWidth + 5;
-        int x = 0;
-        for (int i=0; i<pages.size(); i++){
-            pages.get(i).setHeight(pageHeight);
-            pages.get(i).setWidth(pageWidth);
-            x = x + pageInterval;
-            pages.get(i).setX(x);
+        if(pageWidth>this.minPageWidth && pageHeight>this.minPageHeight){
+            pageWidth = pageWidth - 10;
+            pageHeight = pageHeight - 10;
+            pageInterval = pageWidth + 5;
+            int x = 0;
+            for (int i=0; i<pages.size(); i++){
+                pages.get(i).setHeight(pageHeight);
+                pages.get(i).setWidth(pageWidth);
+                x = x + pageInterval;
+                pages.get(i).setX(x);
+            }
         }
     }
     
