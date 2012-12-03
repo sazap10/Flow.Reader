@@ -5,6 +5,8 @@
 package flowreader.view;
  
 import java.util.ArrayList;
+
+import flowreader.core.Page;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.ScrollEvent;
@@ -17,7 +19,7 @@ import javafx.scene.shape.*;
  */
 public class RibbonView {
     
-    private ArrayList<Rectangle> pages;
+    private ArrayList<Page> pages;
     Group root;
     int pageWidth = 200;
     int pageHeight = 200;
@@ -34,22 +36,17 @@ public class RibbonView {
     public void buildRibbon(){
         this.root = new Group();
         
-        this.pages = new ArrayList<>();
+        this.pages = new ArrayList<Page>();
         
         int i = 0;
         int x = 0;
         int y = 0;
         while(i<pagesNumber){
             x = x + pageWidth + pageInterval;
-            Rectangle page = RectangleBuilder.create()
-             .x(x)
-             .y(y)
-             .width(pageWidth)
-             .height(pageHeight)
-             .fill(Color.FLORALWHITE)
-             .build();
+            Page page = new Page(new Rectangle(x,y,pageWidth,pageHeight));
+            System.out.println(page.getX());
             this.pages.add(page);
-            root.getChildren().add(page);
+            root.getChildren().add(page.getPage());
             i++;
         }
     } 
@@ -61,8 +58,8 @@ public class RibbonView {
             pageInterval = pageWidth + 5;
             int x = 0;
             for (int i=0; i<pages.size(); i++){
-                pages.get(i).setHeight(pageHeight);
-                pages.get(i).setWidth(pageWidth);
+                pages.get(i).setPageHeight(pageHeight);
+                pages.get(i).setPageWidth(pageWidth);
                 x = x + pageInterval;
                 pages.get(i).setX(x);
             }
@@ -76,8 +73,8 @@ public class RibbonView {
             pageInterval = pageWidth + 5;
             int x = 0;
             for (int i=0; i<pages.size(); i++){
-                pages.get(i).setHeight(pageHeight);
-                pages.get(i).setWidth(pageWidth);
+                pages.get(i).setPageHeight(pageHeight);
+                pages.get(i).setPageWidth(pageWidth);
                 x = x + pageInterval;
                 pages.get(i).setX(x);
             }
