@@ -41,13 +41,14 @@ public class RibbonView {
         int i = 0;
         int x = 0;
         int y = 0;
-        while(i<pagesNumber){
+                while(i<pagesNumber){
             x = x + pageWidth + pageInterval;
             Page page = new Page(new Rectangle(x,y,pageWidth,pageHeight));
             System.out.println(page.getX());
             this.pages.add(page);
             root.getChildren().add(page.getPage());
             i++;
+ 
         }
     } 
     
