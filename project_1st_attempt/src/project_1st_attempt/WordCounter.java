@@ -120,7 +120,17 @@ public class WordCounter {
      }
  }
  
- public Group renderCloud(){
+ 
+
+class WordCloud {
+    private Group words;
+    
+    
+    public WordCloud(){
+        this.words = new Group();
+    }
+    
+   public void renderCloud(ArrayList<Word> wordObjects ){
      
     //create the basic rectangle (usually in terms of function inputs)
     Group cloud = new Group();
@@ -140,7 +150,7 @@ public class WordCounter {
     double maxWidth = 200;
     double maxHeight = 100;
     
-    for (Word word : this.wordObjects ){
+    for (Word word : wordObjects ){
      Text currText = new Text();
      currText.setFont(Font.font("Veranda", word.getFontSize()));
      currText.setText(word.getText());
@@ -156,7 +166,7 @@ public class WordCounter {
              currX = originX;
              currText.setX(currX);
              currText.setY(currY);
-             cloud.getChildren().add(currText);
+             this.words.getChildren().add(currText);
              //need some kind of 'renderWord(x,y)' here
          }
      }
@@ -165,17 +175,21 @@ public class WordCounter {
          currX = wordWidth + currX;
           currText.setX(currX);
           currText.setY(currY);
-          cloud.getChildren().add(currText);
+          this.words.getChildren().add(currText);
          //need some kind of 'renderWord(x,y)' here
      }
     }
-    cloud.getChildren().add(r);
-    return cloud;
+    this.words.getChildren().add(r);
+   
  }
  
  
  
 
+} 
+    
+    
+    
 }
 class Word {
     
