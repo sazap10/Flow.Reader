@@ -57,6 +57,7 @@ public class RibbonView {
                 pages.get(i).setPageHeight(pageHeight);
                 pages.get(i).setPageWidth(pageWidth);
                 x = x + pageInterval;
+                pages.get(i).setTextScale(true);
                 pages.get(i).setX(x);
             }
         }
@@ -72,6 +73,7 @@ public class RibbonView {
                 pages.get(i).setPageHeight(pageHeight);
                 pages.get(i).setPageWidth(pageWidth);
                 x = x + pageInterval;
+                pages.get(i).setTextScale(false);
                 pages.get(i).setX(x);
             }
         }
