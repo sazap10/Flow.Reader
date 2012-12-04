@@ -20,6 +20,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.text.Font;
+import javafx.scene.Group;
 /**
  *
  * @author jim
@@ -119,9 +120,10 @@ public class WordCounter {
      }
  }
  
- public Rectangle renderCloud(){
+ public Group renderCloud(){
      
     //create the basic rectangle (usually in terms of function inputs)
+    Group cloud = new Group();
     Rectangle r = new Rectangle();
     r.setX(50);
     r.setY(50);
@@ -150,18 +152,25 @@ public class WordCounter {
          }
          else{
              //start new line
-             currX = wordHeight + currY;
+             currY = wordHeight + currY;
              currX = originX;
+             currText.setX(currX);
+             currText.setY(currY);
+             cloud.getChildren().add(currText);
              //need some kind of 'renderWord(x,y)' here
          }
      }
      else{
          currY = wordHeight + currY;
          currX = wordWidth + currX;
+          currText.setX(currX);
+          currText.setY(currY);
+          cloud.getChildren().add(currText);
          //need some kind of 'renderWord(x,y)' here
      }
     }
-    return r;
+    cloud.getChildren().add(r);
+    return cloud;
  }
  
  
