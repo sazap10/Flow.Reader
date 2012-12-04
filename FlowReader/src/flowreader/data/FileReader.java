@@ -4,7 +4,6 @@
  */
 package flowreader.data;
 
-import java.util.ArrayList;
 import javafx.stage.Stage;
 
 /**
@@ -12,5 +11,5 @@ import javafx.stage.Stage;
  * @author D-Day
  */
 public interface FileReader {
-public void startFileChooser(Stage primaryStage);
+	public void startFileChooser(Stage primaryStage);
 }

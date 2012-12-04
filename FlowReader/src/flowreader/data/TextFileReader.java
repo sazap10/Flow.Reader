@@ -67,11 +67,13 @@ public class TextFileReader implements FileReader {
             while (sc.hasNext()) {
                 word = sc.next();
                 double wordWidth = new Text(word).getBoundsInLocal().getWidth();
+                double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
+                if (textWithNewLine > boundHeight) {
+                	pages.add(page);
+                    page = "";
+                }
                 if (wordWidth + spaceWidth > spaceLeft) {
-                    if (tempPage.getBoundsInLocal().getHeight() + lineHeight > boundHeight) {
-                        pages.add(page);
-                        page = "";
-                    } else {
+                	if(!(textWithNewLine > boundHeight)) {
                         page += "\n";
                     }
                     spaceLeft = boundWidth - wordWidth;
