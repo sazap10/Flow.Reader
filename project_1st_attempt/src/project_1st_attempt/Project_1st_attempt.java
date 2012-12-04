@@ -107,6 +107,14 @@ public class Project_1st_attempt extends Application {
             readFile(parsefile(f));           
            // text.setText(array.get(current_page));
             text.setText(wordCounter.getWordCount());
+            ArrayList<Word> cloudInput = wordCounter.wordObjects;
+            //create the cloud
+            WordCloud cloud = new WordCloud();
+           //need to move all WordCounter code to WordCloud
+           //for better organisation
+           //not sure how to render the group contained in the WordCloud
+            cloud.renderCloud(cloudInput);
+            //
         } else {
             System.out.println("File chosen is null");
         }
