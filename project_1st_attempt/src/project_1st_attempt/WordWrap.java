@@ -80,6 +80,7 @@ public class WordWrap extends Application {
         ArrayList<Text> pages = readFile(r);
         	flow.getChildren().addAll(pages);
         root.getChildren().add(flow);
+        
         primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();
         
