@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.Collections;
 import javafx.scene.text.Text;
 import java.util.Map;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.scene.text.Font;
 /**
  *
  * @author jim
@@ -113,6 +119,51 @@ public class WordCounter {
      }
  }
  
+ public Rectangle renderCloud(){
+     
+    //create the basic rectangle (usually in terms of function inputs)
+    Rectangle r = new Rectangle();
+    r.setX(50);
+    r.setY(50);
+    r.setWidth(200);
+    r.setHeight(100);
+    r.setArcWidth(20);
+    r.setArcHeight(20);
+    
+    //these would normally be inputs to the function
+    double originX = 50;
+    double originY = 50;
+    double currX = originX;
+    double currY = originY;
+    double maxWidth = 200;
+    double maxHeight = 100;
+    
+    for (Word word : this.wordObjects ){
+     Text currText = new Text();
+     currText.setFont(Font.font("Veranda", word.getFontSize()));
+     currText.setText(word.getText());
+     double wordWidth = currText.getBoundsInLocal().getWidth();
+     double wordHeight = currText.getBoundsInLocal().getHeight();
+     if ((wordWidth + currX) > maxWidth){
+         if ((wordHeight + currY) > maxHeight){
+             break; // word won't fit on rectangle
+         }
+         else{
+             //start new line
+             currX = wordHeight + currY;
+             currX = originX;
+             //need some kind of 'renderWord(x,y)' here
+         }
+     }
+     else{
+         currY = wordHeight + currY;
+         currX = wordWidth + currX;
+         //need some kind of 'renderWord(x,y)' here
+     }
+    }
+    return r;
+ }
+ 
  
  
 
@@ -130,8 +181,14 @@ class Word {
     public void setFontSize(Integer size){
         this.fontSize = size;
     }
+    public Integer getFontSize(){
+        return this.fontSize;
+    }
     public Integer getCount(){
         return this.count;
+    }
+    public String getText(){
+        return this.letters;
     }
      
  }
