@@ -4,10 +4,12 @@
  */
 package flowreader.data;
 
+import javafx.stage.Stage;
+
 /**
  *
  * @author D-Day
  */
 public interface FileReader {
-    
+	public void startFileChooser(Stage primaryStage);
 }
