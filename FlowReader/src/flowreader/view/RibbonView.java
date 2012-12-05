@@ -77,34 +77,6 @@ public class RibbonView {
 
 	}
 
-	public void zoomIn() {
-
-		/*
-		 * if (pageWidth < this.maxPageWidth && pageHeight < this.maxPageHeight)
-		 * { pageWidth = pageWidth + 10; pageHeight = pageHeight + 10;
-		 * pageInterval = pageWidth + 5; int x = 0; for (int i = 0; i <
-		 * pages.size(); i++) { pages.get(i).setPageHeight(pageHeight);
-		 * pages.get(i).setPageWidth(pageWidth); x = x + pageInterval;
-		 * pages.get(i).setTextScale(true); pages.get(i).setX(x); } }
-		 */
-	}
-
-	public void zoomOut() {
-		if (pageWidth > this.minPageWidth && pageHeight > this.minPageHeight) {
-			pageWidth = pageWidth - 10;
-			pageHeight = pageHeight - 10;
-			pageInterval = pageWidth + 5;
-			int x = 0;
-			for (int i = 0; i < pages.size(); i++) {
-				pages.get(i).setPageHeight(pageHeight);
-				pages.get(i).setPageWidth(pageWidth);
-				x = x + pageInterval;
-				pages.get(i).setTextScale(false);
-				pages.get(i).setX(x);
-			}
-		}
-	}
-
 	public double getPageWidth() {
 		return pageWidth;
 	}

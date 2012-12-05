@@ -80,12 +80,6 @@ public class FlowReader extends Application {
                     @Override
                     public void handle(ScrollEvent event) {
                     	ribbon.zoom(event.getDeltaY());
-                    	/*
-                        if (event.getDeltaY() > 0) {
-                            ribbon.zoomIn();
-                        } else {
-                            ribbon.zoomOut();
-                        }*/
                         event.consume();
                     }
                 });
