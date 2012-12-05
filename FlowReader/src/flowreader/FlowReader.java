@@ -8,6 +8,7 @@ import flowreader.core.Page;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -45,13 +46,27 @@ public class FlowReader extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(ribbon.getRoot());
         borderPane.setBottom(openFileButton);
+        Button closeBtn = new Button("x");
+        closeBtn.setId("closeBtn");
+        closeBtn.getStylesheets().add(this.getClass().getResource("button.css").toExternalForm());
+		BorderPane.setAlignment(closeBtn, Pos.TOP_RIGHT);
+		borderPane.setTop(closeBtn);
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
         scene.getStylesheets().add(FlowReader.class.getResource("Background.css").toExternalForm());
         this.setOpenFileButtonEvent(openFileButton, primaryStage);
         this.setSceneEvents(scene);
-
+        this.setCloseBtnEvent(closeBtn, primaryStage);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    private void setCloseBtnEvent(Button button, final Stage primaryStage){
+    	button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.close();
+            }
+        });
     }
 
     private void setOpenFileButtonEvent(Button button, final Stage primaryStage) {
