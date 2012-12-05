@@ -18,8 +18,8 @@ public class RibbonView {
 
     private ArrayList<Page> pages;
     Group root;
-    int pageWidth = 200;
-    int pageHeight = 200;
+    int pageWidth = 700;
+    int pageHeight = 700;
     int pageInterval = 5;
     int pagesNumber = 30;
     int maxPageWidth = 700;

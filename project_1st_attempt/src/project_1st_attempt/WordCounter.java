@@ -138,7 +138,7 @@ public void setWordObjects(ArrayList<Word> wordObjects) {
 
 
 
-class WordCloud {
+/*class WordCloud {
     private Group words;
     
     
@@ -202,7 +202,7 @@ class WordCloud {
  
  
 
-} 
+}*/ 
     
     
     
