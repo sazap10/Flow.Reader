@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import flowreader.data.TextFileReader;
@@ -48,14 +49,20 @@ public class FlowReader extends Application {
         borderPane.setBottom(openFileButton);
         Button closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
-        closeBtn.getStylesheets().add(this.getClass().getResource("button.css").toExternalForm());
-		BorderPane.setAlignment(closeBtn, Pos.TOP_RIGHT);
-		borderPane.setTop(closeBtn);
+        Button minBtn = new Button("_");
+		minBtn.setId("minBtn");
+		FlowPane flow = new FlowPane();
+		flow.setHgap(4);
+		flow.setAlignment(Pos.TOP_RIGHT);
+		flow.getChildren().addAll(minBtn,closeBtn);
+		BorderPane.setAlignment(flow, Pos.TOP_RIGHT);
+		borderPane.setTop(flow);
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
-        scene.getStylesheets().add(FlowReader.class.getResource("Background.css").toExternalForm());
+        scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         this.setOpenFileButtonEvent(openFileButton, primaryStage);
         this.setSceneEvents(scene);
         this.setCloseBtnEvent(closeBtn, primaryStage);
+        this.setMinBtnEvent(minBtn, primaryStage);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -65,6 +72,15 @@ public class FlowReader extends Application {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.close();
+            }
+        });
+    }
+    
+    private void setMinBtnEvent(Button button, final Stage primaryStage){
+    	button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setIconified(true);
             }
         });
     }
