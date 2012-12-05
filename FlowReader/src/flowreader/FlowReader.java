@@ -15,7 +15,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import flowreader.data.FileReader;
 import flowreader.data.TextFileReader;
 import flowreader.view.RibbonView;
 import java.util.ArrayList;
@@ -80,11 +79,13 @@ public class FlowReader extends Application {
                 new EventHandler<ScrollEvent>() {
                     @Override
                     public void handle(ScrollEvent event) {
+                    	ribbon.zoom(event.getDeltaY());
+                    	/*
                         if (event.getDeltaY() > 0) {
                             ribbon.zoomIn();
                         } else {
                             ribbon.zoomOut();
-                        }
+                        }*/
                         event.consume();
                     }
                 });

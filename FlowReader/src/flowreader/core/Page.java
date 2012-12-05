@@ -4,8 +4,6 @@
  */
 package flowreader.core;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -31,17 +29,17 @@ public class Page {
         textBoundHeight = boundary.getHeight() * 0.8;
         textBound = new Rectangle(textBoundWidth, textBoundHeight);
         textBound.setFill(Color.TRANSPARENT);
-        textBound.setStroke(Color.BLACK);
+        //textBound.setStroke(Color.BLACK);
         pageText = new Text();
         pageText.setX(pageBoundary.getX() + ((pageBoundary.getWidth() - textBound.getWidth()) * 0.5));
         pageText.setY(pageBoundary.getY() + ((pageBoundary.getHeight() - textBound.getHeight()) * 0.5));
         page = new Group();
-        page.getChildren().addAll(pageBoundary, textBound, pageText);
-        setTextBoundXEvents();
-        setTextBoundYEvents();
+        page.getChildren().addAll(pageBoundary, pageText);
+       // setTextBoundXEvents();
+        //setTextBoundYEvents();
         textScale = 1;
     }
-
+/*
     public void setTextBoundXEvents() {
         textBound.xProperty().addListener(
                 new ChangeListener() {
@@ -71,7 +69,7 @@ public class Page {
                 });
 
     }
-
+*/
     public void setText(String text) {
         pageText.setText(text);
     }
