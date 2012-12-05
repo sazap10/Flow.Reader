@@ -34,7 +34,7 @@ public class WordCounter {
  private ArrayList<Word> wordObjects;
  public WordCounter(){
      this.words = new HashMap<String, Integer>();
-     this.wordObjects = new ArrayList<Word>();
+     this.setWordObjects(new ArrayList<Word>());
  }
  
  //counts words in a line of texts and adds them to the 'words' hashMap
@@ -96,7 +96,7 @@ public class WordCounter {
            if (tmpCount == maxInMap){
               output += (pairs.getKey().toString()+ ":" + "        " + tmpCount + "\n");
               maxKey = pairs.getKey().toString();
-              this.wordObjects.add(new Word(maxKey, tmpCount));
+              this.getWordObjects().add(new Word(maxKey, tmpCount));
               if (!(maxCount)){
                   this.maxCount = tmpCount;
                   maxCount = true;
@@ -112,7 +112,7 @@ public class WordCounter {
  }
  
  public void setWordFontsizes(){
-     for (Word word : wordObjects){
+     for (Word word : getWordObjects()){
          int countDiff = word.getCount() - this.maxCount;
          int totalCountDiff = this.maxCount - this.minCount;
          word.setFontSize( ((this.maxFontSize* countDiff) / totalCountDiff));
@@ -121,6 +121,22 @@ public class WordCounter {
  }
  
  
+
+/**
+ * @return the wordObjects
+ */
+public ArrayList<Word> getWordObjects() {
+	return wordObjects;
+}
+
+/**
+ * @param wordObjects the wordObjects to set
+ */
+public void setWordObjects(ArrayList<Word> wordObjects) {
+	this.wordObjects = wordObjects;
+}
+
+
 
 class WordCloud {
     private Group words;

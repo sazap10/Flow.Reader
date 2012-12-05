@@ -6,6 +6,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import project_1st_attempt.WordCounter.WordCloud;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -107,9 +109,9 @@ public class Project_1st_attempt extends Application {
             readFile(parsefile(f));           
            // text.setText(array.get(current_page));
             text.setText(wordCounter.getWordCount());
-            ArrayList<Word> cloudInput = wordCounter.wordObjects;
+            ArrayList<Word> cloudInput = wordCounter.getWordObjects();
             //create the cloud
-            WordCloud cloud = new WordCloud();
+            WordCloud cloud = wordCounter.new WordCloud();
            //need to move all WordCounter code to WordCloud
            //for better organisation
            //not sure how to render the group contained in the WordCloud
