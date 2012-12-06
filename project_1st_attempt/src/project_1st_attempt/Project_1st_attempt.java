@@ -78,6 +78,7 @@ public class Project_1st_attempt extends Application {
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
         setSceneEvents(scene);
         borderPane.getChildren().add(cloud.words);
+        System.out.println(cloud.words);
         scene.getStylesheets().add(Project_1st_attempt.class.getResource("Background.css").toExternalForm());
 
         primaryStage.setTitle("Flow Reader");
@@ -114,7 +115,7 @@ public class Project_1st_attempt extends Application {
            //need to move all WordCounter code to WordCloud
            //for better organisation
            //not sure how to render the group contained in the WordCloud
-           // cloud.renderCloud(cloudInput);
+            cloud.renderCloud(cloudInput);
             //
         } else {
             System.out.println("File chosen is null");
