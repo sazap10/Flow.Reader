@@ -53,7 +53,7 @@ public class Project_1st_attempt extends Application {
     int MAX_LINES_PER_PAGE = 28;
     int MAX_CHARACTERS_PER_LINE = 85;
     WordCounter wordCounter = new WordCounter(); //counts the words for wordCloud
-    
+    WordCloud cloud = new WordCloud();
     
     @Override
     public void start(Stage primaryStage) {
@@ -76,6 +76,7 @@ public class Project_1st_attempt extends Application {
 
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
         setSceneEvents(scene);
+        borderPane.getChildren().add(cloud.words);
         scene.getStylesheets().add(Project_1st_attempt.class.getResource("Background.css").toExternalForm());
 
         primaryStage.setTitle("Flow Reader");
@@ -107,9 +108,8 @@ public class Project_1st_attempt extends Application {
             readFile(parsefile(f));           
            // text.setText(array.get(current_page));
             text.setText(wordCounter.getWordCount());
-            ArrayList<Word> cloudInput = wordCounter.wordObjects;
-            //create the cloud
-            WordCloud cloud = new WordCloud();
+            wordCounter.setWordSizes();
+            ArrayList<Word> cloudInput = wordCounter.wordObjects;        
            //need to move all WordCounter code to WordCloud
            //for better organisation
            //not sure how to render the group contained in the WordCloud
