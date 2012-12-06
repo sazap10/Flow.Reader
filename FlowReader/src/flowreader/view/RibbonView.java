@@ -59,24 +59,39 @@ public class RibbonView {
 			else {
 				zoomFactor = 2.0 - zoomFactor;
 				curScale--;
+                                setOpacity();
 			}
 		} else{
 			if(curScale>maxScale)
 				zoomFactor=1;
 			else
 				curScale++;
+                                setOpacity();
+
 		}
 		//System.out.println(zoomFactor);
 		double scaleX = pages.get(0).getPage().getScaleX() * zoomFactor;
 		double scaleY = pages.get(0).getPage().getScaleY() * zoomFactor;
 		//System.out.println("scaleX: " + scaleX + " scaleY: " + scaleY);
+                Scale scale = new Scale(scaleX, scaleY, 500, 500);
 		for (int i = 0; i < pages.size(); i++) {
-			Scale scale = new Scale(scaleX, scaleY, 0, 0);
+			
 			pages.get(i).getPage().getTransforms().add(scale);
 		}
 
 	}
-
+public void setOpacity(){
+    double opacity;
+                                double range = maxScale-minScale;
+                                if(minScale<0){
+                                    opacity = (curScale+(Math.abs(minScale)))/range;
+                                }else{
+                                    opacity = (curScale-(minScale))/range;
+                                }
+                                		for (int i = 0; i < pages.size(); i++) {
+                                                pages.get(i).getPage().setOpacity(opacity);
+                                                }
+}
 	public double getPageWidth() {
 		return pageWidth;
 	}
