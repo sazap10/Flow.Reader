@@ -9,13 +9,14 @@ import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
 
 /**
  *
  * @author jim
  */
 public class WordCloud {
-    private Group words;
+    public Group words;
     
     
     public WordCloud(){
@@ -29,10 +30,11 @@ public class WordCloud {
     Rectangle r = new Rectangle();
     r.setX(50);
     r.setY(50);
-    r.setWidth(200);
-    r.setHeight(100);
-    r.setArcWidth(20);
-    r.setArcHeight(20);
+    r.setWidth(1500);
+    r.setHeight(500);
+    r.setArcWidth(100);
+    r.setArcHeight(100);
+    r.setFill(Color.WHITE);
     
     //these would normally be inputs to the function
     double originX = 50;
@@ -43,35 +45,45 @@ public class WordCloud {
     double maxHeight = 100;
     
     for (Word word : wordObjects ){
-     Text currText = new Text();
-     currText.setFont(Font.font("Veranda", word.getFontSize()));
+     Text currText = new Text();   
      currText.setText(word.getText());
+     currText.setFont(new Font(word.getFontSize()));
      double wordWidth = currText.getBoundsInLocal().getWidth();
      double wordHeight = currText.getBoundsInLocal().getHeight();
-     if ((wordWidth + currX) > maxWidth){
-         if ((wordHeight + currY) > maxHeight){
-             break; // word won't fit on rectangle
-         }
-         else{
+     if ((wordWidth + currX) <= maxWidth){
+      //if it doesn't fit on the current line
+          System.out.println("goes on the same line!");
+          System.out.println("word text:" + word.getText());
+          System.out.println("font size:" + word.getFontSize().toString());
+          System.out.println("width:" + wordWidth);
+          currY = currY;
+          currX = currX;
+          currText.setX(currX);
+          currText.setY(currY);
+          currX = wordWidth + currX;
+          this.words.getChildren().add(currText);       
+         
+     }else{
+         if((wordHeight + currY) <= maxHeight){
+             
              //start new line
+             System.out.println("goes on a new line!");
              currY = wordHeight + currY;
              currX = originX;
              currText.setX(currX);
              currText.setY(currY);
              this.words.getChildren().add(currText);
+             currX += wordWidth;
              //need some kind of 'renderWord(x,y)' here
          }
+         else{
+             System.out.println("finished, because it doesn't fit at all!");
+             break; //doesn't fit
+         }
      }
-     else{
-         currY = wordHeight + currY;
-         currX = wordWidth + currX;
-          currText.setX(currX);
-          currText.setY(currY);
-          this.words.getChildren().add(currText);
-         //need some kind of 'renderWord(x,y)' here
-     }
+    
     }
-    this.words.getChildren().add(r);
+    //this.words.getChildren().add(r);
    
  }
  
