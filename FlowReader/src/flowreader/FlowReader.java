@@ -48,7 +48,7 @@ public class FlowReader extends Application {
         Button openFileButton = new Button("Open file");
 
         BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(ribbon.getRoot());
+        borderPane.setCenter(ribbon);
         borderPane.setBottom(openFileButton);
         Button closeBtn = new Button("x");
         closeBtn.setId("closeBtn");

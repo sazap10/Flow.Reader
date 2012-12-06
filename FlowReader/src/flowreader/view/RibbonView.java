@@ -10,16 +10,19 @@ import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import flowreader.core.Page;
+import javafx.animation.TranslateTransition;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 /**
  * 
  * @author D-Day
  */
-public class RibbonView {
+public class RibbonView extends Group{
 
 	private ArrayList<Page> pages;
         WordCloudView wordCloud;
-	Group root;
 	int pageWidth = 700;
 	int pageHeight = 700;
 	int pageInterval = 5;
@@ -34,7 +37,6 @@ public class RibbonView {
 
 	public RibbonView(WordCloudView wordCloud) {
 		this.pages = new ArrayList<Page>();
-		this.root = new Group();
                 this.wordCloud = wordCloud;
 	}
 
@@ -48,9 +50,10 @@ public class RibbonView {
 			x = x + pageWidth + pageInterval;
 			Page page = new Page(new Rectangle(x, y, pageWidth, pageHeight));
 			this.pages.add(page);
-			root.getChildren().add(page.getPage());
+			this.getChildren().add(page.getPage());
 			i++;
 		}
+                this.setRibbonEvents();
 	}
 
 	public void zoom(double deltaY) {
@@ -82,18 +85,19 @@ public class RibbonView {
 		}
 
 	}
-public void setOpacity(){
-    double opacity;
-                                double range = maxScale-minScale;
-                                if(minScale<0){
-                                    opacity = (curScale+(Math.abs(minScale)))/range;
-                                }else{
-                                    opacity = (curScale-(minScale))/range;
-                                }
-                                		for (int i = 0; i < pages.size(); i++) {
-                                                pages.get(i).getPage().setOpacity(opacity);
-                                                }
-}
+        public void setOpacity(){
+            double opacity;
+            double range = maxScale-minScale;
+            if(minScale<0){
+                opacity = (curScale+(Math.abs(minScale)))/range;
+            }else{
+                opacity = (curScale-(minScale))/range;
+            }
+                            for (int i = 0; i < pages.size(); i++) {
+                            pages.get(i).getPage().setOpacity(opacity);
+                            }
+        }
+        
 	public double getPageWidth() {
 		return pageWidth;
 	}
@@ -102,13 +106,46 @@ public void setOpacity(){
 		return pageHeight;
 	}
 
-	public Group getRoot() {
-		return this.root;
-	}
-
 	public void setTexttoPages(ArrayList<String> text) {
 		for (int i = 0; i < pages.size(); i++) {
 			pages.get(i).setText(text.get(i));
 		}
 	}
+        
+        private void setRibbonEvents(){
+            EventHandler<MouseEvent> swipeHandler = new EventHandler<MouseEvent>() {
+                MouseEvent previousEvent, firstEvent;
+
+                @Override
+                public void handle(MouseEvent event) {
+                    if(event.getEventType().equals(MouseEvent.MOUSE_PRESSED)){
+                        previousEvent = event;
+                        firstEvent = event;
+                        System.out.println("PRESSED");
+                    }
+                    else if(event.getEventType().equals(MouseEvent.MOUSE_DRAGGED)){
+                        
+                        System.out.println("DRAGGED");
+                        double d = event.getSceneX()-previousEvent.getSceneX();
+                        RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()+ d);
+                        
+                        TranslateTransition tt = new TranslateTransition(Duration.millis(400), RibbonView.this);
+                        
+
+                           tt.setByX(d);
+
+                        
+                        tt.setCycleCount(0);
+                        tt.setAutoReverse(true);
+                        tt.play();
+                    }
+                    previousEvent = event;
+                    event.consume();
+                }
+            };
+        
+                RibbonView.this.setOnMouseDragged(swipeHandler);
+                RibbonView.this.setOnMousePressed(swipeHandler);
+                RibbonView.this.setOnMouseReleased(swipeHandler);
+        }
 }
