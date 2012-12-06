@@ -8,14 +8,15 @@ import flowreader.core.Page;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import flowreader.data.FileReader;
 import flowreader.data.TextFileReader;
 import flowreader.view.RibbonView;
 import java.util.ArrayList;
@@ -46,13 +47,42 @@ public class FlowReader extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(ribbon.getRoot());
         borderPane.setBottom(openFileButton);
+        Button closeBtn = new Button("x");
+        closeBtn.setId("closeBtn");
+        Button minBtn = new Button("_");
+		minBtn.setId("minBtn");
+		FlowPane flow = new FlowPane();
+		flow.setHgap(4);
+		flow.setAlignment(Pos.TOP_RIGHT);
+		flow.getChildren().addAll(minBtn,closeBtn);
+		BorderPane.setAlignment(flow, Pos.TOP_RIGHT);
+		borderPane.setTop(flow);
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
-        scene.getStylesheets().add(FlowReader.class.getResource("Background.css").toExternalForm());
+        scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         this.setOpenFileButtonEvent(openFileButton, primaryStage);
         this.setSceneEvents(scene);
-
+        this.setCloseBtnEvent(closeBtn, primaryStage);
+        this.setMinBtnEvent(minBtn, primaryStage);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    private void setCloseBtnEvent(Button button, final Stage primaryStage){
+    	button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.close();
+            }
+        });
+    }
+    
+    private void setMinBtnEvent(Button button, final Stage primaryStage){
+    	button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setIconified(true);
+            }
+        });
     }
 
     private void setOpenFileButtonEvent(Button button, final Stage primaryStage) {
@@ -80,11 +110,7 @@ public class FlowReader extends Application {
                 new EventHandler<ScrollEvent>() {
                     @Override
                     public void handle(ScrollEvent event) {
-                        if (event.getDeltaY() > 0) {
-                            ribbon.zoomIn();
-                        } else {
-                            ribbon.zoomOut();
-                        }
+                    	ribbon.zoom(event.getDeltaY());
                         event.consume();
                     }
                 });
