@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -65,6 +66,7 @@ public class FlowReader extends Application {
         this.setSceneEvents(scene);
         this.setCloseBtnEvent(closeBtn, primaryStage);
         this.setMinBtnEvent(minBtn, primaryStage);
+        primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
