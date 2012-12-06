@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -113,7 +114,7 @@ public class Project_1st_attempt extends Application {
            //need to move all WordCounter code to WordCloud
            //for better organisation
            //not sure how to render the group contained in the WordCloud
-            cloud.renderCloud(cloudInput);
+           // cloud.renderCloud(cloudInput);
             //
         } else {
             System.out.println("File chosen is null");
