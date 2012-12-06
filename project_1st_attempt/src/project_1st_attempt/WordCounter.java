@@ -28,10 +28,11 @@ import javafx.scene.Group;
 public class WordCounter {
  private HashMap<String, Integer> words;
  private Integer numOfWordsInCloud = 30;
- private Integer maxFontSize = 40;
+ private Integer maxFontSize = 100;
  private Integer maxCount;
  private Integer minCount;
- private ArrayList<Word> wordObjects;
+ private Integer normalizationConstant = 3;
+ public ArrayList<Word> wordObjects;  //only public for basic testing
  public WordCounter(){
      this.words = new HashMap<String, Integer>();
      this.wordObjects = new ArrayList<Word>();
@@ -77,7 +78,9 @@ public class WordCounter {
      return word.replaceAll("\\W", "");    
      
  }
- 
+
+ //returns the n most common words in a document as a string
+ //also converts these strings into word objects;
  public String getNodes(){
      String output = "";
      String maxKey = "";
@@ -111,82 +114,18 @@ public class WordCounter {
     return output;
  }
  
- public void setWordFontsizes(){
+ public void setWordSizes(){
      for (Word word : wordObjects){
-         int countDiff = word.getCount() - this.maxCount;
+         int countDiff = word.getCount() - this.minCount;
          int totalCountDiff = this.maxCount - this.minCount;
-         word.setFontSize( ((this.maxFontSize* countDiff) / totalCountDiff));
+         word.setFontSize( ((this.maxFontSize * countDiff) / (this.normalizationConstant * totalCountDiff)));
          
      }
  }
  
  
 
-class WordCloud {
-    private Group words;
-    
-    
-    public WordCloud(){
-        this.words = new Group();
-    }
-    
-   public void renderCloud(ArrayList<Word> wordObjects ){
-     
-    //create the basic rectangle (usually in terms of function inputs)
-    Group cloud = new Group();
-    Rectangle r = new Rectangle();
-    r.setX(50);
-    r.setY(50);
-    r.setWidth(200);
-    r.setHeight(100);
-    r.setArcWidth(20);
-    r.setArcHeight(20);
-    
-    //these would normally be inputs to the function
-    double originX = 50;
-    double originY = 50;
-    double currX = originX;
-    double currY = originY;
-    double maxWidth = 200;
-    double maxHeight = 100;
-    
-    for (Word word : wordObjects ){
-     Text currText = new Text();
-     currText.setFont(Font.font("Veranda", word.getFontSize()));
-     currText.setText(word.getText());
-     double wordWidth = currText.getBoundsInLocal().getWidth();
-     double wordHeight = currText.getBoundsInLocal().getHeight();
-     if ((wordWidth + currX) > maxWidth){
-         if ((wordHeight + currY) > maxHeight){
-             break; // word won't fit on rectangle
-         }
-         else{
-             //start new line
-             currY = wordHeight + currY;
-             currX = originX;
-             currText.setX(currX);
-             currText.setY(currY);
-             this.words.getChildren().add(currText);
-             //need some kind of 'renderWord(x,y)' here
-         }
-     }
-     else{
-         currY = wordHeight + currY;
-         currX = wordWidth + currX;
-          currText.setX(currX);
-          currText.setY(currY);
-          this.words.getChildren().add(currText);
-         //need some kind of 'renderWord(x,y)' here
-     }
-    }
-    this.words.getChildren().add(r);
-   
- }
- 
- 
- 
 
-} 
     
     
     
