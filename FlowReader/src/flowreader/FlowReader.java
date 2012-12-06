@@ -19,6 +19,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import flowreader.data.TextFileReader;
 import flowreader.view.RibbonView;
+import flowreader.view.WordCloudView;
 import java.util.ArrayList;
 import javafx.scene.shape.Rectangle;
 
@@ -31,15 +32,16 @@ public class FlowReader extends Application {
     // Background
     private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     RibbonView ribbon;
+    WordCloudView wordCloud;
     TextFileReader fileReader;
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Flow Reader");
         primaryStage.setFullScreen(true);
-
-        ribbon = new RibbonView();
-
+        
+        wordCloud = new WordCloudView();
+        ribbon = new RibbonView(wordCloud);
         fileReader = new TextFileReader();
 
         Button openFileButton = new Button("Open file");
@@ -50,13 +52,13 @@ public class FlowReader extends Application {
         Button closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
         Button minBtn = new Button("_");
-		minBtn.setId("minBtn");
-		FlowPane flow = new FlowPane();
-		flow.setHgap(4);
-		flow.setAlignment(Pos.TOP_RIGHT);
-		flow.getChildren().addAll(minBtn,closeBtn);
-		BorderPane.setAlignment(flow, Pos.TOP_RIGHT);
-		borderPane.setTop(flow);
+        minBtn.setId("minBtn");
+        FlowPane flow = new FlowPane();
+        flow.setHgap(4);
+        flow.setAlignment(Pos.TOP_RIGHT);
+        flow.getChildren().addAll(minBtn, closeBtn);
+        BorderPane.setAlignment(flow, Pos.TOP_RIGHT);
+        borderPane.setTop(flow);
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         this.setOpenFileButtonEvent(openFileButton, primaryStage);
@@ -66,18 +68,18 @@ public class FlowReader extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    
-    private void setCloseBtnEvent(Button button, final Stage primaryStage){
-    	button.setOnAction(new EventHandler<ActionEvent>() {
+
+    private void setCloseBtnEvent(Button button, final Stage primaryStage) {
+        button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.close();
             }
         });
     }
-    
-    private void setMinBtnEvent(Button button, final Stage primaryStage){
-    	button.setOnAction(new EventHandler<ActionEvent>() {
+
+    private void setMinBtnEvent(Button button, final Stage primaryStage) {
+        button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.setIconified(true);
@@ -92,11 +94,18 @@ public class FlowReader extends Application {
                 fileReader.startFileChooser(primaryStage);
                 try {
                     Page page = new Page(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
+                    
                     ArrayList<String> pages = new ArrayList<>();
                     pages = fileReader.readFile(page.getTextBound());
+                    
+                    ArrayList<String> wordClouds = new ArrayList<>();
+                    wordClouds = fileReader.readFile_WordCloud();
+                    
                     ribbon.buildRibbon(pages.size());
                     ribbon.setTexttoPages(pages);
-
+                    
+                    wordCloud.buildWordCloud(wordClouds);
+                    
                 } catch (Exception exception) {
                     System.out.println(exception);
                 }
@@ -110,8 +119,9 @@ public class FlowReader extends Application {
                 new EventHandler<ScrollEvent>() {
                     @Override
                     public void handle(ScrollEvent event) {
-                    	ribbon.zoom(event.getDeltaY());
+                        ribbon.zoom(event.getDeltaY());
                         event.consume();
+
                     }
                 });
 

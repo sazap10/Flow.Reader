@@ -18,6 +18,7 @@ import flowreader.core.Page;
 public class RibbonView {
 
 	private ArrayList<Page> pages;
+        WordCloudView wordCloud;
 	Group root;
 	int pageWidth = 700;
 	int pageHeight = 700;
@@ -31,9 +32,10 @@ public class RibbonView {
 	int minScale = -20;
 	int curScale = 0;
 
-	public RibbonView() {
+	public RibbonView(WordCloudView wordCloud) {
 		this.pages = new ArrayList<Page>();
 		this.root = new Group();
+                this.wordCloud = wordCloud;
 	}
 
 	public void buildRibbon(int pagesNumber) {
@@ -73,7 +75,7 @@ public class RibbonView {
 		double scaleX = pages.get(0).getPage().getScaleX() * zoomFactor;
 		double scaleY = pages.get(0).getPage().getScaleY() * zoomFactor;
 		//System.out.println("scaleX: " + scaleX + " scaleY: " + scaleY);
-                Scale scale = new Scale(scaleX, scaleY, 500, 500);
+                Scale scale = new Scale(scaleX, scaleY, 0, 0);
 		for (int i = 0; i < pages.size(); i++) {
 			
 			pages.get(i).getPage().getTransforms().add(scale);

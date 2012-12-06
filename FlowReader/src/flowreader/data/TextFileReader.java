@@ -62,11 +62,11 @@ public class TextFileReader implements FileReader {
                 double wordWidth = new Text(word).getBoundsInLocal().getWidth();
                 double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
                 if (textWithNewLine > boundHeight) {
-                	pages.add(page);
+                    pages.add(page);
                     page = "";
                 }
                 if (wordWidth + spaceWidth > spaceLeft) {
-                	if(!(textWithNewLine > boundHeight)) {
+                    if (!(textWithNewLine > boundHeight)) {
                         page += "\n";
                     }
                     spaceLeft = boundWidth - wordWidth;
@@ -86,5 +86,13 @@ public class TextFileReader implements FileReader {
         pages.add(page);
         r.close();
         return pages;
+    }
+
+    public ArrayList<String> readFile_WordCloud() {
+        ArrayList<String> wordClouds = new ArrayList<String>();
+        
+        //WordCloud Algorithm
+        
+        return wordClouds;
     }
 }
