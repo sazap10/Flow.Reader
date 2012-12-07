@@ -7,10 +7,13 @@ package flowreader.view;
 import java.util.ArrayList;
 
 import javafx.scene.Group;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import flowreader.core.Page;
-import javafx.animation.TranslateTransition;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
@@ -23,17 +26,14 @@ public class RibbonView extends Group{
 
 	private ArrayList<Page> pages;
         WordCloudView wordCloud;
-	int pageWidth = 700;
-	int pageHeight = 700;
-	int pageInterval = 5;
-	int pagesNumber = 30;
-	int maxPageWidth = 700;
-	int maxPageHeight = 700;
-	int minPageWidth = 200;
-	int minPageHeight = 200;
-	int maxScale = 15;
-	int minScale = -20;
-	int curScale = 0;
+        int pageWidth = 500;
+    	int pageHeight = 700;
+    	int pageInterval = 5;
+    	int pagesNumber = 30;
+    	int maxScale = 15;
+    	int minScale = -20;
+    	int curScale = 0;
+
 
 	public RibbonView(WordCloudView wordCloud) {
 		this.pages = new ArrayList<Page>();
@@ -56,31 +56,30 @@ public class RibbonView extends Group{
                 this.setRibbonEvents();
 	}
 
-	public void zoom(double deltaY) {
+	public void zoom(double deltaY,double x,double y) {
 		double zoomFactor = 1.05;
-		if (deltaY < 0) {
+		if (deltaY <= 0) {
 			if (curScale < minScale)
 				zoomFactor = 1;
 			else {
 				zoomFactor = 2.0 - zoomFactor;
 				curScale--;
-                                setOpacity();
+				setOpacity();
 			}
 		} else{
 			if(curScale>maxScale)
 				zoomFactor=1;
-			else
+			else{
 				curScale++;
-                                setOpacity();
-
+				 setOpacity();
+			}
 		}
 		//System.out.println(zoomFactor);
 		double scaleX = pages.get(0).getPage().getScaleX() * zoomFactor;
 		double scaleY = pages.get(0).getPage().getScaleY() * zoomFactor;
 		//System.out.println("scaleX: " + scaleX + " scaleY: " + scaleY);
-                Scale scale = new Scale(scaleX, scaleY, 0, 0);
 		for (int i = 0; i < pages.size(); i++) {
-			
+			Scale scale = new Scale(scaleX, scaleY,x,y);
 			pages.get(i).getPage().getTransforms().add(scale);
 		}
 
@@ -112,40 +111,50 @@ public class RibbonView extends Group{
 		}
 	}
         
-        private void setRibbonEvents(){
-            EventHandler<MouseEvent> swipeHandler = new EventHandler<MouseEvent>() {
-                MouseEvent previousEvent, firstEvent;
+	private void setRibbonEvents(){
+        EventHandler<MouseEvent> swipeHandler = new EventHandler<MouseEvent>() {
+            MouseEvent previousEvent;
 
-                @Override
-                public void handle(MouseEvent event) {
-                    if(event.getEventType().equals(MouseEvent.MOUSE_PRESSED)){
-                        previousEvent = event;
-                        firstEvent = event;
-                        System.out.println("PRESSED");
-                    }
-                    else if(event.getEventType().equals(MouseEvent.MOUSE_DRAGGED)){
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.getEventType().equals(MouseEvent.MOUSE_PRESSED)){
+                    previousEvent = event;
+                    //System.out.println("PRESSED");
+                }
+                else if(event.getEventType().equals(MouseEvent.MOUSE_DRAGGED)){
+                    double d = event.getSceneX()-previousEvent.getSceneX();
+                    for(int i=0; i<pages.size(); i++){
+                        //System.out.println("DRAGGED FROM "+pages.get(i).getPage().getLayoutX()+" to "+(pages.get(i).getPage().getLayoutX()+d));
+                        pages.get(i).getPage().setLayoutX(pages.get(i).getPage().getLayoutX()+d);
                         
-                        System.out.println("DRAGGED");
-                        double d = event.getSceneX()-previousEvent.getSceneX();
-                        RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()+ d);
-                        
-                        TranslateTransition tt = new TranslateTransition(Duration.millis(400), RibbonView.this);
-                        
-
-                           tt.setByX(d);
-
-                        
-                        tt.setCycleCount(0);
-                        tt.setAutoReverse(true);
-                        tt.play();
                     }
                     previousEvent = event;
-                    event.consume();
                 }
-            };
-        
-                RibbonView.this.setOnMouseDragged(swipeHandler);
-                RibbonView.this.setOnMousePressed(swipeHandler);
-                RibbonView.this.setOnMouseReleased(swipeHandler);
+                else if(event.getEventType().equals(MouseEvent.MOUSE_RELEASED)){
+                    
+                    for(int i=0; i<pages.size(); i++){
+                        Path path = new Path();
+                        path.getElements().add(new MoveTo(pages.get(i).getPage().getLayoutX()+20,pages.get(i).getPage().getLayoutY()));
+                        PathTransition pathTransition = new PathTransition();
+                        pathTransition.setDuration(Duration.millis(1000));
+                        pathTransition.setPath(path);
+                        pathTransition.setNode(pages.get(i).getPage());
+                        pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+                        pathTransition.setCycleCount(Timeline.INDEFINITE);
+                        pathTransition.setAutoReverse(true);
+                        pathTransition.play();
+                        
+                    }
+                    
+                }
+                event.consume();
+            }
+        };
+    
+        for(int i=0; i<pages.size(); i++){
+            pages.get(i).getPage().setOnMouseDragged(swipeHandler);
+            pages.get(i).getPage().setOnMousePressed(swipeHandler);
+            pages.get(i).getPage().setOnMouseReleased(swipeHandler);
         }
+}
 }
