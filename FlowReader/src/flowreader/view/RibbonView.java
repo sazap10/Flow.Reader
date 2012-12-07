@@ -7,13 +7,9 @@ package flowreader.view;
 import java.util.ArrayList;
 
 import javafx.scene.Group;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import flowreader.core.Page;
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
