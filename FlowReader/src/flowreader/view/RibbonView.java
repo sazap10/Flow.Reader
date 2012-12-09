@@ -13,6 +13,7 @@ import flowreader.core.Page;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
@@ -52,7 +53,7 @@ public class RibbonView extends Group {
 		this.setRibbonEvents();
 	}
 
-	public void zoom(double deltaY, double x, double y) {
+	public void zoom(double deltaY, double x,double y,StackPane stackPane) {
 		double zoomFactor = 1.05;
 		if (deltaY <= 0) {
 			if (curScale < minScale)
@@ -74,10 +75,9 @@ public class RibbonView extends Group {
 		double scaleX = pages.get(0).getPage().getScaleX() * zoomFactor;
 		double scaleY = pages.get(0).getPage().getScaleY() * zoomFactor;
 		// System.out.println("scaleX: " + scaleX + " scaleY: " + scaleY);
-		for (int i = 0; i < pages.size(); i++) {
-			Scale scale = new Scale(scaleX, scaleY, x, y);
-			pages.get(i).getPage().getTransforms().add(scale);
-		}
+			Scale scale = new Scale(scaleX, scaleY,stackPane.getLayoutBounds().getWidth()/2,stackPane.getLayoutBounds().getHeight()/2);
+			stackPane.getTransforms().add(scale);
+		
 
 	}
 

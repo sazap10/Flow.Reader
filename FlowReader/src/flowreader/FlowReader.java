@@ -23,6 +23,7 @@ import flowreader.data.TextFileReader;
 import flowreader.view.RibbonView;
 import flowreader.view.WordCloudView;
 import java.util.ArrayList;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -36,26 +37,29 @@ public class FlowReader extends Application {
     RibbonView ribbon;
     WordCloudView wordCloud;
     TextFileReader fileReader;
-    private Button minBtn,closeBtn,openFileButton;
+    private Button minBtn, closeBtn, openFileButton;
     private FlowPane flow;
+    StackPane stackPane;
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Flow Reader");
         primaryStage.setFullScreen(true);
-        
+
         wordCloud = new WordCloudView();
         ribbon = new RibbonView(wordCloud);
         fileReader = new TextFileReader();
-        
+
         setUpButtons();
 
         setUpButtonBar();
 
         BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(ribbon);
+        stackPane = new StackPane();
+        stackPane.getChildren().add(ribbon);
+        borderPane.setCenter(stackPane);
         borderPane.setBottom(openFileButton);
-        
+
         BorderPane.setAlignment(flow, Pos.TOP_RIGHT);
         borderPane.setTop(flow);
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
@@ -69,42 +73,41 @@ public class FlowReader extends Application {
     }
 
     /**
-	 * 
-	 */
-	private void setUpButtons() {
-		closeBtn = new Button("x");
+     *
+     */
+    private void setUpButtons() {
+        closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
-        
+
         minBtn = new Button("_");
-		minBtn.setId("minBtn");
-		
-		openFileButton = new Button("Open file");
-	}
-	
-	private void setUpButtonBar(){
-    	flow = new FlowPane();
-		flow.setHgap(4);
-		flow.setAlignment(Pos.TOP_RIGHT);
-		flow.getChildren().addAll(minBtn,closeBtn);
+        minBtn.setId("minBtn");
+
+        openFileButton = new Button("Open file");
     }
 
+    private void setUpButtonBar() {
+        flow = new FlowPane();
+        flow.setHgap(4);
+        flow.setAlignment(Pos.TOP_RIGHT);
+        flow.getChildren().addAll(minBtn, closeBtn);
+    }
 
-    private void setButtonEvents(final Stage primaryStage){
-    	closeBtn.setOnAction(new EventHandler<ActionEvent>() {
+    private void setButtonEvents(final Stage primaryStage) {
+        closeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.close();
             }
         });
-    	
-    	minBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+        minBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.setIconified(true);
             }
         });
-    	
-    	openFileButton.setOnAction(new EventHandler<ActionEvent>() {
+
+        openFileButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 fileReader.startFileChooser(primaryStage);
@@ -121,8 +124,6 @@ public class FlowReader extends Application {
             }
         });
     }
-	
-	
 
     private void setSceneEvents(final Scene scene) {
         //handles mouse scrolling
@@ -130,7 +131,7 @@ public class FlowReader extends Application {
                 new EventHandler<ScrollEvent>() {
                     @Override
                     public void handle(ScrollEvent event) {
-                    	ribbon.zoom(event.getDeltaY(),event.getX(),event.getY());
+                        ribbon.zoom(event.getDeltaY(), event.getX(), event.getY(),stackPane);
                         event.consume();
 
                     }
@@ -138,8 +139,8 @@ public class FlowReader extends Application {
         scene.setOnZoom(new EventHandler<ZoomEvent>() {
             @Override
             public void handle(ZoomEvent event) {
-            	double delta =event.getZoomFactor()-1;
-            	ribbon.zoom(delta,event.getX(),event.getY());
+                double delta = event.getZoomFactor() - 1;
+                ribbon.zoom(delta, event.getX(), event.getY(),stackPane);
                 event.consume();
             }
         });
