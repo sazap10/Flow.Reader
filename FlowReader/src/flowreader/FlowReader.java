@@ -47,7 +47,7 @@ public class FlowReader extends Application {
         primaryStage.setFullScreen(true);
 
         wordCloud = new WordCloudView();
-        ribbon = new RibbonView(wordCloud);
+        //ribbon = new RibbonView(wordCloud);
         fileReader = new TextFileReader();
 
         setUpButtons();
@@ -56,7 +56,7 @@ public class FlowReader extends Application {
 
         BorderPane borderPane = new BorderPane();
         stackPane = new StackPane();
-        stackPane.getChildren().add(ribbon);
+        
         borderPane.setCenter(stackPane);
         BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
         borderPane.setBottom(openFileButton);
@@ -111,6 +111,8 @@ public class FlowReader extends Application {
         openFileButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+            	ribbon = new RibbonView(wordCloud);
+            	stackPane.getChildren().add(ribbon);
                 fileReader.startFileChooser(primaryStage);
                 try {
                     Page page = new Page(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
