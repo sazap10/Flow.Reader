@@ -75,7 +75,8 @@ public class RibbonView extends Group {
 		double scaleX = pages.get(0).getPage().getScaleX() * zoomFactor;
 		double scaleY = pages.get(0).getPage().getScaleY() * zoomFactor;
 		// System.out.println("scaleX: " + scaleX + " scaleY: " + scaleY);
-			Scale scale = new Scale(scaleX, scaleY,stackPane.getLayoutBounds().getWidth()/2,stackPane.getLayoutBounds().getHeight()/2);
+			Scale scale = new Scale(scaleX, scaleY,x,y);
+                        System.out.println(x+" "+y);
 			stackPane.getTransforms().add(scale);
 		
 
