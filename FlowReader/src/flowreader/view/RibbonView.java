@@ -28,9 +28,9 @@ public class RibbonView extends Group {
 	int pageHeight = 700;
 	int pageInterval = 5;
 	int pagesNumber = 30;
-	int maxScale = 15;
-	int minScale = -20;
-	int curScale = 0;
+    int maxScale = 35;
+    int minScale = 0;
+    int curScale = 15;
 
 	public RibbonView(WordCloudView wordCloud) {
 		this.pages = new ArrayList<Page>();
@@ -53,47 +53,44 @@ public class RibbonView extends Group {
 		this.setRibbonEvents();
 	}
 
-	public void zoom(double deltaY, double x,double y,StackPane stackPane) {
-		double zoomFactor = 1.05;
-		if (deltaY <= 0) {
-			if (curScale < minScale)
-				zoomFactor = 1;
-			else {
-				zoomFactor = 2.0 - zoomFactor;
-				curScale--;
-				setOpacity();
-			}
-		} else {
-			if (curScale > maxScale)
-				zoomFactor = 1;
-			else {
-				curScale++;
-				setOpacity();
-			}
-		}
-		// System.out.println(zoomFactor);
-		double scaleX = pages.get(0).getPage().getScaleX() * zoomFactor;
-		double scaleY = pages.get(0).getPage().getScaleY() * zoomFactor;
-		// System.out.println("scaleX: " + scaleX + " scaleY: " + scaleY);
-			Scale scale = new Scale(scaleX, scaleY,x,y);
-                        System.out.println(x+" "+y);
-			stackPane.getTransforms().add(scale);
-		
+    public void zoom(double deltaY, double x, double y, StackPane stackPane) {
+        if (deltaY <= 0) {
+            if (curScale < minScale+1) {
+            } else {
+                curScale--;
+                setOpacity(stackPane);
+            }
+        } else {
+            if (curScale > maxScale-1) {
+            } else {
+                curScale++;
+                setOpacity(stackPane);
+            }
+        }
 
-	}
 
-	public void setOpacity() {
-		double opacity;
-		double range = maxScale - minScale;
-		if (minScale < 0) {
-			opacity = (curScale + (Math.abs(minScale))) / range;
-		} else {
-			opacity = (curScale - (minScale)) / range;
-		}
-		for (int i = 0; i < pages.size(); i++) {
-			pages.get(i).getPage().setOpacity(opacity);
-		}
-	}
+        double[] array = new double[36];
+        for (int i = 0; i < 36; i++) {
+            array[i] = Math.pow(1.05, i - 15);
+        }
+
+        Scale scale = new Scale(array[curScale], array[curScale], x, y);
+        if (stackPane.getTransforms().size() > 0) {
+            for (int i = 0; i < stackPane.getTransforms().size(); i++) {
+                stackPane.getTransforms().remove(i);
+            }
+        }
+        stackPane.getTransforms().add(scale);
+
+
+    }
+
+    public void setOpacity(StackPane stackPane) {
+        double opacity;
+        opacity = curScale / (double) maxScale;
+        stackPane.setOpacity(opacity);
+
+    }
 
 	public double getPageWidth() {
 		return pageWidth;
