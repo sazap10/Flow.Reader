@@ -110,38 +110,37 @@ public class RibbonView extends Group {
 	}
 
 	private void setRibbonEvents() {
-		EventHandler<MouseEvent> swipeHandler = new EventHandler<MouseEvent>() {
-			MouseEvent previousEvent;
+            EventHandler<MouseEvent> swipeHandler = new EventHandler<MouseEvent>() {
+                MouseEvent previousEvent;
 
-			@Override
-			public void handle(MouseEvent event) {
-				if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-					previousEvent = event;
-					System.out.println("PRESSED");
-				} else if (event.getEventType()
-						.equals(MouseEvent.MOUSE_DRAGGED)) {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+                            previousEvent = event;
+                            //System.out.println("PRESSED");
+                    } else if (event.getEventType()
+                                    .equals(MouseEvent.MOUSE_DRAGGED)) {
 
-					System.out.println("DRAGGED");
-					double d = event.getSceneX() - previousEvent.getSceneX();
-					RibbonView.this
-							.setLayoutX(RibbonView.this.getLayoutX() + d);
+                            //System.out.println("DRAGGED");
+                            double dx = event.getSceneX() - previousEvent.getSceneX();
+                            double dy = event.getSceneY() - previousEvent.getSceneY();
+                            RibbonView.this.setLayoutX(RibbonView.this.getLayoutX() + dx);
+                            RibbonView.this.setLayoutY(RibbonView.this.getLayoutY() + dy);
 
-					TranslateTransition tt = new TranslateTransition(
-							Duration.millis(400), RibbonView.this);
+                            TranslateTransition tt = new TranslateTransition(Duration.millis(400), RibbonView.this);
+                            tt.setByX(dx);
+                            tt.setByY(dy);
+                            tt.setCycleCount(0);
+                            tt.setAutoReverse(true);
+                            tt.play();
+                    }
+                    previousEvent = event;
+                    event.consume();
+                }
+            };
 
-					tt.setByX(d);
-
-					tt.setCycleCount(0);
-					tt.setAutoReverse(true);
-					tt.play();
-				}
-				previousEvent = event;
-				event.consume();
-			}
-		};
-
-		RibbonView.this.setOnMouseDragged(swipeHandler);
-		RibbonView.this.setOnMousePressed(swipeHandler);
-		RibbonView.this.setOnMouseReleased(swipeHandler);
+            RibbonView.this.setOnMouseDragged(swipeHandler);
+            RibbonView.this.setOnMousePressed(swipeHandler);
+            RibbonView.this.setOnMouseReleased(swipeHandler);
 	}
 }

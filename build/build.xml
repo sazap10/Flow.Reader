@@ -21,11 +21,7 @@
 		
 		
 		<mkdir dir="project" />
-		<copy todir="project">
-			<fileset dir="C:\Users\Sachin\workspace\Flow.Reader\FlowReader">
-				<include name="src/**" />
-			</fileset>
-		</copy>
+
 		
 		<mkdir dir="projectRefs" />
 	</target>
