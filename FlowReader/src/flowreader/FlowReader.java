@@ -58,6 +58,7 @@ public class FlowReader extends Application {
         stackPane = new StackPane();
         stackPane.getChildren().add(ribbon);
         borderPane.setCenter(stackPane);
+        BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
         borderPane.setBottom(openFileButton);
 
         BorderPane.setAlignment(flow, Pos.TOP_RIGHT);

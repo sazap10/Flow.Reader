@@ -44,10 +44,10 @@ public class RibbonView extends Group {
 		int x = 0;
 		int y = 0;
 		while (i < pagesNumber) {
-			x = x + pageWidth + pageInterval;
 			Page page = new Page(new Rectangle(x, y, pageWidth, pageHeight));
 			this.pages.add(page);
 			this.getChildren().add(page.getPage());
+			x += pageWidth + pageInterval;
 			i++;
 		}
 		this.setRibbonEvents();
