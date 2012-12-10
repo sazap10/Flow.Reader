@@ -111,13 +111,12 @@ public class RibbonView extends Group {
 
 	private void setRibbonEvents() {
 		EventHandler<MouseEvent> swipeHandler = new EventHandler<MouseEvent>() {
-			MouseEvent previousEvent, firstEvent;
+			MouseEvent previousEvent;
 
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
 					previousEvent = event;
-					firstEvent = event;
 					System.out.println("PRESSED");
 				} else if (event.getEventType()
 						.equals(MouseEvent.MOUSE_DRAGGED)) {
