@@ -54,7 +54,7 @@ public class Project_1st_attempt extends Application {
     int MAX_LINES_PER_PAGE = 28;
     int MAX_CHARACTERS_PER_LINE = 85;
     WordCounter wordCounter = new WordCounter(); //counts the words for wordCloud
-    WordCloud2 cloud = new WordCloud2();
+    WordCloud cloud = new WordCloud();
     
     @Override
     public void start(Stage primaryStage) {
