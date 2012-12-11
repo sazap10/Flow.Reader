@@ -27,8 +27,9 @@ import javafx.scene.Group;
  */
 public class WordCounter {
  private HashMap<String, Integer> words;
- private Integer numOfWordsInCloud = 30;
- private Integer maxFontSize = 100;
+ private Integer numOfWordsInCloud = 70;
+ private Integer maxFontSize = 500;
+ public Integer minFontSize = 14;
  private Integer maxCount;
  private Integer minCount;
  private Integer normalizationConstant = 3;
@@ -118,7 +119,11 @@ public class WordCounter {
      for (Word word : wordObjects){
          int countDiff = word.getCount() - this.minCount;
          int totalCountDiff = this.maxCount - this.minCount;
-         word.setFontSize( ((this.maxFontSize * countDiff) / (this.normalizationConstant * totalCountDiff)));
+         int fontSize = ((this.maxFontSize * countDiff) / (this.normalizationConstant * totalCountDiff));
+         if (fontSize < this.minFontSize){
+             fontSize = this.minFontSize;
+         }
+         word.setFontSize( fontSize);
          
      }
  }
