@@ -124,7 +124,7 @@ StackPane stackPane;
                     stackPane.setLayoutX(stackPane.getLayoutX() + dx);
                     stackPane.setLayoutY(stackPane.getLayoutY() + dy);
 
-                    TranslateTransition tt = new TranslateTransition(Duration.millis(400), stackPane);
+                    TranslateTransition tt = new TranslateTransition(Duration.millis(100), stackPane);
                     tt.setByX(dx);
                     tt.setByY(dy);
                     tt.setCycleCount(0);

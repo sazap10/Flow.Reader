@@ -38,7 +38,7 @@
 }
 
 #openFileBtn{
-	-fx-background-color: #008287;
+	-fx-background-color: #005888;
     -fx-background-radius: 0;
     -fx-padding: 1 20 1 20;
     -fx-text-fill: white;
@@ -52,7 +52,7 @@
 	-fx-translate-y:1;
 }
 #wordCloudBtn{
-	-fx-background-color: #008287;
+	-fx-background-color: #005888;
     -fx-background-radius: 0;
     -fx-padding: 1 20 1 20;
     -fx-text-fill: white;
