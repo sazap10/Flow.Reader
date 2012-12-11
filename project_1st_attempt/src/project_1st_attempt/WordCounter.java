@@ -55,9 +55,11 @@ public class WordCounter {
               words.put(i, 1);    
             }
             else{
-                Integer count = this.words.get(i);
-                count++;
-                this.words.put(i, count);
+                if (!this.commonWords.containsKey(i)){
+                   Integer count = this.words.get(i);
+                   count++;
+                   this.words.put(i, count);
+                }
             }
         }
      }
