@@ -90,7 +90,9 @@ public class FlowReader extends Application {
         minBtn.setId("minBtn");
         
         openFileButton = new Button("Open file");
+        openFileButton.setId("openFileBtn");
         wordCloudButton = new Button("Word Cloud");
+        wordCloudButton.setId("wordCloudBtn");
         wordCloudButton.setDisable(true);
     }
     

@@ -36,3 +36,32 @@
 	-fx-background-color: #14167D;
 	-fx-text-fill: white;
 }
+
+#openFileBtn{
+	-fx-background-color: #008287;
+    -fx-background-radius: 0;
+    -fx-padding: 1 20 1 20;
+    -fx-text-fill: white;
+    -fx-font-size: 17pt;
+    
+}
+
+#openFileBtn:hover{
+	-fx-background-color: #022020;
+	-fx-translate-x:1;
+	-fx-translate-y:1;
+}
+#wordCloudBtn{
+	-fx-background-color: #008287;
+    -fx-background-radius: 0;
+    -fx-padding: 1 20 1 20;
+    -fx-text-fill: white;
+    -fx-font-size: 17pt;
+    
+}
+
+#wordCloudBtn:hover{
+	-fx-background-color: #022020;
+	-fx-translate-x:1;
+	-fx-translate-y:1;
+}
