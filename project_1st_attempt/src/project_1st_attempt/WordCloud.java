@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 
 /**
  *
@@ -37,12 +38,14 @@ public class WordCloud {
     r.setFill(Color.WHITE);
     
     //these would normally be inputs to the function
-    double originX = 50;
-    double originY = 50;
-    double currX = originX;
-    double currY = originY;
+    
+    
     double maxWidth = 800;
     double maxHeight = 400;
+    double originX = (Screen.getPrimary().getVisualBounds().getWidth() / 2) - (maxWidth / 2);
+    double originY = (Screen.getPrimary().getVisualBounds().getHeight() / 2) - (maxHeight / 2);
+    double currX = originX;
+    double currY = originY;
     
     for (Word word : wordObjects ){
      Text currText = new Text();   
@@ -60,7 +63,7 @@ public class WordCloud {
           currX = currX;
           currText.setX(currX);
           currText.setY(currY);
-          currX = wordWidth + currX;
+          currX = wordWidth + currX + 20;
           this.words.getChildren().add(currText);       
          
      }else{
@@ -73,7 +76,7 @@ public class WordCloud {
              currText.setX(currX);
              currText.setY(currY);
              this.words.getChildren().add(currText);
-             currX += wordWidth;
+             currX += wordWidth + 20;
              //need some kind of 'renderWord(x,y)' here
          }
          else{
