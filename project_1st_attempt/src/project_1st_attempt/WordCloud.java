@@ -27,15 +27,15 @@ public class WordCloud {
         this.words = new Group();
     }
     
-   public void renderCloud(ArrayList<Word> WordObjects ){
-    ArrayList<Integer> indexes = new ArrayList<Integer>();
-    ArrayList<Word> wordObjects = new ArrayList<Word>();
-     for (int i = 0; i <= wordObjects.size() -1; i ++){
-         indexes.add(i, i);
-     }
-     Collections.shuffle(indexes);
-     System.out.println("PRINTING INDEXES!");
-     System.out.println(indexes);
+   public void renderCloud(ArrayList<Word> wordObjects ){
+    //ArrayList<Integer> indexes = new ArrayList<Integer>();
+   // ArrayList<Word> wordObjects = new ArrayList<Word>();
+   //  for (int i = 0; i <= wordObjects.size() -1; i ++){
+  ////       indexes.add(i, i);
+   //  }
+     Collections.shuffle(wordObjects);
+   //  System.out.println("PRINTING INDEXES!");
+  //   System.out.println(indexes);
     //create the basic rectangle (usually in terms of class attributes)
     Group cloud = new Group();
     Rectangle r = new Rectangle();
@@ -83,6 +83,7 @@ public class WordCloud {
              
              //start new line
           //   System.out.println("goes on a new line!");
+             System.out.println("stupid thing!");
              currY = wordHeight + currY;
              currX = originX;
              currText.setX(currX);
