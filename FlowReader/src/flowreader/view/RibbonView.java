@@ -30,9 +30,10 @@ public class RibbonView extends Group {
     int maxScale = 35;
     int minScale = 0;
     int curScale = 15;
-
-    public RibbonView() {
+StackPane stackPane;
+    public RibbonView(StackPane stackPane) {
         this.pages = new ArrayList<Page>();
+        this.stackPane = stackPane;
     }
 
     public void buildRibbon(int pagesNumber) {
@@ -51,18 +52,18 @@ public class RibbonView extends Group {
         this.setRibbonEvents();
     }
 
-    public void zoom(double deltaY, double x, double y, StackPane stackPane) {
+    public void zoom(double deltaY, double x, double y) {
         if (deltaY <= 0) {
             if (curScale < minScale + 1) {
             } else {
                 curScale--;
-                setOpacity(stackPane);
+                setOpacity();
             }
         } else {
             if (curScale > maxScale - 1) {
             } else {
                 curScale++;
-                setOpacity(stackPane);
+                setOpacity();
             }
         }
 
@@ -83,7 +84,7 @@ public class RibbonView extends Group {
 
     }
 
-    public void setOpacity(StackPane stackPane) {
+    public void setOpacity() {
         double opacity;
         opacity = curScale / (double) maxScale;
         stackPane.setOpacity(opacity);
@@ -119,10 +120,10 @@ public class RibbonView extends Group {
                     //System.out.println("DRAGGED");
                     double dx = event.getSceneX() - previousEvent.getSceneX();
                     double dy = event.getSceneY() - previousEvent.getSceneY();
-                    RibbonView.this.setLayoutX(RibbonView.this.getLayoutX() + dx);
-                    RibbonView.this.setLayoutY(RibbonView.this.getLayoutY() + dy);
+                    stackPane.setLayoutX(stackPane.getLayoutX() + dx);
+                    stackPane.setLayoutY(stackPane.getLayoutY() + dy);
 
-                    TranslateTransition tt = new TranslateTransition(Duration.millis(400), RibbonView.this);
+                    TranslateTransition tt = new TranslateTransition(Duration.millis(400), stackPane);
                     tt.setByX(dx);
                     tt.setByY(dy);
                     tt.setCycleCount(0);
