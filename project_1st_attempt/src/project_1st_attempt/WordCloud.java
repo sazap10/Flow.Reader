@@ -41,8 +41,8 @@ public class WordCloud {
     double originY = 50;
     double currX = originX;
     double currY = originY;
-    double maxWidth = 200;
-    double maxHeight = 100;
+    double maxWidth = 800;
+    double maxHeight = 400;
     
     for (Word word : wordObjects ){
      Text currText = new Text();   
