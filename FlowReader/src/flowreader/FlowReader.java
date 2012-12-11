@@ -123,7 +123,7 @@ public class FlowReader extends Application {
         openFileButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                ribbon = new RibbonView();
+                ribbon = new RibbonView(stackPane);
                 stackPane.getChildren().addAll(wordCloud,ribbon);
                 wordCloud.setVisible(false);
                 fileReader.startFileChooser(primaryStage);
@@ -164,7 +164,7 @@ public class FlowReader extends Application {
                     @Override
                     public void handle(ScrollEvent event) {
                         if (!event.isDirect()) {  
-                        ribbon.zoom(event.getDeltaY(), event.getX(), event.getY(), stackPane);
+                        ribbon.zoom(event.getDeltaY(), event.getX(), event.getY());
                         }
                         event.consume();
                         
@@ -174,7 +174,7 @@ public class FlowReader extends Application {
             @Override
             public void handle(ZoomEvent event) {
                 double delta = event.getZoomFactor() - 1;
-                ribbon.zoom(delta, event.getX(), event.getY(), stackPane);
+                ribbon.zoom(delta, event.getX(), event.getY());
                 event.consume();
             }
         });
