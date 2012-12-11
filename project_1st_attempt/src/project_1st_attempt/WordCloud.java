@@ -5,6 +5,8 @@
 package project_1st_attempt;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -26,6 +28,8 @@ public class WordCloud {
     
    public void renderCloud(ArrayList<Word> wordObjects ){
      
+   
+       
     //create the basic rectangle (usually in terms of class attributes)
     Group cloud = new Group();
     Rectangle r = new Rectangle();
@@ -42,11 +46,13 @@ public class WordCloud {
     
     double maxWidth = 800;
     double maxHeight = 400;
+    double spacing = 20;
     double originX = (Screen.getPrimary().getVisualBounds().getWidth() / 2) - (maxWidth / 2);
     double originY = (Screen.getPrimary().getVisualBounds().getHeight() / 2) - (maxHeight / 2);
     double currX = originX;
     double currY = originY;
     
+  
     for (Word word : wordObjects ){
      Text currText = new Text();   
      currText.setText(word.getText());
@@ -59,11 +65,11 @@ public class WordCloud {
           System.out.println("word text:" + word.getText());
           System.out.println("font size:" + word.getFontSize().toString());
           System.out.println("width:" + wordWidth);
-          currY = currY;
-          currX = currX;
+        //  currY = currY;
+        //  currX = currX;
           currText.setX(currX);
           currText.setY(currY);
-          currX = wordWidth + currX + 20;
+          currX = wordWidth + currX + spacing;
           this.words.getChildren().add(currText);       
          
      }else{
@@ -76,7 +82,7 @@ public class WordCloud {
              currText.setX(currX);
              currText.setY(currY);
              this.words.getChildren().add(currText);
-             currX += wordWidth + 20;
+             currX += wordWidth + spacing;
              //need some kind of 'renderWord(x,y)' here
          }
          else{
