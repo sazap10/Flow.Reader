@@ -7,6 +7,7 @@ package project_1st_attempt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Vector;
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -26,10 +27,15 @@ public class WordCloud {
         this.words = new Group();
     }
     
-   public void renderCloud(ArrayList<Word> wordObjects ){
-     
-   
-       
+   public void renderCloud(ArrayList<Word> WordObjects ){
+    ArrayList<Integer> indexes = new ArrayList<Integer>();
+    ArrayList<Word> wordObjects = new ArrayList<Word>();
+     for (int i = 0; i <= wordObjects.size() -1; i ++){
+         indexes.add(i, i);
+     }
+     Collections.shuffle(indexes);
+     System.out.println("PRINTING INDEXES!");
+     System.out.println(indexes);
     //create the basic rectangle (usually in terms of class attributes)
     Group cloud = new Group();
     Rectangle r = new Rectangle();
@@ -61,10 +67,10 @@ public class WordCloud {
      double wordHeight = currText.getBoundsInLocal().getHeight();
      if ((wordWidth + currX) <= maxWidth){
       //if it doesn't fit on the current line
-          System.out.println("goes on the same line!");
-          System.out.println("word text:" + word.getText());
-          System.out.println("font size:" + word.getFontSize().toString());
-          System.out.println("width:" + wordWidth);
+       //   System.out.println("goes on the same line!");
+      ////    System.out.println("word text:" + word.getText());
+     //     System.out.println("font size:" + word.getFontSize().toString());
+      //    System.out.println("width:" + wordWidth);
         //  currY = currY;
         //  currX = currX;
           currText.setX(currX);
@@ -76,7 +82,7 @@ public class WordCloud {
          if((wordHeight + currY) <= maxHeight){
              
              //start new line
-             System.out.println("goes on a new line!");
+          //   System.out.println("goes on a new line!");
              currY = wordHeight + currY;
              currX = originX;
              currText.setX(currX);
