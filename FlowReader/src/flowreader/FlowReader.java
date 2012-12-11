@@ -37,37 +37,41 @@ public class FlowReader extends Application {
     RibbonView ribbon;
     WordCloudView wordCloud;
     TextFileReader fileReader;
-    private Button minBtn, closeBtn, openFileButton;
-    private FlowPane flow;
+    private Button minBtn, closeBtn, openFileButton, wordCloudButton;
+    private FlowPane flow, flow2;
     StackPane stackPane;
-
+    boolean wordCloudToggle;
+    
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Flow Reader");
         primaryStage.setFullScreen(true);
-
+        
         wordCloud = new WordCloudView();
+        wordCloudToggle = false;
         //ribbon = new RibbonView(wordCloud);
         fileReader = new TextFileReader();
-
+        
         setUpButtons();
-
+        
         setUpButtonBar();
-
+        
         BorderPane borderPane = new BorderPane();
         stackPane = new StackPane();
         
-        borderPane.setCenter(stackPane);
-        BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
-        borderPane.setBottom(openFileButton);
-
         BorderPane.setAlignment(flow, Pos.TOP_RIGHT);
         borderPane.setTop(flow);
+       
+        
+        borderPane.setBottom(flow2);
+        
+        borderPane.setCenter(stackPane);
+        BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         this.setButtonEvents(primaryStage);
         this.setSceneEvents(scene);
-
+        
         primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -79,20 +83,27 @@ public class FlowReader extends Application {
     private void setUpButtons() {
         closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
-
+        
         minBtn = new Button("_");
         minBtn.setId("minBtn");
-
+        
         openFileButton = new Button("Open file");
+        wordCloudButton = new Button("Word Cloud");
+        wordCloudButton.setDisable(true);
     }
-
+    
     private void setUpButtonBar() {
         flow = new FlowPane();
         flow.setHgap(4);
         flow.setAlignment(Pos.TOP_RIGHT);
         flow.getChildren().addAll(minBtn, closeBtn);
+        
+        flow2 = new FlowPane();
+        flow2.setHgap(4);
+        flow2.setAlignment(Pos.BOTTOM_LEFT);
+        flow2.getChildren().addAll(openFileButton, wordCloudButton);
     }
-
+    
     private void setButtonEvents(final Stage primaryStage) {
         closeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -100,19 +111,20 @@ public class FlowReader extends Application {
                 primaryStage.close();
             }
         });
-
+        
         minBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.setIconified(true);
             }
         });
-
+        
         openFileButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-            	ribbon = new RibbonView(wordCloud);
-            	stackPane.getChildren().add(ribbon);
+                ribbon = new RibbonView();
+                stackPane.getChildren().addAll(wordCloud,ribbon);
+                wordCloud.setVisible(false);
                 fileReader.startFileChooser(primaryStage);
                 try {
                     Page page = new Page(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
@@ -120,34 +132,50 @@ public class FlowReader extends Application {
                     pages = fileReader.readFile(page.getTextBound());
                     ribbon.buildRibbon(pages.size());
                     ribbon.setTexttoPages(pages);
+                            wordCloudButton.setDisable(false);
 
                 } catch (Exception exception) {
                     System.out.println(exception);
                 }
             }
         });
+        
+        wordCloudButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (wordCloudToggle) {
+                    wordCloudToggle = false;
+                    wordCloud.setVisible(wordCloudToggle);
+                    ribbon.setVisible(true);
+                } else {
+                    wordCloudToggle = true;
+                    wordCloud.setVisible(wordCloudToggle);
+                    ribbon.setVisible(false);
+                }
+            }
+        });
     }
-
+    
     private void setSceneEvents(final Scene scene) {
         //handles mouse scrolling
         scene.setOnScroll(
                 new EventHandler<ScrollEvent>() {
                     @Override
                     public void handle(ScrollEvent event) {
-                        ribbon.zoom(event.getDeltaY(), event.getX(), event.getY(),stackPane);
+                        ribbon.zoom(event.getDeltaY(), event.getX(), event.getY(), stackPane);
                         event.consume();
-
+                        
                     }
                 });
         scene.setOnZoom(new EventHandler<ZoomEvent>() {
             @Override
             public void handle(ZoomEvent event) {
                 double delta = event.getZoomFactor() - 1;
-                ribbon.zoom(delta, event.getX(), event.getY(),stackPane);
+                ribbon.zoom(delta, event.getX(), event.getY(), stackPane);
                 event.consume();
             }
         });
-
+        
     }
 
     /**
