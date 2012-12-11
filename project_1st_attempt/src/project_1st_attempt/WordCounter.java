@@ -4,6 +4,10 @@
  */
 
 package project_1st_attempt;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,11 +38,13 @@ public class WordCounter {
  private Integer minCount;
  private Integer normalizationConstant = 3;
  public ArrayList<Word> wordObjects;  //only public for basic testing
+ private HashMap<String, Integer> commonWords;
  public WordCounter(){
      this.words = new HashMap<String, Integer>();
      this.wordObjects = new ArrayList<Word>();
+     this.commonWords = new HashMap<String, Integer>();
+     this.getCommonWords();
  }
- 
  //counts words in a line of texts and adds them to the 'words' hashMap
  public void readLine(String text){
      ArrayList<String> characters;
@@ -73,6 +79,32 @@ public class WordCounter {
     
      return output;
  */    
+ }
+ 
+ public void getCommonWords(){
+        StringBuilder stringBuffer = new StringBuilder();
+        BufferedReader bufferedReader = null;
+         try {
+            bufferedReader = new BufferedReader(new FileReader("CommonEnglishWords.txt"));
+            String temp_text;
+           while ((temp_text = bufferedReader.readLine()) != null) {
+               this.commonWords.put(temp_text, 1);
+           }
+         }
+         catch (FileNotFoundException ex){
+             System.out.println("Couldn't find the file!");
+         }
+         catch (IOException ex){
+             System.out.println("no idea!");
+         }
+         finally {
+             try{
+                bufferedReader.close();
+             }
+             catch(IOException ex){
+                System.out.println("couldn't close the file!");   
+             }
+         }
  }
  
  public String trimPunctuation(String word){
