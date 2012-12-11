@@ -54,7 +54,7 @@ public class Project_1st_attempt extends Application {
     int MAX_LINES_PER_PAGE = 28;
     int MAX_CHARACTERS_PER_LINE = 85;
     WordCounter wordCounter = new WordCounter(); //counts the words for wordCloud
-    WordCloud cloud = new WordCloud();
+    WordCloud2 cloud = new WordCloud2();
     
     @Override
     public void start(Stage primaryStage) {
@@ -109,7 +109,7 @@ public class Project_1st_attempt extends Application {
         if (f != null) {
             readFile(parsefile(f));           
            // text.setText(array.get(current_page));
-            text.setText(wordCounter.getWordCount());
+           wordCounter.getWordCount();
             wordCounter.setWordSizes();
             ArrayList<Word> cloudInput = wordCounter.wordObjects;        
            //need to move all WordCounter code to WordCloud
