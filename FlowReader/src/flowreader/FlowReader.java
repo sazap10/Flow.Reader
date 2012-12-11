@@ -159,15 +159,17 @@ public class FlowReader extends Application {
     
     private void setSceneEvents(final Scene scene) {
         //handles mouse scrolling
-        /*scene.setOnScroll(
+        scene.setOnScroll(
                 new EventHandler<ScrollEvent>() {
                     @Override
                     public void handle(ScrollEvent event) {
+                        if (!event.isDirect()) {  
                         ribbon.zoom(event.getDeltaY(), event.getX(), event.getY(), stackPane);
+                        }
                         event.consume();
                         
                     }
-                });*/
+                });
         scene.setOnZoom(new EventHandler<ZoomEvent>() {
             @Override
             public void handle(ZoomEvent event) {
