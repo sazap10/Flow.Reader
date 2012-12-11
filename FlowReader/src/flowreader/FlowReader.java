@@ -63,10 +63,11 @@ public class FlowReader extends Application {
         
        
         
-        borderPane.setBottom(flow2);
         
         borderPane.setCenter(stackPane);
         borderPane.setTop(flow);
+                borderPane.setBottom(flow2);
+
         BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
         Scene scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
