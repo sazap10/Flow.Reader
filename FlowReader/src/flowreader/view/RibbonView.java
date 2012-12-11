@@ -30,6 +30,7 @@ public class RibbonView extends Group {
     int maxScale = 35;
     int minScale = 0;
     int curScale = 15;
+    int opaqueScale =15;
 StackPane stackPane;
     public RibbonView(StackPane stackPane) {
         this.pages = new ArrayList<Page>();
@@ -86,7 +87,7 @@ StackPane stackPane;
 
     public void setOpacity() {
         double opacity;
-        opacity = curScale / (double) maxScale;
+        opacity = curScale / (double) opaqueScale;
         stackPane.setOpacity(opacity);
 
     }
