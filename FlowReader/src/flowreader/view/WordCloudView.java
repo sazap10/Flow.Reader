@@ -28,14 +28,6 @@ import javafx.stage.Screen;
  */
 public class WordCloudView extends Group {
 
-    private HashMap<String, Integer> words;
-    private Integer numOfWordsInCloud = 30;
-    private Integer maxFontSize = 500;
-    public Integer minFontSize = 14;
-    private Integer maxCount;
-    private Integer minCount;
-    private Integer normalizationConstant = 3;
-    private HashMap<String, Integer> commonWords;
     TextFileReader_WordCloud fileReader_WordCloud;
 
     public WordCloudView(TextFileReader_WordCloud fileReader_WordCloud) {
