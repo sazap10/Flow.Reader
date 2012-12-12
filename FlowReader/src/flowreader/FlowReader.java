@@ -71,9 +71,9 @@ public class FlowReader extends Application {
 		setUpButtons();
 		setUpButtonBar();
 
+		borderPane.setBottom(comparisonView);
 		borderPane.setCenter(stackPane);
 		borderPane.setTop(btnsBar);
-		borderPane.setBottom(comparisonView);
 		
 		BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
 		this.defineSceneEvents();
@@ -159,21 +159,21 @@ public class FlowReader extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-                                                        stackPane.getChildren().clear();
-                    wordCloud.getChildren().clear();
-                    fileReader_WordCloud.wordObjects.clear();
-                    wordCloudToggle = true;
-                    wordCloudButton.setText("Ribbon View");
+					stackPane.getChildren().clear();
+					wordCloud.getChildren().clear();
+					fileReader_WordCloud.wordObjects.clear();
+					wordCloudToggle = true;
+					wordCloudButton.setText("Ribbon View");
 
-                                    
 					ribbon = new RibbonView(stackPane);
 					ArrayList<String> pages = new ArrayList<>();
 					Page page = new Page(new Rectangle(0, 0, ribbon
 							.getPageWidth(), ribbon.getPageHeight()));
 
 					stackPane.getChildren().add(wordCloud);
-					comparisonView.setPageSize(ribbon.getPageWidth(),ribbon.getPageHeight());
-					
+					comparisonView.setPageSize(ribbon.getPageWidth(),
+							ribbon.getPageHeight());
+
 					fileReader.startFileChooser(primaryStage);
 					fileReader_WordCloud.getCommonWords();
 					pages = fileReader.readFile(page.getTextBound());
@@ -214,11 +214,13 @@ public class FlowReader extends Application {
 					diffModeToggle = false;
 					diffModeBtn.setText("Drag Mode");
 					ribbon.setRibbonEvents(true);
+					ribbon.setPageDragEvent(false);
 					comparisonView.setDragEvents(false);
 				} else {
 					diffModeToggle = true;
 					diffModeBtn.setText("Pan Mode");
 					ribbon.setRibbonEvents(false);
+					ribbon.setPageDragEvent(true);
 					comparisonView.setDragEvents(true);
 				}
 			}
@@ -252,7 +254,7 @@ public class FlowReader extends Application {
 		if (setFlag) {
 			scene.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 			scene.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
-		}else{
+		} else {
 			scene.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
 			scene.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
 		}

@@ -32,7 +32,7 @@ public class ComparisonView extends FlowPane {
 		pages = new ArrayList<Page>();
 		defineDragEvent();
 		this.setMinSize(Screen.getPrimary().getVisualBounds().getWidth(), 200);
-		this.setStyle("-fx-background-color: grey");
+		this.setStyle("-fx-background-color: #B8B8B8");
 	}
 	
 	public void setPageSize(double pageWidth, double pageHeight){
@@ -52,7 +52,7 @@ public class ComparisonView extends FlowPane {
 		dragOverHandler = new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
 				/* data is dragged over the target */
-
+				System.out.println("dragOver");
 				/*
 				 * accept it only if it is not dragged from the same node and if
 				 * it has a string data
@@ -68,6 +68,7 @@ public class ComparisonView extends FlowPane {
 		};
 		dragEnteredHandler = new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
+				System.out.println("dragEnter");
 				/* show to the user that it is an actual gesture target */
 				if (event.getGestureSource() != ComparisonView.this
 						&& event.getDragboard().hasString()) {
@@ -79,6 +80,7 @@ public class ComparisonView extends FlowPane {
 		};
 		dragExitedHandler = new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
+				System.out.println("dragExit");
 				/* mouse moved away, remove the graphical cues */
 				ComparisonView.this.setStyle("-fx-background-color: #B8B8B8");
 
@@ -88,6 +90,7 @@ public class ComparisonView extends FlowPane {
 
 		dragDroppedHandler = new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
+				System.out.println("dragDropped");
 				/* if there is a string data on dragboard, read it and use it */
 				Dragboard db = event.getDragboard();
 				boolean success = false;

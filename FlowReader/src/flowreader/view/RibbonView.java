@@ -160,6 +160,7 @@ public class RibbonView extends Group {
 			if (setFlag) {
 			page.setOnDragDetected(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent event) {
+					System.out.println("page dragged");
 					Dragboard drag = page.startDragAndDrop(TransferMode.ANY);
 					ClipboardContent content = new ClipboardContent();
 					content.putString(page.getText());
