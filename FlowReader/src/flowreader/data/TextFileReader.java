@@ -21,8 +21,10 @@ import javafx.scene.shape.Rectangle;
 public class TextFileReader implements FileReader {
 
     File file;
+    TextFileReader_WordCloud fileReader_WordCloud;
 
-    public TextFileReader() {
+    public TextFileReader(TextFileReader_WordCloud fileReader_WordCloud) {
+        this.fileReader_WordCloud = fileReader_WordCloud;
     }
 
     @Override
@@ -56,6 +58,8 @@ public class TextFileReader implements FileReader {
         LineNumberReader r = new LineNumberReader(new java.io.FileReader(file));
         String paragraph, word;
         while ((paragraph = r.readLine()) != null) {
+            fileReader_WordCloud.readLine(paragraph);
+
             Scanner sc = new Scanner(paragraph);
             while (sc.hasNext()) {
                 word = sc.next();
@@ -86,13 +90,5 @@ public class TextFileReader implements FileReader {
         pages.add(page);
         r.close();
         return pages;
-    }
-
-    public ArrayList<String> readFile_WordCloud() {
-        ArrayList<String> wordClouds = new ArrayList<String>();
-        
-        //WordCloud Algorithm
-        
-        return wordClouds;
     }
 }
