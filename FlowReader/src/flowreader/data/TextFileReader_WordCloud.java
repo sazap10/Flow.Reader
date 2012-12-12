@@ -80,7 +80,7 @@ public class TextFileReader_WordCloud {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new java.io.FileReader(this.getClass().getResource("CommonEnglishWords.txt").toExternalForm()));
+            bufferedReader = new BufferedReader(new java.io.FileReader(System.getProperty("user.dir")+"CommonEnglishWords.txt"));
 
             String temp_text;
             while ((temp_text = bufferedReader.readLine()) != null) {
