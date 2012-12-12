@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import flowreader.data.TextFileReader;
+import flowreader.data.TextFileReader_WordCloud;
 import flowreader.view.RibbonView;
 import flowreader.view.WordCloudView;
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class FlowReader extends Application {
 	RibbonView ribbon;
 	WordCloudView wordCloud;
 	TextFileReader fileReader;
+            TextFileReader_WordCloud fileReader_WordCloud;
+
 	private Button minBtn, closeBtn, openFileButton, wordCloudButton,
 			diffModeBtn;
 	private VBox btnsBar;
@@ -49,11 +52,12 @@ public class FlowReader extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Flow Reader");
 		primaryStage.setFullScreen(true);
+        fileReader_WordCloud = new TextFileReader_WordCloud();
 
-		wordCloud = new WordCloudView();
+		wordCloud = new WordCloudView(fileReader_WordCloud);
 		wordCloudToggle = diffModeToggle = false;
 		// ribbon = new RibbonView(wordCloud);
-		fileReader = new TextFileReader();
+		fileReader = new TextFileReader(fileReader_WordCloud);
 
 		setUpButtons();
 
@@ -157,6 +161,9 @@ public class FlowReader extends Application {
 					Page page = new Page(new Rectangle(0, 0, ribbon
 							.getPageWidth(), ribbon.getPageHeight()));
 					ArrayList<String> pages = new ArrayList<>();
+                                        
+                                                            fileReader_WordCloud.getCommonWords();
+
 					pages = fileReader.readFile(page.getTextBound());
 
 					ribbon.buildRibbon(pages.size());
