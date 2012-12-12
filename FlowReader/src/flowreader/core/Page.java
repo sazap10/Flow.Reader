@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
  *
  * @author D-Day
  */
-public class Page {
+public class Page extends Group{
 
     private Rectangle pageBoundary, textBound;
     private Text pageText;
