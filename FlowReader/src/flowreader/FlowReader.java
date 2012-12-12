@@ -96,7 +96,7 @@ public class FlowReader extends Application {
 
 		openFileButton = new Button("Open file");
 		openFileButton.setId("openFileBtn");
-		wordCloudButton = new Button("Word Cloud View");
+		wordCloudButton = new Button("Ribbon View");
 		wordCloudButton.setId("wordCloudBtn");
 		wordCloudButton.setDisable(true);
 
@@ -155,12 +155,19 @@ public class FlowReader extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
+                                                        stackPane.getChildren().clear();
+                    wordCloud.getChildren().clear();
+                    fileReader_WordCloud.wordObjects.clear();
+                    wordCloudToggle = true;
+                    wordCloudButton.setText("Ribbon View");
+
+                                    
 					ribbon = new RibbonView(stackPane);
 					ArrayList<String> pages = new ArrayList<>();
 					Page page = new Page(new Rectangle(0, 0, ribbon
 							.getPageWidth(), ribbon.getPageHeight()));
 
-					stackPane.getChildren().add(ribbon);
+					stackPane.getChildren().add(wordCloud);
 
 					fileReader.startFileChooser(primaryStage);
 					fileReader_WordCloud.getCommonWords();
