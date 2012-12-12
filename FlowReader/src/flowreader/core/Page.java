@@ -37,6 +37,10 @@ public class Page extends Group{
     public void setText(String text) {
         pageText.setText(text);
     }
+    
+    public String getText(){
+    	return pageText.getText();
+    }
 
     public double getPageWidth() {
         return pageBoundary.getWidth();

@@ -23,6 +23,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import flowreader.data.TextFileReader;
 import flowreader.data.TextFileReader_WordCloud;
+import flowreader.view.ComparisonView;
 import flowreader.view.RibbonView;
 import flowreader.view.WordCloudView;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class FlowReader extends Application {
 	WordCloudView wordCloud;
 	TextFileReader fileReader;
 	TextFileReader_WordCloud fileReader_WordCloud;
+	ComparisonView comparisonView;
 	private Button minBtn, closeBtn, openFileButton, wordCloudButton,
 			diffModeBtn;
 	private VBox btnsBar;
@@ -52,6 +54,7 @@ public class FlowReader extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		
 		fileReader_WordCloud = new TextFileReader_WordCloud();
 		wordCloud = new WordCloudView(fileReader_WordCloud);
 		fileReader = new TextFileReader(fileReader_WordCloud);
