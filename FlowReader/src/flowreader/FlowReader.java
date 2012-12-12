@@ -37,7 +37,7 @@ public class FlowReader extends Application {
     RibbonView ribbon;
     WordCloudView wordCloud;
     TextFileReader fileReader;
-    private Button minBtn, closeBtn, openFileButton, wordCloudButton;
+    private Button minBtn, closeBtn, openFileButton, wordCloudButton,diffModeBtn;
     private FlowPane flow, flow2;
     StackPane stackPane;
     boolean wordCloudToggle;
@@ -91,9 +91,13 @@ public class FlowReader extends Application {
 
         openFileButton = new Button("Open file");
         openFileButton.setId("openFileBtn");
-        wordCloudButton = new Button("Word Cloud");
+        wordCloudButton = new Button("Word Cloud View");
         wordCloudButton.setId("wordCloudBtn");
         wordCloudButton.setDisable(true);
+        
+        diffModeBtn = new Button("Drag Mode");
+        diffModeBtn.setId("diffModeBtn");
+        
     }
 
     private void setUpButtonBar() {
@@ -152,10 +156,12 @@ public class FlowReader extends Application {
                     wordCloudToggle = false;
                                         stackPane.getChildren().remove(wordCloud);
                     stackPane.getChildren().add(ribbon);
+                    wordCloudButton.setText("Word Cloud View");
                 } else {
                     wordCloudToggle = true;
                                         stackPane.getChildren().remove(ribbon);
                      stackPane.getChildren().add(wordCloud);
+                     wordCloudButton.setText("Ribbon View");
                 }
             }
         });

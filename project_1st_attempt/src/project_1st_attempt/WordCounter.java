@@ -31,7 +31,7 @@ import javafx.scene.Group;
  */
 public class WordCounter {
  private HashMap<String, Integer> words;
- private Integer numOfWordsInCloud = 70;
+ private Integer numOfWordsInCloud = 30;
  private Integer maxFontSize = 500;
  public Integer minFontSize = 14;
  private Integer maxCount;
@@ -87,7 +87,7 @@ public class WordCounter {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
          try {
-            bufferedReader = new BufferedReader(new FileReader("CommonEnglishWords.txt"));
+            bufferedReader = new BufferedReader(new FileReader(this.getClass().getResource("CommonEnglishWords.txt").toExternalForm()));
             String temp_text;
            while ((temp_text = bufferedReader.readLine()) != null) {
                this.commonWords.put(temp_text, 1);
@@ -101,7 +101,8 @@ public class WordCounter {
          }
          finally {
              try{
-                bufferedReader.close();
+            	 if(bufferedReader!= null)
+            		 bufferedReader.close();
              }
              catch(IOException ex){
                 System.out.println("couldn't close the file!");   
