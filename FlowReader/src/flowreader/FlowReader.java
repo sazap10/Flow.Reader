@@ -54,12 +54,12 @@ public class FlowReader extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		
 		fileReader_WordCloud = new TextFileReader_WordCloud();
 		wordCloud = new WordCloudView(fileReader_WordCloud);
 		fileReader = new TextFileReader(fileReader_WordCloud);
 		BorderPane borderPane = new BorderPane();
 		stackPane = new StackPane();
+		comparisonView = new ComparisonView(10);
 		scene = new Scene(borderPane, screenBounds.getWidth(),
 				screenBounds.getHeight());
 
@@ -73,7 +73,8 @@ public class FlowReader extends Application {
 
 		borderPane.setCenter(stackPane);
 		borderPane.setTop(btnsBar);
-
+		borderPane.setBottom(comparisonView);
+		
 		BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
 		this.defineSceneEvents();
 		this.setButtonEvents(primaryStage);
@@ -171,7 +172,8 @@ public class FlowReader extends Application {
 							.getPageWidth(), ribbon.getPageHeight()));
 
 					stackPane.getChildren().add(wordCloud);
-
+					comparisonView.setPageSize(ribbon.getPageWidth(),ribbon.getPageHeight());
+					
 					fileReader.startFileChooser(primaryStage);
 					fileReader_WordCloud.getCommonWords();
 					pages = fileReader.readFile(page.getTextBound());
@@ -211,9 +213,13 @@ public class FlowReader extends Application {
 				if (diffModeToggle) {
 					diffModeToggle = false;
 					diffModeBtn.setText("Drag Mode");
+					ribbon.setRibbonEvents(true);
+					comparisonView.setDragEvents(false);
 				} else {
 					diffModeToggle = true;
 					diffModeBtn.setText("Pan Mode");
+					ribbon.setRibbonEvents(false);
+					comparisonView.setDragEvents(true);
 				}
 			}
 		});

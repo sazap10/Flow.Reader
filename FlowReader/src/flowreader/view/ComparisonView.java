@@ -14,6 +14,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 
 /**
  * 
@@ -21,16 +22,22 @@ import javafx.scene.shape.Rectangle;
  */
 public class ComparisonView extends FlowPane {
 	ArrayList<Page> pages;
-	int pageWidth, pageHeight;
+	double pageWidth, pageHeight;
 	private EventHandler<DragEvent> dragExitedHandler, dragEnteredHandler,
 			dragOverHandler, dragDroppedHandler;
 
-	public ComparisonView(int pageWidth, int pageHeight, int pageGap) {
+	public ComparisonView(int pageGap) {
 		super(pageGap, 0);
-		this.pageHeight = pageHeight;
-		this.pageWidth = pageWidth;
+		this.pageHeight =this.pageWidth = 0;
 		pages = new ArrayList<Page>();
 		defineDragEvent();
+		this.setMinSize(Screen.getPrimary().getVisualBounds().getWidth(), 200);
+		this.setStyle("-fx-background-color: grey");
+	}
+	
+	public void setPageSize(double pageWidth, double pageHeight){
+		this.pageHeight = pageWidth;
+		this.pageWidth = pageHeight;
 	}
 
 	public void createPage(String text) {
