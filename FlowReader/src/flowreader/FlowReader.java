@@ -185,7 +185,9 @@ public class FlowReader extends Application {
                                         ArrayList<TextFileReader_WordCloud>  wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
                                          for (Page tmpPage : ribbon.getPages()){
                                              wordCloudCounters.add(new TextFileReader_WordCloud(tmpPage) );
-                                            
+                                             for(TextFileReader_WordCloud cloud : wordCloudCounters){
+                                                 
+                                             }
                                         }
 				//	wordCloudButton.setDisable(false);
 					diffModeBtn.setDisable(false);
