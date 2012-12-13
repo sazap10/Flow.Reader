@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package flowreader.data;
-
+import flowreader.core.Page;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,8 +38,30 @@ public class TextFileReader_WordCloud {
         this.wordObjects = new ArrayList<>();
         this.commonWords = new HashMap<>();
     }
+    
+    
+    public TextFileReader_WordCloud(TextFileReader_WordCloud a, TextFileReader_WordCloud b){
+        this.words = a.getWords();
+         Iterator it = b.getWords().entrySet().iterator();
+        while (it.hasNext()){
+             Map.Entry pairs = (Map.Entry) it.next();
+             if (this.words.containsKey(pairs.getKey().toString())){
+                 int count = this.words.get(pairs.getKey().toString());
+                 count += b.getWords().get(pairs.getKey().toString());
+             }
+             else{
+                 this.words.put(pairs.getKey().toString(),Integer.parseInt(pairs.getValue().toString()));
+             }         
+            
+        }
+        
+    }
+    
+    public HashMap<String, Integer> getWords(){
+        return this.words;
+    }
 
-    public void readLine(String text) {
+    private void countWords(String text) {
 
         if (text != null) {
             ArrayList<String> characters;
@@ -60,6 +82,12 @@ public class TextFileReader_WordCloud {
         }
     }
 
+    
+    public void readTextFromPage(Page page){
+        String text = page.getText();
+        countWords(text);
+        
+    }
     public String getWordCount() {
         String output = "";
         Integer currentMax = 0;
