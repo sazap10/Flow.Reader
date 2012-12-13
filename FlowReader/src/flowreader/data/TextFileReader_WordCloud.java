@@ -33,10 +33,11 @@ public class TextFileReader_WordCloud {
     public ArrayList<Word> wordObjects;  //only public for basic testing
     private HashMap<String, Integer> commonWords;
 
-    public TextFileReader_WordCloud() {
+    public TextFileReader_WordCloud(Page page) {
         this.words = new HashMap<>();
         this.wordObjects = new ArrayList<>();
         this.commonWords = new HashMap<>();
+        readTextFromPage(page);
     }
     
     
