@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
+import flowreader.core.WordCloud;
 import flowreader.core.Page;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -27,6 +28,7 @@ import javafx.util.Duration;
 public class RibbonView extends Group {
 
 	private ArrayList<Page> pages;
+        private ArrayList<WordCloud> wordClouds;
 	int pageWidth = 500;
 	int pageHeight = 700;
 	int pageInterval = 5;
@@ -40,6 +42,7 @@ public class RibbonView extends Group {
 
 	public RibbonView(StackPane stackPane) {
 		this.pages = new ArrayList<Page>();
+                this.wordClouds = new ArrayList<WordCloud>();
 		this.stackPane = stackPane;
 	}
         
@@ -57,6 +60,7 @@ public class RibbonView extends Group {
 		while (i < pagesNumber) {
 			Page page = new Page(new Rectangle(x, y, pageWidth, pageHeight));
 			this.pages.add(page);
+                        this.wordClouds.add(new WordCloud(page));
 			this.getChildren().add(page.getPage());
 			x += pageWidth + pageInterval;
 			i++;
