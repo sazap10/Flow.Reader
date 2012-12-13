@@ -58,7 +58,7 @@ public class TextFileReader implements FileReader {
         LineNumberReader r = new LineNumberReader(new java.io.FileReader(file));
         String paragraph, word;
         while ((paragraph = r.readLine()) != null) {
-            fileReader_WordCloud.readLine(paragraph);
+            //fileReader_WordCloud.readLine(paragraph);
 
             Scanner sc = new Scanner(paragraph);
             while (sc.hasNext()) {
