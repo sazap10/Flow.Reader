@@ -40,6 +40,7 @@ public class Page extends Group{
     
     public String getText(){
     	return pageText.getText();
+      
     }
 
     public double getPageWidth() {
