@@ -61,7 +61,7 @@ public class Project_1st_attempt extends Application {
         setPageProperties(screenBounds.getWidth(), screenBounds.getHeight());
         
 
-        text = TextBuilder.create().text("\nHello there, you have not selected a file to read! Why not?").build();
+       // text = TextBuilder.create().text("\nHello there, you have not selected a file to read! Why not?").build();
         setText(primaryStage);
         System.out.println(array.size() + " Pages");
 
@@ -69,7 +69,7 @@ public class Project_1st_attempt extends Application {
         page_number.setText(Integer.toString(current_page + 1) + "/" + array_size);
 
         AnchorPane anchorPane = new AnchorPane();
-        anchorPane.getChildren().add(text);
+       // anchorPane.getChildren().add(text);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(page_number);
