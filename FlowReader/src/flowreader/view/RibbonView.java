@@ -125,11 +125,11 @@ public class RibbonView extends Group {
 					// System.out.println("DRAGGED");
 					double dx = event.getSceneX() - previousEvent.getSceneX();
 					double dy = event.getSceneY() - previousEvent.getSceneY();
-					stackPane.setLayoutX(stackPane.getLayoutX() + dx);
-					stackPane.setLayoutY(stackPane.getLayoutY() + dy);
+					RibbonView.this.setLayoutX(RibbonView.this.getLayoutX() + dx);
+					RibbonView.this.setLayoutY(RibbonView.this.getLayoutY() + dy);
 
 					TranslateTransition tt = new TranslateTransition(
-							Duration.millis(100), stackPane);
+							Duration.millis(100), RibbonView.this);
 					tt.setByX(dx);
 					tt.setByY(dy);
 					tt.setCycleCount(0);
