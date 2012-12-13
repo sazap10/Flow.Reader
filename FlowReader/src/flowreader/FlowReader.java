@@ -176,11 +176,17 @@ public class FlowReader extends Application {
 
 					fileReader.startFileChooser(primaryStage);
 				//	fileReader_WordCloud.getCommonWords();
+                                        //returns all pages
 					pages = fileReader.readFile(page.getTextBound());
+                                      
 					ribbon.buildRibbon(pages.size());
 				//	wordCloud.buildWordCloud(pages);
 					ribbon.setTexttoPages(pages);
-
+                                        ArrayList<TextFileReader_WordCloud>  wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
+                                         for (Page tmpPage : ribbon.getPages()){
+                                             wordCloudCounters.add(new TextFileReader_WordCloud(tmpPage) );
+                                            
+                                        }
 				//	wordCloudButton.setDisable(false);
 					diffModeBtn.setDisable(false);
 
