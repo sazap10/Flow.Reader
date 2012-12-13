@@ -31,7 +31,7 @@ import javafx.scene.Group;
  */
 public class WordCounter {
  private HashMap<String, Integer> words;
- private Integer numOfWordsInCloud = 30;
+ private Integer numOfWordsInCloud = 45;
  private Integer maxFontSize = 500;
  public Integer minFontSize = 14;
  private Integer maxCount;
