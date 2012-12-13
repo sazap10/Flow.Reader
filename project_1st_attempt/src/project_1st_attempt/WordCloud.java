@@ -39,8 +39,8 @@ public class WordCloud {
     //create the basic rectangle (usually in terms of class attributes)
     Group cloud = new Group();
     Rectangle r = new Rectangle();
-    r.setX(50);
-    r.setY(50);
+    r.setX(0);
+    r.setY(0);
     r.setWidth(1500);
     r.setHeight(500);
     r.setArcWidth(100);
@@ -50,46 +50,62 @@ public class WordCloud {
     //these would normally be inputs to the function
     
     
-    double maxWidth = 800;
-    double maxHeight = 400;
+    double maxWidth = 1000;
+    double maxHeight = 800;
     double spacing = 20;
     double originX = (Screen.getPrimary().getVisualBounds().getWidth() / 2) - (maxWidth / 2);
     double originY = (Screen.getPrimary().getVisualBounds().getHeight() / 2) - (maxHeight / 2);
     double currX = originX;
     double currY = originY;
+    double currHighest = 0;
+    ArrayList<ArrayList<Word>> lines = new ArrayList<ArrayList<Word>>();
+    ArrayList<Double> highest = new ArrayList<Double>();
+    int currentLine = 0;
+    lines.add(new ArrayList<Word>());
     
-  
     for (Word word : wordObjects ){
      Text currText = new Text();   
      currText.setText(word.getText());
      currText.setFont(new Font(word.getFontSize()));
      double wordWidth = currText.getBoundsInLocal().getWidth();
      double wordHeight = currText.getBoundsInLocal().getHeight();
+     
      if ((wordWidth + currX) <= maxWidth){
-      //if it doesn't fit on the current line
-       //   System.out.println("goes on the same line!");
-      ////    System.out.println("word text:" + word.getText());
-     //     System.out.println("font size:" + word.getFontSize().toString());
-      //    System.out.println("width:" + wordWidth);
-        //  currY = currY;
-        //  currX = currX;
+      //fits on the same line
+         if (wordHeight > currHighest){
+             currHighest = wordHeight;
+         
+         }
           currText.setX(currX);
           currText.setY(currY);
           currX = wordWidth + currX + spacing;
-          this.words.getChildren().add(currText);       
+          //this.words.getChildren().add(currText);       
+         ArrayList<Word> tmpLine = lines.get(currentLine);
+         tmpLine.add(word);
+         lines.add(currentLine, tmpLine);
          
      }else{
          if((wordHeight + currY) <= maxHeight){
              
              //start new line
-          //   System.out.println("goes on a new line!");
-             System.out.println("stupid thing!");
+         
              currY = wordHeight + currY;
              currX = originX;
              currText.setX(currX);
              currText.setY(currY);
-             this.words.getChildren().add(currText);
+             //this.words.getChildren().add(currText);
              currX += wordWidth + spacing;
+              //add current highest to previous
+           
+            
+             currentLine++;
+             highest.add(currHighest);
+             ArrayList<Word> tmpLine = new ArrayList<Word>();
+             tmpLine.add(word);
+             lines.add(currentLine, tmpLine);
+             currHighest = 0;
+           
+             
              //need some kind of 'renderWord(x,y)' here
          }
          else{
@@ -98,6 +114,26 @@ public class WordCloud {
          }
      }
     
+    }
+    
+    int renderX = 0;
+    int renderY = 0;
+    for (int i = 0; i <= currentLine-1; i++){
+       
+           renderY += highest.get(i);  
+        
+       
+        renderX = 0;
+        for (Word word : lines.get(i)){
+             Text currText = new Text();   
+             currText.setText(word.getText());
+             currText.setFont(new Font(word.getFontSize()));
+             double wordWidth = currText.getBoundsInLocal().getWidth();
+             currText.setX(renderX);
+             currText.setY(renderY);
+             this.words.getChildren().add(currText);
+             renderX += (wordWidth + spacing) ;
+        }
     }
     //this.words.getChildren().add(r);
    
