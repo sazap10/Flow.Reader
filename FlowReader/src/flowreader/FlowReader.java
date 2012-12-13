@@ -56,7 +56,7 @@ public class FlowReader extends Application {
 	public void start(Stage primaryStage) {
 		// fileReader_WordCloud = new TextFileReader_WordCloud();
 		// wordCloud = new WordCloudView(fileReader_WordCloud);
-		// fileReader = new TextFileReader(fileReader_WordCloud);
+		 fileReader = new TextFileReader(fileReader_WordCloud);
 		BorderPane borderPane = new BorderPane();
 		stackPane = new StackPane();
 		comparisonView = new ComparisonView(10);
@@ -99,7 +99,7 @@ public class FlowReader extends Application {
 
 		openFileButton = new Button("Open file");
 		openFileButton.setId("openFileBtn");
-		wordCloudButton = new Button("Ribbon View");
+		wordCloudButton = new Button("WordCloud View");
 		wordCloudButton.setId("wordCloudBtn");
 		wordCloudButton.setDisable(true);
 
@@ -149,26 +149,27 @@ public class FlowReader extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
+
 					stackPane.getChildren().clear();
 					// wordCloud.getChildren().clear();
 					// fileReader_WordCloud.wordObjects.clear();
-					wordCloudToggle = true;
-					wordCloudButton.setText("Ribbon View");
+					wordCloudToggle = false;
+					wordCloudButton.setText("WordCloud View");
 
 					ribbon = new RibbonView(stackPane);
 					ArrayList<String> pages = new ArrayList<>();
 					Page page = new Page(new Rectangle(0, 0, ribbon
 							.getPageWidth(), ribbon.getPageHeight()));
 
-					// stackPane.getChildren().add(wordCloud);
+					 stackPane.getChildren().add(ribbon);
 					comparisonView.setPageSize(ribbon.getPageWidth(),
 							ribbon.getPageHeight());
 
 					fileReader.startFileChooser(primaryStage);
+
 					// fileReader_WordCloud.getCommonWords();
 					// returns all pages
 					pages = fileReader.readFile(page.getTextBound());
-
 					ribbon.buildRibbon(pages.size());
 					// wordCloud.buildWordCloud(pages);
 					ribbon.setTexttoPages(pages);
