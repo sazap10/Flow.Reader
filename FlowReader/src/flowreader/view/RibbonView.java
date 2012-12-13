@@ -45,6 +45,7 @@ public class RibbonView extends Group {
         
         public ArrayList<Page> getPages(){
            return this.pages;
+           
         }
 
 	public void buildRibbon(int pagesNumber) {
