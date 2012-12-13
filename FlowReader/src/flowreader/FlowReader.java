@@ -39,7 +39,7 @@ public class FlowReader extends Application {
 	// Background
 	private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 	RibbonView ribbon;
-	//WordCloudView wordCloud;
+	// WordCloudView wordCloud;
 	TextFileReader fileReader;
 	TextFileReader_WordCloud fileReader_WordCloud;
 	ComparisonView comparisonView;
@@ -54,9 +54,9 @@ public class FlowReader extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		//fileReader_WordCloud = new TextFileReader_WordCloud();
-		//wordCloud = new WordCloudView(fileReader_WordCloud);
-		//fileReader = new TextFileReader(fileReader_WordCloud);
+		// fileReader_WordCloud = new TextFileReader_WordCloud();
+		// wordCloud = new WordCloudView(fileReader_WordCloud);
+		// fileReader = new TextFileReader(fileReader_WordCloud);
 		BorderPane borderPane = new BorderPane();
 		stackPane = new StackPane();
 		comparisonView = new ComparisonView(10);
@@ -71,7 +71,6 @@ public class FlowReader extends Application {
 		setUpButtons();
 		setUpButtonBar();
 
-		
 		borderPane.setCenter(stackPane);
 		borderPane.setTop(btnsBar);
 		borderPane.setBottom(comparisonView);
@@ -111,15 +110,6 @@ public class FlowReader extends Application {
 	}
 
 	private void setUpButtonBar() {
-		/*
-		 * flow = new FlowPane(); flow.setHgap(4);
-		 * flow.setAlignment(Pos.TOP_RIGHT); flow.getChildren().addAll(minBtn,
-		 * closeBtn);
-		 * 
-		 * flow2 = new FlowPane(); flow2.setHgap(4);
-		 * flow2.setAlignment(Pos.BOTTOM_LEFT);
-		 * flow2.getChildren().addAll(openFileButton, wordCloudButton);
-		 */
 		btnsBar = new VBox(10);
 		HBox mainBtns = new HBox(10);
 		mainBtns.getChildren().add(openFileButton);
@@ -160,8 +150,8 @@ public class FlowReader extends Application {
 			public void handle(ActionEvent e) {
 				try {
 					stackPane.getChildren().clear();
-				//	wordCloud.getChildren().clear();
-					//fileReader_WordCloud.wordObjects.clear();
+					// wordCloud.getChildren().clear();
+					// fileReader_WordCloud.wordObjects.clear();
 					wordCloudToggle = true;
 					wordCloudButton.setText("Ribbon View");
 
@@ -170,26 +160,27 @@ public class FlowReader extends Application {
 					Page page = new Page(new Rectangle(0, 0, ribbon
 							.getPageWidth(), ribbon.getPageHeight()));
 
-				//	stackPane.getChildren().add(wordCloud);
+					// stackPane.getChildren().add(wordCloud);
 					comparisonView.setPageSize(ribbon.getPageWidth(),
 							ribbon.getPageHeight());
 
 					fileReader.startFileChooser(primaryStage);
-				//	fileReader_WordCloud.getCommonWords();
-                                        //returns all pages
+					// fileReader_WordCloud.getCommonWords();
+					// returns all pages
 					pages = fileReader.readFile(page.getTextBound());
-                                      
+
 					ribbon.buildRibbon(pages.size());
-				//	wordCloud.buildWordCloud(pages);
+					// wordCloud.buildWordCloud(pages);
 					ribbon.setTexttoPages(pages);
-                                        ArrayList<TextFileReader_WordCloud>  wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
-                                         for (Page tmpPage : ribbon.getPages()){
-                                             wordCloudCounters.add(new TextFileReader_WordCloud(tmpPage) );
-                                             for(TextFileReader_WordCloud cloud : wordCloudCounters){
-                                                 
-                                             }
-                                        }
-				//	wordCloudButton.setDisable(false);
+					ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
+					for (Page tmpPage : ribbon.getPages()) {
+						wordCloudCounters.add(new TextFileReader_WordCloud(
+								tmpPage));
+						for (TextFileReader_WordCloud cloud : wordCloudCounters) {
+
+						}
+					}
+					// wordCloudButton.setDisable(false);
 					diffModeBtn.setDisable(false);
 
 				} catch (Exception exception) {
@@ -203,13 +194,13 @@ public class FlowReader extends Application {
 			public void handle(ActionEvent e) {
 				if (wordCloudToggle) {
 					wordCloudToggle = false;
-				//	stackPane.getChildren().remove(wordCloud);
+					// stackPane.getChildren().remove(wordCloud);
 					stackPane.getChildren().add(ribbon);
 					wordCloudButton.setText("Word Cloud View");
 				} else {
 					wordCloudToggle = true;
 					stackPane.getChildren().remove(ribbon);
-				//	stackPane.getChildren().add(wordCloud);
+					// stackPane.getChildren().add(wordCloud);
 					wordCloudButton.setText("Ribbon View");
 				}
 			}
