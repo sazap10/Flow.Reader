@@ -71,10 +71,10 @@ public class FlowReader extends Application {
 		setUpButtons();
 		setUpButtonBar();
 
-		borderPane.setBottom(comparisonView);
+		
 		borderPane.setCenter(stackPane);
 		borderPane.setTop(btnsBar);
-		
+		borderPane.setBottom(comparisonView);
 		BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
 		this.defineSceneEvents();
 		this.setButtonEvents(primaryStage);

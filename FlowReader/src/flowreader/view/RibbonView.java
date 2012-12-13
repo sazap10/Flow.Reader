@@ -7,6 +7,7 @@ package flowreader.view;
 import java.util.ArrayList;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import flowreader.core.Page;
@@ -125,8 +126,10 @@ public class RibbonView extends Group {
 					// System.out.println("DRAGGED");
 					double dx = event.getSceneX() - previousEvent.getSceneX();
 					double dy = event.getSceneY() - previousEvent.getSceneY();
-					RibbonView.this.setLayoutX(RibbonView.this.getLayoutX() + dx);
-					RibbonView.this.setLayoutY(RibbonView.this.getLayoutY() + dy);
+					RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()
+							+ dx);
+					RibbonView.this.setLayoutY(RibbonView.this.getLayoutY()
+							+ dy);
 
 					TranslateTransition tt = new TranslateTransition(
 							Duration.millis(100), RibbonView.this);
@@ -143,36 +146,40 @@ public class RibbonView extends Group {
 	}
 
 	public void setRibbonEvents(boolean setFlag) {
-		if(setFlag){
+		if (setFlag) {
 			this.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
 			this.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
 			this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-		}else{
+		} else {
 			this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
 			this.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
 			this.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
 		}
-		
+
 	}
 
 	public void setPageDragEvent(boolean setFlag) {
-		for (final Page page : pages) {
-			if (setFlag) {
-			page.setOnDragDetected(new EventHandler<MouseEvent>() {
-				public void handle(MouseEvent event) {
-					System.out.println("page dragged");
-					Dragboard drag = page.startDragAndDrop(TransferMode.ANY);
-					ClipboardContent content = new ClipboardContent();
-					content.putString(page.getText());
-					drag.setContent(content);
+		EventHandler<MouseEvent> dragHandler = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
+				Dragboard drag = ((Node) event.getSource())
+						.startDragAndDrop(TransferMode.ANY);
+				ClipboardContent content = new ClipboardContent();
+				content.putString(((Page) event.getSource()).getText());
+				drag.setContent(content);
 
-					event.consume();
-				}
-
-			});
-			}else{
-				page.setOnDragDetected(null);
+				event.consume();
 			}
+
+		};
+		int pageNum = 0;
+		while(pageNum<pages.size()){
+			if (setFlag) {
+				pages.get(pageNum).setOnDragDetected(dragHandler);
+				//System.out.println(page.getOnDragDetected().toString());
+			} else {
+				pages.get(pageNum).setOnDragDetected(null);
+			}
+			pageNum++;
 		}
 
 	}
