@@ -4,6 +4,7 @@
  */
 package flowreader.data;
 import flowreader.core.Page;
+import flowreader.view.PageView;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class TextFileReader_WordCloud {
     public ArrayList<Word> wordObjects;  //only public for basic testing
     private HashMap<String, Integer> commonWords;
 
-    public TextFileReader_WordCloud(Page page) {
+    public TextFileReader_WordCloud(PageView page) {
         this.words = new HashMap<>();
         this.wordObjects = new ArrayList<>();
         this.commonWords = new HashMap<>();
@@ -84,7 +85,7 @@ public class TextFileReader_WordCloud {
     }
 
     
-    public void readTextFromPage(Page page){
+    public void readTextFromPage(PageView page){
         String text = page.getText();
         countWords(text);
         

@@ -26,7 +26,7 @@ import javafx.util.Duration;
  */
 public class RibbonView extends Group {
 
-	private ArrayList<Page> pages;
+	private ArrayList<PageView> pages;
 	int pageWidth = 500;
 	int pageHeight = 700;
 	int pageInterval = 5;
@@ -39,11 +39,11 @@ public class RibbonView extends Group {
 	EventHandler<MouseEvent> swipeHandler;
 
 	public RibbonView(StackPane stackPane) {
-		this.pages = new ArrayList<Page>();
+		this.pages = new ArrayList<PageView>();
 		this.stackPane = stackPane;
 	}
         
-        public ArrayList<Page> getPages(){
+        public ArrayList<PageView> getPages(){
            return this.pages;
            
         }
@@ -55,7 +55,7 @@ public class RibbonView extends Group {
 		int x = 0;
 		int y = 0;
 		while (i < pagesNumber) {
-			Page page = new Page(new Rectangle(x, y, pageWidth, pageHeight));
+			PageView page = new PageView(new Rectangle(x, y, pageWidth, pageHeight));
 			this.pages.add(page);
 			this.getChildren().add(page.getPage());
 			x += pageWidth + pageInterval;

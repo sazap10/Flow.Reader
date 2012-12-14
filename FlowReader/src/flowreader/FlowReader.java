@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import flowreader.data.TextFileReader;
 import flowreader.data.TextFileReader_WordCloud;
 import flowreader.view.ComparisonView;
+import flowreader.view.PageView;
 import flowreader.view.RibbonView;
 import flowreader.view.WordCloudView;
 import java.util.ArrayList;
@@ -158,7 +159,7 @@ public class FlowReader extends Application {
 
 					ribbon = new RibbonView(stackPane);
 					ArrayList<String> pages = new ArrayList<>();
-					Page page = new Page(new Rectangle(0, 0, ribbon
+					PageView page = new PageView(new Rectangle(0, 0, ribbon
 							.getPageWidth(), ribbon.getPageHeight()));
 
 					 stackPane.getChildren().add(ribbon);
@@ -174,7 +175,7 @@ public class FlowReader extends Application {
 					// wordCloud.buildWordCloud(pages);
 					ribbon.setTexttoPages(pages);
 					ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
-					for (Page tmpPage : ribbon.getPages()) {
+					for (PageView tmpPage : ribbon.getPages()) {
 						wordCloudCounters.add(new TextFileReader_WordCloud(
 								tmpPage));
 						for (TextFileReader_WordCloud cloud : wordCloudCounters) {

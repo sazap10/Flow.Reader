@@ -41,7 +41,7 @@ public class ComparisonView extends FlowPane {
 	}
 
 	public void createPage(String text) {
-		Page page = new Page(new Rectangle(pageWidth, pageHeight));
+		PageView page = new PageView(new Rectangle(pageWidth, pageHeight));
 		page.setText(text);
 		page.setScaleX(0.25);
 		page.setScaleY(0.25);
