@@ -2,7 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package flowreader.model;
+package flowreader.utils;
+import flowreader.model.Page;
 import flowreader.utils.Word;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

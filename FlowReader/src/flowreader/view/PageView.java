@@ -4,6 +4,7 @@
  */
 package flowreader.view;
 
+import flowreader.model.Page;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,7 +18,7 @@ public class PageView extends Group{
 
     private Rectangle pageBoundary, textBound;
     private Text pageText;
-    private Group page;
+    //private Group page;
     private double textBoundWidth, textBoundHeight;
 
     public PageView(Rectangle boundary) {
@@ -30,8 +31,9 @@ public class PageView extends Group{
         pageText = new Text();
         pageText.setX(pageBoundary.getX() + ((pageBoundary.getWidth() - textBound.getWidth()) * 0.5));
         pageText.setY(pageBoundary.getY() + ((pageBoundary.getHeight() - textBound.getHeight()) * 0.5));
-        page = new Group();
-        page.getChildren().addAll(pageBoundary, pageText);
+        //page = new Group();
+        this.getChildren().addAll(pageBoundary, pageText);
+        
     }
     
     public void setText(String text) {
@@ -75,9 +77,9 @@ public class PageView extends Group{
 
     }
 
-    public Group getPage() {
+    /**public Group getPage() {
         return page;
-    }
+    }**/
 
     public void setX(double x) {
         pageBoundary.setX(x);

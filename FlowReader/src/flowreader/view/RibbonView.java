@@ -52,16 +52,16 @@ public class RibbonView extends Group {
            
         }
 
-	public void buildRibbon(int pagesNumber) {
-		this.pagesNumber = pagesNumber;
+	public void buildRibbon(ArrayList<Page> pagesContent) {
 
 		int i = 0;
 		int x = 0;
 		int y = 0;
-		while (i < pagesNumber) {
+		while (i < pagesContent.size()) {
 			PageView page = new PageView(new Rectangle(x, y, pageWidth, pageHeight));
+                        page.setText(pagesContent.get(i).getText());
 			this.pages.add(page);
-			this.getChildren().add(page.getPage());
+			this.getChildren().add(page);
 			x += pageWidth + pageInterval;
 			i++;
 		}
@@ -115,9 +115,7 @@ public class RibbonView extends Group {
 	}
 
 	public void setPages(ArrayList<Page> Pages) {
-		for (int i = 0; i < pages.size(); i++) {
-			pages.get(i).setText(Pages.get(i).getText());
-		}
+		
 	}
 
 	private void defineRibbonEvents() {

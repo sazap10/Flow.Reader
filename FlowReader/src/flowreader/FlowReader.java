@@ -148,8 +148,7 @@ public class FlowReader extends Application {
 
 					ribbon = new RibbonView(mainPane);
 					ArrayList<Page> pages = new ArrayList<>();
-					PageView page = new PageView(new Rectangle(0, 0, ribbon
-							.getPageWidth(), ribbon.getPageHeight()));
+					PageView page = new PageView(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
 
 					 mainPane.getChildren().add(ribbon);
 					//comparisonView.setPageSize(ribbon.getPageWidth(), ribbon.getPageHeight());
@@ -159,9 +158,8 @@ public class FlowReader extends Application {
 					// fileReader_WordCloud.getCommonWords();
 					// returns all pages
 					pages = fileReader.readFile(page.getTextBound());
-					ribbon.buildRibbon(pages.size());
+					ribbon.buildRibbon(pages);
 					// wordCloud.buildWordCloud(pages);
-					ribbon.setPages(pages);
 					ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
 					for (PageView tmpPage : ribbon.getPages()) {
 						wordCloudCounters.add(new TextFileReader_WordCloud(

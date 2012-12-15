@@ -40,13 +40,13 @@ public class ComparisonView extends FlowPane {
 		this.pageWidth = pageHeight;
 	}
 
-	public void createPage(String text) {
+	/*public void createPage(String text) {
 		PageView page = new PageView(new Rectangle(pageWidth, pageHeight));
 		page.setText(text);
 		page.setScaleX(0.25);
 		page.setScaleY(0.25);
 		this.getChildren().add(page);
-	}
+	}*/
 
 	private void defineDragEvent() {
 		dragOverHandler = new EventHandler<DragEvent>() {
@@ -95,7 +95,7 @@ public class ComparisonView extends FlowPane {
 				Dragboard db = event.getDragboard();
 				boolean success = false;
 				if (db.hasString()) {
-					createPage(db.getString());
+					//createPage(db.getString());
 					success = true;
 				}
 				/*
