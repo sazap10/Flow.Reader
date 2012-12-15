@@ -2,8 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package flowreader.data;
-import flowreader.core.Page;
+package flowreader.utils;
+import flowreader.model.Page;
 import flowreader.view.PageView;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

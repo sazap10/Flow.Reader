@@ -4,8 +4,8 @@
  */
 package flowreader.view;
 
-import flowreader.data.TextFileReader_WordCloud;
-import flowreader.data.Word;
+import flowreader.utils.TextFileReader_WordCloud;
+import flowreader.utils.Word;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.scene.Group;

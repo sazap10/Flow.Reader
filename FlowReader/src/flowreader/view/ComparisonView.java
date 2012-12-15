@@ -6,7 +6,7 @@ package flowreader.view;
 
 import java.util.ArrayList;
 
-import flowreader.core.Page;
+import flowreader.model.Page;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.DragEvent;

@@ -1,10 +1,12 @@
+package flowreader;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package flowreader;
 
-import flowreader.core.Page;
+
+import flowreader.model.Page;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,11 +20,10 @@ import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import flowreader.data.TextFileReader;
-import flowreader.data.TextFileReader_WordCloud;
+import flowreader.utils.TextFileReader;
+import flowreader.utils.TextFileReader_WordCloud;
 import flowreader.view.ComparisonView;
 import flowreader.view.PageView;
 import flowreader.view.RibbonView;

@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package flowreader.data;
+package flowreader.utils;
 
-import flowreader.core.Page;
+import flowreader.model.Page;
 import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
