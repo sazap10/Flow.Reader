@@ -16,7 +16,9 @@ import javafx.event.EventHandler;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
@@ -36,7 +38,9 @@ public class RibbonView extends Group {
 	int curScale = 15;
 	int opaqueScale = 15;
 	StackPane stackPane;
-	EventHandler<MouseEvent> swipeHandler;
+	private EventHandler<MouseEvent> swipeHandler;
+        private EventHandler<ScrollEvent> scrollHandler;
+	private EventHandler<ZoomEvent> zoomHandler;
 
 	public RibbonView(StackPane stackPane) {
 		this.pages = new ArrayList<PageView>();
@@ -148,6 +152,26 @@ public class RibbonView extends Group {
 				event.consume();
 			}
 		};
+                
+                scrollHandler = new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent event) {
+				if (!event.isDirect()) {
+					RibbonView.this.zoom(event.getDeltaY(), event.getX(), event.getY());
+				}
+				event.consume();
+
+			}
+		};
+
+		zoomHandler = new EventHandler<ZoomEvent>() {
+			@Override
+			public void handle(ZoomEvent event) {
+				double delta = event.getZoomFactor() - 1;
+				RibbonView.this.zoom(delta, event.getX(), event.getY());
+				event.consume();
+			}
+		};
 	}
 
 	public void setRibbonEvents(boolean setFlag) {
@@ -155,10 +179,14 @@ public class RibbonView extends Group {
 			this.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
 			this.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
 			this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+                        this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+			this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
 		} else {
 			this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
 			this.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
 			this.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+                        this.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+			this.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
 		}
 
 	}

@@ -75,10 +75,6 @@ public class FlowReader extends Application {
             
             wordCloudToggle = diffModeToggle = false;
 
-
-            this.defineSceneEvents();
-            this.setSceneEvents(true);
-
             scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
             primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
             primaryStage.setScene(scene);
@@ -217,39 +213,6 @@ public class FlowReader extends Application {
 				}
 			}
 		});
-	}
-
-	private void defineSceneEvents() {
-		scrollHandler = new EventHandler<ScrollEvent>() {
-			@Override
-			public void handle(ScrollEvent event) {
-				if (!event.isDirect()) {
-					ribbon.zoom(event.getDeltaY(), event.getX(), event.getY());
-				}
-				event.consume();
-
-			}
-		};
-
-		zoomHandler = new EventHandler<ZoomEvent>() {
-			@Override
-			public void handle(ZoomEvent event) {
-				double delta = event.getZoomFactor() - 1;
-				ribbon.zoom(delta, event.getX(), event.getY());
-				event.consume();
-			}
-		};
-	}
-
-	private void setSceneEvents(boolean setFlag) {
-		// handles mouse scrolling
-		if (setFlag) {
-			scene.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-			scene.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
-		} else {
-			scene.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
-			scene.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
-		}
 	}
 
 	/**
