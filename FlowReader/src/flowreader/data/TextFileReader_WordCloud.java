@@ -90,6 +90,7 @@ public class TextFileReader_WordCloud {
         countWords(text);
         
     }
+    
     public String getWordCount() {
         String output = "";
         Integer currentMax = 0;
@@ -136,7 +137,6 @@ public class TextFileReader_WordCloud {
 
     public String trimPunctuation(String word) {
         return word.replaceAll("\\W", "");
-
     }
 
     public String getNodes() {

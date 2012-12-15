@@ -37,58 +37,52 @@ import javafx.scene.shape.Rectangle;
  */
 public class FlowReader extends Application {
 
-	// Background
+	// Background and main scene
 	private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-	RibbonView ribbon;
-	// WordCloudView wordCloud;
-	TextFileReader fileReader;
-	TextFileReader_WordCloud fileReader_WordCloud;
-	ComparisonView comparisonView;
-	private Button minBtn, closeBtn, openFileButton, wordCloudButton,
-			diffModeBtn;
-	private VBox btnsBar;
-	private StackPane stackPane;
+	private Scene scene;
+        
+        // Elements
+        private StackPane mainPane; // The main pane that contains the ribbon or the word cloud
+        private RibbonView ribbon; // The ribbon at the center of the page
+        //private WordCloudView wordCloud; // The word cloud view at the center of the page
+        //private ComparisonView comparisonView; // The buckets to compare pages in the bottom
+        
+        private HBox topBtnsBar; // the button bar at the top of the screen
+        private Button minBtn, closeBtn; // The buttons at the top of the page
+        private Button openFileButton, wordCloudButton, diffModeBtn; // The buttons at the bottom of the page
+	
+
 	private EventHandler<ScrollEvent> scrollHandler;
 	private EventHandler<ZoomEvent> zoomHandler;
 	boolean wordCloudToggle, diffModeToggle;
-	private Scene scene;
 
 	@Override
 	public void start(Stage primaryStage) {
-		// fileReader_WordCloud = new TextFileReader_WordCloud();
-		// wordCloud = new WordCloudView(fileReader_WordCloud);
-		 fileReader = new TextFileReader(fileReader_WordCloud);
-		BorderPane borderPane = new BorderPane();
-		stackPane = new StackPane();
-		comparisonView = new ComparisonView(10);
-		scene = new Scene(borderPane, screenBounds.getWidth(),
-				screenBounds.getHeight());
+            primaryStage.setTitle("Flow Reader");
+            primaryStage.setFullScreen(true);
 
-		primaryStage.setTitle("Flow Reader");
-		primaryStage.setFullScreen(true);
+            BorderPane borderPane = new BorderPane();
+            scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
+            
+            mainPane = new StackPane();
+            setUpButtonBar();
+            this.setButtonEvents(primaryStage);
+            
+            borderPane.setCenter(this.mainPane);
+            borderPane.setTop(topBtnsBar);
+            BorderPane.setAlignment(mainPane, Pos.CENTER_LEFT);
+            
+            
+            wordCloudToggle = diffModeToggle = false;
 
-		wordCloudToggle = diffModeToggle = false;
 
-		setUpButtons();
-		setUpButtonBar();
+            this.defineSceneEvents();
+            this.setSceneEvents(true);
 
-		borderPane.setCenter(stackPane);
-		borderPane.setTop(btnsBar);
-		borderPane.setBottom(comparisonView);
-		BorderPane.setAlignment(stackPane, Pos.CENTER_LEFT);
-		this.defineSceneEvents();
-		this.setButtonEvents(primaryStage);
-		this.setSceneEvents(true);
-
-		scene.getStylesheets()
-				.add(FlowReader.class.getResource("stylesheet.css")
-						.toExternalForm());
-
-		primaryStage.getIcons().add(
-				new Image(this.getClass().getResource("logo.png")
-						.toExternalForm()));
-		primaryStage.setScene(scene);
-		primaryStage.show();
+            scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+            primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
+            primaryStage.setScene(scene);
+            primaryStage.show();
 	}
 
 	private void setUpButtons() {
@@ -107,27 +101,25 @@ public class FlowReader extends Application {
 		diffModeBtn = new Button("Drag Mode");
 		diffModeBtn.setId("diffModeBtn");
 		diffModeBtn.setDisable(true);
-
 	}
 
 	private void setUpButtonBar() {
-		btnsBar = new VBox(10);
+		this.setUpButtons();
+            
+                topBtnsBar = new HBox(10);
+                
 		HBox mainBtns = new HBox(10);
 		mainBtns.getChildren().add(openFileButton);
-		HBox winBtnBox = new HBox(10);
+                mainBtns.getChildren().add(wordCloudButton);
+                mainBtns.getChildren().add(diffModeBtn);
+		
+                HBox winBtnBox = new HBox(10);
 		winBtnBox.setAlignment(Pos.CENTER_RIGHT);
 		winBtnBox.getChildren().addAll(minBtn, closeBtn);
 		mainBtns.getChildren().add(winBtnBox);
 		HBox.setHgrow(winBtnBox, Priority.ALWAYS);
-
-		HBox modeBtns = new HBox(10);
-		modeBtns.getChildren().add(wordCloudButton);
-		HBox diffModeBox = new HBox(10);
-		diffModeBox.setAlignment(Pos.CENTER_RIGHT);
-		diffModeBox.getChildren().add(diffModeBtn);
-		modeBtns.getChildren().add(diffModeBox);
-		HBox.setHgrow(diffModeBox, Priority.ALWAYS);
-		btnsBar.getChildren().addAll(mainBtns, modeBtns);
+		
+                topBtnsBar.getChildren().addAll(mainBtns, winBtnBox);
 	}
 
 	private void setButtonEvents(final Stage primaryStage) {
@@ -150,21 +142,20 @@ public class FlowReader extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-
-					stackPane.getChildren().clear();
+                                        TextFileReader fileReader = new TextFileReader();
+					mainPane.getChildren().clear();
 					// wordCloud.getChildren().clear();
 					// fileReader_WordCloud.wordObjects.clear();
 					wordCloudToggle = false;
 					wordCloudButton.setText("WordCloud View");
 
-					ribbon = new RibbonView(stackPane);
+					ribbon = new RibbonView(mainPane);
 					ArrayList<Page> pages = new ArrayList<>();
 					PageView page = new PageView(new Rectangle(0, 0, ribbon
 							.getPageWidth(), ribbon.getPageHeight()));
 
-					 stackPane.getChildren().add(ribbon);
-					comparisonView.setPageSize(ribbon.getPageWidth(),
-							ribbon.getPageHeight());
+					 mainPane.getChildren().add(ribbon);
+					//comparisonView.setPageSize(ribbon.getPageWidth(), ribbon.getPageHeight());
 
 					fileReader.startFileChooser(primaryStage);
 
@@ -197,11 +188,11 @@ public class FlowReader extends Application {
 				if (wordCloudToggle) {
 					wordCloudToggle = false;
 					// stackPane.getChildren().remove(wordCloud);
-					stackPane.getChildren().add(ribbon);
+					mainPane.getChildren().add(ribbon);
 					wordCloudButton.setText("Word Cloud View");
 				} else {
 					wordCloudToggle = true;
-					stackPane.getChildren().remove(ribbon);
+					mainPane.getChildren().remove(ribbon);
 					// stackPane.getChildren().add(wordCloud);
 					wordCloudButton.setText("Ribbon View");
 				}
@@ -216,13 +207,13 @@ public class FlowReader extends Application {
 					diffModeBtn.setText("Drag Mode");
 					ribbon.setRibbonEvents(true);
 					ribbon.setPageDragEvent(false);
-					comparisonView.setDragEvents(false);
+					//comparisonView.setDragEvents(false);
 				} else {
 					diffModeToggle = true;
 					diffModeBtn.setText("Pan Mode");
 					ribbon.setRibbonEvents(false);
 					ribbon.setPageDragEvent(true);
-					comparisonView.setDragEvents(true);
+					//comparisonView.setDragEvents(true);
 				}
 			}
 		});

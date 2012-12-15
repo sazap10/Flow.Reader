@@ -20,16 +20,13 @@ import javafx.scene.shape.Rectangle;
  *
  * @author D-Day
  */
-public class TextFileReader implements FileReader {
+public class TextFileReader{
 
     File file;
-    TextFileReader_WordCloud fileReader_WordCloud;
 
-    public TextFileReader(TextFileReader_WordCloud fileReader_WordCloud) {
-        this.fileReader_WordCloud = fileReader_WordCloud;
+    public TextFileReader() {
     }
 
-    @Override
     public void startFileChooser(Stage primaryStage) {
         //start file chooser
         File f = new File(System.getProperty("user.dir"));
