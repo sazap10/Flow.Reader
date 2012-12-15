@@ -5,7 +5,9 @@
 package flowreader.utils;
 
 import flowreader.model.Page;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
@@ -22,9 +24,12 @@ import javafx.scene.shape.Rectangle;
  */
 public class TextFileReader{
 
-    File file;
+    private File file;
+    private HashMap<String, Integer> commonWords;
 
     public TextFileReader() {
+        this.commonWords = new HashMap<>();
+        this.getCommonWords();
     }
 
     public void startFileChooser(Stage primaryStage) {
@@ -84,11 +89,13 @@ public class TextFileReader{
                     spaceLeft = spaceLeft - (wordWidth + spaceWidth);
                 }
                 pageText += word + " ";
-                if(wordsOccurrences.get(word)!=null){
-                    wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
-                }
-                else{
-                    wordsOccurrences.put(word, 1);
+                if (!this.commonWords.containsKey(word)) {
+                    if(wordsOccurrences.get(word)!=null){
+                        wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
+                    }
+                    else{
+                        wordsOccurrences.put(word, 1);
+                    }
                 }
                 tempPage.setText(pageText);
             }
@@ -103,5 +110,31 @@ public class TextFileReader{
         
         r.close();
         return pages;
+    }
+
+    public void getCommonWords() {
+        StringBuilder stringBuffer = new StringBuilder();
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new java.io.FileReader(System.getProperty("user.dir")+System.getProperty("file.separator")+"CommonEnglishWords.txt"));
+            
+            String temp_text;
+            while ((temp_text = bufferedReader.readLine()) != null) {
+                //System.out.println(temp_text);
+                this.commonWords.put(temp_text, 1);
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("Couldn't find the file!");
+        } catch (IOException ex) {
+            System.out.println("no idea!.. some IOException");
+        } finally {
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+            } catch (IOException ex) {
+                System.out.println("couldn't close the file!");
+            }
+        }
     }
 }

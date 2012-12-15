@@ -8,6 +8,7 @@ import flowreader.utils.TextFileReader_WordCloud;
 import flowreader.utils.Word;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,15 +21,15 @@ import javafx.stage.Screen;
  * @author D-Day
  */
 public class WordCloudView extends Group {
-
+    private HashMap<String, Integer> wordsOccurrences;
+    
     TextFileReader_WordCloud fileReader_WordCloud;
 
-    public WordCloudView(TextFileReader_WordCloud fileReader_WordCloud) {
-        this.fileReader_WordCloud = fileReader_WordCloud;
-
+    public WordCloudView() {
+        
     }
 
-    public void buildWordCloud(ArrayList<String> pages) {
+    public void buildWordCloud(HashMap<String, Integer> wordsOccurrences) {
 
         fileReader_WordCloud.getWordCount();
         fileReader_WordCloud.setWordSizes();

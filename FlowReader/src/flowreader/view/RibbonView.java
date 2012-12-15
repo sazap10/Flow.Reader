@@ -29,6 +29,8 @@ import javafx.util.Duration;
 public class RibbonView extends Group {
 
 	private ArrayList<PageView> pages;
+        private ArrayList<WordCloudView> wordClouds;
+        
 	int pageWidth = 500;
 	int pageHeight = 700;
 	int pageInterval = 5;
@@ -112,10 +114,6 @@ public class RibbonView extends Group {
 
 	public double getPageHeight() {
 		return pageHeight;
-	}
-
-	public void setPages(ArrayList<Page> Pages) {
-		
 	}
 
 	private void defineRibbonEvents() {

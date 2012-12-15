@@ -38,7 +38,7 @@ public class TextFileReader_WordCloud {
         this.words = new HashMap<>();
         this.wordObjects = new ArrayList<>();
         this.commonWords = new HashMap<>();
-        readTextFromPage(page);
+        //readTextFromPage(page);
     }
     
     
@@ -62,34 +62,6 @@ public class TextFileReader_WordCloud {
     public HashMap<String, Integer> getWords(){
         return this.words;
     }
-
-    private void countWords(String text) {
-
-        if (text != null) {
-            ArrayList<String> characters;
-            for (String i : text.split(" ")) {
-                i = this.trimPunctuation(i);
-                if (!(i.equals(""))) {
-                    if (this.words.get(i) == null) {
-                        words.put(i, 1);
-                    } else {
-                        if (!this.commonWords.containsKey(i)) {
-                            Integer count = this.words.get(i);
-                            count++;
-                            this.words.put(i, count);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    
-    public void readTextFromPage(PageView page){
-        String text = page.getText();
-        countWords(text);
-        
-    }
     
     public String getWordCount() {
         String output = "";
@@ -107,37 +79,7 @@ public class TextFileReader_WordCloud {
          */
     }
 
-    public void getCommonWords() {
-        StringBuilder stringBuffer = new StringBuilder();
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new java.io.FileReader(System.getProperty("user.dir")+System.getProperty("file.separator")+"CommonEnglishWords.txt"));
-            
-            String temp_text;
-            while ((temp_text = bufferedReader.readLine()) != null) {
-                System.out.println(temp_text);
-                this.commonWords.put(temp_text, 1);
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println("Couldn't find the file!");
-        } catch (IOException ex) {
-            System.out.println("no idea!.. some IOException");
-        } finally {
-            try {
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-            } catch (IOException ex) {
-                System.out.println("couldn't close the file!");
-            }
-        }
 
-
-    }
-
-    public String trimPunctuation(String word) {
-        return word.replaceAll("\\W", "");
-    }
 
     public String getNodes() {
         String output = "";

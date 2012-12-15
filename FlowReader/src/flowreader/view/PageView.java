@@ -77,10 +77,6 @@ public class PageView extends Group{
 
     }
 
-    /**public Group getPage() {
-        return page;
-    }**/
-
     public void setX(double x) {
         pageBoundary.setX(x);
         textBound.setX(x + (pageBoundary.getWidth() * 0.1));
