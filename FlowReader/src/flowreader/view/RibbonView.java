@@ -110,9 +110,9 @@ public class RibbonView extends Group {
 		return pageHeight;
 	}
 
-	public void setTexttoPages(ArrayList<String> text) {
+	public void setPages(ArrayList<Page> Pages) {
 		for (int i = 0; i < pages.size(); i++) {
-			pages.get(i).setText(text.get(i));
+			pages.get(i).setText(Pages.get(i).getText());
 		}
 	}
 

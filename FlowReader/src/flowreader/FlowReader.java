@@ -158,7 +158,7 @@ public class FlowReader extends Application {
 					wordCloudButton.setText("WordCloud View");
 
 					ribbon = new RibbonView(stackPane);
-					ArrayList<String> pages = new ArrayList<>();
+					ArrayList<Page> pages = new ArrayList<>();
 					PageView page = new PageView(new Rectangle(0, 0, ribbon
 							.getPageWidth(), ribbon.getPageHeight()));
 
@@ -173,7 +173,7 @@ public class FlowReader extends Application {
 					pages = fileReader.readFile(page.getTextBound());
 					ribbon.buildRibbon(pages.size());
 					// wordCloud.buildWordCloud(pages);
-					ribbon.setTexttoPages(pages);
+					ribbon.setPages(pages);
 					ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
 					for (PageView tmpPage : ribbon.getPages()) {
 						wordCloudCounters.add(new TextFileReader_WordCloud(

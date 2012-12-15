@@ -5,6 +5,7 @@
 package flowreader.core;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -22,6 +23,11 @@ public class Page{
     public Page(String text, HashMap<String, Integer> wordsOccurrences) {
         this.text = text;
         this.wordsOccurrences = wordsOccurrences;
+        Iterator i = wordsOccurrences.keySet().iterator();
+        while(i.hasNext()){
+            String word = (String)i.next();
+            System.out.println(""+word+": "+wordsOccurrences.get(word));
+        }
     }
     
     public String getText(){
