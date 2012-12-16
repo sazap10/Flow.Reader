@@ -1,12 +1,11 @@
 package flowreader;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 import flowreader.model.Page;
+import flowreader.utils.TextFileReader;
+import flowreader.utils.TextFileReader_WordCloud;
+import flowreader.view.PageView;
+import flowreader.view.RibbonView;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,17 +19,10 @@ import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import flowreader.utils.TextFileReader;
-import flowreader.utils.TextFileReader_WordCloud;
-import flowreader.view.ComparisonView;
-import flowreader.view.PageView;
-import flowreader.view.RibbonView;
-import flowreader.view.WordCloudView;
-import java.util.ArrayList;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 /**
  * 
@@ -72,7 +64,6 @@ public class FlowReader extends Application {
             borderPane.setCenter(this.mainPane);
             borderPane.setTop(topBtnsBar);
             BorderPane.setAlignment(mainPane, Pos.CENTER_LEFT);
-            
             
             wordCloudToggle = diffModeToggle = false;
 
@@ -147,7 +138,7 @@ public class FlowReader extends Application {
 					wordCloudButton.setText("WordCloud View");
 
 					ribbon = new RibbonView(mainPane);
-					ArrayList<Page> pages = new ArrayList<>();
+					ArrayList<Page> pages;
 					PageView page = new PageView(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
 
 					 mainPane.getChildren().add(ribbon);
@@ -160,7 +151,7 @@ public class FlowReader extends Application {
 					pages = fileReader.readFile(page.getTextBound());
 					ribbon.buildRibbon(pages);
 					// wordCloud.buildWordCloud(pages);
-					ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
+					ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<>();
 					for (PageView tmpPage : ribbon.getPages()) {
 						wordCloudCounters.add(new TextFileReader_WordCloud(
 								tmpPage));

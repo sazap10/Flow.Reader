@@ -4,15 +4,12 @@
  */
 package flowreader.view;
 
-import java.util.ArrayList;
-
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Scale;
 import flowreader.model.Page;
+import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +17,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 /**
@@ -208,6 +207,7 @@ public class RibbonView extends Group {
 
 	public void setPageDragEvent(boolean setFlag) {
 		EventHandler<MouseEvent> dragHandler = new EventHandler<MouseEvent>() {
+                    @Override
 			public void handle(MouseEvent event) {
 				Dragboard drag = ((Node) event.getSource())
 						.startDragAndDrop(TransferMode.ANY);

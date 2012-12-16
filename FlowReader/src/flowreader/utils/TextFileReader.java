@@ -11,11 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 import javafx.scene.shape.Rectangle;
@@ -71,56 +67,54 @@ public class TextFileReader{
         Text tempPage = new Text("");
         String pageText = "";
         HashMap<String, Integer> wordsOccurrences = new HashMap<>();
-        
-        LineNumberReader r = new LineNumberReader(new java.io.FileReader(file));
-        String paragraph, word;
-        while ((paragraph = r.readLine()) != null) {
-            Scanner sc = new Scanner(paragraph); // scan the line word by word
-            while (sc.hasNext()) { // while there is words in the line
-                word = sc.next(); 
-                double wordWidth = new Text(word).getBoundsInLocal().getWidth();
-                double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
-                if (textWithNewLine > boundHeight) {
-                    TreeMap<String, Integer> wordsOccurrencesSorted = this.sortWordsOccurrences(wordsOccurrences);
-                    Page page = new Page(pageText, wordsOccurrencesSorted);
-                    //System.out.println(""+page.toString());
-                    pages.add(page);
-                    pageText = "";
-                    wordsOccurrences = new HashMap<>();
-                }
-                if (wordWidth + spaceWidth > spaceLeft) {
-                    if (!(textWithNewLine > boundHeight)) {
+        try (LineNumberReader r = new LineNumberReader(new java.io.FileReader(file))) {
+            String paragraph, word;
+            while ((paragraph = r.readLine()) != null) {
+                try (Scanner sc = new Scanner(paragraph)) {
+                    while (sc.hasNext()) { // while there is words in the line
+                        word = sc.next(); 
+                        double wordWidth = new Text(word).getBoundsInLocal().getWidth();
+                        double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
+                        if (textWithNewLine > boundHeight) {
+                            TreeMap<String, Integer> wordsOccurrencesSorted = this.sortWordsOccurrences(wordsOccurrences);
+                            Page page = new Page(pageText, wordsOccurrencesSorted);
+                            //System.out.println(""+page.toString());
+                            pages.add(page);
+                            pageText = "";
+                            wordsOccurrences = new HashMap<>();
+                        }
+                        if (wordWidth + spaceWidth > spaceLeft) {
+                            if (!(textWithNewLine > boundHeight)) {
+                                pageText += "\n";
+                            }
+                            spaceLeft = boundWidth - wordWidth;
+                        } else {
+                            spaceLeft = spaceLeft - (wordWidth + spaceWidth);
+                        }
+                        pageText += word + " ";
+                        word = this.trimPunctuation(word);
+                        if (!this.commonWords.containsKey(word)) {
+                            if(wordsOccurrences.get(word)!=null){
+                                wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
+                            }
+                            else{
+                                wordsOccurrences.put(word, 1);
+                            }
+                        }
+                        tempPage.setText(pageText);
+                    }
+                    if (!((tempPage.getBoundsInLocal().getHeight() + lineHeight) > boundHeight)) {
                         pageText += "\n";
-                    }
-                    spaceLeft = boundWidth - wordWidth;
-                } else {
-                    spaceLeft = spaceLeft - (wordWidth + spaceWidth);
-                }
-                pageText += word + " ";
-                word = this.trimPunctuation(word);
-                if (!this.commonWords.containsKey(word)) {
-                    if(wordsOccurrences.get(word)!=null){
-                        wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
-                    }
-                    else{
-                        wordsOccurrences.put(word, 1);
+                        tempPage.setText(pageText);
+                        spaceLeft = boundWidth;
                     }
                 }
-                tempPage.setText(pageText);
             }
-            if (!((tempPage.getBoundsInLocal().getHeight() + lineHeight) > boundHeight)) {
-                pageText += "\n";
-                tempPage.setText(pageText);
-                spaceLeft = boundWidth;
-            }
-            sc.close();
+            TreeMap<String, Integer> wordsOccurrencesSorted = this.sortWordsOccurrences(wordsOccurrences);
+            Page page = new Page(pageText, wordsOccurrencesSorted);
+            //System.out.println(""+page.toString());
+            pages.add(page);
         }
-        TreeMap<String, Integer> wordsOccurrencesSorted = this.sortWordsOccurrences(wordsOccurrences);
-        Page page = new Page(pageText, wordsOccurrencesSorted);
-        //System.out.println(""+page.toString());
-        pages.add(page);
-        
-        r.close();
         return pages;
     }
 
