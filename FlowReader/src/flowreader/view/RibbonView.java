@@ -45,8 +45,9 @@ public class RibbonView extends Group {
 	private EventHandler<ZoomEvent> zoomHandler;
 
 	public RibbonView(StackPane stackPane) {
-		this.pages = new ArrayList<PageView>();
-		this.stackPane = stackPane;
+            this.pages = new ArrayList<>();
+            this.wordClouds = new ArrayList<>();
+            this.stackPane = stackPane;
 	}
         
         public ArrayList<PageView> getPages(){
@@ -55,7 +56,6 @@ public class RibbonView extends Group {
         }
 
 	public void buildRibbon(ArrayList<Page> pagesContent) {
-
 		int i = 0;
 		int x = 0;
 		int y = 0;
@@ -63,13 +63,32 @@ public class RibbonView extends Group {
 			PageView page = new PageView(new Rectangle(x, y, pageWidth, pageHeight));
                         page.setText(pagesContent.get(i).getText());
 			this.pages.add(page);
-			this.getChildren().add(page);
+                        this.getChildren().add(page);
+                        
+                        WordCloudView wordCloud = new WordCloudView(new Rectangle(x, y, pageWidth, pageHeight));
+                        wordCloud.setWordOccurrences(pagesContent.get(i).getWordsOccurrences());
+			this.wordClouds.add(wordCloud);
+                        
 			x += pageWidth + pageInterval;
 			i++;
 		}
 		this.defineRibbonEvents();
 		this.setRibbonEvents(true);
 	}
+        
+        public void switchToWordCloud(){
+            this.getChildren().clear();
+            for(int i=0; i< this.wordClouds.size(); i++) {
+                this.getChildren().add(this.wordClouds.get(i));
+            }
+        }
+        
+        public void switchToPages(){
+            this.getChildren().clear();
+            for(int i=0; i< this.pages.size(); i++) {
+                this.getChildren().add(this.pages.get(i));
+            }
+        }
 
 	public void zoom(double deltaY, double x, double y) {
 		if (deltaY <= 0) {

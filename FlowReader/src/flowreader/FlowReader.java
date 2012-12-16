@@ -93,7 +93,7 @@ public class FlowReader extends Application {
 		openFileButton.setId("openFileBtn");
 		wordCloudButton = new Button("WordCloud View");
 		wordCloudButton.setId("wordCloudBtn");
-		wordCloudButton.setDisable(true);
+		wordCloudButton.setDisable(false);
 
 		diffModeBtn = new Button("Drag Mode");
 		diffModeBtn.setId("diffModeBtn");
@@ -182,13 +182,11 @@ public class FlowReader extends Application {
 			public void handle(ActionEvent e) {
 				if (wordCloudToggle) {
 					wordCloudToggle = false;
-					// stackPane.getChildren().remove(wordCloud);
-					mainPane.getChildren().add(ribbon);
+					ribbon.switchToPages();
 					wordCloudButton.setText("Word Cloud View");
 				} else {
 					wordCloudToggle = true;
-					mainPane.getChildren().remove(ribbon);
-					// stackPane.getChildren().add(wordCloud);
+					ribbon.switchToWordCloud();
 					wordCloudButton.setText("Ribbon View");
 				}
 			}

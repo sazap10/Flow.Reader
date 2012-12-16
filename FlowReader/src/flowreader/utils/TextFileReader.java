@@ -11,12 +11,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -54,7 +59,7 @@ public class TextFileReader{
      * @throws IOException 
      */
     public ArrayList<Page> readFile(Rectangle bounds) throws IOException {
-        ArrayList<Page> pages = new ArrayList<Page>();
+        ArrayList<Page> pages = new ArrayList<>(); // The list of all the pages
         
         // Text Wrapper
         double boundWidth = bounds.getWidth(); // Width of the page
@@ -65,7 +70,7 @@ public class TextFileReader{
 
         Text tempPage = new Text("");
         String pageText = "";
-        HashMap<String, Integer> wordsOccurrences = new HashMap<String, Integer>();
+        HashMap<String, Integer> wordsOccurrences = new HashMap<>();
         
         LineNumberReader r = new LineNumberReader(new java.io.FileReader(file));
         String paragraph, word;
@@ -76,9 +81,12 @@ public class TextFileReader{
                 double wordWidth = new Text(word).getBoundsInLocal().getWidth();
                 double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
                 if (textWithNewLine > boundHeight) {
-                    pages.add(new Page(pageText, wordsOccurrences));
+                    TreeMap<String, Integer> wordsOccurrencesSorted = this.sortWordsOccurrences(wordsOccurrences);
+                    Page page = new Page(pageText, wordsOccurrencesSorted);
+                    //System.out.println(""+page.toString());
+                    pages.add(page);
                     pageText = "";
-                    wordsOccurrences = new HashMap<String, Integer>();
+                    wordsOccurrences = new HashMap<>();
                 }
                 if (wordWidth + spaceWidth > spaceLeft) {
                     if (!(textWithNewLine > boundHeight)) {
@@ -89,6 +97,7 @@ public class TextFileReader{
                     spaceLeft = spaceLeft - (wordWidth + spaceWidth);
                 }
                 pageText += word + " ";
+                word = this.trimPunctuation(word);
                 if (!this.commonWords.containsKey(word)) {
                     if(wordsOccurrences.get(word)!=null){
                         wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
@@ -106,13 +115,16 @@ public class TextFileReader{
             }
             sc.close();
         }
-        pages.add(new Page(pageText, wordsOccurrences));
+        TreeMap<String, Integer> wordsOccurrencesSorted = this.sortWordsOccurrences(wordsOccurrences);
+        Page page = new Page(pageText, wordsOccurrencesSorted);
+        //System.out.println(""+page.toString());
+        pages.add(page);
         
         r.close();
         return pages;
     }
 
-    public void getCommonWords() {
+    private void getCommonWords() {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
@@ -136,5 +148,21 @@ public class TextFileReader{
                 System.out.println("couldn't close the file!");
             }
         }
+    }
+    
+    private TreeMap<String, Integer> sortWordsOccurrences(HashMap<String, Integer> wordsOccurrences){
+        ValueComparator bvc =  new ValueComparator(wordsOccurrences);
+        TreeMap<String,Integer> sortedWordsOccurrences = new TreeMap<>(bvc);
+        sortedWordsOccurrences.putAll(wordsOccurrences);
+        
+        //System.out.println("unsorted map: "+wordsOccurrences);
+        //System.out.println("results: "+sortedWordsOccurrences);
+       
+        return sortedWordsOccurrences;
+    }
+    
+    //removes punctuation from any words found
+    private String trimPunctuation(String word) {
+        return word.toLowerCase().replaceAll("\\W", "");
     }
 }

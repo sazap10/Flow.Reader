@@ -4,8 +4,8 @@
  */
 package flowreader.model;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -14,23 +14,27 @@ import java.util.Iterator;
 public class Page{
 
     private String text;
-    private HashMap<String, Integer> wordsOccurrences;
+    private TreeMap<String, Integer> wordsOccurrences;
 
-    public Page(String text, HashMap<String, Integer> wordsOccurrences) {
+    public Page(String text, TreeMap<String, Integer> wordsOccurrences) {
         this.text = text;
         this.wordsOccurrences = wordsOccurrences;
-        Iterator i = wordsOccurrences.keySet().iterator();
-        while(i.hasNext()){
-            String word = (String)i.next();
-            System.out.println(""+word+": "+wordsOccurrences.get(word));
-        }
     }
     
     public String getText(){
         return this.text;
     }
     
-    public HashMap<String, Integer> getWordsOccurrences(){
+    public TreeMap<String, Integer> getWordsOccurrences(){
         return this.wordsOccurrences;
+    }
+    
+    public String toString(){
+        String s = "PAGE \n "+text+"\n";
+        
+        for (Map.Entry<String, Integer> entree : this.wordsOccurrences.entrySet()) {
+            System.out.println("Clé : "+entree.getKey()+" Valeur : "+entree.getValue());
+	}
+        return s+"\n";
     }
 }

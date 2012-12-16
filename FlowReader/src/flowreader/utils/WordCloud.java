@@ -130,7 +130,6 @@ public class WordCloud {
      //removes punctuation from any words found
     public String trimPunctuation(String word) {
         return word.replaceAll("\\W", "");
-
     }
 
     
