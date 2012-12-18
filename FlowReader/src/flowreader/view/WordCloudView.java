@@ -1,6 +1,7 @@
 package flowreader.view;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +23,10 @@ public class WordCloudView extends Group{
     private TreeMap<String, Integer> wordsOccurrences;
     private ArrayList<Text> words;
     private FlowPane cloud;
+    private Integer maxFontSize = 500;
+    private Integer minFontSize = 14;
+    private Integer numOfWordsInCloud = 10;
+    private Integer normalizationConstant = 3;
 
     public WordCloudView(Rectangle boundary) {
         wordCloudBoundary = boundary;
@@ -69,14 +74,27 @@ public class WordCloudView extends Group{
         Set<Map.Entry<String, Integer>> w = this.wordsOccurrences.entrySet();
         Iterator i = w.iterator();
         int j = 0;
-        while(j<10 && i.hasNext()) {
+        while(j<this.numOfWordsInCloud && i.hasNext()) {
             Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();
             Text word = new Text(e.getKey());
+            //this.setWordSizes(word, e.getValue());
             word.setFont(new Font(10*e.getValue()));
             word.setWrappingWidth(word.getLayoutBounds().getWidth()+10);
             this.words.add(word);
-            this.cloud.getChildren().add(word);
             j++;
 	}
+        Collections.shuffle(this.words);
+        this.cloud.getChildren().addAll(this.words);
+    }
+    
+    //iterates through the word objects and assigns them a font size
+    private void setWordSizes(Text word, int numberOfOccurrences) {
+        int countDiff = numberOfOccurrences - this.wordsOccurrences.firstEntry().getValue();
+        int totalCountDiff = this.wordsOccurrences.lastEntry().getValue() - this.wordsOccurrences.firstEntry().getValue();
+        int fontSize = ((this.maxFontSize * countDiff) / (this.normalizationConstant * totalCountDiff));
+        if (fontSize < this.minFontSize) {
+            fontSize = this.minFontSize;
+        }
+        word.setFont(new Font(fontSize));
     }
 }

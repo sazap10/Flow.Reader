@@ -2,7 +2,6 @@ package flowreader;
 
 import flowreader.model.Page;
 import flowreader.utils.TextFileReader;
-import flowreader.utils.TextFileReader_WordCloud;
 import flowreader.view.PageView;
 import flowreader.view.RibbonView;
 import java.util.ArrayList;
@@ -150,16 +149,7 @@ public class FlowReader extends Application {
 					// returns all pages
 					pages = fileReader.readFile(page.getTextBound());
 					ribbon.buildRibbon(pages);
-					// wordCloud.buildWordCloud(pages);
-					ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<>();
-					for (PageView tmpPage : ribbon.getPages()) {
-						wordCloudCounters.add(new TextFileReader_WordCloud(
-								tmpPage));
-						for (TextFileReader_WordCloud cloud : wordCloudCounters) {
 
-						}
-					}
-					// wordCloudButton.setDisable(false);
 					diffModeBtn.setDisable(false);
 
 				} catch (Exception exception) {
