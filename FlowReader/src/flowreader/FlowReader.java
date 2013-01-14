@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
@@ -42,7 +43,7 @@ public class FlowReader extends Application {
         private HBox topBtnsBar; // the button bar at the top of the screen
         private Button minBtn, closeBtn; // The buttons at the top of the page
         private Button openFileButton, wordCloudButton, diffModeBtn; // The buttons at the bottom of the page
-	
+	private Label zoomLabel;
 
 	private EventHandler<ScrollEvent> scrollHandler;
 	private EventHandler<ZoomEvent> zoomHandler;
@@ -59,6 +60,7 @@ public class FlowReader extends Application {
             mainPane = new StackPane();
             setUpButtonBar();
             this.setButtonEvents(primaryStage);
+            Label zoomLabel = new Label("zoom level");
             
             borderPane.setCenter(this.mainPane);
             borderPane.setTop(topBtnsBar);

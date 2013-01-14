@@ -39,6 +39,8 @@ public class RibbonView extends Group {
 	int curScale = 15;
 	int opaqueScale = 15;
 	StackPane stackPane;
+        		double[] array = new double[36];
+
 	private EventHandler<MouseEvent> swipeHandler;
         private EventHandler<ScrollEvent> scrollHandler;
 	private EventHandler<ZoomEvent> zoomHandler;
@@ -71,6 +73,12 @@ public class RibbonView extends Group {
 			x += pageWidth + pageInterval;
 			i++;
 		}
+                
+                                //set up zoom levels
+		for (int j = 0;j < 36; j++) {
+			array[j] = Math.pow(1.05, j - 15);
+		}
+
 		this.defineRibbonEvents();
 		this.setRibbonEvents(true);
 	}
@@ -104,11 +112,6 @@ public class RibbonView extends Group {
 			}
 		}
 
-                //set up zoom levels
-		double[] array = new double[36];
-		for (int i = 0; i < 36; i++) {
-			array[i] = Math.pow(1.05, i - 15);
-		}
 
 		Scale scale = new Scale(array[curScale], array[curScale], x, y);
                 //remove previously applied transformation(s)
