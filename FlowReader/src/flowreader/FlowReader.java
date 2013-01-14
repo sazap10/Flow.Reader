@@ -26,183 +26,181 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
- * 
+ *
  * @author D-Day
  */
 public class FlowReader extends Application {
 
-	// Background and main scene
-	private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-	private Scene scene;
-        
-        // Elements
-        private StackPane mainPane; // The main pane that contains the ribbon or the word cloud
-        private RibbonView ribbon; // The ribbon at the center of the page
-        //private WordCloudView wordCloud; // The word cloud view at the center of the page
-        //private ComparisonView comparisonView; // The buckets to compare pages in the bottom
-        
-        private HBox topBtnsBar; // the button bar at the top of the screen
-        private Button minBtn, closeBtn; // The buttons at the top of the page
-        private Button openFileButton, wordCloudButton, diffModeBtn; // The buttons at the bottom of the page
-        public static Text zoomLabel;
-	private EventHandler<ScrollEvent> scrollHandler;
-	private EventHandler<ZoomEvent> zoomHandler;
-	boolean wordCloudToggle, diffModeToggle;
-	@Override
-	public void start(Stage primaryStage) {
-            primaryStage.setTitle("Flow Reader");
-            primaryStage.setFullScreen(true);
-            BorderPane borderPane = new BorderPane();
-            scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
-            
-            mainPane = new StackPane();
-                        zoomLabel = new Text("zoom label");
-            setUpButtonBar();
-            this.setButtonEvents(primaryStage);
-            
-            borderPane.setCenter(this.mainPane);
-            borderPane.setTop(topBtnsBar);
-            BorderPane.setAlignment(mainPane, Pos.CENTER_LEFT);
-            borderPane.setBottom(zoomLabel);
-            wordCloudToggle = diffModeToggle = false;
+    // Background and main scene
+    private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+    private Scene scene;
+    // Elements
+    private StackPane mainPane; // The main pane that contains the ribbon or the word cloud
+    private RibbonView ribbon; // The ribbon at the center of the page
+    //private WordCloudView wordCloud; // The word cloud view at the center of the page
+    //private ComparisonView comparisonView; // The buckets to compare pages in the bottom
+    private HBox topBtnsBar; // the button bar at the top of the screen
+    private Button minBtn, closeBtn; // The buttons at the top of the page
+    private Button openFileButton, wordCloudButton, diffModeBtn; // The buttons at the bottom of the page
+    public static Text zoomLabel;
+    private EventHandler<ScrollEvent> scrollHandler;
+    private EventHandler<ZoomEvent> zoomHandler;
+    boolean wordCloudToggle, diffModeToggle;
 
-            scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-            primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
-            primaryStage.setScene(scene);
-            primaryStage.show();
-	}
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Flow Reader");
+        primaryStage.setFullScreen(true);
+        BorderPane borderPane = new BorderPane();
+        scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
 
-	private void setUpButtons() {
-		closeBtn = new Button("x");
-		closeBtn.setId("closeBtn");
+        mainPane = new StackPane();
+        zoomLabel = new Text("zoom label");
+        setUpButtonBar();
+        this.setButtonEvents(primaryStage);
 
-		minBtn = new Button("_");
-		minBtn.setId("minBtn");
+        borderPane.setCenter(this.mainPane);
+        borderPane.setTop(topBtnsBar);
+        BorderPane.setAlignment(mainPane, Pos.CENTER_LEFT);
+        borderPane.setBottom(zoomLabel);
+        wordCloudToggle = diffModeToggle = false;
 
-		openFileButton = new Button("Open file");
-		openFileButton.setId("openFileBtn");
-		wordCloudButton = new Button("WordCloud View");
-		wordCloudButton.setId("wordCloudBtn");
-		wordCloudButton.setDisable(false);
+        scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+        primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
-		diffModeBtn = new Button("Drag Mode");
-		diffModeBtn.setId("diffModeBtn");
-		diffModeBtn.setDisable(true);
-	}
+    private void setUpButtons() {
+        closeBtn = new Button("x");
+        closeBtn.setId("closeBtn");
 
-	private void setUpButtonBar() {
-		this.setUpButtons();
-            
-                topBtnsBar = new HBox(10);
-                
-		HBox mainBtns = new HBox(10);
-		mainBtns.getChildren().add(openFileButton);
-                mainBtns.getChildren().add(wordCloudButton);
-                mainBtns.getChildren().add(diffModeBtn);
-		
-                HBox winBtnBox = new HBox(10);
-		winBtnBox.setAlignment(Pos.CENTER_RIGHT);
-		winBtnBox.getChildren().addAll(minBtn, closeBtn);
-		mainBtns.getChildren().add(winBtnBox);
-		HBox.setHgrow(winBtnBox, Priority.ALWAYS);
-		
-                topBtnsBar.getChildren().addAll(mainBtns, winBtnBox);
-	}
+        minBtn = new Button("_");
+        minBtn.setId("minBtn");
 
-	private void setButtonEvents(final Stage primaryStage) {
+        openFileButton = new Button("Open file");
+        openFileButton.setId("openFileBtn");
+        wordCloudButton = new Button("WordCloud View");
+        wordCloudButton.setId("wordCloudBtn");
+        wordCloudButton.setDisable(false);
 
-		closeBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				primaryStage.close();
-			}
-		});
+        diffModeBtn = new Button("Drag Mode");
+        diffModeBtn.setId("diffModeBtn");
+        diffModeBtn.setDisable(true);
+    }
 
-		minBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				primaryStage.setIconified(true);
-			}
-		});
+    private void setUpButtonBar() {
+        this.setUpButtons();
 
-		openFileButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				try {
-                                        TextFileReader fileReader = new TextFileReader();
-					mainPane.getChildren().clear();
-					// wordCloud.getChildren().clear();
-					// fileReader_WordCloud.wordObjects.clear();
-					wordCloudToggle = false;
-					wordCloudButton.setText("WordCloud View");
+        topBtnsBar = new HBox(10);
 
-					ribbon = new RibbonView(mainPane);
-					ArrayList<Page> pages;
-					PageView page = new PageView(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
+        HBox mainBtns = new HBox(10);
+        mainBtns.getChildren().add(openFileButton);
+        mainBtns.getChildren().add(wordCloudButton);
+        mainBtns.getChildren().add(diffModeBtn);
 
-					 mainPane.getChildren().add(ribbon);
-					//comparisonView.setPageSize(ribbon.getPageWidth(), ribbon.getPageHeight());
+        HBox winBtnBox = new HBox(10);
+        winBtnBox.setAlignment(Pos.CENTER_RIGHT);
+        winBtnBox.getChildren().addAll(minBtn, closeBtn);
+        mainBtns.getChildren().add(winBtnBox);
+        HBox.setHgrow(winBtnBox, Priority.ALWAYS);
 
-					fileReader.startFileChooser(primaryStage);
+        topBtnsBar.getChildren().addAll(mainBtns, winBtnBox);
+    }
 
-					// fileReader_WordCloud.getCommonWords();
-					// returns all pages
-					pages = fileReader.readFile(page.getTextBound());
-					ribbon.buildRibbon(pages);
+    private void setButtonEvents(final Stage primaryStage) {
 
-					diffModeBtn.setDisable(false);
+        closeBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.close();
+            }
+        });
 
-				} catch (Exception exception) {
-					System.out.println(exception);
-				}
-			}
-		});
+        minBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.setIconified(true);
+            }
+        });
 
-		wordCloudButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				if (wordCloudToggle) {
-					wordCloudToggle = false;
-					ribbon.switchToPages();
-					wordCloudButton.setText("Word Cloud View");
-				} else {
-					wordCloudToggle = true;
-					ribbon.switchToWordCloud();
-					wordCloudButton.setText("Ribbon View");
-				}
-			}
-		});
+        openFileButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                try {
+                    TextFileReader fileReader = new TextFileReader();
+                    mainPane.getChildren().clear();
+                    // wordCloud.getChildren().clear();
+                    // fileReader_WordCloud.wordObjects.clear();
+                    wordCloudToggle = false;
+                    wordCloudButton.setText("WordCloud View");
 
-		diffModeBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				if (diffModeToggle) {
-					diffModeToggle = false;
-					diffModeBtn.setText("Drag Mode");
-					ribbon.setRibbonEvents(true);
-					ribbon.setPageDragEvent(false);
-					//comparisonView.setDragEvents(false);
-				} else {
-					diffModeToggle = true;
-					diffModeBtn.setText("Pan Mode");
-					ribbon.setRibbonEvents(false);
-					ribbon.setPageDragEvent(true);
-					//comparisonView.setDragEvents(true);
-				}
-			}
-		});
-	}
+                    ribbon = new RibbonView(mainPane);
+                    ArrayList<Page> pages;
+                    PageView page = new PageView(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
 
-	/**
-	 * The main() method is ignored in correctly deployed JavaFX application.
-	 * main() serves only as fallback in case the application can not be
-	 * launched through deployment artifacts, e.g., in IDEs with limited FX
-	 * support. NetBeans ignores main().
-	 * 
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String[] args) {
-		launch(args);
-	}
+                    mainPane.getChildren().add(ribbon);
+                    //comparisonView.setPageSize(ribbon.getPageWidth(), ribbon.getPageHeight());
+
+                    fileReader.startFileChooser(primaryStage);
+
+                    // fileReader_WordCloud.getCommonWords();
+                    // returns all pages
+                    pages = fileReader.readFile(page.getTextBound());
+                    ribbon.buildRibbon(pages);
+
+                    diffModeBtn.setDisable(false);
+
+                } catch (Exception exception) {
+                    System.out.println(exception);
+                }
+            }
+        });
+
+        wordCloudButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (wordCloudToggle) {
+                    wordCloudToggle = false;
+                    ribbon.switchToPages();
+                    wordCloudButton.setText("Word Cloud View");
+                } else {
+                    wordCloudToggle = true;
+                    ribbon.switchToWordCloud();
+                    wordCloudButton.setText("Ribbon View");
+                }
+            }
+        });
+
+        diffModeBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (diffModeToggle) {
+                    diffModeToggle = false;
+                    diffModeBtn.setText("Drag Mode");
+                    ribbon.setRibbonEvents(true);
+                    ribbon.setPageDragEvent(false);
+                    //comparisonView.setDragEvents(false);
+                } else {
+                    diffModeToggle = true;
+                    diffModeBtn.setText("Pan Mode");
+                    ribbon.setRibbonEvents(false);
+                    ribbon.setPageDragEvent(true);
+                    //comparisonView.setDragEvents(true);
+                }
+            }
+        });
+    }
+
+    /**
+     * The main() method is ignored in correctly deployed JavaFX application.
+     * main() serves only as fallback in case the application can not be
+     * launched through deployment artifacts, e.g., in IDEs with limited FX
+     * support. NetBeans ignores main().
+     *
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

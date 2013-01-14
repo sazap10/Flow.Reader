@@ -7,7 +7,7 @@ import java.util.TreeMap;
  *
  * @author D-Day
  */
-public class Page{
+public class Page {
 
     private String text;
     private TreeMap<String, Integer> wordsOccurrences;
@@ -16,22 +16,22 @@ public class Page{
         this.text = text;
         this.wordsOccurrences = wordsOccurrences;
     }
-    
-    public String getText(){
+
+    public String getText() {
         return this.text;
     }
-    
-    public TreeMap<String, Integer> getWordsOccurrences(){
+
+    public TreeMap<String, Integer> getWordsOccurrences() {
         return this.wordsOccurrences;
     }
-    
+
     @Override
-    public String toString(){
-        String s = "PAGE \n "+text+"\n";
-        
+    public String toString() {
+        String s = "PAGE \n " + text + "\n";
+
         for (Map.Entry<String, Integer> entree : this.wordsOccurrences.entrySet()) {
-            System.out.println("Clé : "+entree.getKey()+" Valeur : "+entree.getValue());
-	}
-        return s+"\n";
+            System.out.println("Clé : " + entree.getKey() + " Valeur : " + entree.getValue());
+        }
+        return s + "\n";
     }
 }
