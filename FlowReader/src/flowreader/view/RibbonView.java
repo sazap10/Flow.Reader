@@ -68,7 +68,8 @@ public class RibbonView extends Group {
             WordCloudView wordCloud = new WordCloudView(new Rectangle(x, y, pageWidth, pageHeight));
             wordCloud.setWordOccurrences(pagesContent.get(i).getWordsOccurrences());
             this.wordClouds.add(wordCloud);
-
+            wordCloud.setOpacity(0);
+            this.getChildren().add(wordCloud);
             x += pageWidth + pageInterval;
             i++;
         }
@@ -130,9 +131,16 @@ public class RibbonView extends Group {
     public void setOpacity() {
         double opacity;
         opacity = curScale / (double) opaqueScale;
-        stackPane.setOpacity(opacity);
-
-    }
+        //stackPane.setOpacity(opacity);
+          
+            for(int i=0;i<pages.size();i++){
+                pages.get(i).setOpacity(opacity);
+            }
+            for(int j=0;j<wordClouds.size();j++){
+                wordClouds.get(j).setOpacity(1-opacity);
+            }
+        }
+    
 
     public double getPageWidth() {
         return pageWidth;
