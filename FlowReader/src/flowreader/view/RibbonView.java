@@ -122,7 +122,10 @@ public class RibbonView extends Group {
 		}
                 
 		stackPane.getTransforms().add(scale);
-FlowReader.zoomLabel.setText("zoom: "+curScale);	}
+FlowReader.zoomLabel.setText("zoom: "+((float)curScale/(float)maxScale)*100+
+        "%\ncurScale: "+curScale+
+        "\nmin Scale: "+minScale+
+        "\nmax Scale: "+maxScale);	}
 
 	public void setOpacity() {
 		double opacity;
