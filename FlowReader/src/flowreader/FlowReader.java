@@ -47,7 +47,7 @@ public class FlowReader extends Application {
 	private EventHandler<ScrollEvent> scrollHandler;
 	private EventHandler<ZoomEvent> zoomHandler;
 	boolean wordCloudToggle, diffModeToggle;
-
+        
 	@Override
 	public void start(Stage primaryStage) {
             primaryStage.setTitle("Flow Reader");

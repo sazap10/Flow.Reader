@@ -104,17 +104,20 @@ public class RibbonView extends Group {
 			}
 		}
 
+                //set up zoom levels
 		double[] array = new double[36];
 		for (int i = 0; i < 36; i++) {
 			array[i] = Math.pow(1.05, i - 15);
 		}
 
 		Scale scale = new Scale(array[curScale], array[curScale], x, y);
+                //remove previously applied transformation(s)
 		if (stackPane.getTransforms().size() > 0) {
 			for (int i = 0; i < stackPane.getTransforms().size(); i++) {
 				stackPane.getTransforms().remove(i);
 			}
 		}
+                
 		stackPane.getTransforms().add(scale);
 
 	}
@@ -171,7 +174,7 @@ public class RibbonView extends Group {
 			@Override
 			public void handle(ScrollEvent event) {
 				if (!event.isDirect()) {
-					RibbonView.this.zoom(event.getDeltaY(), event.getX(), event.getY());
+					RibbonView.this.zoom(event.getDeltaY(), event.getScreenX(), event.getScreenY());
 				}
 				event.consume();
 
