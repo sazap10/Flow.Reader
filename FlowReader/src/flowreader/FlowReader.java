@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -43,29 +44,26 @@ public class FlowReader extends Application {
         private HBox topBtnsBar; // the button bar at the top of the screen
         private Button minBtn, closeBtn; // The buttons at the top of the page
         private Button openFileButton, wordCloudButton, diffModeBtn; // The buttons at the bottom of the page
-	private Label zoomLabel;
-
+        public static Text zoomLabel;
 	private EventHandler<ScrollEvent> scrollHandler;
 	private EventHandler<ZoomEvent> zoomHandler;
 	boolean wordCloudToggle, diffModeToggle;
-        
 	@Override
 	public void start(Stage primaryStage) {
             primaryStage.setTitle("Flow Reader");
             primaryStage.setFullScreen(true);
-
             BorderPane borderPane = new BorderPane();
             scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
             
             mainPane = new StackPane();
+                        zoomLabel = new Text("zoom label");
             setUpButtonBar();
             this.setButtonEvents(primaryStage);
-            Label zoomLabel = new Label("zoom level");
             
             borderPane.setCenter(this.mainPane);
             borderPane.setTop(topBtnsBar);
             BorderPane.setAlignment(mainPane, Pos.CENTER_LEFT);
-            
+            borderPane.setBottom(zoomLabel);
             wordCloudToggle = diffModeToggle = false;
 
             scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());

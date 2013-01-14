@@ -4,12 +4,14 @@
  */
 package flowreader.view;
 
+import flowreader.FlowReader;
 import flowreader.model.Page;
 import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -40,11 +42,10 @@ public class RibbonView extends Group {
 	int opaqueScale = 15;
 	StackPane stackPane;
         		double[] array = new double[36];
-
 	private EventHandler<MouseEvent> swipeHandler;
         private EventHandler<ScrollEvent> scrollHandler;
 	private EventHandler<ZoomEvent> zoomHandler;
-
+        
 	public RibbonView(StackPane stackPane) {
             this.pages = new ArrayList<>();
             this.wordClouds = new ArrayList<>();
@@ -53,7 +54,6 @@ public class RibbonView extends Group {
         
         public ArrayList<PageView> getPages(){
            return this.pages;
-           
         }
 
 	public void buildRibbon(ArrayList<Page> pagesContent) {
@@ -122,8 +122,7 @@ public class RibbonView extends Group {
 		}
                 
 		stackPane.getTransforms().add(scale);
-
-	}
+FlowReader.zoomLabel.setText("zoom: "+curScale);	}
 
 	public void setOpacity() {
 		double opacity;
