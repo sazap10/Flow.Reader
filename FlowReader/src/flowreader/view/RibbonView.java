@@ -28,7 +28,7 @@ import javafx.util.Duration;
 public class RibbonView extends Group {
 
 	private ArrayList<Page> pages;
-        private ArrayList<WordCloud> wordClouds;// plan to have one of these for each zoom level
+        private ArrayList<WordCloud> wordClouds;
 	int pageWidth = 500;
 	int pageHeight = 700;
 	int pageInterval = 5;
@@ -46,31 +46,6 @@ public class RibbonView extends Group {
 		this.stackPane = stackPane;
 	}
         
-        public void setWordCloudsForPages(){
-            WordCloud cloud;
-            //create a page with the text of each page
-            Group cloudObjects;
-            int i = 0;
-            for (Page page : pages){
-                cloud = new WordCloud(page);
-                cloud.setHeight(this.pageHeight / 3);
-                cloud.setWidth(this.pageWidth);
-                System.out.println("page width: " + this.pageWidth);
-                System.out.println("page height: " + this.pageHeight);
-                double pageX = ((this.pageWidth + pageInterval) * i);
-                System.out.println("page startX:" + pageX);
-                double pageY =  0; //arbitrary gap between cloud and page;
-                 //System.out.println("cloud start X:" + pageX);
-                 // System.out.println("cloud startY:" + pageY);
-                System.out.println("calling rendercloud with input pagex: " + pageX + " pageY: " + pageY);
-                cloudObjects = cloud.renderCloud(pageX, pageY);
-                this.getChildren().add(cloudObjects);
-                i++;
-            }
-            
-            
-        }
-        
         public ArrayList<Page> getPages(){
            return this.pages;
            
@@ -81,11 +56,11 @@ public class RibbonView extends Group {
 
 		int i = 0;
 		int x = 0;
-		int y = (this.pageHeight / 3) + 30;
+		int y = 0;
 		while (i < pagesNumber) {
 			Page page = new Page(new Rectangle(x, y, pageWidth, pageHeight));
 			this.pages.add(page);
-                        //this.wordClouds.add(new WordCloud(page));
+                        this.wordClouds.add(new WordCloud(page));
 			this.getChildren().add(page.getPage());
 			x += pageWidth + pageInterval;
 			i++;
@@ -113,8 +88,6 @@ public class RibbonView extends Group {
 		for (int i = 0; i < 36; i++) {
 			array[i] = Math.pow(1.05, i - 15);
 		}
-                
-                System.out.println("current scale:" + curScale);
 
 		Scale scale = new Scale(array[curScale], array[curScale], x, y);
 		if (stackPane.getTransforms().size() > 0) {
@@ -142,10 +115,8 @@ public class RibbonView extends Group {
 	}
 
 	public void setTexttoPages(ArrayList<String> text) {
-            
 		for (int i = 0; i < pages.size(); i++) {
 			pages.get(i).setText(text.get(i));
-                       
 		}
 	}
 
