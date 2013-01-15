@@ -61,6 +61,7 @@ public class WordCloudView extends Group{
         
     }
     
+    
     public double getPageWidth() {
         return wordCloudBoundary.getWidth();
     }
