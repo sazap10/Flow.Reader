@@ -40,22 +40,33 @@ public class WordCloudView extends Group{
     }
     
     //merges two wordclouds
-    public WordCloudView (WordCloudView a, WordCloudView b){
-              
-        TreeMap<String,Integer> bMap = a.getWordOccurrences();       
-        Set<Map.Entry<String, Integer>> w = bMap.entrySet();
+    public WordCloudView (WordCloudView a, WordCloudView b, Rectangle boundary){    
+        this(boundary);         
+        TreeMap<String,Integer> bMap = b.getWordOccurrences();       
+        Set<Map.Entry<String, Integer>> w = bMap.entrySet();     
         Iterator i = w.iterator();
-        this.setWordOccurrences(a.getWordOccurrences());
-        while (i.hasNext()){           
-            Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();
+        this.setWordOccurrences(a.getWordOccurrences());      
+        
+        //walk through cloud b and add it's words
+        while (i.hasNext()){   
+    
+            Set<Map.Entry<String, Integer>> occurrences = wordsOccurrences.entrySet(); 
+            Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();      
+            String key = e.getKey();
+            int value = e.getValue();
+            
             //if word exists, use sum of counts
-            if (wordsOccurrences.get(e.getKey()) != null){
-                int count = wordsOccurrences.get(e.getKey()) + e.getValue();
-                wordsOccurrences.put(e.getKey(), count);
+            if (wordsOccurrences.containsKey(key)){
+                int count = wordsOccurrences.get(key) + value;
+                wordsOccurrences.put(key, count);
             }
-            else{
-                wordsOccurrences.put(e.getKey(), e.getValue());
+            else{             
+                wordsOccurrences.put(key, value);
+                
+                
             }
+         
+          
             
         }
         
