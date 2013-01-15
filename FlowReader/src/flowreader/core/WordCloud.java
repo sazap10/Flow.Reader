@@ -36,15 +36,19 @@ public class WordCloud {
     private Integer normalizationConstant = 3;
     public ArrayList<Word> wordObjects;  //only public for basic testing
     private HashMap<String, Integer> commonWords;
-
+    private double width;
+    private double height;
     
     //constructor with a single page as input
     public WordCloud(Page page) {
-        this.words = new HashMap<>();
-        this.wordObjects = new ArrayList<>();
-        this.commonWords = new HashMap<>();
+        this.words = new HashMap<String, Integer>();
+        this.wordObjects = new ArrayList<Word>();
+        this.commonWords = new HashMap<String, Integer>();
         countWords(page);
+        getNodes();
+        setWordSizes();
     }
+    
     
     
     
@@ -66,6 +70,23 @@ public class WordCloud {
         
     }
     
+    public double getWidth(){
+        return this.width;
+    }
+    
+    public void setWidth(double width){
+        this.width = width;
+    }
+    
+    public double getHeight(){
+        return this.height;
+    }
+    
+    public void setHeight(double height){
+        this.height = height;   
+    }
+    
+    
     
     //returns the words
      public HashMap<String, Integer> getWords(){
@@ -75,7 +96,9 @@ public class WordCloud {
      
     //counts the words in an input page 
     private void countWords(Page page) {
+   
         String text = page.getText();
+        
         if (text != null) {
             ArrayList<String> characters;
             for (String i : text.split(" ")) {
@@ -105,7 +128,7 @@ public class WordCloud {
             
             String temp_text;
             while ((temp_text = bufferedReader.readLine()) != null) {
-                System.out.println(temp_text);
+               
                 this.commonWords.put(temp_text, 1);
             }
         } catch (FileNotFoundException ex) {
@@ -135,6 +158,7 @@ public class WordCloud {
     
     //creates Word objects with the top n most common words
     public String getNodes() {
+       
         String output = "";
         String maxKey = "";
         int tmpCount;
@@ -170,6 +194,7 @@ public class WordCloud {
     
     //iterates through the word objects and assigns them a font size
     public void setWordSizes() {
+      
         for (Word word : wordObjects) {
             int countDiff = word.getCount() - this.minCount;
             int totalCountDiff = this.maxCount - this.minCount;
@@ -186,20 +211,21 @@ public class WordCloud {
     
     //very big function for rendering the wordclouds
     //(returns a group containing the rendered words;
-      public Group renderCloud(ArrayList<Word> wordObjects ){
+      public Group renderCloud(double x, double y ){
     //ArrayList<Integer> indexes = new ArrayList<Integer>();
    // ArrayList<Word> wordObjects = new ArrayList<Word>();
    //  for (int i = 0; i <= wordObjects.size() -1; i ++){
   ////       indexes.add(i, i);
    //  }
+      ArrayList<Word> wordObjects = this.wordObjects;
      Collections.shuffle(wordObjects);
    //  System.out.println("PRINTING INDEXES!");
   //   System.out.println(indexes);
     //create the basic rectangle (usually in terms of class attributes)
     Group cloud = new Group();
     Rectangle r = new Rectangle();
-    r.setX(0);
-    r.setY(0);
+    r.setX(x);
+    r.setY(y);
     r.setWidth(1500);
     r.setHeight(500);
     r.setArcWidth(100);
@@ -209,11 +235,13 @@ public class WordCloud {
     //these would normally be inputs to the function
     
     
-    double maxWidth = 1000;
-    double maxHeight = 800;
+    double maxWidth = this.width;
+    double maxHeight = this.height;
     double spacing = 20;
-    double originX = (Screen.getPrimary().getVisualBounds().getWidth() / 2) - (maxWidth / 2);
-    double originY = (Screen.getPrimary().getVisualBounds().getHeight() / 2) - (maxHeight / 2);
+    //double originX = (Screen.getPrimary().getVisualBounds().getWidth() / 2) - (maxWidth / 2);
+    //double originY = (Screen.getPrimary().getVisualBounds().getHeight() / 2) - (maxHeight / 2);
+    double originX = x;
+    double originY = y;
     double currX = originX;
     double currY = originY;
     double currHighest = 0;
@@ -223,13 +251,14 @@ public class WordCloud {
     lines.add(new ArrayList<Word>());
     
     for (Word word : wordObjects ){
+        
      Text currText = new Text();   
      currText.setText(word.getText());
      currText.setFont(new Font(word.getFontSize()));
      double wordWidth = currText.getBoundsInLocal().getWidth();
      double wordHeight = currText.getBoundsInLocal().getHeight();
      
-     if ((wordWidth + currX) <= maxWidth){
+     if ((wordWidth + currX) <= (maxWidth + originX)){
       //fits on the same line
          if (wordHeight > currHighest){
              currHighest = wordHeight;
@@ -244,7 +273,7 @@ public class WordCloud {
          lines.add(currentLine, tmpLine);
          
      }else{
-         if((wordHeight + currY) <= maxHeight){
+         if((wordHeight + currY) <= (maxHeight + originY)){
              
              //start new line
          
@@ -275,14 +304,14 @@ public class WordCloud {
     
     }
     
-    int renderX = 0;
-    int renderY = 0;
+    double renderX = x;
+    double renderY = y;
     for (int i = 0; i <= currentLine-1; i++){
        
            renderY += highest.get(i);  
         
        
-        renderX = 0;
+        renderX = x;
         for (Word word : lines.get(i)){
              Text currText = new Text();   
              currText.setText(word.getText());
