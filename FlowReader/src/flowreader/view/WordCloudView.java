@@ -30,7 +30,7 @@ public class WordCloudView extends Group{
 
     public WordCloudView(Rectangle boundary) {
         wordCloudBoundary = boundary;
-        wordCloudBoundary.setFill(Color.TRANSPARENT);
+        wordCloudBoundary.setFill(Color.ALICEBLUE);
         this.words = new ArrayList<>();
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
