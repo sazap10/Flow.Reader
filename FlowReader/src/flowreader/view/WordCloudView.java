@@ -1,115 +1,126 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package flowreader.view;
 
-import flowreader.data.TextFileReader_WordCloud;
-import flowreader.data.Word;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import javafx.scene.Group;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
 
 /**
  *
  * @author D-Day
  */
-public class WordCloudView extends Group {
+public class WordCloudView extends Group{
 
-    TextFileReader_WordCloud fileReader_WordCloud;
+    private Rectangle wordCloudBoundary;
+    private TreeMap<String, Integer> wordsOccurrences;
+    private ArrayList<Text> words;
+    private FlowPane cloud;
+    private Integer maxFontSize = 500;
+    private Integer minFontSize = 14;
+    private Integer numOfWordsInCloud = 10;
+    private Integer normalizationConstant = 3;
 
-    public WordCloudView(TextFileReader_WordCloud fileReader_WordCloud) {
-        this.fileReader_WordCloud = fileReader_WordCloud;
-
+    public WordCloudView(Rectangle boundary) {
+        wordCloudBoundary = boundary;
+        wordCloudBoundary.setFill(Color.ALICEBLUE);
+        this.words = new ArrayList<>();
+        this.cloud = new FlowPane();
+        this.cloud.setLayoutX(wordCloudBoundary.getX());
+        
+        this.getChildren().addAll(wordCloudBoundary, cloud);
+        
     }
-
-    public void buildWordCloud(ArrayList<String> pages) {
-
-        fileReader_WordCloud.getWordCount();
-        fileReader_WordCloud.setWordSizes();
-        ArrayList<Word> cloudInput = fileReader_WordCloud.wordObjects;
-        renderCloud(cloudInput);
-
-    }
-
-    public void renderCloud(ArrayList<Word> wordObjects) {
-        //ArrayList<Integer> indexes = new ArrayList<Integer>();
-        // ArrayList<Word> wordObjects = new ArrayList<Word>();
-        //  for (int i = 0; i <= wordObjects.size() -1; i ++){
-        ////       indexes.add(i, i);
-        //  }
-        Collections.shuffle(wordObjects);
-        //  System.out.println("PRINTING INDEXES!");
-        //   System.out.println(indexes);
-        //create the basic rectangle (usually in terms of class attributes)
-        Rectangle r = new Rectangle();
-        r.setX(50);
-        r.setY(50);
-        r.setWidth(1500);
-        r.setHeight(500);
-        r.setArcWidth(100);
-        r.setArcHeight(100);
-        r.setFill(Color.WHITE);
-
-        //these would normally be inputs to the function
-
-
-        double maxWidth = 800;
-        double maxHeight = 400;
-        double spacing = 20;
-        double originX = (Screen.getPrimary().getVisualBounds().getWidth() / 2) - (maxWidth / 2);
-        double originY = (Screen.getPrimary().getVisualBounds().getHeight() / 2) - (maxHeight / 2);
-        double currX = originX;
-        double currY = originY;
-
-
-        for (Word word : wordObjects) {
-            Text currText = new Text();
-            currText.setText(word.getText());
-            currText.setFont(new Font(word.getFontSize()));
-            double wordWidth = currText.getBoundsInLocal().getWidth();
-            double wordHeight = currText.getBoundsInLocal().getHeight();
-            if ((wordWidth + currX) <= maxWidth) {
-                //if it doesn't fit on the current line
-                //   System.out.println("goes on the same line!");
-                ////    System.out.println("word text:" + word.getText());
-                //     System.out.println("font size:" + word.getFontSize().toString());
-                //    System.out.println("width:" + wordWidth);
-                //  currY = currY;
-                //  currX = currX;
-                currText.setX(currX);
-                currText.setY(currY);
-                currX = wordWidth + currX + spacing;
-                this.getChildren().add(currText);
-
-            } else {
-                if ((wordHeight + currY) <= maxHeight) {
-
-                    //start new line
-                    //   System.out.println("goes on a new line!");
-                    System.out.println("stupid thing!");
-                    currY = wordHeight + currY;
-                    currX = originX;
-                    currText.setX(currX);
-                    currText.setY(currY);
-                    this.getChildren().add(currText);
-                    currX += wordWidth + spacing;
-                    //need some kind of 'renderWord(x,y)' here
-                } else {
-                    System.out.println("finished, because it doesn't fit at all!");
-                    break; //doesn't fit
-
-
-                }
+    
+    //merges two wordclouds
+    public WordCloudView (WordCloudView a, WordCloudView b){
+              
+        TreeMap<String,Integer> bMap = a.getWordOccurrences();       
+        Set<Map.Entry<String, Integer>> w = bMap.entrySet();
+        Iterator i = w.iterator();
+        this.setWordOccurrences(a.getWordOccurrences());
+        while (i.hasNext()){           
+            Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();
+            //if word exists, use sum of counts
+            if (wordsOccurrences.get(e.getKey()) != null){
+                int count = wordsOccurrences.get(e.getKey()) + e.getValue();
+                wordsOccurrences.put(e.getKey(), count);
             }
-
+            else{
+                wordsOccurrences.put(e.getKey(), e.getValue());
+            }
+            
         }
-        //this.words.getChildren().add(r);
+        
+    }
+    
+    public double getPageWidth() {
+        return wordCloudBoundary.getWidth();
+    }
 
+    public double getPageHeight() {
+        return wordCloudBoundary.getHeight();
+    }
+    
+    public void setPageWidth(double width) {
+        wordCloudBoundary.setWidth(width);
+    }
+
+    public void setPageHeight(double height) {
+        wordCloudBoundary.setHeight(height);
+    }
+
+    public void setX(double x) {
+        wordCloudBoundary.setX(x);
+        System.out.println("x: " + x + "pageBoundary Width: " + wordCloudBoundary.getWidth());
+
+    }
+
+    public double getX() {
+        return wordCloudBoundary.getX();
+    }
+
+    void setWordOccurrences(TreeMap<String, Integer> wordsOccurrences) {
+        this.wordsOccurrences = wordsOccurrences;
+        this.renderWordCloud();
+    }
+    
+    public TreeMap<String, Integer> getWordOccurrences(){
+        return this.wordsOccurrences;
+    }
+    
+    void renderWordCloud(){
+        Set<Map.Entry<String, Integer>> w = this.wordsOccurrences.entrySet();
+        Iterator i = w.iterator();
+        int j = 0;
+        while(j<this.numOfWordsInCloud && i.hasNext()) {
+            Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();
+            Text word = new Text(e.getKey());
+            //this.setWordSizes(word, e.getValue());
+            word.setFont(new Font(10*e.getValue()));
+            word.setWrappingWidth(word.getLayoutBounds().getWidth()+10);
+            this.words.add(word);
+            j++;
+	}
+        Collections.shuffle(this.words);
+        this.cloud.getChildren().addAll(this.words);
+    }
+    
+    //iterates through the word objects and assigns them a font size
+    private void setWordSizes(Text word, int numberOfOccurrences) {
+        int countDiff = numberOfOccurrences - this.wordsOccurrences.firstEntry().getValue();
+        int totalCountDiff = this.wordsOccurrences.lastEntry().getValue() - this.wordsOccurrences.firstEntry().getValue();
+        int fontSize = ((this.maxFontSize * countDiff) / (this.normalizationConstant * totalCountDiff));
+        if (fontSize < this.minFontSize) {
+            fontSize = this.minFontSize;
+        }
+        word.setFont(new Font(fontSize));
     }
 }
