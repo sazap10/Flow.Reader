@@ -172,15 +172,18 @@ public class FlowReader extends Application {
 					pages = fileReader.readFile(page.getTextBound());
 					ribbon.buildRibbon(pages.size());
 					// wordCloud.buildWordCloud(pages);
+                                        
 					ribbon.setTexttoPages(pages);
-					ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
-					for (Page tmpPage : ribbon.getPages()) {
-						wordCloudCounters.add(new TextFileReader_WordCloud(
-								tmpPage));
-						for (TextFileReader_WordCloud cloud : wordCloudCounters) {
+                                       
+                                        ribbon.setWordCloudsForPages();
+					//ArrayList<TextFileReader_WordCloud> wordCloudCounters = new ArrayList<TextFileReader_WordCloud>();
+					//for (Page tmpPage : ribbon.getPages()) {
+					//	wordCloudCounters.add(new TextFileReader_WordCloud(
+					//			tmpPage));
+					//	for (TextFileReader_WordCloud cloud : wordCloudCounters) {
 
-						}
-					}
+					//	}
+				//	}
 					// wordCloudButton.setDisable(false);
 					diffModeBtn.setDisable(false);
 
