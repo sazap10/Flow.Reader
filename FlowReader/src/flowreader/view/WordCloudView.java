@@ -39,6 +39,38 @@ public class WordCloudView extends Group{
         
     }
     
+     public WordCloudView (WordCloudView a, WordCloudView b, Rectangle boundary){    
+        this(boundary);         
+        TreeMap<String,Integer> bMap = b.getWordOccurrences();       
+        Set<Map.Entry<String, Integer>> w = bMap.entrySet();     
+        Iterator i = w.iterator();
+        this.setWordOccurrences(a.getWordOccurrences());      
+        
+        //walk through cloud b and add it's words
+        while (i.hasNext()){   
+    
+            Set<Map.Entry<String, Integer>> occurrences = wordsOccurrences.entrySet(); 
+            Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();      
+            String key = e.getKey();
+            int value = e.getValue();
+            
+            //if word exists, use sum of counts
+            if (wordsOccurrences.containsKey(key)){
+                int count = wordsOccurrences.get(key) + value;
+                wordsOccurrences.put(key, count);
+            }
+            else{             
+                wordsOccurrences.put(key, value);
+                
+                
+            }
+         
+          
+            
+        }
+        
+    }
+    
     public double getPageWidth() {
         return wordCloudBoundary.getWidth();
     }
@@ -68,6 +100,10 @@ public class WordCloudView extends Group{
     void setWordOccurrences(TreeMap<String, Integer> wordsOccurrences) {
         this.wordsOccurrences = wordsOccurrences;
         this.renderWordCloud();
+    }
+    
+    TreeMap<String, Integer> getWordOccurrences(){
+        return this.wordsOccurrences;
     }
     
     void renderWordCloud(){
