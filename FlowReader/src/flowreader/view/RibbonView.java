@@ -70,7 +70,7 @@ public class RibbonView extends Group {
 
 
 	// sets the scale needed for the correct level of precision and other stuff
-	public void createZoomTable() {
+	public void createZoomTable(int size) {
 		// first, find the final zoom level
 		double finalPercentage = 100 / Math.pow(2, zoomLevels);
 		System.out.println("zoom levels:" + zoomLevels);
