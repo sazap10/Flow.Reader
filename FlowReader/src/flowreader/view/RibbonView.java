@@ -6,6 +6,7 @@ package flowreader.view;
 
 import flowreader.FlowReader;
 import flowreader.model.Page;
+import flowreader.model.Document;
 import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -81,7 +82,7 @@ public class RibbonView extends Group {
 	// merges all clouds from one zoom level and outputs half the amount of
 
 
-	public void buildRibbon(ArrayList<Page> pagesContent) {
+	public void buildRibbon(Document document) {
 		int i = 0;
 		int x = 0;
 		int y = 0;
@@ -89,19 +90,17 @@ public class RibbonView extends Group {
 		wordCloudPane = new StackPane();
 		pagesGroup = new Group();
 		wordCloudGroup = new Group();
-		while (i < pagesContent.size()) {
+		while (i < document.getNumOfPages()) {
 
-			WordCloudView wordCloud = new WordCloudView(new Rectangle(x, y,
-					pageWidth, pageHeight / 3));
-			wordCloud.setWordOccurrences(pagesContent.get(i)
-					.getWordsOccurrences());
+			WordCloudView wordCloud = new WordCloudView(document.getCloud(1, i), new Rectangle(x, y,
+					pageWidth, pageHeight / 3));			
 			this.wordClouds.add(wordCloud);
 			wordCloudGroup.setOpacity(1);
 			this.wordCloudGroup.getChildren().add(wordCloud);
 
 			PageView page = new PageView(new Rectangle(x, y + 50
 					+ (pageHeight / 3), pageWidth, pageHeight));
-			page.setText(pagesContent.get(i).getText());
+			page.setText(document.getPage(i).getText());
 			this.pages.add(page);
 			this.pagesGroup.getChildren().add(page);
 
@@ -114,7 +113,7 @@ public class RibbonView extends Group {
 		this.getChildren().add(wordCloudGroup);
 
 		// set up zoom levels
-                createZoomTable(pagesContent.size());
+                createZoomTable(document.getNumOfPages());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
