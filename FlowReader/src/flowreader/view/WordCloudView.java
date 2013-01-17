@@ -1,17 +1,20 @@
 package flowreader.view;
 
+import flowreader.utils.ValueComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.HashMap;
 import javafx.scene.Group;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import flowreader.model.WordCloud;
 
 /**
  *
@@ -20,7 +23,7 @@ import javafx.scene.text.Text;
 public class WordCloudView extends Group{
 
     private Rectangle wordCloudBoundary;
-    private TreeMap<String, Integer> wordsOccurrences;
+    private WordCloud wordCloud;
     private ArrayList<Text> words;
     private FlowPane cloud;
     private Integer maxFontSize = 500;
@@ -28,48 +31,19 @@ public class WordCloudView extends Group{
     private Integer numOfWordsInCloud = 10;
     private Integer normalizationConstant = 3;
 
-    public WordCloudView(Rectangle boundary) {
+    public WordCloudView( WordCloud wordCloud, Rectangle boundary) {
         wordCloudBoundary = boundary;
         wordCloudBoundary.setFill(Color.ALICEBLUE);
+        this.wordCloud = wordCloud;
         this.words = new ArrayList<>();
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
         
         this.getChildren().addAll(wordCloudBoundary, cloud);
-        
+        renderWordCloud();
     }
     
-     public WordCloudView (WordCloudView a, WordCloudView b, Rectangle boundary){    
-        this(boundary);         
-        TreeMap<String,Integer> bMap = b.getWordOccurrences();       
-        Set<Map.Entry<String, Integer>> w = bMap.entrySet();     
-        Iterator i = w.iterator();
-        this.setWordOccurrences(a.getWordOccurrences());      
-        
-        //walk through cloud b and add it's words
-        while (i.hasNext()){   
-    
-            Set<Map.Entry<String, Integer>> occurrences = wordsOccurrences.entrySet(); 
-            Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();      
-            String key = e.getKey();
-            int value = e.getValue();
-            
-            //if word exists, use sum of counts
-            if (wordsOccurrences.containsKey(key)){
-                int count = wordsOccurrences.get(key) + value;
-                wordsOccurrences.put(key, count);
-            }
-            else{             
-                wordsOccurrences.put(key, value);
-                
-                
-            }
-         
-          
-            
-        }
-        
-    }
+  
     
     public double getPageWidth() {
         return wordCloudBoundary.getWidth();
@@ -97,17 +71,13 @@ public class WordCloudView extends Group{
         return wordCloudBoundary.getX();
     }
 
-    void setWordOccurrences(TreeMap<String, Integer> wordsOccurrences) {
-        this.wordsOccurrences = wordsOccurrences;
-        this.renderWordCloud();
-    }
-    
-    TreeMap<String, Integer> getWordOccurrences(){
-        return this.wordsOccurrences;
-    }
+   
+
+
     
     void renderWordCloud(){
-        Set<Map.Entry<String, Integer>> w = this.wordsOccurrences.entrySet();
+        TreeMap<String, Integer> sortedWordOccurrences = sortWordsOccurrences(wordCloud.getWordOccurrences());
+        Set<Map.Entry<String, Integer>> w = sortedWordOccurrences.entrySet();
         Iterator i = w.iterator();
         int j = 0;
         while(j<this.numOfWordsInCloud && i.hasNext()) {
@@ -124,7 +94,7 @@ public class WordCloudView extends Group{
     }
     
     //iterates through the word objects and assigns them a font size
-    private void setWordSizes(Text word, int numberOfOccurrences) {
+   /* private void setWordSizes(Text word, int numberOfOccurrences) {
         int countDiff = numberOfOccurrences - this.wordsOccurrences.firstEntry().getValue();
         int totalCountDiff = this.wordsOccurrences.lastEntry().getValue() - this.wordsOccurrences.firstEntry().getValue();
         int fontSize = ((this.maxFontSize * countDiff) / (this.normalizationConstant * totalCountDiff));
@@ -132,5 +102,17 @@ public class WordCloudView extends Group{
             fontSize = this.minFontSize;
         }
         word.setFont(new Font(fontSize));
+    }
+    * */
+    
+     private TreeMap<String, Integer> sortWordsOccurrences(HashMap<String, Integer> wordsOccurrences){
+        ValueComparator bvc =  new ValueComparator(wordsOccurrences);
+        TreeMap<String,Integer> sortedWordsOccurrences = new TreeMap<>(bvc);
+        sortedWordsOccurrences.putAll(wordsOccurrences);
+        
+        //System.out.println("unsorted map: "+wordsOccurrences);
+        //System.out.println("results: "+sortedWordsOccurrences);
+       
+        return sortedWordsOccurrences;
     }
 }
