@@ -37,7 +37,7 @@ public class RibbonView extends Group {
 	private ArrayList<PageView> pages;
 	private ArrayList<PageView> culledPages;
 	private ArrayList<WordCloudView> wordClouds;
-	private HashMap<Integer, Integer> cloudLevels;
+	private HashMap<Integer, Integer> zoomTable;
 	int pageWidth = 500;
 	int pageHeight = 700;
 	int pageInterval = 5;
@@ -63,6 +63,7 @@ public class RibbonView extends Group {
 		this.pages = new ArrayList<>();
 		this.wordClouds = new ArrayList<>();
 		this.stackPane = stackPane;
+                this.zoomTable = new HashMap<Integer, Integer>();
 	}
 
 	public ArrayList<PageView> getPages() {
@@ -72,11 +73,16 @@ public class RibbonView extends Group {
 
 
 	// sets the scale needed for the correct level of precision and other stuff
-	public void createZoomTable(int size) {
+	public void createZoomTable( int zoomLevels) {
 		// first, find the final zoom level
-		double finalPercentage = 100 / Math.pow(2, zoomLevels);
-		System.out.println("zoom levels:" + zoomLevels);
-		System.out.println(" final percent: " + finalPercentage);
+		double finalPercentage = (100 / zoomLevels);
+                int scale;
+                int percent;
+	        for(int i = 1; i <= zoomLevels; i ++){
+                    percent = 100/ i;
+                    scale = percent * maxScale;
+                    zoomTable.put(i, scale);
+                }
 
 	}
 
@@ -115,7 +121,7 @@ public class RibbonView extends Group {
 		this.getChildren().add(wordCloudGroup);
 
 		// set up zoom levels
-                createZoomTable(document.getNumOfPages());
+                createZoomTable(document.getNumOfCloudLevels());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
