@@ -34,8 +34,7 @@ import java.util.HashMap;
  */
 public class RibbonView extends Group {
 
-	private ArrayList<PageView> pages;
-	private ArrayList<PageView> culledPages;
+	private ArrayList<PageView> pages, culledPages;
 	private ArrayList<Group> wordClouds;
 	private HashMap<Integer, Integer> zoomTable;
 	int pageWidth = 500;
@@ -47,8 +46,8 @@ public class RibbonView extends Group {
 	int curScale = 80;
 	int opaqueScale = 15;
 	int currentZoomLevel;
-        int minZoomLevel = 1;
-        int maxZoomLevel;
+	int minZoomLevel = 1;
+	int maxZoomLevel;
 
 	StackPane stackPane;
 	StackPane pagesPane;
@@ -65,94 +64,92 @@ public class RibbonView extends Group {
 		this.pages = new ArrayList<>();
 		this.wordClouds = new ArrayList<Group>();
 		this.stackPane = stackPane;
-                this.zoomTable = new HashMap<Integer, Integer>();
-                this.currentZoomLevel = 1;
+		this.zoomTable = new HashMap<Integer, Integer>();
+		this.currentZoomLevel = 1;
 	}
 
 	public ArrayList<PageView> getPages() {
 		return this.pages;
 	}
 
-
-
 	// sets the scale needed for the correct level of precision and other stuff
-	public void createZoomTable( int zoomLevels) {
+	public void createZoomTable(int zoomLevels) {
 		// first, find the final zoom level
-                
-                int scale;
-                float percent;
-	        for(int i = 1; i <= zoomLevels; i ++){
-                    percent = curScale / (i * 100.0f);
-                    scale = (int) (percent * maxScale);
-                    zoomTable.put(i, scale);
-                }
-                maxZoomLevel = zoomLevels;
+
+		int scale;
+		float percent;
+		for (int i = 1; i <= zoomLevels; i++) {
+			percent = curScale / (i * 100.0f);
+			scale = (int) (percent * maxScale);
+			zoomTable.put(i, scale);
+		}
+		maxZoomLevel = zoomLevels;
 
 	}
-        
-        public void checkCloudLevel(){
-            int nextDown, nextUp;
-            System.out.println("this is being called with curscale " + curScale);
-            int minScale = zoomTable.get(minZoomLevel);
-            int maxScale = zoomTable.get(maxZoomLevel);
-            if ((curScale < minScale + 1) && (curScale > maxScale - 1)){
-                System.out.println("curScale is in the confines it should be");
-                if( currentZoomLevel != minZoomLevel){
-                nextDown = currentZoomLevel -1;
-                }
-                else{
-                    nextDown = currentZoomLevel;
-                }
-                 if( currentZoomLevel != maxZoomLevel){
-                nextUp = currentZoomLevel +1;
-                }
-                else{
-                    nextUp = currentZoomLevel;
-                }
 
-               //now nextUp and nextDown have been set, check if we need to scale up or down
-               // based on the current scale
-               if (curScale == zoomTable.get(nextDown)){
-                   scaleCloudDown();
-                   currentZoomLevel--;
-                
-               }
-               else if (curScale == zoomTable.get(nextUp)){
-                   scaleCloudUp();
-                   currentZoomLevel++;
-               }
-         
-            }
-            
-        }
+	public void checkCloudLevel() {
+		int nextDown, nextUp;
+		System.out.println("this is being called with curscale " + curScale);
+		int minScale = zoomTable.get(minZoomLevel);
+		int maxScale = zoomTable.get(maxZoomLevel);
+		if ((curScale < minScale + 1) && (curScale > maxScale - 1)) {
+			System.out.println("curScale is in the confines it should be");
+			if (currentZoomLevel != minZoomLevel) {
+				nextDown = currentZoomLevel - 1;
+			} else {
+				nextDown = currentZoomLevel;
+			}
+			if (currentZoomLevel != maxZoomLevel) {
+				nextUp = currentZoomLevel + 1;
+			} else {
+				nextUp = currentZoomLevel;
+			}
 
-        //function to replace all clouds currently displayed with half the amount (larger ones from next level up)
-        public void scaleCloudUp(){
-            //index of list is one less than the level of the cloud, so no need to increase zoom level:
-            Group newLevel = wordClouds.get(currentZoomLevel);
-            //need to switch out the current group from the stackpane
-            System.out.println("clearing current clouds");
-            this.wordCloudPane.getChildren().clear();
-            this.wordCloudPane.getChildren().add(newLevel);
-            this.getChildren().clear();
-            this.getChildren().add(pagesGroup);
-            this.getChildren().add(newLevel);
-        }
-        
-        
-        //function to replace all clouds currently displayed with double the amount (smaller ones from lower level)
-        public void scaleCloudDown(){
-            //index of list is one less than the level of the cloud, so no need decrease current level by 2:
-            Group newLevel = wordClouds.get(currentZoomLevel - 2);
-            //need to switch out the current group from the stackpane
-            this.wordCloudPane.getChildren().clear();
-            this.wordCloudPane.getChildren().add(newLevel);
-            this.getChildren().clear();
-            this.getChildren().add(pagesGroup);
-            this.getChildren().add(newLevel);
-            
-        }
+			// now nextUp and nextDown have been set, check if we need to scale
+			// up or down
+			// based on the current scale
+			if (curScale == zoomTable.get(nextDown)) {
+				scaleCloudDown();
+				currentZoomLevel--;
 
+			} else if (curScale == zoomTable.get(nextUp)) {
+				scaleCloudUp();
+				currentZoomLevel++;
+			}
+
+		}
+
+	}
+
+	// function to replace all clouds currently displayed with half the amount
+	// (larger ones from next level up)
+	public void scaleCloudUp() {
+		// index of list is one less than the level of the cloud, so no need to
+		// increase zoom level:
+		Group newLevel = wordClouds.get(currentZoomLevel);
+		// need to switch out the current group from the stackpane
+		System.out.println("clearing current clouds");
+		this.wordCloudPane.getChildren().clear();
+		this.wordCloudPane.getChildren().add(newLevel);
+		this.getChildren().clear();
+		this.getChildren().add(pagesGroup);
+		this.getChildren().add(newLevel);
+	}
+
+	// function to replace all clouds currently displayed with double the amount
+	// (smaller ones from lower level)
+	public void scaleCloudDown() {
+		// index of list is one less than the level of the cloud, so no need
+		// decrease current level by 2:
+		Group newLevel = wordClouds.get(currentZoomLevel - 2);
+		// need to switch out the current group from the stackpane
+		this.wordCloudPane.getChildren().clear();
+		this.wordCloudPane.getChildren().add(newLevel);
+		this.getChildren().clear();
+		this.getChildren().add(pagesGroup);
+		this.getChildren().add(newLevel);
+
+	}
 
 	public void buildRibbon(Document document) {
 		int i = 0;
@@ -162,12 +159,12 @@ public class RibbonView extends Group {
 		wordCloudPane = new StackPane();
 		pagesGroup = new Group();
 		wordCloudGroup = new Group();
-                ArrayList<WordCloud> clouds = document.getCloudLevel(1); 
-                ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
+		ArrayList<WordCloud> clouds = document.getCloudLevel(1);
+		ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
 		while (i < document.getNumOfPages()) {
 
-			WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
-					pageWidth, pageHeight / 3));			
+			WordCloudView wordCloud = new WordCloudView(clouds.get(i),
+					new Rectangle(x, y, pageWidth, pageHeight / 3));
 			wordCloudGroup.setOpacity(1);
 			this.wordCloudGroup.getChildren().add(wordCloud);
 
@@ -175,25 +172,26 @@ public class RibbonView extends Group {
 					+ (pageHeight / 3), pageWidth, pageHeight));
 			page.setText(document.getPage(i).getText());
 			this.pages.add(page);
-			this.pagesGroup.getChildren().add(page);
+			//this.pagesGroup.getChildren().add(page);
 
 			x += pageWidth + pageInterval;
 			i++;
 		}
-                //add the first level of clouds
-                this.wordClouds.add(wordCloudGroup);
-                
-                //
-                //create the rest of the clouds
-                createCloudLevelGroups(document);
-                
+		culledPages = culling(screenBounds.getWidth());
+		// add the first level of clouds
+		this.wordClouds.add(wordCloudGroup);
+		this.pagesGroup.getChildren().addAll(culledPages);
+		//
+		// create the rest of the clouds
+		//createCloudLevelGroups(document);
+
 		this.pagesPane.getChildren().add(pagesGroup);
-		this.wordCloudPane.getChildren().add(wordCloudGroup);
+		//this.wordCloudPane.getChildren().add(wordCloudGroup);
 		this.getChildren().add(pagesGroup);
-		this.getChildren().add(wordCloudGroup);
+		//this.getChildren().add(wordCloudGroup);
 
 		// set up zoom levels
-                createZoomTable(document.getNumOfCloudLevels());
+		//createZoomTable(document.getNumOfCloudLevels());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
@@ -206,38 +204,40 @@ public class RibbonView extends Group {
 		this.defineRibbonEvents();
 		this.setRibbonEvents(true);
 	}
-        
-        //creates all but the first level of wordCloud groups and adds them to the list of groups
-        public void createCloudLevelGroups(Document document){
-            ArrayList<WordCloud> currentLevelClouds;
-            Group currentLevelViews;
-            int cloudWidth = pageWidth;
-            int cloudHeight = pageHeight / 3;
-            int cloudInterval = pageInterval;
-            int x, y;
-            
-            for (int i = 1; i < document.getNumOfCloudLevels(); i++){
-                currentLevelClouds = document.getCloudLevel(i);
-                x = 0;
-                y = 0;
-                currentLevelViews = new Group();
-                
-                //render each cloud on this level and add it to the group
-                
-                for (WordCloud wordCloud: currentLevelClouds){
-                   WordCloudView currentView = new WordCloudView(wordCloud, new Rectangle(x, y, cloudWidth, cloudHeight));
-                   currentLevelViews.getChildren().add(currentView);
-                   x += cloudWidth;                 
-                }
-                
-                //add the group, and double dimensions
-                wordClouds.add(currentLevelViews);
-                cloudWidth *= 2;
-                cloudHeight *= 2;
-                cloudInterval *= 2;
-            }
-            
-        }
+
+	// creates all but the first level of wordCloud groups and adds them to the
+	// list of groups
+	public void createCloudLevelGroups(Document document) {
+		ArrayList<WordCloud> currentLevelClouds;
+		Group currentLevelViews;
+		int cloudWidth = pageWidth;
+		int cloudHeight = pageHeight / 3;
+		int cloudInterval = pageInterval;
+		int x, y;
+
+		for (int i = 1; i < document.getNumOfCloudLevels(); i++) {
+			currentLevelClouds = document.getCloudLevel(i);
+			x = 0;
+			y = 0;
+			currentLevelViews = new Group();
+
+			// render each cloud on this level and add it to the group
+
+			for (WordCloud wordCloud : currentLevelClouds) {
+				WordCloudView currentView = new WordCloudView(wordCloud,
+						new Rectangle(x, y, cloudWidth, cloudHeight));
+				currentLevelViews.getChildren().add(currentView);
+				x += cloudWidth;
+			}
+
+			// add the group, and double dimensions
+			wordClouds.add(currentLevelViews);
+			cloudWidth *= 2;
+			cloudHeight *= 2;
+			cloudInterval *= 2;
+		}
+
+	}
 
 	public void switchToWordCloud() {
 		this.getChildren().clear();
@@ -248,9 +248,10 @@ public class RibbonView extends Group {
 
 	public void switchToPages() {
 		this.getChildren().clear();
-		for (int i = 0; i < this.pages.size(); i++) {
+		updateCulledPages();
+		/*for (int i = 0; i < this.pages.size(); i++) {
 			this.getChildren().add(this.pages.get(i));
-		}
+		}*/
 	}
 
 	public void zoom(double deltaY, double x, double y) {
@@ -267,9 +268,9 @@ public class RibbonView extends Group {
 				setOpacity();
 			}
 		}
-                //before any actual scaling takes place, need to check if cloud level
-                //needs to be changed
-                checkCloudLevel();
+		// before any actual scaling takes place, need to check if cloud level
+		// needs to be changed
+		//checkCloudLevel();
 		Scale scale = new Scale(array[curScale], array[curScale], x, y);
 		Scale scale2 = new Scale(array[maxScale - 10] - array[curScale],
 				array[maxScale - 10] - array[curScale]);
@@ -294,6 +295,7 @@ public class RibbonView extends Group {
 		// pagesGroup.getTransforms().add(scale);
 		// wordCloudGroup.getTransforms().add(scale2);
 		stackPane.getTransforms().add(scale);
+	
 		System.out.println("x: " + x + "y: " + y
 				+ "\nstackPane parent bound x: "
 				+ stackPane.getBoundsInParent().getWidth()
@@ -424,12 +426,12 @@ public class RibbonView extends Group {
 
 	}
 
-	public ArrayList<PageView> culling(double sceneWidth) {
+	private ArrayList<PageView> culling(double sceneWidth) {
 		ArrayList<PageView> clippedPages = new ArrayList<PageView>();
-		double pageWidth = clippedPages.get(0).getPageWidth();
+		double pageWidth = this.pages.get(0).getPageWidth();
 		int noOfPages = (int) Math.ceil(sceneWidth / pageWidth);
-		if (noOfPages < pages.size())
-			noOfPages = pages.size();
+		if (noOfPages > this.pages.size())
+			noOfPages = this.pages.size();
 		boolean found = false;
 		for (int i = 0; i < this.pages.size(); i++) {
 			if (noOfPages == 0)
@@ -446,4 +448,11 @@ public class RibbonView extends Group {
 		}
 		return clippedPages;
 	}
+	
+	private void updateCulledPages(){
+		this.getChildren().clear();
+		culledPages = culling(screenBounds.getWidth());
+		this.getChildren().addAll(culledPages);
+	}
+	
 }
