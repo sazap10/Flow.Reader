@@ -13,12 +13,14 @@ public class Document {
     ArrayList<Page> pages;
     ArrayList<ArrayList<WordCloud>> wordClouds;
     int numOfPages;
+    int numOfCloudLevels;
     
     
     public Document(ArrayList<Page> pages, ArrayList<ArrayList<WordCloud>> wordClouds){
         this.pages = pages;
         this.wordClouds = wordClouds;
         this.numOfPages = pages.size();
+        this.numOfCloudLevels = wordClouds.size();
         
     }
     
@@ -41,6 +43,10 @@ public class Document {
     
     public int getNumOfPages(){
         return this.numOfPages;
+    }
+    
+    public int getNumOfCloudLevels(){
+        return this.numOfCloudLevels;
     }
     
 }
