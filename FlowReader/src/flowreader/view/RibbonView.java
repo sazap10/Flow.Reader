@@ -37,14 +37,14 @@ public class RibbonView extends Group {
     int pageHeight = 700;
     int pageInterval = 5;
     int pagesNumber = 30;
-    int maxScale = 35;
+    int maxScale = 100;
     int minScale = 0;
-    int curScale = 15;
-    int opaqueScale = 15;
+    int curScale = 81;
+    int opaqueScale = 81;
     StackPane stackPane;
     Group pagesGroup;
     Group wordCloudGroup;
-    double[] array = new double[36];
+    double[] array = new double[maxScale+1];
     private EventHandler<MouseEvent> swipeHandler;
     private EventHandler<ScrollEvent> scrollHandler;
     private EventHandler<ZoomEvent> zoomHandler;
@@ -72,10 +72,10 @@ public class RibbonView extends Group {
             this.pages.add(page);
             this.pagesGroup.getChildren().add(page);
 
-            WordCloudView wordCloud = new WordCloudView(new Rectangle(x, y, pageWidth, pageHeight));
+            WordCloudView wordCloud = new WordCloudView(new Rectangle(x, y, pageWidth, pageHeight/2));
             wordCloud.setWordOccurrences(pagesContent.get(i).getWordsOccurrences());
             this.wordClouds.add(wordCloud);
-            wordCloudGroup.setOpacity(0);
+            //wordCloudGroup.setOpacity(0);
             this.wordCloudGroup.getChildren().add(wordCloud);
             x += pageWidth + pageInterval;
             i++;
@@ -84,8 +84,8 @@ public class RibbonView extends Group {
             this.getChildren().add(wordCloudGroup);
 
         //set up zoom levels
-        for (int j = 0; j < 36; j++) {
-            array[j] = Math.pow(1.05, j - 15);
+        for (int j = 0; j < maxScale+1; j++) {
+            array[j] = Math.pow(1.05, j - 81);
             System.out.println("array["+j+"]: "+array[j]);
         }
         System.out.println("screen properties:"+
@@ -126,8 +126,8 @@ public class RibbonView extends Group {
         }
 
 
-        Scale scale = new Scale(array[curScale], array[curScale], x,y);
-        Scale scale2 = new Scale(array[maxScale-10]-array[curScale], array[maxScale-10]-array[curScale], x,y);
+        Scale scale = new Scale(array[curScale], array[curScale], pagesGroup.getBoundsInLocal().getWidth()/2,pagesGroup.getBoundsInLocal().getHeight()/2);
+        Scale scale2 = new Scale(array[maxScale-10]-array[curScale], array[maxScale-10]-array[curScale], wordCloudGroup.getBoundsInLocal().getWidth()/2,wordCloudGroup.getBoundsInLocal().getHeight()/2);
         
         //remove previously applied transformation(s)
         if (pagesGroup.getTransforms().size() > 0) {
@@ -183,8 +183,8 @@ public class RibbonView extends Group {
                         .equals(MouseEvent.MOUSE_DRAGGED)) {
 
                     // System.out.println("DRAGGED");
-                    double dx = event.getSceneX() - previousEvent.getSceneX();
-                    double dy = event.getSceneY() - previousEvent.getSceneY();
+                    double dx = event.getX() - previousEvent.getX();
+                    double dy = event.getY() - previousEvent.getY();
                     RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()
                             + dx);
                     RibbonView.this.setLayoutY(RibbonView.this.getLayoutY()
@@ -210,7 +210,10 @@ public class RibbonView extends Group {
                     System.out.println("---------------"+
                             "\nScreen X: "+event.getScreenX()+"Screen Y: "+event.getScreenY()+
                             "\nget X: "+event.getX()+"get Y: "+event.getY());
-                    RibbonView.this.zoom(event.getDeltaY(), event.getX(), event.getY());
+                                    double height = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getHeight();
+                                     double width = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getWidth();
+                                     
+					RibbonView.this.zoom(event.getDeltaY(),0,0);
                 }
                 event.consume();
 
@@ -229,15 +232,15 @@ public class RibbonView extends Group {
 
     public void setRibbonEvents(boolean setFlag) {
         if (setFlag) {
-            this.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-            this.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-            this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+            stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+            stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+            stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
             this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
             this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
         } else {
-            this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-            this.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-            this.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+            stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+            stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+            stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
             this.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
             this.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
         }
