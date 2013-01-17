@@ -44,9 +44,11 @@ public class RibbonView extends Group {
 	int pagesNumber = 30;
 	int maxScale = 100;
 	int minScale = 0;
-	int curScale = 81;
+	int curScale = 80;
 	int opaqueScale = 15;
-	int zoomLevels = 0;
+	int currentZoomLevel;
+        int minZoomLevel = 1;
+        int maxZoomLevel;
 
 	StackPane stackPane;
 	StackPane pagesPane;
@@ -64,6 +66,7 @@ public class RibbonView extends Group {
 		this.wordClouds = new ArrayList<>();
 		this.stackPane = stackPane;
                 this.zoomTable = new HashMap<Integer, Integer>();
+                this.currentZoomLevel = 1;
 	}
 
 	public ArrayList<PageView> getPages() {
@@ -75,18 +78,49 @@ public class RibbonView extends Group {
 	// sets the scale needed for the correct level of precision and other stuff
 	public void createZoomTable( int zoomLevels) {
 		// first, find the final zoom level
-		double finalPercentage = (100 / zoomLevels);
+                
                 int scale;
                 int percent;
 	        for(int i = 1; i <= zoomLevels; i ++){
-                    percent = 100/ i;
+                    percent = curScale/ i;
                     scale = percent * maxScale;
                     zoomTable.put(i, scale);
                 }
+                maxZoomLevel = zoomLevels;
 
 	}
+        
+        public void checkCloudLevel(){
+            int nextDown, nextUp;
+            int minScale = zoomTable.get(minZoomLevel);
+            int maxScale = zoomTable.get(maxZoomLevel);
+            if ((curScale > minScale -1) && (curScale < maxScale + 1)){
+                nextDown = currentZoomLevel -1;
+                nextUp = currentZoomLevel + 1;
+               //now nextUp and nextDown have been set, check if we need to scale up or down
+               // based on the current scale
+               if (curScale == zoomTable.get(nextDown)){
+                   scaleCloudDown();
+                
+               }
+               else if (curScale == zoomTable.get(nextUp)){
+                   scaleCloudUp();
+               }
+         
+            }
+            
+        }
 
-	// merges all clouds from one zoom level and outputs half the amount of
+        //function to replace all clouds currently displayed with half the amount (larger ones from next level up)
+        public void scaleCloudUp(){
+            
+        }
+        
+        
+        //function to replace all clouds currently displayed with double the amount (smaller ones from lower level)
+        public void scaleCloudDown(){
+            
+        }
 
 
 	public void buildRibbon(Document document) {
@@ -163,7 +197,9 @@ public class RibbonView extends Group {
 				setOpacity();
 			}
 		}
-
+                //before any actual scaling takes place, need to check if cloud level
+                //needs to be changed
+                checkCloudLevel();
 		Scale scale = new Scale(array[curScale], array[curScale], x, y);
 		Scale scale2 = new Scale(array[maxScale - 10] - array[curScale],
 				array[maxScale - 10] - array[curScale]);
