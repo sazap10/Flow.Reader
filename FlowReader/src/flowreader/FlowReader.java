@@ -4,6 +4,7 @@ import flowreader.model.Page;
 import flowreader.utils.TextFileReader;
 import flowreader.view.PageView;
 import flowreader.view.RibbonView;
+import flowreader.model.Document;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -136,7 +137,7 @@ public class FlowReader extends Application {
                     wordCloudButton.setText("WordCloud View");
 
                     ribbon = new RibbonView(mainPane);
-                    ArrayList<Page> pages;
+                    Document document;
                     PageView page = new PageView(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
 
                     mainPane.getChildren().add(ribbon);
@@ -146,8 +147,8 @@ public class FlowReader extends Application {
 
                     // fileReader_WordCloud.getCommonWords();
                     // returns all pages
-                    pages = fileReader.readFile(page.getTextBound());
-                    ribbon.buildRibbon(pages);
+                    document = fileReader.readFile(page.getTextBound());
+                    ribbon.buildRibbon(document);
 
                     diffModeBtn.setDisable(false);
 
