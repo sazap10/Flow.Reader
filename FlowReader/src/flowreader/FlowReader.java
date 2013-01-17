@@ -33,7 +33,7 @@ import javafx.stage.Stage;
 public class FlowReader extends Application {
 
     // Background and main scene
-    private Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+    public static Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     private Scene scene;
     // Elements
     private StackPane mainPane; // The main pane that contains the ribbon or the word cloud
@@ -47,12 +47,12 @@ public class FlowReader extends Application {
     private EventHandler<ScrollEvent> scrollHandler;
     private EventHandler<ZoomEvent> zoomHandler;
     boolean wordCloudToggle, diffModeToggle;
-
+public static BorderPane borderPane;
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Flow Reader");
         primaryStage.setFullScreen(true);
-        BorderPane borderPane = new BorderPane();
+        borderPane = new BorderPane();
         scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
 
         mainPane = new StackPane();

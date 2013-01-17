@@ -362,8 +362,10 @@ public class RibbonView extends Group {
 					// System.out.println("---------------"+
 					// "\nScreen X: "+event.getScreenX()+"Screen Y: "+event.getScreenY()+
 					// "\nget X: "+event.getX()+"get Y: "+event.getY());
-					RibbonView.this.zoom(event.getDeltaY(), event.getScreenX(),
-							event.getScreenY());
+					double height = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getHeight();
+                                        double width = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getWidth();
+                                        RibbonView.this.zoom(event.getDeltaY(), event.getScreenX()/screenBounds.getWidth()*width, event.getScreenY()/screenBounds.getHeight()*height);
+
 
 				}
 				event.consume();
