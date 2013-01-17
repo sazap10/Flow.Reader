@@ -35,7 +35,7 @@ public class RibbonView extends Group {
 	private ArrayList<PageView> pages;
 	private ArrayList<PageView> culledPages;
 	private ArrayList<WordCloudView> wordClouds;
-	private HashMap<Integer, ArrayList<WordCloudView>> cloudLevels;
+	private HashMap<Integer, Integer> cloudLevels;
 	int pageWidth = 500;
 	int pageHeight = 700;
 	int pageInterval = 5;
@@ -60,7 +60,6 @@ public class RibbonView extends Group {
 	public RibbonView(StackPane stackPane) {
 		this.pages = new ArrayList<>();
 		this.wordClouds = new ArrayList<>();
-		this.cloudLevels = new HashMap<Integer, ArrayList<WordCloudView>>();
 		this.stackPane = stackPane;
 	}
 
@@ -68,22 +67,7 @@ public class RibbonView extends Group {
 		return this.pages;
 	}
 
-	public void setCloudZoomLevels() {
-		int pageCount = pages.size();
-		int levelCount = 0;
-		cloudLevels.put(0, wordClouds);
-		while (pageCount >= 1) {
-			pageCount /= 2; // half pages
-			System.out.println("Pagecount:" + pageCount);
-			ArrayList<WordCloudView> currClouds = mergeClouds(
-					cloudLevels.get(levelCount), levelCount);
-			System.out.println("done merge!");
-			levelCount++;
-			cloudLevels.put(levelCount, currClouds);
 
-		}
-		this.zoomLevels = levelCount + 1;
-	}
 
 	// sets the scale needed for the correct level of precision and other stuff
 	public void createZoomTable() {
@@ -95,37 +79,7 @@ public class RibbonView extends Group {
 	}
 
 	// merges all clouds from one zoom level and outputs half the amount of
-	// clouds
-	// IMPORTANT: only works with an even number of clouds, final page is missed
-	// out at this point,
-	// need to improve later
-	public ArrayList<WordCloudView> mergeClouds(ArrayList<WordCloudView> input,
-			int level) {
-		System.out.println("calling mergeclouds");
-		WordCloudView b = null;
-		Boolean haveb = false;
-		double x = input.get(0).getX();
-		double y = 0;
-		double scale = Math.pow(2, level + 1);
-		ArrayList<WordCloudView> clouds = new ArrayList<WordCloudView>();
-		for (WordCloudView i : input) {
-			if (haveb && (b != null)) {
-				System.out.println("about to call merge cloud constructor");
-				WordCloudView newCloud = new WordCloudView(i, b, new Rectangle(
-						x, y, pageWidth * scale, (pageHeight / 3) * scale));
-				System.out.println("made a cloud!");
-				clouds.add(newCloud);
-				x += pageWidth * scale;
-				haveb = false;
-			} else {
-				b = i;
-				haveb = true;
-			}
 
-		}
-		return clouds;
-
-	}
 
 	public void buildRibbon(ArrayList<Page> pagesContent) {
 		int i = 0;
@@ -160,6 +114,7 @@ public class RibbonView extends Group {
 		this.getChildren().add(wordCloudGroup);
 
 		// set up zoom levels
+                createZoomTable(pagesContent.size());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
