@@ -5,6 +5,8 @@
 package flowreader.utils;
 
 import flowreader.model.Page;
+import flowreader.model.WordCloud;
+import flowreader.model.Document;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,9 +56,10 @@ public class TextFileReader{
      * @return a list of pages that contains the text of each page and the words occurrences
      * @throws IOException 
      */
-    public ArrayList<Page> readFile(Rectangle bounds) throws IOException {
+    public Document readFile(Rectangle bounds) throws IOException {
         ArrayList<Page> pages = new ArrayList<>(); // The list of all the pages
-        
+        ArrayList<WordCloud> wordClouds = new ArrayList();
+        ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<ArrayList<WordCloud>>();
         // Text Wrapper
         double boundWidth = bounds.getWidth(); // Width of the page
         double boundHeight = bounds.getHeight(); // Height of the page
@@ -76,10 +79,11 @@ public class TextFileReader{
                         double wordWidth = new Text(word).getBoundsInLocal().getWidth();
                         double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
                         if (textWithNewLine > boundHeight) {
-                            TreeMap<String, Integer> wordsOccurrencesSorted = this.sortWordsOccurrences(wordsOccurrences);
-                            Page page = new Page(pageText, wordsOccurrencesSorted);
+                            Page page = new Page(pageText);
+                            WordCloud wordCloud = new WordCloud(wordsOccurrences);
                             //System.out.println(""+page.toString());
                             pages.add(page);
+                            wordClouds.add(wordCloud);
                             pageText = "";
                             wordsOccurrences = new HashMap<>();
                         }
@@ -110,14 +114,70 @@ public class TextFileReader{
                     }
                 }
             }
-            TreeMap<String, Integer> wordsOccurrencesSorted = this.sortWordsOccurrences(wordsOccurrences);
-            Page page = new Page(pageText, wordsOccurrencesSorted);
+   
+            
+            Page page = new Page(pageText);
+            WordCloud wordCloud = new WordCloud(wordsOccurrences);
             //System.out.println(""+page.toString());
             pages.add(page);
+            wordClouds.add(wordCloud);           
         }
-        return pages;
+        wordCloudLevels.add(wordClouds);// add the first level
+        
+        //add each level of merged clouds
+        for (ArrayList<WordCloud> tmpList : makeCloudLevels(wordClouds)){
+            wordCloudLevels.add(tmpList);
+        }
+   
+        System.out.println("number of levels:" + wordCloudLevels.size());
+        Document document = new Document(pages, wordCloudLevels);
+        return document;
     }
 
+    
+    private ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds){
+        ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<ArrayList<WordCloud>>();
+        ArrayList<ArrayList<WordCloud>> otherLevels = new ArrayList<ArrayList<WordCloud>>();
+        ArrayList<WordCloud> currentLevel = new ArrayList<WordCloud>();
+        WordCloud cloudB = null;
+        boolean haveB = false;
+        int listCount = 0;
+        int lastIndex = clouds.size() -1;
+        if (lastIndex == 0){  // only one cloud in array
+           // return clouds;
+            localLevels.add(clouds);
+            return localLevels;
+            
+        }
+      
+        for (WordCloud cloud : clouds){
+            
+             if (haveB && (cloudB!= null)){      
+                 WordCloud newCloud = new WordCloud(cloud, cloudB);
+                 if (clouds.indexOf(cloud) + 1 == lastIndex){
+                    WordCloud triCloud = new WordCloud(newCloud, clouds.get(lastIndex));
+                    currentLevel.add(triCloud);
+                 }
+                 else{
+                currentLevel.add(newCloud);   
+                 }
+                haveB = false;
+            }
+             else{
+                 cloudB = cloud;
+                 haveB = true;
+             }
+            
+        }
+        localLevels.add(currentLevel);
+        otherLevels = makeCloudLevels(currentLevel);
+        for (ArrayList<WordCloud> cloudList : otherLevels){ // add otherLevels to localLevels
+            localLevels.add(cloudList);
+        }
+        return localLevels;
+        
+    }
+    
     private void getCommonWords() {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
@@ -143,17 +203,7 @@ public class TextFileReader{
             }
         }
     }
-    
-    private TreeMap<String, Integer> sortWordsOccurrences(HashMap<String, Integer> wordsOccurrences){
-        ValueComparator bvc =  new ValueComparator(wordsOccurrences);
-        TreeMap<String,Integer> sortedWordsOccurrences = new TreeMap<>(bvc);
-        sortedWordsOccurrences.putAll(wordsOccurrences);
-        
-        //System.out.println("unsorted map: "+wordsOccurrences);
-        //System.out.println("results: "+sortedWordsOccurrences);
-       
-        return sortedWordsOccurrences;
-    }
+
     
     //removes punctuation from any words found
     private String trimPunctuation(String word) {
