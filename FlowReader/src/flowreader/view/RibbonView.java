@@ -7,6 +7,7 @@ package flowreader.view;
 import flowreader.FlowReader;
 import flowreader.model.Page;
 import flowreader.model.Document;
+import flowreader.model.WordCloud;
 import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -90,9 +91,10 @@ public class RibbonView extends Group {
 		wordCloudPane = new StackPane();
 		pagesGroup = new Group();
 		wordCloudGroup = new Group();
+                ArrayList<WordCloud> clouds = document.getCloudLevel(1); 
 		while (i < document.getNumOfPages()) {
 
-			WordCloudView wordCloud = new WordCloudView(document.getCloud(1, i), new Rectangle(x, y,
+			WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
 					pageWidth, pageHeight / 3));			
 			this.wordClouds.add(wordCloud);
 			wordCloudGroup.setOpacity(1);
