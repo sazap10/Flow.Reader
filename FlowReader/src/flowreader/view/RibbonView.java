@@ -335,8 +335,8 @@ public class RibbonView extends Group {
 						.equals(MouseEvent.MOUSE_DRAGGED)) {
 
 					// System.out.println("DRAGGED");
-					double dx = event.getSceneX() - previousEvent.getSceneX();
-					double dy = event.getSceneY() - previousEvent.getSceneY();
+					double dx = event.getX() - previousEvent.getX();
+					double dy = event.getY() - previousEvent.getY();
 					RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()
 							+ dx);
 					RibbonView.this.setLayoutY(RibbonView.this.getLayoutY()
@@ -383,15 +383,15 @@ public class RibbonView extends Group {
 
 	public void setRibbonEvents(boolean setFlag) {
 		if (setFlag) {
-			this.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-			this.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-			this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+			stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+			stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+			stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
 			this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 			this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
 		} else {
-			this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-			this.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-			this.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+			stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+			stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+			stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
 			this.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
 			this.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
 		}
