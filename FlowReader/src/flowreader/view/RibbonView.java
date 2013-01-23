@@ -171,27 +171,28 @@ public class RibbonView extends Group {
 			PageView page = new PageView(new Rectangle(x, y + 50
 					+ (pageHeight / 3), pageWidth, pageHeight));
 			page.setText(document.getPage(i).getText());
+			page.setVisible(false);
 			this.pages.add(page);
-			//this.pagesGroup.getChildren().add(page);
+			// this.pagesGroup.getChildren().add(page);
 
 			x += pageWidth + pageInterval;
 			i++;
 		}
-		culledPages = culling(screenBounds.getWidth());
+		culling();
 		// add the first level of clouds
 		this.wordClouds.add(wordCloudGroup);
-		this.pagesGroup.getChildren().addAll(culledPages);
+		this.pagesGroup.getChildren().addAll(pages);
 		//
 		// create the rest of the clouds
-		//createCloudLevelGroups(document);
+		// createCloudLevelGroups(document);
 
 		this.pagesPane.getChildren().add(pagesGroup);
-		//this.wordCloudPane.getChildren().add(wordCloudGroup);
+		// this.wordCloudPane.getChildren().add(wordCloudGroup);
 		this.getChildren().add(pagesGroup);
-		//this.getChildren().add(wordCloudGroup);
+		// this.getChildren().add(wordCloudGroup);
 
 		// set up zoom levels
-		//createZoomTable(document.getNumOfCloudLevels());
+		// createZoomTable(document.getNumOfCloudLevels());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
@@ -248,10 +249,11 @@ public class RibbonView extends Group {
 
 	public void switchToPages() {
 		this.getChildren().clear();
-		updateCulledPages();
-		/*for (int i = 0; i < this.pages.size(); i++) {
-			this.getChildren().add(this.pages.get(i));
-		}*/
+		culling();
+		/*
+		 * for (int i = 0; i < this.pages.size(); i++) {
+		 * this.getChildren().add(this.pages.get(i)); }
+		 */
 	}
 
 	public void zoom(double deltaY, double x, double y) {
@@ -270,7 +272,7 @@ public class RibbonView extends Group {
 		}
 		// before any actual scaling takes place, need to check if cloud level
 		// needs to be changed
-		//checkCloudLevel();
+		// checkCloudLevel();
 		Scale scale = new Scale(array[curScale], array[curScale], x, y);
 		Scale scale2 = new Scale(array[maxScale - 10] - array[curScale],
 				array[maxScale - 10] - array[curScale]);
@@ -285,7 +287,7 @@ public class RibbonView extends Group {
 			for (int j = 0; j < wordCloudGroup.getTransforms().size(); j++) {
 				wordCloudGroup.getTransforms().remove(j);
 			}
-		}
+		}0
 		if (stackPane.getTransforms().size() > 0) {
 			for (int j = 0; j < stackPane.getTransforms().size(); j++) {
 				stackPane.getTransforms().remove(j);
@@ -295,7 +297,7 @@ public class RibbonView extends Group {
 		// pagesGroup.getTransforms().add(scale);
 		// wordCloudGroup.getTransforms().add(scale2);
 		stackPane.getTransforms().add(scale);
-	
+		culling();
 		System.out.println("x: " + x + "y: " + y
 				+ "\nstackPane parent bound x: "
 				+ stackPane.getBoundsInParent().getWidth()
@@ -343,7 +345,7 @@ public class RibbonView extends Group {
 							+ dx);
 					RibbonView.this.setLayoutY(RibbonView.this.getLayoutY()
 							+ dy);
-
+					culling();
 					TranslateTransition tt = new TranslateTransition(
 							Duration.millis(100), RibbonView.this);
 					tt.setByX(dx);
@@ -351,6 +353,7 @@ public class RibbonView extends Group {
 					tt.setCycleCount(0);
 					tt.setAutoReverse(true);
 					tt.play();
+
 				}
 				previousEvent = event;
 				event.consume();
@@ -426,33 +429,40 @@ public class RibbonView extends Group {
 
 	}
 
-	private ArrayList<PageView> culling(double sceneWidth) {
-		ArrayList<PageView> clippedPages = new ArrayList<PageView>();
+	// culling method sets the pages to be displayed as visible
+	private void culling() {
+		//set all the pages as invisible to clear previous culling call
+		/*for(PageView page:pages)
+			page.setVisible(false);
+		*/
+		// get the width of the page
 		double pageWidth = this.pages.get(0).getPageWidth();
-		int noOfPages = (int) Math.ceil(sceneWidth / pageWidth);
+		// calculate the number of pages to display
+		int noOfPages = (int) Math.ceil(screenBounds.getWidth() / pageWidth);
+		// if the number of pages calculated above is greater than that of the
+		// amount of pages then use the amount of pages as noOfPages
 		if (noOfPages > this.pages.size())
 			noOfPages = this.pages.size();
 		boolean found = false;
+		System.out.println(this.getLayoutX());
 		for (int i = 0; i < this.pages.size(); i++) {
+			// System.out.println("page no: "+i+" x: "+pages.get(i).getX());
+			//no more pages to set as visible
 			if (noOfPages == 0)
 				break;
-			if (this.pages.get(i).getX() > -(pageWidth)
-					&& this.pages.get(i).getX() < (pageWidth)) {
+			//check which pages is the most left on the screen.
+			if (this.pages.get(i).getX() > (this.getLayoutX() - pageWidth)
+					&& this.pages.get(i).getX() < (this.getLayoutX() + pageWidth)) {
 				found = true;
+				// System.out.println("page no: "+i);
 			}
+			//set the pages as visible
 			if (found && noOfPages > 0) {
-				clippedPages.add(this.pages.get(i));
+				this.pages.get(i).setVisible(true);
 				noOfPages--;
 				continue;
 			}
 		}
-		return clippedPages;
 	}
-	
-	private void updateCulledPages(){
-		this.getChildren().clear();
-		culledPages = culling(screenBounds.getWidth());
-		this.getChildren().addAll(culledPages);
-	}
-	
+
 }
