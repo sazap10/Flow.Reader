@@ -41,6 +41,7 @@ public class RibbonView extends Group {
     int minScale = 0;
     int curScale = 81;
     int opaqueScale = 81;
+    double wordCloudScale =1;
     StackPane stackPane;
     Group pagesGroup;
     Group wordCloudGroup;
@@ -82,7 +83,7 @@ public class RibbonView extends Group {
         }
             this.getChildren().add(pagesGroup);
             this.getChildren().add(wordCloudGroup);
-
+//stackPane.autosize();
         //set up zoom levels
         for (int j = 0; j < maxScale+1; j++) {
             array[j] = Math.pow(1.05, j - 81);
@@ -115,50 +116,91 @@ public class RibbonView extends Group {
             if (curScale < minScale + 1) {
             } else {
                 curScale--;
-                setOpacity();
+                setTheOpacity(deltaY);
             }
         } else {
             if (curScale > maxScale - 1) {
             } else {
                 curScale++;
-                setOpacity();
+                setTheOpacity(deltaY);
             }
         }
 
 
-        Scale scale = new Scale(array[curScale], array[curScale], pagesGroup.getBoundsInLocal().getWidth()/2,pagesGroup.getBoundsInLocal().getHeight()/2);
-        Scale scale2 = new Scale(array[maxScale-10]-array[curScale], array[maxScale-10]-array[curScale], wordCloudGroup.getBoundsInLocal().getWidth()/2,wordCloudGroup.getBoundsInLocal().getHeight()/2);
+        Scale scale = new Scale(array[curScale], array[curScale], x,y);
         
         //remove previously applied transformation(s)
-        if (pagesGroup.getTransforms().size() > 0) {
-            for (int i = 0; i < pagesGroup.getTransforms().size(); i++) {
-                pagesGroup.getTransforms().remove(i);
-            }
-        }
-        if (wordCloudGroup.getTransforms().size() > 0) {
-            for (int j = 0; j < wordCloudGroup.getTransforms().size(); j++) {
-                wordCloudGroup.getTransforms().remove(j);
-            }
-        }
-        
+        stackPane.getTransforms().clear();
         //add the transformation to the groups
-        pagesGroup.getTransforms().add(scale);
-        wordCloudGroup.getTransforms().add(scale2);
-        
+        stackPane.getTransforms().add(scale);
+       
         FlowReader.zoomLabel.setText("zoom: " + ((float) curScale / (float) maxScale) * 100
                 + "%\ncurScale: " + curScale
                 + "\nmin Scale: " + minScale
                 + "\nmax Scale: " + maxScale);
     }
 
-    public void setOpacity() {
+    public void setTheOpacity(double deltaY) {
         double opacity;
         opacity = curScale / (double) opaqueScale;
+
         //stackPane.setOpacity(opacity);
           
-           
+           System.out.println("opacity: "+opacity);
             pagesGroup.setOpacity(opacity);
             wordCloudGroup.setOpacity(1-opacity);
+            
+            //make word cloud bigger at a certain opacity
+            if(opacity<1 && deltaY<0){
+                wordCloudScale = wordCloudScale*1.07;
+                                                         //   Scale scale = new Scale(wordCloudScale, wordCloudScale, 800,405.5);
+
+                for(int i=0;i<wordClouds.size();i++){
+                //    wordClouds.get(i).incrementFont();
+                                    //remove previously applied transformation(s)
+                   //  wordClouds.get(i).getTransforms().clear();
+                     //add the transformation to the groups
+                     //wordClouds.get(i).getTransforms().add(scale);
+                             wordClouds.get(i).setScaleX(wordCloudScale);
+                              wordClouds.get(i).setScaleY(wordCloudScale);
+                }
+stackPane.autosize();
+
+                }else{
+                if(wordCloudScale>1){
+                                    wordCloudScale = wordCloudScale/1.07;
+                                           // Scale scale = new Scale(wordCloudScale, wordCloudScale, 800,405.5);
+
+                                     for(int i=0;i<wordClouds.size();i++){
+                                                             //wordClouds.get(i).decrementFont();
+
+        
+                     //remove previously applied transformation(s)
+                     //wordClouds.get(i).getTransforms().clear();
+                     //add the transformation to the groups
+                    // wordClouds.get(i).getTransforms().add(scale);
+                     
+                              wordClouds.get(i).setScaleX(wordCloudScale);
+                              wordClouds.get(i).setScaleY(wordCloudScale);
+                                     }
+                                     stackPane.autosize();
+
+                }else{
+                    wordCloudScale=1;
+                       //     Scale scale = new Scale(wordCloudScale, wordCloudScale, 800,405.5);
+                     for(int i=0;i<wordClouds.size();i++){
+                                         //remove previously applied transformation(s)
+                     //wordClouds.get(i).getTransforms().clear();
+                     //add the transformation to the groups
+                    // wordClouds.get(i).getTransforms().add(scale);
+                    wordClouds.get(i).setScaleX(wordCloudScale);
+                      wordClouds.get(i).setScaleY(wordCloudScale);
+                                     }
+                     stackPane.autosize();
+
+                }
+            }
+            
         }
     
 
@@ -212,8 +254,9 @@ public class RibbonView extends Group {
                             "\nget X: "+event.getX()+"get Y: "+event.getY());
                                     double height = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getHeight();
                                      double width = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getWidth();
-                                     
-					RibbonView.this.zoom(event.getDeltaY(),0,0);
+                       
+                                        RibbonView.this.zoom(event.getDeltaY(), event.getScreenX(), event.getScreenY());
+
                 }
                 event.consume();
 
@@ -232,14 +275,14 @@ public class RibbonView extends Group {
 
     public void setRibbonEvents(boolean setFlag) {
         if (setFlag) {
-            stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+           stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+             this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+             this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
         } else {
-            stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-            stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+             stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+             stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
             this.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
             this.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);

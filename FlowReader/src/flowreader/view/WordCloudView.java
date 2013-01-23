@@ -97,4 +97,14 @@ public class WordCloudView extends Group{
         }
         word.setFont(new Font(fontSize));
     }
+    public void incrementFont(){
+        for(Text word:words){
+            word.setFont(new Font(word.getFont().getSize()+3));
+        }
+    }
+    public void decrementFont(){
+                for(Text word:words){
+            word.setFont(new Font(word.getFont().getSize()-3));
+        }
+    }
 }
