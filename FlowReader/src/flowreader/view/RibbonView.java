@@ -129,7 +129,7 @@ public class RibbonView extends Group {
         }
 
 
-        Scale scale = new Scale(array[curScale], array[curScale], 800,400);
+        Scale scale = new Scale(array[curScale], array[curScale], x,y);
         
         //remove previously applied transformation(s)
         stackPane.getTransforms().clear();
@@ -227,8 +227,8 @@ public class RibbonView extends Group {
                         .equals(MouseEvent.MOUSE_DRAGGED)) {
 
                     // System.out.println("DRAGGED");
-                    double dx = event.getX() - previousEvent.getX();
-                    double dy = event.getY() - previousEvent.getY();
+                    double dx = event.getScreenX() - previousEvent.getScreenX();
+                    double dy = event.getScreenY() - previousEvent.getScreenY();
                     RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()
                             + dx);
                     RibbonView.this.setLayoutY(RibbonView.this.getLayoutY()
@@ -257,7 +257,8 @@ public class RibbonView extends Group {
                                     double height = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getHeight();
                                      double width = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getWidth();
                        
-                                        RibbonView.this.zoom(event.getDeltaY(), event.getScreenX(), event.getScreenY());
+                                        //RibbonView.this.zoom(event.getDeltaY(), event.getScreenX(), event.getScreenY());
+                                        RibbonView.this.zoom(event.getDeltaY(), event.getScreenX()/screenBounds.getWidth()*width, event.getScreenY()/screenBounds.getHeight()*height);
 
                 }
                 event.consume();
@@ -277,11 +278,11 @@ public class RibbonView extends Group {
 
     public void setRibbonEvents(boolean setFlag) {
         if (setFlag) {
-           stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-           stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-            stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-           stackPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            stackPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+           flowreader.FlowReader.the_Group.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+            flowreader.FlowReader.the_Group.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+            flowreader.FlowReader.the_Group.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+           flowreader.FlowReader.the_Group.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            flowreader.FlowReader.the_Group.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
              
         } else {
             flowreader.FlowReader.the_Group.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
