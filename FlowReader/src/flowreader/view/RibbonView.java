@@ -113,13 +113,15 @@ public class RibbonView extends Group {
                //now nextUp and nextDown have been set, check if we need to scale up or down
                // based on the current scale
                if (curScale == zoomTable.get(nextDown)){
-                   scaleCloudDown();
                    currentZoomLevel--;
+                   scaleCloudDown();
+                  
                 
                }
                else if (curScale == zoomTable.get(nextUp)){
+                    currentZoomLevel++;
                    scaleCloudUp();
-                   currentZoomLevel++;
+                  
                }
          
             }
@@ -132,8 +134,8 @@ public class RibbonView extends Group {
             Group newLevel = wordClouds.get(currentZoomLevel);
             //need to switch out the current group from the stackpane
             System.out.println("clearing current clouds");
-            this.wordCloudPane.getChildren().clear();
-            this.wordCloudPane.getChildren().add(newLevel);
+           //.this.wordCloudPane.getChildren().clear();
+           // this.wordCloudPane.getChildren().add(newLevel);
             this.getChildren().clear();
             this.getChildren().add(pagesGroup);
             this.getChildren().add(newLevel);
@@ -294,11 +296,11 @@ public class RibbonView extends Group {
 		// pagesGroup.getTransforms().add(scale);
 		// wordCloudGroup.getTransforms().add(scale2);
 		stackPane.getTransforms().add(scale);
-		System.out.println("x: " + x + "y: " + y
+	/*System.out.println("x: " + x + "y: " + y
 				+ "\nstackPane parent bound x: "
 				+ stackPane.getBoundsInParent().getWidth()
 				+ "stackPane parent bound y: "
-				+ stackPane.getBoundsInParent().getHeight());
+				+ stackPane.getBoundsInParent().getHeight());*/
 		FlowReader.zoomLabel.setText("zoom: "
 				+ ((float) curScale / (float) maxScale) * 100 + "%\ncurScale: "
 				+ curScale + "\nmin Scale: " + minScale + "\nmax Scale: "
