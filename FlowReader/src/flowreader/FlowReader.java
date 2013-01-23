@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,6 +37,7 @@ public class FlowReader extends Application {
     private Scene scene;
     // Elements
     private StackPane mainPane; // The main pane that contains the ribbon or the word cloud
+    private StackPane pane2;
     private RibbonView ribbon; // The ribbon at the center of the page
     //private WordCloudView wordCloud; // The word cloud view at the center of the page
     //private ComparisonView comparisonView; // The buckets to compare pages in the bottom
@@ -46,21 +48,24 @@ public class FlowReader extends Application {
     private EventHandler<ScrollEvent> scrollHandler;
     private EventHandler<ZoomEvent> zoomHandler;
     boolean wordCloudToggle, diffModeToggle;
+    public static Group the_Group;
 public static  BorderPane borderPane;
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Flow Reader");
         primaryStage.setFullScreen(true);
-        
+        the_Group=new Group();
          borderPane = new BorderPane();
         scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
 
         mainPane = new StackPane();
+pane2=new StackPane();
         zoomLabel = new Text("zoom label");
         setUpButtonBar();
         this.setButtonEvents(primaryStage);
-
-        borderPane.setCenter(this.mainPane);
+the_Group.getChildren().addAll(mainPane,pane2);
+        borderPane.setCenter(this.the_Group);
+        
         borderPane.setTop(topBtnsBar);
         BorderPane.setAlignment(mainPane, Pos.CENTER_LEFT);
         borderPane.setBottom(zoomLabel);
@@ -136,7 +141,7 @@ public static  BorderPane borderPane;
                     wordCloudToggle = false;
                     wordCloudButton.setText("WordCloud View");
 
-                    ribbon = new RibbonView(mainPane);
+                    ribbon = new RibbonView(mainPane,pane2);
                     ArrayList<Page> pages;
                     PageView page = new PageView(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
 

@@ -43,6 +43,7 @@ public class RibbonView extends Group {
     int opaqueScale = 81;
     double wordCloudScale =1;
     StackPane stackPane;
+    StackPane ribbonPane;
     Group pagesGroup;
     Group wordCloudGroup;
     double[] array = new double[maxScale+1];
@@ -51,10 +52,11 @@ public class RibbonView extends Group {
     private EventHandler<ZoomEvent> zoomHandler;
     private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
-    public RibbonView(StackPane stackPane) {
+    public RibbonView(StackPane stackPane,StackPane ribbonPane) {
         this.pages = new ArrayList<>();
         this.wordClouds = new ArrayList<>();
         this.stackPane = stackPane;
+        this.ribbonPane=ribbonPane;
     }
 
     public ArrayList<PageView> getPages() {
@@ -82,7 +84,7 @@ public class RibbonView extends Group {
             i++;
         }
             this.getChildren().add(pagesGroup);
-            this.getChildren().add(wordCloudGroup);
+            ribbonPane.getChildren().add(wordCloudGroup);
 //stackPane.autosize();
         //set up zoom levels
         for (int j = 0; j < maxScale+1; j++) {
@@ -127,7 +129,7 @@ public class RibbonView extends Group {
         }
 
 
-        Scale scale = new Scale(array[curScale], array[curScale], x,y);
+        Scale scale = new Scale(array[curScale], array[curScale], 800,400);
         
         //remove previously applied transformation(s)
         stackPane.getTransforms().clear();
@@ -152,7 +154,7 @@ public class RibbonView extends Group {
             
             //make word cloud bigger at a certain opacity
             if(opacity<1 && deltaY<0){
-                wordCloudScale = wordCloudScale*1.07;
+                wordCloudScale = wordCloudScale*1.05;
                                                          //   Scale scale = new Scale(wordCloudScale, wordCloudScale, 800,405.5);
 
                 for(int i=0;i<wordClouds.size();i++){
@@ -164,11 +166,11 @@ public class RibbonView extends Group {
                              wordClouds.get(i).setScaleX(wordCloudScale);
                               wordClouds.get(i).setScaleY(wordCloudScale);
                 }
-stackPane.autosize();
+//stackPane.autosize();
 
                 }else{
                 if(wordCloudScale>1){
-                                    wordCloudScale = wordCloudScale/1.07;
+                                    wordCloudScale = wordCloudScale/1.05;
                                            // Scale scale = new Scale(wordCloudScale, wordCloudScale, 800,405.5);
 
                                      for(int i=0;i<wordClouds.size();i++){
@@ -183,7 +185,7 @@ stackPane.autosize();
                               wordClouds.get(i).setScaleX(wordCloudScale);
                               wordClouds.get(i).setScaleY(wordCloudScale);
                                      }
-                                     stackPane.autosize();
+                                   //  stackPane.autosize();
 
                 }else{
                     wordCloudScale=1;
@@ -196,7 +198,7 @@ stackPane.autosize();
                     wordClouds.get(i).setScaleX(wordCloudScale);
                       wordClouds.get(i).setScaleY(wordCloudScale);
                                      }
-                     stackPane.autosize();
+                     //stackPane.autosize();
 
                 }
             }
@@ -233,7 +235,7 @@ stackPane.autosize();
                             + dy);
 
                     TranslateTransition tt = new TranslateTransition(
-                            Duration.millis(100), RibbonView.this);
+                            Duration.millis(100), stackPane);
                     tt.setByX(dx);
                     tt.setByY(dy);
                     tt.setCycleCount(0);
@@ -276,16 +278,17 @@ stackPane.autosize();
     public void setRibbonEvents(boolean setFlag) {
         if (setFlag) {
            stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-            stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+           stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-             this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-             this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+           stackPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            stackPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+             
         } else {
-             stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-             stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-            stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            this.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            this.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            flowreader.FlowReader.the_Group.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+            flowreader.FlowReader.the_Group.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+           flowreader.FlowReader.the_Group.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+            flowreader.FlowReader.the_Group.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            flowreader.FlowReader.the_Group.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
         }
 
     }
