@@ -1,2 +1,5 @@
 /build/built-jar.properties
 /dist/FlowReader.jar
+/nbproject/private/
+/build/
+/dist/
