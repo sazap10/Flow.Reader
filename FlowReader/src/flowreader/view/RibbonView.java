@@ -192,7 +192,7 @@ public class RibbonView extends Group {
                 
                 //
                 //create the rest of the clouds
-                createCloudLevelGroups(document);
+               // createCloudLevelGroups(document);
                 
 		this.pagesPane.getChildren().add(pagesGroup);
 		this.wordCloudPane.getChildren().add(wordCloudGroup);
@@ -200,7 +200,7 @@ public class RibbonView extends Group {
 		this.getChildren().add(wordCloudGroup);
 
 		// set up zoom levels
-                createZoomTable(document.getNumOfCloudLevels());
+               // createZoomTable(document.getNumOfCloudLevels());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
@@ -276,7 +276,7 @@ public class RibbonView extends Group {
 		}
                 //before any actual scaling takes place, need to check if cloud level
                 //needs to be changed
-                checkCloudLevel();
+              //  checkCloudLevel();
 		Scale scale = new Scale(array[curScale], array[curScale], x, y);
 		Scale scale2 = new Scale(array[maxScale - 10] - array[curScale],
 				array[maxScale - 10] - array[curScale]);
