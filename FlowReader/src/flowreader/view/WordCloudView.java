@@ -84,7 +84,7 @@ public class WordCloudView extends Group{
             Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();
             Text word = new Text(e.getKey());
             //this.setWordSizes(word, e.getValue());
-            word.setFont(new Font(10*e.getValue()));
+            word.setFont(new Font(30));
             word.setWrappingWidth(word.getLayoutBounds().getWidth()+10);
             this.words.add(word);
             j++;
