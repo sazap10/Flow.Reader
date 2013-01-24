@@ -85,6 +85,7 @@ public class RibbonView extends Group {
                     percent = curScale / (i * 100.0f);
                     scale = (int) (percent * maxScale);
                     zoomTable.put(i, scale);
+                    System.out.println("put " + scale + "at level " + i);
                 }
                 maxZoomLevel = zoomLevels;
 
@@ -93,10 +94,12 @@ public class RibbonView extends Group {
         public void checkCloudLevel(){
             int nextDown, nextUp;
             System.out.println("this is being called with curscale " + curScale);
+            System.out.println("current zoom level: " + currentZoomLevel);
             int minScale = zoomTable.get(minZoomLevel);
             int maxScale = zoomTable.get(maxZoomLevel);
+
             if ((curScale < minScale + 1) && (curScale > maxScale - 1)){
-                System.out.println("curScale is in the confines it should be");
+                System.out.println("curScale is in the confines it should be");             
                 if( currentZoomLevel != minZoomLevel){
                 nextDown = currentZoomLevel -1;
                 }
@@ -109,29 +112,31 @@ public class RibbonView extends Group {
                 else{
                     nextUp = currentZoomLevel;
                 }
-
+            
+            
+                  System.out.println("nextdown = " + zoomTable.get(nextDown));
+                 System.out.println("nextup = " + zoomTable.get(nextUp));
                //now nextUp and nextDown have been set, check if we need to scale up or down
                // based on the current scale
-               if (curScale == zoomTable.get(nextDown)){
+               if ((curScale > zoomTable.get(nextDown)) || (curScale > zoomTable.get(currentZoomLevel))){                
+                   scaleCloud(nextDown);
                    currentZoomLevel--;
-                   scaleCloudDown();
-                  
                 
                }
-               else if (curScale == zoomTable.get(nextUp)){
-                    currentZoomLevel++;
-                   scaleCloudUp();
+               else if (curScale < zoomTable.get(nextUp)){                 
+                   scaleCloud(nextUp);
+                   currentZoomLevel++;
                   
                }
          
-            }
+        } 
             
         }
 
         //function to replace all clouds currently displayed with half the amount (larger ones from next level up)
-        public void scaleCloudUp(){
+        public void scaleCloud(int level){
             //index of list is one less than the level of the cloud, so no need to increase zoom level:
-            Group newLevel = wordClouds.get(currentZoomLevel);
+            Group newLevel = wordClouds.get(level);
             //need to switch out the current group from the stackpane
             System.out.println("clearing current clouds");
            //.this.wordCloudPane.getChildren().clear();
@@ -145,7 +150,7 @@ public class RibbonView extends Group {
         //function to replace all clouds currently displayed with double the amount (smaller ones from lower level)
         public void scaleCloudDown(){
             //index of list is one less than the level of the cloud, so no need decrease current level by 2:
-            Group newLevel = wordClouds.get(currentZoomLevel - 2);
+            Group newLevel = wordClouds.get(currentZoomLevel - 1);
             //need to switch out the current group from the stackpane
             this.wordCloudPane.getChildren().clear();
             this.wordCloudPane.getChildren().add(newLevel);
