@@ -74,8 +74,8 @@ public class PagesScene extends StackPane{
             
             Scale scale = new Scale(scaleFactors[curPageZoom], scaleFactors[curPageZoom], x, y);
 
-            this.pageGroup.getTransforms().clear();
-            this.pageGroup.getTransforms().add(scale);
+            this.getTransforms().clear();
+            this.getTransforms().add(scale);
      }
      
     private void move(double dx, double dy) {
@@ -117,7 +117,7 @@ public class PagesScene extends StackPane{
                         if (!event.isDirect()) {
                                 double height = PagesScene.this.getLayoutBounds().getHeight();
                                 double width = PagesScene.this.getLayoutBounds().getWidth();
-                                PagesScene.this.zoom(event.getDeltaY(), event.getScreenX()/Screen.getPrimary().getBounds().getWidth()*width, event.getScreenY()/Screen.getPrimary().getBounds().getHeight()*height);
+                                PagesScene.this.zoom(event.getDeltaY(), Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight()/2);
                         }
                         event.consume();
                     }
