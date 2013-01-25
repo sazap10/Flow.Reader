@@ -287,7 +287,8 @@ public class RibbonView extends Group {
 			for (int j = 0; j < wordCloudGroup.getTransforms().size(); j++) {
 				wordCloudGroup.getTransforms().remove(j);
 			}
-		}0
+		}
+		
 		if (stackPane.getTransforms().size() > 0) {
 			for (int j = 0; j < stackPane.getTransforms().size(); j++) {
 				stackPane.getTransforms().remove(j);
