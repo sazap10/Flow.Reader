@@ -151,10 +151,11 @@ public class RibbonView extends Group {
         //translates the pages appropriately to the wordcloud level they are on
         public void translatePages(int level, int oldLevel){
             //find the difference between old and new levels
-            double difference  = ((oldLevel - level) * this.pageHeight/3 * 2);
+            //pagesGroup.getTransforms().clear();
+            double difference  = ((oldLevel - level) * this.pageHeight/3 );
             System.out.println("difference:" + difference);
             Translate translate = new Translate(0, difference);
-            this.pagesPane.getTransforms().add(translate);
+            pagesGroup.getTransforms().add(translate);
         }
         
         
@@ -287,17 +288,13 @@ public class RibbonView extends Group {
 		}
                 //before any actual scaling takes place, need to check if cloud level
                 //needs to be changed
-                checkCloudLevel();
+               
 		Scale scale = new Scale(array[curScale], array[curScale], x, y);
 		Scale scale2 = new Scale(array[maxScale - 10] - array[curScale],
 				array[maxScale - 10] - array[curScale]);
 
 		// remove previously applied transformation(s)
-		if (pagesGroup.getTransforms().size() > 0) {
-			for (int i = 0; i < pagesGroup.getTransforms().size(); i++) {
-				pagesGroup.getTransforms().remove(i);
-			}
-		}
+		
 		if (wordCloudGroup.getTransforms().size() > 0) {
 			for (int j = 0; j < wordCloudGroup.getTransforms().size(); j++) {
 				wordCloudGroup.getTransforms().remove(j);
@@ -311,6 +308,7 @@ public class RibbonView extends Group {
 		// add the transformation to the groups
 		// pagesGroup.getTransforms().add(scale);
 		// wordCloudGroup.getTransforms().add(scale2);
+                 checkCloudLevel();
 		stackPane.getTransforms().add(scale);
                
 	/*System.out.println("x: " + x + "y: " + y
