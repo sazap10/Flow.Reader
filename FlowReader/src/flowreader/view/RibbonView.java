@@ -27,6 +27,7 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import java.util.HashMap;
+import javafx.scene.transform.Translate;
 
 /**
  * 
@@ -119,14 +120,14 @@ public class RibbonView extends Group {
                //now nextUp and nextDown have been set, check if we need to scale up or down
                // based on the current scale
                if ((curScale > zoomTable.get(nextDown)) || (curScale > zoomTable.get(currentZoomLevel))){                
-                   scaleCloud(nextDown);
+                   scaleCloud(nextDown, -1);
                    currentZoomLevel--;
-                
+                   System.out.println("scaling cloud down");
                }
                else if (curScale < zoomTable.get(nextUp)){                 
-                   scaleCloud(nextUp);
+                   scaleCloud(nextUp, 1);
                    currentZoomLevel++;
-                  
+                  System.out.println("scaling cloud up");
                }
          
         } 
@@ -134,16 +135,26 @@ public class RibbonView extends Group {
         }
 
         //function to replace all clouds currently displayed with half the amount (larger ones from next level up)
-        public void scaleCloud(int level){
+        public void scaleCloud(int level, int upOrDown){
             //index of list is one less than the level of the cloud, so no need to increase zoom level:
             Group newLevel = wordClouds.get(level);
             //need to switch out the current group from the stackpane
             System.out.println("clearing current clouds");
            //.this.wordCloudPane.getChildren().clear();
            // this.wordCloudPane.getChildren().add(newLevel);
-            //this.getChildren().clear();
-            //this.getChildren().add(pagesGroup);
-            //this.getChildren().add(newLevel);
+            this.getChildren().clear();
+            this.getChildren().add(pagesGroup);
+            translatePages(level, level + upOrDown);
+            this.getChildren().add(newLevel);
+        }
+        
+        //translates the pages appropriately to the wordcloud level they are on
+        public void translatePages(int level, int oldLevel){
+            //find the difference between old and new levels
+            double difference  = ((oldLevel - level) * this.pageHeight/3 * 2);
+            System.out.println("difference:" + difference);
+            Translate translate = new Translate(0, difference);
+            this.pagesPane.getTransforms().add(translate);
         }
         
         
@@ -174,7 +185,7 @@ public class RibbonView extends Group {
 		while (i < document.getNumOfPages()) {
 
 			WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
-					pageWidth, pageHeight / 3));			
+					pageWidth, pageHeight / 3), 1);			
 			wordCloudGroup.setOpacity(1);
 			this.wordCloudGroup.getChildren().add(wordCloud);
 
@@ -232,7 +243,7 @@ public class RibbonView extends Group {
                 //render each cloud on this level and add it to the group
                 
                 for (WordCloud wordCloud: currentLevelClouds){
-                   WordCloudView currentView = new WordCloudView(wordCloud, new Rectangle(x, y, cloudWidth, cloudHeight));
+                   WordCloudView currentView = new WordCloudView(wordCloud, new Rectangle(x, y, cloudWidth, cloudHeight), i);
                    currentLevelViews.getChildren().add(currentView);
                    x += cloudWidth;                 
                 }
@@ -301,6 +312,7 @@ public class RibbonView extends Group {
 		// pagesGroup.getTransforms().add(scale);
 		// wordCloudGroup.getTransforms().add(scale2);
 		stackPane.getTransforms().add(scale);
+               
 	/*System.out.println("x: " + x + "y: " + y
 				+ "\nstackPane parent bound x: "
 				+ stackPane.getBoundsInParent().getWidth()
