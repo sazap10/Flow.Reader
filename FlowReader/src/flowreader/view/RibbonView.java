@@ -122,11 +122,12 @@ public class RibbonView extends Group {
                if ((curScale > zoomTable.get(nextDown)) || (curScale > zoomTable.get(currentZoomLevel))){                
                    scaleCloud(nextDown, -1);
                    currentZoomLevel--;
+                  
                    System.out.println("scaling cloud down");
                }
                else if (curScale < zoomTable.get(nextUp)){                 
                    scaleCloud(nextUp, 1);
-                   currentZoomLevel++;
+                   currentZoomLevel++;                  
                   System.out.println("scaling cloud up");
                }
          
@@ -144,24 +145,37 @@ public class RibbonView extends Group {
            // this.wordCloudPane.getChildren().add(newLevel);
             this.getChildren().clear();
             this.getChildren().add(pagesGroup);
+     
+            if (upOrDown == 1){
+                level --;
+            }
+            else{
+                level++;
+            }
+            System.out.println("level: " + level);
+            System.out.println("upOrDOwn: " + upOrDown);
+            System.out.println("level + upordown: " + (level + upOrDown));
             translatePages(level, level + upOrDown);
             this.getChildren().add(newLevel);
         }
         
         //translates the pages appropriately to the wordcloud level they are on
-        public void translatePages(int level, int oldLevel){
+        public void translatePages(int level, int newLevel){
             //find the difference between old and new levels
+            System.out.println("level: " + level);
+            System.out.println("new level: " + newLevel);
             pagesGroup.getTransforms().clear();
-            int sign = oldLevel - level;
-            int magnitude;
-            if (sign == 1){ //going down
-                magnitude = level;
-            }
-            else{
-                magnitude = oldLevel;
-            }
-            magnitude--;
-            double difference  = ((sign * magnitude) * this.pageHeight/3 );
+            double sign = newLevel - level;
+            double smallest, magnitude;
+           if (newLevel > level){
+               smallest = level;
+           }
+           else{
+               smallest = newLevel;
+           }
+           System.out.println("smallest:" + smallest);
+            magnitude = Math.pow(2, smallest - 1) * (pageHeight / 3);       
+            double difference  = (sign * magnitude );
             System.out.println("difference:" + difference);
             Translate translate = new Translate(0, difference);
             pagesGroup.getTransforms().add(translate);
