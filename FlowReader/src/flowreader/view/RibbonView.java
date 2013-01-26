@@ -151,8 +151,17 @@ public class RibbonView extends Group {
         //translates the pages appropriately to the wordcloud level they are on
         public void translatePages(int level, int oldLevel){
             //find the difference between old and new levels
-            //pagesGroup.getTransforms().clear();
-            double difference  = ((oldLevel - level) * this.pageHeight/3 );
+            pagesGroup.getTransforms().clear();
+            int sign = oldLevel - level;
+            int magnitude;
+            if (sign == 1){ //going down
+                magnitude = level;
+            }
+            else{
+                magnitude = oldLevel;
+            }
+            magnitude--;
+            double difference  = ((sign * magnitude) * this.pageHeight/3 );
             System.out.println("difference:" + difference);
             Translate translate = new Translate(0, difference);
             pagesGroup.getTransforms().add(translate);
