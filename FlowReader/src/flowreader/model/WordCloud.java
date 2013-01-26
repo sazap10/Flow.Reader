@@ -31,7 +31,7 @@ public class WordCloud extends Group{
     public WordCloud(HashMap<String, Integer> wordsOccurrences) {
         this.wordsOccurrences = wordsOccurrences;       
         this.sortedMap = sortWordsOccurrences(wordsOccurrences);
- 
+        trimOccurrences();
         
     }
     
@@ -51,6 +51,7 @@ public class WordCloud extends Group{
             }                 
             
         }
+        trimOccurrences();
         
     }
     
@@ -77,6 +78,47 @@ public class WordCloud extends Group{
         //System.out.println("results: "+sortedWordsOccurrences);
        
         return sortedWordsOccurrences;
+    }
+       
+       
+       //creates Word objects with the top n most common words
+
+    private void trimOccurrences() {	
+        String maxKey = "";
+        int tmpCount;	
+        boolean maxCount = false;
+        int minCount;
+        HashMap<String, Integer> words = new HashMap<String, Integer>();
+        
+        for (int i = 0; i <= this.numOfWordsInCloud; i++) {
+            
+            Integer maxInMap = Collections.max(this.wordsOccurrences.values());	
+            Iterator it = this.wordsOccurrences.entrySet().iterator();
+            
+            while (it.hasNext()) {	
+                
+                Map.Entry pairs = (Map.Entry) it.next();			
+                tmpCount = Integer.parseInt(pairs.getValue().toString());
+                
+                //if it's the highest value, add it to our current array
+                 if (tmpCount == maxInMap) {
+                    maxKey = pairs.getKey().toString();	
+                    words.put(maxKey, tmpCount);	
+                      if (!(maxCount)) {
+                        maxInMap = tmpCount;	
+                        maxCount = true;
+	
+                    }
+	
+               }
+	
+           }
+
+          this.wordsOccurrences.remove(maxKey);
+          minCount = maxInMap;
+	
+        }
+         this.wordsOccurrences = words;	
     }
 
     
