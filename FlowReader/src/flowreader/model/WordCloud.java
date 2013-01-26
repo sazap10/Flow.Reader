@@ -25,14 +25,16 @@ public class WordCloud extends Group{
     private HashMap<String, Integer> wordsOccurrences;
     private TreeMap<String, Integer> sortedMap;
     private ArrayList<Text> words;
-    private Integer numOfWordsInCloud = 10;
-
+    private Integer numOfWordsInCloud = 12;
+    int minCount; //count of smallest word in occurences
+    int maxCount; //cound of biggest word in occurrences;
 
     public WordCloud(HashMap<String, Integer> wordsOccurrences) {
         this.wordsOccurrences = wordsOccurrences;       
         this.sortedMap = sortWordsOccurrences(wordsOccurrences);
-        trimOccurrences();
-        
+        minCount = sortedMap.lastEntry().getValue();
+        maxCount = sortedMap.firstEntry().getValue();
+        System.out.println("works at the end of wordcloud");
     }
     
      public WordCloud (WordCloud a, WordCloud b){                   
@@ -51,12 +53,16 @@ public class WordCloud extends Group{
             }                 
             
         }
-        trimOccurrences();
+        this.sortedMap = sortWordsOccurrences(wordsOccurrences);
+        minCount = sortedMap.lastEntry().getValue();
+        maxCount = sortedMap.firstEntry().getValue();
         
     }
     
 
-   
+   public TreeMap<String, Integer> getSortedMap(){
+       return this.sortedMap;
+   }
     
    public void setWordOccurrences(HashMap<String,Integer> wordsOccurrences){
         this.wordsOccurrences = wordsOccurrences;
@@ -80,19 +86,33 @@ public class WordCloud extends Group{
         return sortedWordsOccurrences;
     }
        
+      private void setMaxCount(int count){
+          if (this.maxCount < count){
+              this.maxCount = count;
+          }
+      }
+      
+      public int getMaxCount(){
+          return this.maxCount;
+      }
+      
+      public int getMinCount(){
+          return this.minCount;
+      }
        
-       //creates Word objects with the top n most common words
+       
+       //creates Word objects with the top (numOfWordsInCloud) most common words
 
-    private void trimOccurrences() {	
+ /*   private void trimOccurrences() {	
         String maxKey = "";
         int tmpCount;	
         boolean maxCount = false;
-        int minCount;
         HashMap<String, Integer> words = new HashMap<String, Integer>();
         
         for (int i = 0; i <= this.numOfWordsInCloud; i++) {
             
             Integer maxInMap = Collections.max(this.wordsOccurrences.values());	
+            this.setMaxCount(maxInMap);
             Iterator it = this.wordsOccurrences.entrySet().iterator();
             
             while (it.hasNext()) {	
@@ -105,7 +125,7 @@ public class WordCloud extends Group{
                     maxKey = pairs.getKey().toString();	
                     words.put(maxKey, tmpCount);	
                       if (!(maxCount)) {
-                        maxInMap = tmpCount;	
+                        maxInMap = tmpCount;
                         maxCount = true;
 	
                     }
@@ -120,7 +140,7 @@ public class WordCloud extends Group{
         }
          this.wordsOccurrences = words;	
     }
-
+*/
     
  
 }
