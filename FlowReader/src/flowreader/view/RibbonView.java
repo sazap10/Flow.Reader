@@ -152,6 +152,7 @@ public class RibbonView extends Group {
 	}
 
 	public void buildRibbon(Document document) {
+		this.setLayoutX(0);
 		int i = 0;
 		int x = 0;
 		int y = 0;
@@ -432,37 +433,48 @@ public class RibbonView extends Group {
 
 	// culling method sets the pages to be displayed as visible
 	private void culling() {
+		
 		//set all the pages as invisible to clear previous culling call
 		/*for(PageView page:pages)
 			page.setVisible(false);
 		*/
-		// get the width of the page
+		/// get the width of the page
 		double pageWidth = this.pages.get(0).getPageWidth();
 		// calculate the number of pages to display
 		int noOfPages = (int) Math.ceil(screenBounds.getWidth() / pageWidth);
+		//System.out.println("page Width = "+ pageWidth);
 		// if the number of pages calculated above is greater than that of the
 		// amount of pages then use the amount of pages as noOfPages
 		if (noOfPages > this.pages.size())
 			noOfPages = this.pages.size();
 		boolean found = false;
-		System.out.println(this.getLayoutX());
+		System.out.println("left x: "+RibbonView.this.getLayoutX()+ " bounds: "+this.getBoundsInLocal().getMinX());
 		for (int i = 0; i < this.pages.size(); i++) {
-			// System.out.println("page no: "+i+" x: "+pages.get(i).getX());
+			//System.out.println("page no: "+i+" x: "+pages.get(i).getX());
 			//no more pages to set as visible
-			if (noOfPages == 0)
-				break;
+			if (noOfPages == 0){
+				found = false;
+				if(i< pages.size()-1){
+					pages.get(i+1).setVisible(true);
+					continue;
+				}
+			}
+				
 			//check which pages is the most left on the screen.
-			if (this.pages.get(i).getX() > (this.getLayoutX() - pageWidth)
-					&& this.pages.get(i).getX() < (this.getLayoutX() + pageWidth)) {
+			if ( (-this.getLayoutX()>this.pages.get(i).getX()-pageWidth)
+					&& (-this.getLayoutX()<this.pages.get(i).getX()+pageWidth) && !found) {
+				if(i != 0)
+					pages.get(i-1).setVisible(true);
 				found = true;
-				// System.out.println("page no: "+i);
+				 System.out.println("page no: "+i);
 			}
 			//set the pages as visible
 			if (found && noOfPages > 0) {
-				this.pages.get(i).setVisible(true);
+				pages.get(i).setVisible(true);
 				noOfPages--;
 				continue;
 			}
+			//pages.get(i).setVisible(false);
 		}
 	}
 
