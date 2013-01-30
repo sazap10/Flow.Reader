@@ -85,9 +85,11 @@ public class WordCloudView extends Group{
             j++;
 	}       
         
+        System.out.println("New Cloud");
         for(int k=0; k<values.length; k++){
             this.setWordSize(this.words.get(k), values[k], values);
             this.words.get(k).setWrappingWidth(this.words.get(k).getLayoutBounds().getWidth()+10);
+            System.out.println(this.words.get(k).getText()+" "+values[k]);
         }
         
         Collections.shuffle(this.words);
@@ -95,8 +97,8 @@ public class WordCloudView extends Group{
     }
     
     //assigns them a font size to a word object
-   private void setWordSize(Text word, int numberOfOccurrences, Integer[] values) {
-        int current = numberOfOccurrences - values[values.length-1];
+   private void setWordSize(Text word, int wordFrequency, Integer[] values) {
+        int current = wordFrequency - values[values.length-1];
 
         int max = values[0] - values[values.length-1];
         int percent;

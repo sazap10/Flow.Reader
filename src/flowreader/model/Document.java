@@ -16,6 +16,12 @@ public class Document {
     public Document(ArrayList<Page> pages, ArrayList<ArrayList<WordCloud>> wordClouds){
         this.pages = pages;
         this.wordClouds = wordClouds;
+        
+        for(ArrayList<WordCloud> alwc : wordClouds){
+            for(WordCloud wc : alwc){
+                wc.calculeWordsFrequenciesOnTotalDocument(wordClouds.get(wordClouds.size()-1).get(0));
+            }
+        }
     }
     
     public ArrayList<Page> getPages(){

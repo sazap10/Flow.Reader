@@ -11,10 +11,10 @@ import java.util.Map;
  *
  * @author D-Day
  */
-public class ValueComparator implements Comparator<String> {
+public class ValueComparatorDouble implements Comparator<String> {
 
-    Map<String, Integer> base;
-    public ValueComparator(Map<String, Integer> base) {
+    Map<String, Double> base;
+    public ValueComparatorDouble(Map<String, Double> base) {
         this.base = base;
     }
 
