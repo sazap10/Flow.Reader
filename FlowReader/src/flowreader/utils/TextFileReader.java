@@ -28,10 +28,12 @@ import javafx.stage.Stage;
 public class TextFileReader{
 
     private File file;
+    
     private HashMap<String, Integer> commonWords;
-
+    private HashMap<String, Integer> documentOccurrences; //dict for whole document
     public TextFileReader() {
         this.commonWords = new HashMap<>();
+        this.documentOccurrences = new HashMap<>();
         this.getCommonWords();
     }
 
@@ -60,6 +62,7 @@ public class TextFileReader{
         ArrayList<Page> pages = new ArrayList<>(); // The list of all the pages
         ArrayList<WordCloud> wordClouds = new ArrayList();
         ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<ArrayList<WordCloud>>();
+       
         // Text Wrapper
         double boundWidth = bounds.getWidth(); // Width of the page
         double boundHeight = bounds.getHeight(); // Height of the page
@@ -69,7 +72,8 @@ public class TextFileReader{
 
         Text tempPage = new Text("");
         String pageText = "";
-        HashMap<String, Integer> wordsOccurrences = new HashMap<>();
+        
+        HashMap<String, Integer> wordsOccurrences = new HashMap<>(); //dict for a single page
         try (LineNumberReader r = new LineNumberReader(new java.io.FileReader(file))) {
             String paragraph, word;
             while ((paragraph = r.readLine()) != null) {
@@ -80,7 +84,7 @@ public class TextFileReader{
                         double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
                         if (textWithNewLine > boundHeight) {
                             Page page = new Page(pageText);
-                            WordCloud wordCloud = new WordCloud(wordsOccurrences);
+                            WordCloud wordCloud = new WordCloud(wordsOccurrences, this.documentOccurrences);
                             //System.out.println(""+page.toString());
                             pages.add(page);
                             wordClouds.add(wordCloud);
@@ -117,7 +121,7 @@ public class TextFileReader{
    
             
             Page page = new Page(pageText);
-            WordCloud wordCloud = new WordCloud(wordsOccurrences);
+            WordCloud wordCloud = new WordCloud(wordsOccurrences, this.documentOccurrences);
             //System.out.println(""+page.toString());
             pages.add(page);
             wordClouds.add(wordCloud);           
@@ -132,6 +136,19 @@ public class TextFileReader{
         System.out.println("number of levels:" + wordCloudLevels.size());
         Document document = new Document(pages, wordCloudLevels);
         return document;
+    }
+    
+    private void addToDocumentMap(HashMap<String, Integer> cloud){
+        for (String word : cloud.keySet()){
+            if (this.documentOccurrences.containsKey(word)){
+                int count = this.documentOccurrences.get(word) + cloud.get(word);
+                this.documentOccurrences.put(word, count);
+            }
+            else{
+                this.documentOccurrences.put(word, cloud.get(word));
+            }
+        }
+        
     }
 
     
