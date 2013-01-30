@@ -84,7 +84,7 @@ public class TextFileReader{
                         double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
                         if (textWithNewLine > boundHeight) {
                             Page page = new Page(pageText);
-                            WordCloud wordCloud = new WordCloud(wordsOccurrences, this.documentOccurrences);
+                            WordCloud wordCloud = new WordCloud(wordsOccurrences);
                             //System.out.println(""+page.toString());
                             pages.add(page);
                             wordClouds.add(wordCloud);
@@ -101,6 +101,7 @@ public class TextFileReader{
                         }
                         pageText += word + " ";
                         word = this.trimPunctuation(word);
+                        this.addDocumentOccurrence(word);
                         if (!this.commonWords.containsKey(word)) {
                             if(wordsOccurrences.get(word)!=null){
                                 wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
@@ -121,7 +122,7 @@ public class TextFileReader{
    
             
             Page page = new Page(pageText);
-            WordCloud wordCloud = new WordCloud(wordsOccurrences, this.documentOccurrences);
+            WordCloud wordCloud = new WordCloud(wordsOccurrences);
             //System.out.println(""+page.toString());
             pages.add(page);
             wordClouds.add(wordCloud);           
@@ -219,6 +220,19 @@ public class TextFileReader{
                 System.out.println("couldn't close the file!");
             }
         }
+    }
+    
+    //adds a word's occurrence to the document Occurrences Map
+    private void addDocumentOccurrence(String word){
+        if (this.documentOccurrences.containsKey(word)){
+            int count = this.documentOccurrences.get(word);
+            count++;
+            this.documentOccurrences.put(word, count);
+        }
+        else{
+            this.documentOccurrences.put(word, 1);
+        }
+        
     }
 
     
