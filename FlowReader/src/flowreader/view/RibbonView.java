@@ -83,7 +83,7 @@ public class RibbonView extends Group {
                 int scale;
                 float percent;
 	        for(int i = 1; i <= zoomLevels; i ++){
-                    percent = curScale / (i * 100.0f);
+                    percent = curScale / (i * 100.0f - 60 );
                     scale = (int) (percent * maxScale);
                     zoomTable.put(i, scale);
                     System.out.println("put " + scale + "at level " + i);
@@ -140,44 +140,34 @@ public class RibbonView extends Group {
             //index of list is one less than the level of the cloud, so no need to increase zoom level:
             Group newLevel = wordClouds.get(level);
             //need to switch out the current group from the stackpane
-            System.out.println("clearing current clouds");
-           //.this.wordCloudPane.getChildren().clear();
-           // this.wordCloudPane.getChildren().add(newLevel);
+           
             this.getChildren().clear();
+                                
+            translatePages(level);
             this.getChildren().add(pagesGroup);
      
-            if (upOrDown == 1){
-                level --;
-            }
-            else{
-                level++;
-            }
-            System.out.println("level: " + level);
-            System.out.println("upOrDOwn: " + upOrDown);
-            System.out.println("level + upordown: " + (level + upOrDown));
-            translatePages(level, level + upOrDown);
+          
             this.getChildren().add(newLevel);
         }
         
         //translates the pages appropriately to the wordcloud level they are on
-        public void translatePages(int level, int newLevel){
-            //find the difference between old and new levels
-            System.out.println("level: " + level);
-            System.out.println("new level: " + newLevel);
+        public void translatePages(int level){
+            //level is the level we are GOING TO
+            //so if going to level 2, we need to translate by 1 cloudheight = 2^0 = 2^ level-2
+            //if going to level 3, need to translate by 
+            double numOfHeights;
             pagesGroup.getTransforms().clear();
-            double sign = newLevel - level;
+            
             double smallest, magnitude;
-           if (newLevel > level){
-               smallest = level;
-           }
-           else{
-               smallest = newLevel;
-           }
-           System.out.println("smallest:" + smallest);
-            magnitude = Math.pow(2, smallest - 1) * (pageHeight / 3);       
-            double difference  = (sign * magnitude );
-            System.out.println("difference:" + difference);
-            Translate translate = new Translate(0, difference);
+            if (level > 1){
+            numOfHeights = Math.pow(2, level-1) -1;       
+            }else{
+                numOfHeights = 0;
+                
+            }
+            magnitude = numOfHeights * (pageHeight/3);
+            System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
+            Translate translate = new Translate(0, magnitude);
             pagesGroup.getTransforms().add(translate);
         }
         
