@@ -28,7 +28,7 @@ public class WordCloudView extends Group{
     private ArrayList<Word> wordObjects; //string with font size pairing
     private ArrayList<Text> words;
     private FlowPane cloud;
-    private Integer maxFontSize = 60;
+    private Integer maxFontSize = 30;
     private Integer minFontSize = 14;
     private Integer numOfWordsInCloud = 10;
     private Integer normalizationConstant = 1;
@@ -44,9 +44,9 @@ public class WordCloudView extends Group{
         this.minFontSize *= level;
         //this.cloud.setLayoutX(wordCloudBoundary.getX());
         
-        this.getChildren().addAll(wordCloudBoundary, cloud);
-        createWordObjects();
-        renderWordCloud();
+        this.getChildren().addAll(wordCloudBoundary, cloud);     
+        createWordObjects();      
+        renderWordCloud();       
     }
     
   
@@ -69,7 +69,7 @@ public class WordCloudView extends Group{
 
     public void setX(double x) {
         wordCloudBoundary.setX(x);
-        System.out.println("x: " + x + "pageBoundary Width: " + wordCloudBoundary.getWidth());
+       
 
     }
 
@@ -81,13 +81,14 @@ public class WordCloudView extends Group{
    public void createWordObjects(){
         Word word;
         int count = 0;
-          System.out.println("works at the start");
+          
         Set<Map.Entry<String, Integer>> w = wordCloud.getSortedMap().entrySet();
         Iterator i = w.iterator();
         while (i.hasNext() && (count < numOfWordsInCloud)){
-            System.out.println("works here");
+            
              Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();
-             int fontSize = this.getFontSize(e.getValue());
+             
+             int fontSize = getFontSize(e.getValue());
              word = new Word(fontSize, e.getKey());
              this.wordObjects.add(word);
              count++;
@@ -247,7 +248,14 @@ public class WordCloudView extends Group{
     //iterates through the word objects and assigns them a font size
     private int getFontSize(int numberOfOccurrences) {
         int countDiff = numberOfOccurrences - this.wordCloud.getMinCount();
-        int totalCountDiff = this.wordCloud.getMaxCount() - this.wordCloud.getMinCount();
+        if (countDiff == 0){
+            countDiff = 1;
+        }
+       
+        int totalCountDiff = this.wordCloud.getMaxCount() - this.wordCloud.getMinCount();      
+        if (totalCountDiff == 0){
+            totalCountDiff = 1;
+        }
         int fontSize = ((this.maxFontSize * countDiff) / (this.normalizationConstant * totalCountDiff));
         if (fontSize < this.minFontSize) {
             fontSize = this.minFontSize;
