@@ -10,15 +10,20 @@ import java.util.TreeMap;
 public class Page {
 
     private String text;
-
+    private int wordCount;
 
     public Page(String text) {
         this.text = text;
+        wordCount = text.split(" ").length;
 
     }
 
     public String getText() {
         return this.text;
+    }
+    
+    public int getWordCount(){
+        return this.wordCount;
     }
 
 
