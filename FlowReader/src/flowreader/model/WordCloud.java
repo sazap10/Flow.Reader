@@ -24,21 +24,22 @@ public class WordCloud extends Group{
 
     private HashMap<String, Integer> wordsOccurrences;
     private TreeMap<String, Integer> sortedMap;
+    private int maxFontSize = 30;
+    private int minFontSize = 14;
     private ArrayList<Text> words;
     private Integer numOfWordsInCloud = 12;
     int minCount; //count of smallest word in occurences
     int maxCount; //cound of biggest word in occurrences;
 
     public WordCloud(HashMap<String, Integer> wordsOccurrences) {
-        this.wordsOccurrences = wordsOccurrences;       
-        this.sortedMap = sortWordsOccurrences(wordsOccurrences);
-        minCount = sortedMap.lastEntry().getValue();
-        maxCount = sortedMap.firstEntry().getValue();
-        System.out.println("works at the end of wordcloud");
+        
+        this.wordsOccurrences = wordsOccurrences; 
+        
     }
     
-     public WordCloud (WordCloud a, WordCloud b){                   
-        HashMap<String,Integer> bMap = b.getWordOccurrences();            
+     public WordCloud (WordCloud a, WordCloud b){ 
+         
+        HashMap<String,Integer> bMap = b.getWordOccurrences();      
         this.setWordOccurrences(a.getWordOccurrences());      
         
         //walk through cloud b and add it's words
@@ -53,16 +54,60 @@ public class WordCloud extends Group{
             }                 
             
         }
-        this.sortedMap = sortWordsOccurrences(wordsOccurrences);
-        minCount = sortedMap.lastEntry().getValue();
-        maxCount = sortedMap.firstEntry().getValue();
+
+       
         
     }
+     
+     
+   //sets a value for each word in the wordsOccurrences based on their
+   //frequency in the page relative to the frequency in the whole document
+   public void setWordValues(HashMap<String, Integer> documentOccurrences, int cloudWordCount, int docWordCount){
+       int finalVal, newVal;
+       float pageCount, docCount;
+       //float newVal;
+       float smallest = 0;
+       float largest = 0;
+       HashMap<String, Float> occurrences = new HashMap<>();
+       //loop through adding double value occurrences to a map
+       for (String word: this.wordsOccurrences.keySet()){
+           pageCount = this.wordsOccurrences.get(word);
+           docCount = documentOccurrences.get(word);
+        
+           float pageFreq = pageCount / cloudWordCount;
+           float docFreq = docCount / docWordCount;         
+           newVal = (int)  (pageFreq / docFreq);
+           this.wordsOccurrences.put(word, newVal);
+           if (newVal < smallest){
+               smallest = newVal;
+           }
+           if (newVal > largest){
+               largest = newVal;
+           }
+       }
+       //now need to loop through to ensure each value is greater than zero
+    /*   for (String word: occurrences.keySet()){
+            System.out.println("new val: " + occurrences.get(word));
+            finalVal = (int) Math.ceil((Math.pow(occurrences.get(word), 2) * coefficient) / 100.0);
+            System.out.println("final val: " + finalVal);
+            this.wordsOccurrences.put(word, finalVal);
+          
+       }
+       * */
+       this.sortedMap = sortWordsOccurrences(this.wordsOccurrences);
+       minCount = sortedMap.lastEntry().getValue();
+       maxCount = sortedMap.firstEntry().getValue();
+       
+   }
     
 
    public TreeMap<String, Integer> getSortedMap(){
        return this.sortedMap;
    }
+
+   
+ 
+  
     
    public void setWordOccurrences(HashMap<String,Integer> wordsOccurrences){
         this.wordsOccurrences = wordsOccurrences;
