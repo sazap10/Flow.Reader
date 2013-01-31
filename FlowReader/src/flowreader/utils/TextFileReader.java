@@ -31,6 +31,7 @@ public class TextFileReader{
     
     private HashMap<String, Integer> commonWords;
     private HashMap<String, Integer> documentOccurrences; //dict for whole document
+    private int wordCount = 0;
     public TextFileReader() {
         this.commonWords = new HashMap<>();
         this.documentOccurrences = new HashMap<>();
@@ -101,7 +102,11 @@ public class TextFileReader{
                         }
                         pageText += word + " ";
                         word = this.trimPunctuation(word);
+                        
+                        //add the occurence to the document map
                         this.addDocumentOccurrence(word);
+
+                        
                         if (!this.commonWords.containsKey(word)) {
                             if(wordsOccurrences.get(word)!=null){
                                 wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
@@ -135,22 +140,10 @@ public class TextFileReader{
         }
    
         System.out.println("number of levels:" + wordCloudLevels.size());
-        Document document = new Document(pages, wordCloudLevels);
+        Document document = new Document(pages, wordCloudLevels, this.documentOccurrences, this.wordCount);
         return document;
     }
     
-    private void addToDocumentMap(HashMap<String, Integer> cloud){
-        for (String word : cloud.keySet()){
-            if (this.documentOccurrences.containsKey(word)){
-                int count = this.documentOccurrences.get(word) + cloud.get(word);
-                this.documentOccurrences.put(word, count);
-            }
-            else{
-                this.documentOccurrences.put(word, cloud.get(word));
-            }
-        }
-        
-    }
 
     
     private ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds){
@@ -232,6 +225,9 @@ public class TextFileReader{
         else{
             this.documentOccurrences.put(word, 1);
         }
+        
+        //finally, increment the overall word count
+        this.wordCount++;
         
     }
 
