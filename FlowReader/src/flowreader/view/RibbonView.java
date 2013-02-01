@@ -14,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -27,6 +26,8 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.transform.Translate;
 
 /**
@@ -61,6 +62,10 @@ public class RibbonView extends Group {
 	private EventHandler<ScrollEvent> scrollHandler;
 	private EventHandler<ZoomEvent> zoomHandler;
 	private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+
+         boolean oh =false;
+        double previous_x=0;
+        double previous_y=0;
 
 	public RibbonView(StackPane stackPane) {
 		this.pages = new ArrayList<>();
@@ -140,14 +145,17 @@ public class RibbonView extends Group {
             //index of list is one less than the level of the cloud, so no need to increase zoom level:
             Group newLevel = wordClouds.get(level);
             //need to switch out the current group from the stackpane
-           
+            previous_x=this.getLayoutX();
+            previous_y=this.getLayoutY();
             this.getChildren().clear();
                                 
-            translatePages(level);
+           
             this.getChildren().add(pagesGroup);
-     
-          
             this.getChildren().add(newLevel);
+            translatePages(level);
+            
+            oh = true;
+   
         }
         
         //translates the pages appropriately to the wordcloud level they are on
@@ -158,7 +166,7 @@ public class RibbonView extends Group {
             double numOfHeights;
             pagesGroup.getTransforms().clear();
             
-            double smallest, magnitude;
+            double magnitude;
             if (level > 1){
             numOfHeights = Math.pow(2, level-1) -1;       
             }else{
@@ -167,6 +175,7 @@ public class RibbonView extends Group {
             }
             magnitude = numOfHeights * (pageHeight/3);
             System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
+
             Translate translate = new Translate(0, magnitude);
             pagesGroup.getTransforms().add(translate);
         }
@@ -286,6 +295,7 @@ public class RibbonView extends Group {
 	}
 
 	public void zoom(double deltaY, double x, double y) {
+            System.out.println("x: "+x +" y: "+y);
 		if (deltaY <= 0) {
 			if (curScale < minScale + 1) {
 			} else {
@@ -367,11 +377,21 @@ public class RibbonView extends Group {
 					// System.out.println("DRAGGED");
 					double dx = event.getX() - previousEvent.getX();
 					double dy = event.getY() - previousEvent.getY();
+					 if(!oh){
 					RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()
 							+ dx);
 					RibbonView.this.setLayoutY(RibbonView.this.getLayoutY()
 							+ dy);
-
+                                        }else{
+                                            RibbonView.this.setLayoutX(previous_x
+							+ dx);
+					RibbonView.this.setLayoutY(previous_y
+							+ dy);
+                                        }
+                                        
+                                        if(oh){
+                                        oh=false;
+                                        }
 					TranslateTransition tt = new TranslateTransition(
 							Duration.millis(100), RibbonView.this);
 					tt.setByX(dx);
