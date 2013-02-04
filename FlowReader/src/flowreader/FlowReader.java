@@ -138,7 +138,7 @@ public static BorderPane borderPane;
                     wordCloudToggle = false;
                     wordCloudButton.setText("WordCloud View");
 
-                    ribbon = new RibbonView(mainPane,borderPane.getCenter().getBoundsInLocal());
+                    ribbon = new RibbonView(mainPane);
                    
                     Document document;
                     PageView page = new PageView(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
