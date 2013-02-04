@@ -104,14 +104,17 @@ public class TextFileReader{
                         word = this.trimPunctuation(word);
                         
                         //add the occurence to the document map
-                        this.addDocumentOccurrence(word);
+                        
 
                         
                         if (!this.commonWords.containsKey(word)) {
                             if(wordsOccurrences.get(word)!=null){
+                                this.addDocumentOccurrence(word);
                                 wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
                             }
                             else{
+                                
+                                this.addDocumentOccurrence(word);
                                 wordsOccurrences.put(word, 1);
                             }
                         }
