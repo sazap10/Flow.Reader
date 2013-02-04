@@ -25,7 +25,7 @@ public class WordCloudView extends Group{
     private FlowPane cloud;
     private Integer maxFontSize = 100;
     private Integer minFontSize = 14;
-    private Integer numOfWordsInCloud = 10;
+    private Integer numOfWordsInCloud = 30;
 
     public WordCloudView(WordCloud wordCloud, Rectangle boundary) {
         wordCloudBoundary = boundary;
@@ -68,6 +68,8 @@ public class WordCloudView extends Group{
     private void renderWordCloud(){
         Set<Map.Entry<String, Integer>> w = this.wordCloud.getSortedWordOccurrences().entrySet();
         Integer[] values;
+        Color col1 = Color.BLUE;
+        Color col2 = Color.RED;
         if(w.size()>this.numOfWordsInCloud){
             values = new Integer[this.numOfWordsInCloud];
         }
@@ -81,6 +83,11 @@ public class WordCloudView extends Group{
             Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();
             values[j] = e.getValue();
             Text word = new Text(e.getKey());
+            //col = col.brighter();
+            //System.out.println(""+col.getBlue());
+            //col = new Color(col.getRed(), col.getGreen()-(1.0/(this.numOfWordsInCloud.doubleValue()+1)), col.getBlue()- (1.0/(this.numOfWordsInCloud.doubleValue()+1)), 1);
+                   
+            word.setFill(gradedValue(col2, col1, ((double)j/this.numOfWordsInCloud.doubleValue())));
             this.words.add(word);
             j++;
 	}       
@@ -94,6 +101,13 @@ public class WordCloudView extends Group{
         
         Collections.shuffle(this.words);
         this.cloud.getChildren().addAll(this.words);
+    }
+    
+    private Color gradedValue(Color beginColor, Color endColor, double percent) {
+        double red = beginColor.getRed() + (double)(percent * (endColor.getRed() - beginColor.getRed()));
+        double blue = beginColor.getBlue() + (double)(percent * (endColor.getBlue() - beginColor.getBlue()));
+        double green = beginColor.getGreen() + (double)(percent * (endColor.getGreen() - beginColor.getGreen()));
+        return new Color(red, green, blue, 1);
     }
     
     //assigns them a font size to a word object
