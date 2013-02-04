@@ -395,8 +395,8 @@ System.out.println("!!!!!!!!!!!!!!!!!!!!!!!"+stackPane.getTransforms().toString(
 					double height = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getHeight()/2;
                                         double width = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getWidth()/2;                               
                                      Point2D p = stackPane.parentToLocal(screenBounds.getWidth()/2,screenBounds.getHeight()/2);
-                                        double x = -1*x_coord.get()+screenBounds.getMaxX()/2;
-                                        double y = -1*y_coord.get()+screenBounds.getMaxY()/2;
+                                        double x = -1*x_coord.get()+(screenBounds.getWidth()/2);
+                                        double y = -1*y_coord.get()+(screenBounds.getHeight()/2);
                                         
                                         text.setLayoutX(x);
                                         text.setLayoutY(y);

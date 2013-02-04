@@ -132,8 +132,11 @@ public static BorderPane borderPane;
             public void handle(ActionEvent e) {
                 try {
                     TextFileReader fileReader = new TextFileReader();
-                    mainPane.getChildren().clear();
-                    // wordCloud.getChildren().clear();
+                    mainPane = new StackPane();
+                    borderPane.setCenter(mainPane);
+                    BorderPane.setAlignment(mainPane, Pos.CENTER_LEFT);
+
+                     //wordCloud.getChildren().clear();
                     // fileReader_WordCloud.wordObjects.clear();
                     wordCloudToggle = false;
                     wordCloudButton.setText("WordCloud View");
