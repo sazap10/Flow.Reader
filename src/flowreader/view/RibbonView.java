@@ -41,7 +41,6 @@ public class RibbonView extends StackPane {
         
         public void switchToFlowView() {
             this.getChildren().clear();
-            this.flowViewPane.build();
             this.getChildren().add(this.flowViewPane);
 	}
 }

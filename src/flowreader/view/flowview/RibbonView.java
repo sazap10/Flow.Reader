@@ -4,11 +4,13 @@
  */
 package flowreader.view.flowview;
 
-import flowreader.model.Document;
+import flowreader.FlowReader;
 import flowreader.model.Page;
+import flowreader.model.Document;
 import flowreader.model.WordCloud;
+import java.awt.Color;
+import java.awt.Transparency;
 import java.util.ArrayList;
-import java.util.HashMap;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
@@ -23,16 +25,27 @@ import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import javafx.stage.Screen;
 import javafx.util.Duration;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+import javafx.scene.transform.Translate;
 
 /**
  * 
  * @author D-Day
  */
 public class RibbonView extends Group {
-
 	private ArrayList<PageView> pages;
 	private ArrayList<PageView> culledPages;
 	private ArrayList<Group> wordClouds;
@@ -44,12 +57,15 @@ public class RibbonView extends Group {
 	int maxScale = 100;
 	int minScale = 0;
 	int curScale = 80;
-	int opaqueScale = 15;
+	int opaqueScale = 100;
 	int currentZoomLevel;
         int minZoomLevel = 1;
         int maxZoomLevel;
-
-	StackPane stackPane;
+        DoubleProperty x_coord = new SimpleDoubleProperty(0.0);
+        DoubleProperty y_coord = new SimpleDoubleProperty(0.0);
+        Translate t = new Translate(0, 0);
+        VBox VBox;
+        StackPane stackPane;
 	StackPane pagesPane;
 	StackPane wordCloudPane;
 	Group pagesGroup;
@@ -59,36 +75,39 @@ public class RibbonView extends Group {
 	private EventHandler<ScrollEvent> scrollHandler;
 	private EventHandler<ZoomEvent> zoomHandler;
 	private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-
-         boolean oh =false;
         double previous_x=0;
         double previous_y=0;
+Scale previousScale = new Scale(1,1);
+Scale scale = new Scale(1,1);
+ Point2D previous_p = new Point2D(0,0);
+                  Text text;
 
 	public RibbonView(StackPane stackPane) {
 		this.pages = new ArrayList<>();
-		this.wordClouds = new ArrayList<Group>();
-		this.stackPane = stackPane;
-                this.zoomTable = new HashMap<Integer, Integer>();
+		this.wordClouds = new ArrayList<>();
+                this.stackPane = stackPane;
+                pagesPane = new StackPane();
+		wordCloudPane = new StackPane();
+                this.zoomTable = new HashMap<>();
                 this.currentZoomLevel = 1;
+                this.VBox = new VBox();
 	}
 
 	public ArrayList<PageView> getPages() {
 		return this.pages;
 	}
 
-
-
 	// sets the scale needed for the correct level of precision and other stuff
 	public void createZoomTable( int zoomLevels) {
 		// first, find the final zoom level
                 
-                int scale;
+                int zoomTable_scale;
                 float percent;
 	        for(int i = 1; i <= zoomLevels; i ++){
                     percent = curScale / (i * 100.0f - 60 );
-                    scale = (int) (percent * maxScale);
-                    zoomTable.put(i, scale);
-                    //System.out.println("put " + scale + "at level " + i);
+                    zoomTable_scale = (int) (percent * maxScale);
+                    zoomTable.put(i, zoomTable_scale);
+                    System.out.println("put " + zoomTable_scale + "at level " + i);
                 }
                 maxZoomLevel = zoomLevels;
 
@@ -96,13 +115,13 @@ public class RibbonView extends Group {
         
         public void checkCloudLevel(){
             int nextDown, nextUp;
-            //System.out.println("this is being called with curscale " + curScale);
-            //System.out.println("current zoom level: " + currentZoomLevel);
-            int minScale = zoomTable.get(minZoomLevel);
-            int maxScale = zoomTable.get(maxZoomLevel);
+            System.out.println("this is being called with curscale " + curScale);
+            System.out.println("current zoom level: " + currentZoomLevel);
+            int zoomTable_minScale = zoomTable.get(minZoomLevel);
+            int zoomTable_maxScale = zoomTable.get(maxZoomLevel);
 
-            if ((curScale < minScale + 1) && (curScale > maxScale - 1)){
-                //System.out.println("curScale is in the confines it should be");             
+            if ((curScale < zoomTable_minScale + 1) && (curScale > zoomTable_maxScale - 1)){
+                System.out.println("curScale is in the confines it should be");             
                 if( currentZoomLevel != minZoomLevel){
                 nextDown = currentZoomLevel -1;
                 }
@@ -117,20 +136,20 @@ public class RibbonView extends Group {
                 }
             
             
-                  //System.out.println("nextdown = " + zoomTable.get(nextDown));
-                 //System.out.println("nextup = " + zoomTable.get(nextUp));
+                  System.out.println("nextdown = " + zoomTable.get(nextDown));
+                 System.out.println("nextup = " + zoomTable.get(nextUp));
                //now nextUp and nextDown have been set, check if we need to scale up or down
                // based on the current scale
                if ((curScale > zoomTable.get(nextDown)) || (curScale > zoomTable.get(currentZoomLevel))){                
                    scaleCloud(nextDown, -1);
                    currentZoomLevel--;
                   
-                   //System.out.println("scaling cloud down");
+                   System.out.println("scaling cloud down");
                }
                else if (curScale < zoomTable.get(nextUp)){                 
                    scaleCloud(nextUp, 1);
                    currentZoomLevel++;                  
-                  //System.out.println("scaling cloud up");
+                  System.out.println("scaling cloud up");
                }
          
         } 
@@ -144,15 +163,11 @@ public class RibbonView extends Group {
             //need to switch out the current group from the stackpane
             previous_x=this.getLayoutX();
             previous_y=this.getLayoutY();
-            this.getChildren().clear();
-                                
+
+            wordCloudPane.getChildren().clear();
+            wordCloudPane.getChildren().add(newLevel);
            
-            this.getChildren().add(pagesGroup);
-            this.getChildren().add(newLevel);
-            translatePages(level);
-            
-            oh = true;
-   
+           // translatePages(level);
         }
         
         //translates the pages appropriately to the wordcloud level they are on
@@ -171,7 +186,7 @@ public class RibbonView extends Group {
                 
             }
             magnitude = numOfHeights * (pageHeight/3);
-            //System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
+            System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
 
             Translate translate = new Translate(0, magnitude);
             pagesGroup.getTransforms().add(translate);
@@ -196,22 +211,29 @@ public class RibbonView extends Group {
 		int i = 0;
 		int x = 0;
 		int y = 0;
-		pagesPane = new StackPane();
-		wordCloudPane = new StackPane();
-		pagesGroup = new Group();
-		wordCloudGroup = new Group();
+                VBox.setMinHeight(1);
+                VBox.getChildren().add(pagesPane);
+                VBox.getChildren().add(wordCloudPane);
+                VBox.setSpacing(20.0);
                 
+                //                VBox.getChildren().get(0).setLayoutY(0);
+                //VBox.getChildren().get(1).setLayoutY(VBox.getChildren().get(0).getBoundsInLocal().getHeight());
+                //StackPane.setAlignment(wordCloudPane,Pos.TOP_CENTER);
+                //StackPane.setAlignment(pagesPane, Pos.CENTER);
+
+                pagesGroup = new Group();
+		wordCloudGroup = new Group();
                 ArrayList<WordCloud> clouds = document.getCloudLevel(0); 
-                ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
+                ArrayList<WordCloudView> cloudViews = new ArrayList<>();
 		while (i < document.getNumOfPages()) {
 
 			WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
-					pageWidth, pageHeight / 3), 1);			
+					pageWidth, pageHeight/3), 1);			
 			wordCloudGroup.setOpacity(1);
 			this.wordCloudGroup.getChildren().add(wordCloud);
 
-			PageView page = new PageView(new Rectangle(x, y + 50
-					+ (pageHeight / 3), pageWidth, pageHeight));
+			PageView page = new PageView(new Rectangle(x, y
+					, pageWidth, pageHeight));
 			page.setText(document.getPage(i).getText());
 			this.pages.add(page);
 			this.pagesGroup.getChildren().add(page);
@@ -228,20 +250,23 @@ public class RibbonView extends Group {
                 
 		this.pagesPane.getChildren().add(pagesGroup);
 		this.wordCloudPane.getChildren().add(wordCloudGroup);
-		this.getChildren().add(pagesGroup);
-		this.getChildren().add(wordCloudGroup);
-
+		stackPane.getChildren().add(VBox);
 		// set up zoom levels
                 createZoomTable(document.getNumOfCloudLevels());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
-			//System.out.println("array[" + j + "]: " + array[j]);
+			System.out.println("array[" + j + "]: " + array[j]);
 		}
-		/*System.out
+		System.out
 				.println("screen properties:" + "\nmax X: "
 						+ screenBounds.getMaxX() + "\nmax Y: "
-						+ screenBounds.getMaxY());*/
-
+						+ screenBounds.getMaxY());
+                stackPane.getTransforms().add(t);
+                t.xProperty().bind(x_coord);
+                t.yProperty().bind(y_coord);
+                text = new Text();
+                text.setText("ooo");
+                stackPane.getChildren().add(text);
 		this.defineRibbonEvents();
 		this.setRibbonEvents(true);
 	}
@@ -251,7 +276,7 @@ public class RibbonView extends Group {
             ArrayList<WordCloud> currentLevelClouds;
             Group currentLevelViews;
             int cloudWidth = pageWidth;
-            int cloudHeight = pageHeight / 3;
+            int cloudHeight = pageHeight/3;
             int cloudInterval = pageInterval;
             int x, y;
             
@@ -293,7 +318,6 @@ public class RibbonView extends Group {
 	}
 
 	public void zoom(double deltaY, double x, double y) {
-            //System.out.println("x: "+x +" y: "+y);
 		if (deltaY <= 0) {
 			if (curScale < minScale + 1) {
 			} else {
@@ -307,36 +331,16 @@ public class RibbonView extends Group {
 				setOpacity();
 			}
 		}
-                //before any actual scaling takes place, need to check if cloud level
-                //needs to be changed
-               
-		Scale scale = new Scale(array[curScale], array[curScale], x, y);
-		Scale scale2 = new Scale(array[maxScale - 10] - array[curScale],
-				array[maxScale - 10] - array[curScale]);
 
-		// remove previously applied transformation(s)
+                previousScale = scale;
+		scale = new Scale(array[curScale], array[curScale], x, y);
+
+System.out.println("!!!!!!!!!!!!!!!!!!!!!!!"+stackPane.getTransforms().toString());
 		
-		if (wordCloudGroup.getTransforms().size() > 0) {
-			for (int j = 0; j < wordCloudGroup.getTransforms().size(); j++) {
-				wordCloudGroup.getTransforms().remove(j);
-			}
-		}
-		if (stackPane.getTransforms().size() > 0) {
-			for (int j = 0; j < stackPane.getTransforms().size(); j++) {
-				stackPane.getTransforms().remove(j);
-			}
-		}
-		// add the transformation to the groups
-		// pagesGroup.getTransforms().add(scale);
-		// wordCloudGroup.getTransforms().add(scale2);
-                 checkCloudLevel();
+                stackPane.getTransforms().remove(previousScale);
+                checkCloudLevel();   
 		stackPane.getTransforms().add(scale);
-               
-	/*System.out.println("x: " + x + "y: " + y
-				+ "\nstackPane parent bound x: "
-				+ stackPane.getBoundsInParent().getWidth()
-				+ "stackPane parent bound y: "
-				+ stackPane.getBoundsInParent().getHeight());*/
+
 		/*FlowReader.zoomLabel.setText("zoom: "
 				+ ((float) curScale / (float) maxScale) * 100 + "%\ncurScale: "
 				+ curScale + "\nmin Scale: " + minScale + "\nmax Scale: "
@@ -346,10 +350,8 @@ public class RibbonView extends Group {
 	public void setOpacity() {
 		double opacity;
 		opacity = curScale / (double) opaqueScale;
-		// stackPane.setOpacity(opacity);
-
-		// pagesGroup.setOpacity(opacity);
-		// wordCloudGroup.setOpacity(1-opacity);
+		 //pagesPane.setOpacity(opacity);
+                 //wordCloudPane.setOpacity(1-opacity);
 	}
 
 	public double getPageWidth() {
@@ -373,30 +375,12 @@ public class RibbonView extends Group {
 						.equals(MouseEvent.MOUSE_DRAGGED)) {
 
 					// System.out.println("DRAGGED");
-					double dx = event.getX() - previousEvent.getX();
-					double dy = event.getY() - previousEvent.getY();
-					 if(!oh){
-					RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()
-							+ dx);
-					RibbonView.this.setLayoutY(RibbonView.this.getLayoutY()
-							+ dy);
-                                        }else{
-                                            RibbonView.this.setLayoutX(previous_x
-							+ dx);
-					RibbonView.this.setLayoutY(previous_y
-							+ dy);
-                                        }
-                                        
-                                        if(oh){
-                                        oh=false;
-                                        }
-					TranslateTransition tt = new TranslateTransition(
-							Duration.millis(100), RibbonView.this);
-					tt.setByX(dx);
-					tt.setByY(dy);
-					tt.setCycleCount(0);
-					tt.setAutoReverse(true);
-					tt.play();
+					double dx = event.getScreenX() - previousEvent.getScreenX();
+					double dy = event.getScreenY() - previousEvent.getScreenY();
+
+                                             x_coord.set(x_coord.doubleValue()+dx);
+                                             y_coord.set(y_coord.doubleValue()+dy);
+
 				}
 				previousEvent = event;
 				event.consume();
@@ -407,12 +391,17 @@ public class RibbonView extends Group {
 			@Override
 			public void handle(ScrollEvent event) {
 				if (!event.isDirect()) {
-					// System.out.println("---------------"+
-					// "\nScreen X: "+event.getScreenX()+"Screen Y: "+event.getScreenY()+
-					// "\nget X: "+event.getX()+"get Y: "+event.getY());
-					//double height = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getHeight();
-                                        //double width = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getWidth();
-                                        RibbonView.this.zoom(event.getDeltaY(), screenBounds.getWidth()/2,screenBounds.getHeight()/2);
+
+					//double height = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getHeight()/2;
+                                        //double width = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getWidth()/2;                               
+                                     Point2D p = stackPane.parentToLocal(screenBounds.getWidth()/2,screenBounds.getHeight()/2);
+                                        double x = -1*x_coord.get()+screenBounds.getMaxX()/2;
+                                        double y = -1*y_coord.get()+screenBounds.getMaxY()/2;
+                                        
+                                        text.setLayoutX(x);
+                                        text.setLayoutY(y);
+                                        zoom(event.getDeltaY(),x,y);
+                                        previous_p = p;
 
 
 				}
@@ -436,14 +425,14 @@ public class RibbonView extends Group {
 			stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
 			stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
 			stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-			this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-			this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+			stackPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+			stackPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
 		} else {
 			stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
 			stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
 			stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-			this.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
-			this.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+			stackPane.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+			stackPane.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
 		}
 
 	}
@@ -475,17 +464,19 @@ public class RibbonView extends Group {
 	}
 
 	public ArrayList<PageView> culling(double sceneWidth) {
-		ArrayList<PageView> clippedPages = new ArrayList<PageView>();
-		double pageWidth = clippedPages.get(0).getPageWidth();
-		int noOfPages = (int) Math.ceil(sceneWidth / pageWidth);
-		if (noOfPages < pages.size())
-			noOfPages = pages.size();
+		ArrayList<PageView> clippedPages = new ArrayList<>();
+		double culling_pageWidth = clippedPages.get(0).getPageWidth();
+		int noOfPages = (int) Math.ceil(sceneWidth / culling_pageWidth);
+		if (noOfPages < pages.size()) {
+                noOfPages = pages.size();
+            }
 		boolean found = false;
 		for (int i = 0; i < this.pages.size(); i++) {
-			if (noOfPages == 0)
-				break;
-			if (this.pages.get(i).getX() > -(pageWidth)
-					&& this.pages.get(i).getX() < (pageWidth)) {
+			if (noOfPages == 0) {
+                        break;
+                    }
+			if (this.pages.get(i).getX() > -(culling_pageWidth)
+					&& this.pages.get(i).getX() < (culling_pageWidth)) {
 				found = true;
 			}
 			if (found && noOfPages > 0) {

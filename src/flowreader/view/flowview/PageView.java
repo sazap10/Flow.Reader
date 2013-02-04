@@ -80,7 +80,7 @@ public class PageView extends Group{
         pageBoundary.setX(x);
         textBound.setX(x + (pageBoundary.getWidth() * 0.1));
         textBound.setY(pageBoundary.getY() + pageBoundary.getHeight() * 0.1);
-        //System.out.println("x: " + x + "pageBoundary Width: " + pageBoundary.getWidth());
+        System.out.println("x: " + x + "pageBoundary Width: " + pageBoundary.getWidth());
 
     }
 
