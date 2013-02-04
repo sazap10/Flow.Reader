@@ -1,20 +1,20 @@
 package flowreader.view.flowview;
 
+import flowreader.model.WordCloud;
 import flowreader.utils.ValueComparatorInteger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.HashMap;
 import javafx.scene.Group;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import flowreader.model.WordCloud;
 
 /**
  *
@@ -210,7 +210,7 @@ public class WordCloudView extends Group{
          //if too big to start a new line, finish
          else{
  	
-            System.out.println("finished, because it doesn't fit at all!");
+            //System.out.println("finished, because it doesn't fit at all!");
             break; //doesn't fit
  
          }

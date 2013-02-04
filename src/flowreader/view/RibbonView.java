@@ -6,6 +6,8 @@ package flowreader.view;
 
 import flowreader.model.Document;
 import flowreader.view.flowview.FlowViewScene;
+import javafx.geometry.Pos;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
 /**

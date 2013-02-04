@@ -4,15 +4,15 @@
  */
 package flowreader.view.flowview;
 
-import flowreader.FlowReader;
-import flowreader.model.Page;
 import flowreader.model.Document;
+import flowreader.model.Page;
 import flowreader.model.WordCloud;
-import java.awt.Color;
-import java.awt.Transparency;
 import java.util.ArrayList;
-import javafx.animation.TranslateTransition;
+import java.util.HashMap;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -23,23 +23,12 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Scale;
-import javafx.stage.Screen;
-import javafx.util.Duration;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import javafx.stage.Screen;
 
 /**
  * 
@@ -77,9 +66,9 @@ public class RibbonView extends Group {
 	private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         double previous_x=0;
         double previous_y=0;
-Scale previousScale = new Scale(1,1);
-Scale scale = new Scale(1,1);
- Point2D previous_p = new Point2D(0,0);
+        Scale previousScale = new Scale(1,1);
+        Scale scale = new Scale(1,1);
+        Point2D previous_p = new Point2D(0,0);
                   Text text;
 
 	public RibbonView(StackPane stackPane) {
@@ -107,7 +96,7 @@ Scale scale = new Scale(1,1);
                     percent = curScale / (i * 100.0f - 60 );
                     zoomTable_scale = (int) (percent * maxScale);
                     zoomTable.put(i, zoomTable_scale);
-                    System.out.println("put " + zoomTable_scale + "at level " + i);
+                    //System.out.println("put " + zoomTable_scale + "at level " + i);
                 }
                 maxZoomLevel = zoomLevels;
 
@@ -115,13 +104,13 @@ Scale scale = new Scale(1,1);
         
         public void checkCloudLevel(){
             int nextDown, nextUp;
-            System.out.println("this is being called with curscale " + curScale);
-            System.out.println("current zoom level: " + currentZoomLevel);
+            //System.out.println("this is being called with curscale " + curScale);
+            //System.out.println("current zoom level: " + currentZoomLevel);
             int zoomTable_minScale = zoomTable.get(minZoomLevel);
             int zoomTable_maxScale = zoomTable.get(maxZoomLevel);
 
             if ((curScale < zoomTable_minScale + 1) && (curScale > zoomTable_maxScale - 1)){
-                System.out.println("curScale is in the confines it should be");             
+                //System.out.println("curScale is in the confines it should be");             
                 if( currentZoomLevel != minZoomLevel){
                 nextDown = currentZoomLevel -1;
                 }
@@ -136,20 +125,20 @@ Scale scale = new Scale(1,1);
                 }
             
             
-                  System.out.println("nextdown = " + zoomTable.get(nextDown));
-                 System.out.println("nextup = " + zoomTable.get(nextUp));
+                  //System.out.println("nextdown = " + zoomTable.get(nextDown));
+                 //System.out.println("nextup = " + zoomTable.get(nextUp));
                //now nextUp and nextDown have been set, check if we need to scale up or down
                // based on the current scale
                if ((curScale > zoomTable.get(nextDown)) || (curScale > zoomTable.get(currentZoomLevel))){                
                    scaleCloud(nextDown, -1);
                    currentZoomLevel--;
                   
-                   System.out.println("scaling cloud down");
+                   //System.out.println("scaling cloud down");
                }
                else if (curScale < zoomTable.get(nextUp)){                 
                    scaleCloud(nextUp, 1);
                    currentZoomLevel++;                  
-                  System.out.println("scaling cloud up");
+                  //System.out.println("scaling cloud up");
                }
          
         } 
@@ -186,7 +175,7 @@ Scale scale = new Scale(1,1);
                 
             }
             magnitude = numOfHeights * (pageHeight/3);
-            System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
+            //System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
 
             Translate translate = new Translate(0, magnitude);
             pagesGroup.getTransforms().add(translate);
@@ -255,12 +244,12 @@ Scale scale = new Scale(1,1);
                 createZoomTable(document.getNumOfCloudLevels());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
-			System.out.println("array[" + j + "]: " + array[j]);
+			//System.out.println("array[" + j + "]: " + array[j]);
 		}
-		System.out
+		/*System.out
 				.println("screen properties:" + "\nmax X: "
 						+ screenBounds.getMaxX() + "\nmax Y: "
-						+ screenBounds.getMaxY());
+						+ screenBounds.getMaxY());*/
                 stackPane.getTransforms().add(t);
                 t.xProperty().bind(x_coord);
                 t.yProperty().bind(y_coord);
@@ -280,7 +269,7 @@ Scale scale = new Scale(1,1);
             int cloudInterval = pageInterval;
             int x, y;
             
-            for (int i = 1; i < document.getNumOfCloudLevels(); i++){
+            for (int i = 0; i < document.getNumOfCloudLevels(); i++){
                 currentLevelClouds = document.getCloudLevel(i);
                 x = 0;
                 y = 0;
@@ -335,7 +324,7 @@ Scale scale = new Scale(1,1);
                 previousScale = scale;
 		scale = new Scale(array[curScale], array[curScale], x, y);
 
-System.out.println("!!!!!!!!!!!!!!!!!!!!!!!"+stackPane.getTransforms().toString());
+//System.out.println("!!!!!!!!!!!!!!!!!!!!!!!"+stackPane.getTransforms().toString());
 		
                 stackPane.getTransforms().remove(previousScale);
                 checkCloudLevel();   

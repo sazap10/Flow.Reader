@@ -16,12 +16,12 @@ public class FlowViewScene extends StackPane{
     private Document document;
     
     public FlowViewScene(Document document){
-        rb = new RibbonView(this);
         this.document = document;
+        rb = new RibbonView(this);
         this.build();
     }
     
-    private void build(){
+    public void build(){
        rb.buildRibbon(document);
        this.getChildren().add(rb);
     }
