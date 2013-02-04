@@ -130,4 +130,5 @@ public class WordCloud{
     private HashMap<String, Double> getWordFrequencies() {
         return this.wordsFrequencies;
     }
+
 }

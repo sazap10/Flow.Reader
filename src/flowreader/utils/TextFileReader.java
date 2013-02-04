@@ -128,7 +128,7 @@ public class TextFileReader {
 
         wordCloudLevels = makeCloudLevels(wordClouds);
 
-        System.out.println("number of levels:" + wordCloudLevels.size());
+        //System.out.println("number of levels:" + wordCloudLevels.size());
         Document document = new Document(pages, wordCloudLevels);
         return document;
     }

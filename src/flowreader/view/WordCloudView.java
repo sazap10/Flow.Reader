@@ -92,11 +92,11 @@ public class WordCloudView extends Group{
             j++;
 	}       
         
-        System.out.println("New Cloud");
+        //System.out.println("New Cloud");
         for(int k=0; k<values.length; k++){
             this.setWordSize(this.words.get(k), values[k], values);
             this.words.get(k).setWrappingWidth(this.words.get(k).getLayoutBounds().getWidth()+10);
-            System.out.println(this.words.get(k).getText()+" "+values[k]);
+            //System.out.println(this.words.get(k).getText()+" "+values[k]);
         }
         
         Collections.shuffle(this.words);

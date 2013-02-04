@@ -37,7 +37,7 @@ public class Document {
     }
     
     public WordCloud getCloud(int level, int cloudNum){
-        System.out.println("returning cloud " + cloudNum + " from level " + level);
+        //System.out.println("returning cloud " + cloudNum + " from level " + level);
         return wordClouds.get(level).get(cloudNum);
     }
 

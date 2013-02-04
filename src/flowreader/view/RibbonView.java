@@ -5,6 +5,7 @@
 package flowreader.view;
 
 import flowreader.model.Document;
+import flowreader.view.flowview.FlowViewScene;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -15,6 +16,7 @@ public class RibbonView extends StackPane {
 
         private PagesScene pagesPane;
         private WordCloudsScene wordCloudsPane;
+        private FlowViewScene flowViewPane;
         
         public RibbonView(){
             
@@ -23,6 +25,7 @@ public class RibbonView extends StackPane {
 	public RibbonView(Document document) {
             this.pagesPane = new PagesScene(document.getPages());
             this.wordCloudsPane = new WordCloudsScene(document.getWordClouds());
+            this.flowViewPane = new FlowViewScene(document);
             this.getChildren().add(this.pagesPane);
 	}
 
@@ -34,5 +37,11 @@ public class RibbonView extends StackPane {
 	public void switchToPages() {
             this.getChildren().clear();
             this.getChildren().add(this.pagesPane);
+	}
+        
+        public void switchToFlowView() {
+            this.getChildren().clear();
+            this.flowViewPane.build();
+            this.getChildren().add(this.flowViewPane);
 	}
 }
