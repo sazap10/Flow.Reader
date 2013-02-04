@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import flowreader.model.WordCloud;
 import flowreader.model.Word;
+import java.math.BigDecimal;
 
 /**
  *
@@ -81,14 +82,14 @@ public class WordCloudView extends Group{
    public void createWordObjects(){
         Word word;
         int count = 0;
-          
-        Set<Map.Entry<String, Integer>> w = wordCloud.getSortedMap().entrySet();
+        
+        Set<Map.Entry<String, BigDecimal>> w = wordCloud.getSortedMap().entrySet();
         Iterator i = w.iterator();
         while (i.hasNext() && (count < numOfWordsInCloud)){
             
-             Map.Entry<String, Integer> e = (Map.Entry<String, Integer>)i.next();
-             
-             int fontSize = getFontSize(e.getValue());
+             Map.Entry<String, BigDecimal> e = (Map.Entry<String, BigDecimal>)i.next();
+             System.out.println("word: " +e.getKey()+ " value: " + e.getValue());
+             int fontSize = getFontSize(e.getValue()) - count;
              word = new Word(fontSize, e.getKey());
              this.wordObjects.add(word);
              count++;
@@ -246,25 +247,29 @@ public class WordCloudView extends Group{
 
  }
     //iterates through the word objects and assigns them a font size
-    private int getFontSize(int numberOfOccurrences) {
-        int countDiff = numberOfOccurrences - this.wordCloud.getMinCount();
-        if (countDiff == 0){
-            countDiff = 1;
+    private int getFontSize(BigDecimal numberOfOccurrences) {
+        BigDecimal countDiff = numberOfOccurrences.subtract(this.wordCloud.getMinCount());
+        if (countDiff.compareTo(new BigDecimal(0)) == 0){
+            countDiff = new BigDecimal(1);
         }
        
-        int totalCountDiff = this.wordCloud.getMaxCount() - this.wordCloud.getMinCount();      
-        if (totalCountDiff == 0){
-            totalCountDiff = 1;
+        BigDecimal totalCountDiff = this.wordCloud.getMaxCount().subtract(this.wordCloud.getMinCount());      
+         if (totalCountDiff.compareTo(new BigDecimal(0)) == 0){
+            totalCountDiff = new BigDecimal(1);
         }
-        int fontSize = ((this.maxFontSize * countDiff) / (this.normalizationConstant * totalCountDiff));
+         BigDecimal numerator = countDiff.multiply(new BigDecimal(this.maxFontSize));
+         BigDecimal denominator = totalCountDiff.multiply(new BigDecimal(this.normalizationConstant));
+         BigDecimal fontSizeDec = numerator.divide(denominator, 30, BigDecimal.ROUND_UP);
+         int fontSize = fontSizeDec.intValue();
         if (fontSize < this.minFontSize) {
             fontSize = this.minFontSize;
         }
+        System.out.println("returning fontsize: " + fontSize);
         return fontSize;
     }
 
     
-     private TreeMap<String, Integer> sortWordsOccurrences(HashMap<String, Integer> wordsOccurrences){
+     /*private TreeMap<String, Integer> sortWordsOccurrences(HashMap<String, Integer> wordsOccurrences){
         ValueComparator bvc =  new ValueComparator(wordsOccurrences);
         TreeMap<String,Integer> sortedWordsOccurrences = new TreeMap<>(bvc);
         sortedWordsOccurrences.putAll(wordsOccurrences);
@@ -273,5 +278,5 @@ public class WordCloudView extends Group{
         //System.out.println("results: "+sortedWordsOccurrences);
        
         return sortedWordsOccurrences;
-    }
+   }*/ 
 }
