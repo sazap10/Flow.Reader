@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.HashMap;
+import java.math.BigDecimal;
 import javafx.scene.Group;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
@@ -23,13 +24,13 @@ public class WordCloud extends Group{
 
 
     private HashMap<String, Integer> wordsOccurrences;
-    private TreeMap<String, Integer> sortedMap;
+    private TreeMap<String, BigDecimal> sortedMap;
     private int maxFontSize = 30;
     private int minFontSize = 14;
     private ArrayList<Text> words;
     private Integer numOfWordsInCloud = 12;
-    int minCount; //count of smallest word in occurences
-    int maxCount; //cound of biggest word in occurrences;
+    BigDecimal minCount; //count of smallest word in occurences
+    BigDecimal maxCount; //cound of biggest word in occurrences;
 
     public WordCloud(HashMap<String, Integer> wordsOccurrences) {
         
@@ -65,24 +66,27 @@ public class WordCloud extends Group{
    public void setWordValues(HashMap<String, Integer> documentOccurrences, int cloudWordCount, int docWordCount){
        int finalVal, newVal;
        float pageCount, docCount;
+       BigDecimal pageFreq, docFreq;
        //float newVal;
-       float smallest = 0;
-       float largest = 0;
-       HashMap<String, Float> occurrences = new HashMap<>();
+       BigDecimal smallest = new BigDecimal(0);
+       BigDecimal largest = new BigDecimal (0);
+       HashMap<String, BigDecimal> occurrences = new HashMap<>();
        //loop through adding double value occurrences to a map
        for (String word: this.wordsOccurrences.keySet()){
            pageCount = this.wordsOccurrences.get(word);
            docCount = documentOccurrences.get(word);
-        
-           float pageFreq = pageCount / cloudWordCount;
-           float docFreq = docCount / docWordCount;         
-           newVal = (int)  (pageFreq / docFreq);
-           this.wordsOccurrences.put(word, newVal);
-           if (newVal < smallest){
-               smallest = newVal;
+           
+            pageFreq =  new BigDecimal(pageCount / cloudWordCount);
+           docFreq = new BigDecimal(docCount / docWordCount);
+         
+           BigDecimal result = pageFreq.divide(docFreq, 30, BigDecimal.ROUND_UP);
+          
+           occurrences.put(word, result);
+           if (result.compareTo(smallest) == -1){
+               smallest = result;
            }
-           if (newVal > largest){
-               largest = newVal;
+           if (result.compareTo(largest) == 1){
+               largest = result;
            }
        }
        //now need to loop through to ensure each value is greater than zero
@@ -94,14 +98,14 @@ public class WordCloud extends Group{
           
        }
        * */
-       this.sortedMap = sortWordsOccurrences(this.wordsOccurrences);
+       this.sortedMap = sortWordsOccurrences(occurrences);
        minCount = sortedMap.lastEntry().getValue();
        maxCount = sortedMap.firstEntry().getValue();
        
    }
     
 
-   public TreeMap<String, Integer> getSortedMap(){
+   public TreeMap<String, BigDecimal> getSortedMap(){
        return this.sortedMap;
    }
 
@@ -120,28 +124,34 @@ public class WordCloud extends Group{
               
     }
       
-       private TreeMap<String, Integer> sortWordsOccurrences(HashMap<String, Integer> wordsOccurrences){
+       private TreeMap<String, BigDecimal> sortWordsOccurrences(HashMap<String, BigDecimal> wordsOccurrences){
         ValueComparator bvc =  new ValueComparator(wordsOccurrences);
-        TreeMap<String,Integer> sortedWordsOccurrences = new TreeMap<>(bvc);
+        TreeMap<String,BigDecimal> sortedWordsOccurrences = new TreeMap<>(bvc);
+        TreeMap<String, BigDecimal> trimmedOccurrences = new TreeMap<>();
         sortedWordsOccurrences.putAll(wordsOccurrences);
-        
-        //System.out.println("unsorted map: "+wordsOccurrences);
-        //System.out.println("results: "+sortedWordsOccurrences);
+        Set<Map.Entry<String, BigDecimal>> w = sortedWordsOccurrences.entrySet();
+        Iterator i = w.iterator();
+        int j = 0;
+        while(j<this.numOfWordsInCloud && i.hasNext()) {
+            Map.Entry<String, BigDecimal> e = (Map.Entry<String, BigDecimal>)i.next();
+            trimmedOccurrences.put(e.getKey(), e.getValue());
+            j++;
+	}
        
-        return sortedWordsOccurrences;
+        return trimmedOccurrences;
     }
        
-      private void setMaxCount(int count){
-          if (this.maxCount < count){
+      private void setMaxCount(BigDecimal count){
+          if (this.maxCount.compareTo(count) == -1){
               this.maxCount = count;
           }
       }
       
-      public int getMaxCount(){
+      public BigDecimal getMaxCount(){
           return this.maxCount;
       }
       
-      public int getMinCount(){
+      public BigDecimal getMinCount(){
           return this.minCount;
       }
        
