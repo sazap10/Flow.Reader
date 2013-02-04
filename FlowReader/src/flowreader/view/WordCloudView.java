@@ -231,12 +231,12 @@ public class WordCloudView extends Group{
              currText.setText(word.getText());
              currText.setFont(new Font(word.getFontSize()));
              double wordWidth = currText.getBoundsInLocal().getWidth();
-             System.out.println("renderX set to " + renderX);
+             //System.out.println("renderX set to " + renderX);
              currText.setX(renderX);
              currText.setY(renderY);
              this.getChildren().add(currText);
              renderX += (wordWidth + spacing) ;
-             System.out.println("renderX noew set to " + renderX);
+             //System.out.println("renderX noew set to " + renderX);
        }
  
    }

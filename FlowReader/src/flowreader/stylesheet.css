@@ -10,6 +10,14 @@
     -fx-background-color: #B8B8B8;
 }
 
+#mainPane{
+        -fx-background-color: #58ACFA;
+}
+#borderPane{
+            -fx-background-color: #000000;
+
+}
+
 #closeBtn{
 	-fx-background-color: #C70A0A;
     -fx-background-radius: 0;

@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -54,12 +55,13 @@ public static BorderPane borderPane;
         primaryStage.setFullScreen(true);
         borderPane = new BorderPane();
         scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
-
+        borderPane.setId("borderPane");
         mainPane = new StackPane();
+        mainPane.setId("mainPane");
+        mainPane.autosize();
         zoomLabel = new Text("zoom label");
         setUpButtonBar();
         this.setButtonEvents(primaryStage);
-
         borderPane.setCenter(this.mainPane);
         borderPane.setTop(topBtnsBar);
         BorderPane.setAlignment(mainPane, Pos.CENTER_LEFT);
@@ -136,11 +138,11 @@ public static BorderPane borderPane;
                     wordCloudToggle = false;
                     wordCloudButton.setText("WordCloud View");
 
-                    ribbon = new RibbonView(mainPane);
+                    ribbon = new RibbonView(mainPane,borderPane.getCenter().getBoundsInLocal());
+                   
                     Document document;
                     PageView page = new PageView(new Rectangle(0, 0, ribbon.getPageWidth(), ribbon.getPageHeight()));
 
-                    mainPane.getChildren().add(ribbon);
                     //comparisonView.setPageSize(ribbon.getPageWidth(), ribbon.getPageHeight());
 
                     fileReader.startFileChooser(primaryStage);
@@ -153,7 +155,8 @@ public static BorderPane borderPane;
                     diffModeBtn.setDisable(false);
 
                 } catch (Exception exception) {
-                    System.out.println(exception);
+                    //System.out.println(exception);
+exception.printStackTrace(System.out);
                 }
             }
         });
