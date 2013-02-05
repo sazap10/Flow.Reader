@@ -69,7 +69,6 @@ public class RibbonView extends Group {
         Scale previousScale = new Scale(1,1);
         Scale scale = new Scale(1,1);
         Point2D previous_p = new Point2D(0,0);
-                  Text text;
 
 	public RibbonView(StackPane stackPane) {
 		this.pages = new ArrayList<>();
@@ -250,12 +249,9 @@ public class RibbonView extends Group {
 				.println("screen properties:" + "\nmax X: "
 						+ screenBounds.getMaxX() + "\nmax Y: "
 						+ screenBounds.getMaxY());*/
-                stackPane.getTransforms().add(t);
+                VBox.getTransforms().add(t);
                 t.xProperty().bind(x_coord);
                 t.yProperty().bind(y_coord);
-                text = new Text();
-                text.setText("ooo");
-                stackPane.getChildren().add(text);
 		this.defineRibbonEvents();
 		this.setRibbonEvents(true);
 	}
@@ -364,8 +360,8 @@ public class RibbonView extends Group {
 						.equals(MouseEvent.MOUSE_DRAGGED)) {
 
 					// System.out.println("DRAGGED");
-					double dx = event.getScreenX() - previousEvent.getScreenX();
-					double dy = event.getScreenY() - previousEvent.getScreenY();
+					double dx = event.getX() - previousEvent.getX();
+					double dy = event.getY() - previousEvent.getY();
 
                                              x_coord.set(x_coord.doubleValue()+dx);
                                              y_coord.set(y_coord.doubleValue()+dy);
@@ -379,20 +375,10 @@ public class RibbonView extends Group {
 		scrollHandler = new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent event) {
-				if (!event.isDirect()) {
-
-					//double height = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getHeight()/2;
-                                        //double width = flowreader.FlowReader.borderPane.getCenter().getLayoutBounds().getWidth()/2;                               
-                                     Point2D p = stackPane.parentToLocal(screenBounds.getWidth()/2,screenBounds.getHeight()/2);
-                                        double x = -1*x_coord.get()+screenBounds.getMaxX()/2;
-                                        double y = -1*y_coord.get()+screenBounds.getMaxY()/2;
-                                        
-                                        text.setLayoutX(x);
-                                        text.setLayoutY(y);
+				if (!event.isDirect()) {                              
+                                        double x = screenBounds.getWidth()/2;
+                                        double y = screenBounds.getHeight()/2;
                                         zoom(event.getDeltaY(),x,y);
-                                        previous_p = p;
-
-
 				}
 				event.consume();
 

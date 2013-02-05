@@ -1,7 +1,7 @@
-/build/built-jar.properties
-/dist/FlowReader.jar
-/nbproject/private
-/build
-/dist
-/nbproject/private/configs
-*.class
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
