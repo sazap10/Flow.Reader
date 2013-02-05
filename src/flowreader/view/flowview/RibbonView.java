@@ -9,6 +9,7 @@ import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
@@ -25,10 +26,10 @@ import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.Screen;
+import javafx.util.Duration;
 
 /**
  * 
@@ -326,6 +327,7 @@ public class RibbonView extends Group {
                 checkCloudLevel();   
 		stackPane.getTransforms().add(scale);
 
+                                        
 		/*FlowReader.zoomLabel.setText("zoom: "
 				+ ((float) curScale / (float) maxScale) * 100 + "%\ncurScale: "
 				+ curScale + "\nmin Scale: " + minScale + "\nmax Scale: "
@@ -362,7 +364,13 @@ public class RibbonView extends Group {
 					// System.out.println("DRAGGED");
 					double dx = event.getX() - previousEvent.getX();
 					double dy = event.getY() - previousEvent.getY();
-
+					TranslateTransition tt = new TranslateTransition(
+					Duration.millis(100), RibbonView.this.VBox);
+					tt.setByX(dx);
+					tt.setByY(dy);
+					tt.setCycleCount(0);
+					tt.setAutoReverse(true);
+					tt.play();
                                              x_coord.set(x_coord.doubleValue()+dx);
                                              y_coord.set(y_coord.doubleValue()+dy);
 
@@ -379,6 +387,7 @@ public class RibbonView extends Group {
                                         double x = screenBounds.getWidth()/2;
                                         double y = screenBounds.getHeight()/2;
                                         zoom(event.getDeltaY(),x,y);
+
 				}
 				event.consume();
 
