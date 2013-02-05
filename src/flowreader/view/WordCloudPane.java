@@ -14,7 +14,7 @@ import javafx.scene.shape.Rectangle;
  *
  * @author D-Day
  */
-public class WordCloudPane extends StackPane{
+public class WordCloudPane extends RibbonPane{
     private Group wordCloudGroup;
     private ArrayList<WordCloudView> wordCloudsView;
     
@@ -39,7 +39,7 @@ public class WordCloudPane extends StackPane{
         this.getChildren().add(this.wordCloudGroup);
     }
     
-        public WordCloudPane(ArrayList<WordCloud> wordClouds, int x, int y){
+    public WordCloudPane(ArrayList<WordCloud> wordClouds, int x, int y){
         this.wordCloudGroup = new Group();
         this.wordCloudsView = new ArrayList<>();
         
@@ -52,17 +52,17 @@ public class WordCloudPane extends StackPane{
         this.getChildren().add(this.wordCloudGroup);
     }
 
-    void setNewPosition(double posX, double posY) {
+    public void setNewPosition(double posX, double posY) {
         this.wordCloudGroup.setLayoutX(posX);
         this.wordCloudGroup.setLayoutY(posY);
     }
     
-    void move(double dX, double dY) {
+    public void move(double dX, double dY) {
         this.wordCloudGroup.setLayoutX(this.wordCloudGroup.getLayoutX()+dX);
         this.wordCloudGroup.setLayoutY(this.wordCloudGroup.getLayoutY()+dY);
     }
     
-    double getGroupWidth(){
+    public double getGroupWidth(){
         return this.wordCloudGroup.getBoundsInLocal().getWidth();
     }
     

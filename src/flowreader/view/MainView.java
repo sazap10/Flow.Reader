@@ -23,7 +23,7 @@ public class MainView extends BorderPane{
     
     private HBox topBtnsBar; // the button bar at the top of the screen
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, pagesSceneButton, wordCloudsSceneButton, flowViewSceneButton; // The buttons at the bottom of the page
+    private Button openFileButton, pagesSceneButton, wordCloudsSceneButton, flowViewSceneButton, diveViewSceneButton; // The buttons at the bottom of the page
     
     private RibbonView ribbon; // The ribbon at the center of the page
     
@@ -51,6 +51,10 @@ public class MainView extends BorderPane{
         flowViewSceneButton.setId("topbarbutton");
         flowViewSceneButton.setDisable(false);
         
+        diveViewSceneButton = new Button("DiveView");
+        diveViewSceneButton.setId("topbarbutton");
+        diveViewSceneButton.setDisable(false);
+        
         pagesSceneButton = new Button("Pages");
         pagesSceneButton.setId("topbarbutton");
         pagesSceneButton.setDisable(false);
@@ -66,6 +70,7 @@ public class MainView extends BorderPane{
         mainBtns.getChildren().add(pagesSceneButton);
         mainBtns.getChildren().add(wordCloudsSceneButton);
         mainBtns.getChildren().add(flowViewSceneButton);
+        mainBtns.getChildren().add(diveViewSceneButton);
 
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
@@ -131,6 +136,13 @@ public class MainView extends BorderPane{
             @Override
             public void handle(ActionEvent e) {
                 ribbon.switchToFlowView();
+            }
+        });
+        
+        diveViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                ribbon.switchToDiveView();
             }
         });
     }
