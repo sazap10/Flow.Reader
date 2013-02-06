@@ -201,10 +201,11 @@ public class RibbonView extends Group {
 //			page.setText(document.getPage(i).getText());
                         ImageView imageView = new ImageView();
                         imageView.setImage(document.getPage(i));
-                        Rectangle2D viewportRect = new Rectangle2D(x,y,pageWidth, pageHeight);
-                        imageView.setViewport(viewportRect);
-                        System.out.println(Runtime.getRuntime().maxMemory());
+                        //Rectangle2D viewportRect = new Rectangle2D(x,y,pageWidth, pageHeight);
+                        //imageView.setViewport(viewportRect);
+                        System.out.println("rendering a new imageview at x="+x+" y="+y);
 			this.pagesGroup.getChildren().add(imageView);
+                        imageView.relocate(x,y);
 			x += pageWidth + pageInterval;
 			i++;
 		}
