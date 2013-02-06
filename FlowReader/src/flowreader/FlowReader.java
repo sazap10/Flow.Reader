@@ -163,11 +163,11 @@ public static BorderPane borderPane;
             public void handle(ActionEvent e) {
                 if (wordCloudToggle) {
                     wordCloudToggle = false;
-                    ribbon.switchToPages();
+                    //ribbon.switchToPages();
                     wordCloudButton.setText("Word Cloud View");
                 } else {
                     wordCloudToggle = true;
-                    ribbon.switchToWordCloud();
+                   // ribbon.switchToWordCloud();
                     wordCloudButton.setText("Ribbon View");
                 }
             }
