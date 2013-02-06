@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -20,6 +21,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -35,7 +39,7 @@ public class TextFileReader{
     public TextFileReader() {
         this.commonWords = new HashMap<>();
         this.documentOccurrences = new HashMap<>();
-        this.getCommonWords();
+       // this.getCommonWords();
     }
 
     public void startFileChooser(Stage primaryStage) {
@@ -46,7 +50,7 @@ public class TextFileReader{
         fileChooser.setInitialDirectory(f);
 
         //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
         fileChooser.getExtensionFilters().add(extFilter);
 
         //Show save file dialog
@@ -59,7 +63,36 @@ public class TextFileReader{
      * @return a list of pages that contains the text of each page and the words occurrences
      * @throws IOException 
      */
-    public Document readFile(Rectangle bounds) throws IOException {
+    
+    
+    //reads in the images from the pdf file
+    public Document readFile(Rectangle bounds) throws IOException{
+    ArrayList myList = new ArrayList<BufferedImage>();
+        try {
+            if (file != null) {
+ 
+                PDDocument document = PDDocument.load(file);
+                List<PDPage> pages = document.getDocumentCatalog().getAllPages();
+                for (int i = 0; i < pages.size(); i++) {
+                    PDPage pDPage = pages.get(i);
+                    myList.add(pDPage.convertToImage());
+                }
+                document.close();
+
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        
+        Document myDocument = new Document(myList);
+        return myDocument;
+
+    }
+        
+    
+    /*public Document readFile(Rectangle bounds) throws IOException {
         ArrayList<Page> pages = new ArrayList<>(); // The list of all the pages
         ArrayList<WordCloud> wordClouds = new ArrayList();
         ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<ArrayList<WordCloud>>();
@@ -239,4 +272,5 @@ public class TextFileReader{
     private String trimPunctuation(String word) {
         return word.toLowerCase().replaceAll("\\W", "");
     }
+    * */
 }
