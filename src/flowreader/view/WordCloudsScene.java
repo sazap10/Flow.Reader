@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 
@@ -26,6 +27,11 @@ public class WordCloudsScene extends StackPane {
     private int curZoom;
     private int minZoom = 0;
     
+    	int maxScale = 100;
+	int minScale = 0;
+	int curScale = 80;
+        	double[] array = new double[maxScale + 1];
+
     private int numberOfOpacitylevels = 4;
     
     private EventHandler<MouseEvent> swipeHandler;
@@ -49,6 +55,9 @@ public class WordCloudsScene extends StackPane {
         this.maxZoom = (wordClouds.size()-1)*(this.numberOfOpacitylevels);
         this.curZoom = this.maxZoom;
         
+        		for (int j = 0; j <= maxScale; j++) {
+			array[j] = Math.pow(1.05, j - 81);
+		}
         this.defineEvents();
         this.setEvents();
     }
@@ -92,7 +101,32 @@ public class WordCloudsScene extends StackPane {
         }
                 
     }
+	public void zoom_wordCloud(double deltaY, double x, double y) {
+		if (deltaY <= 0) {
+			if (curScale < minScale + 1) {
+			} else {
+				curScale--;
+			}
+		} else {
+			if (curScale > maxScale - 1) {
+			} else {
+				curScale++;
+			}
+		}
 
+		Scale scale = new Scale(array[curScale], array[curScale], x, y);
+
+//System.out.println("!!!!!!!!!!!!!!!!!!!!!!!"+stackPane.getTransforms().toString());
+		
+                this.getTransforms().clear();
+		this.getTransforms().add(scale);
+
+                                        
+		/*FlowReader.zoomLabel.setText("zoom: "
+				+ ((float) curScale / (float) maxScale) * 100 + "%\ncurScale: "
+				+ curScale + "\nmin Scale: " + minScale + "\nmax Scale: "
+				+ maxScale);*/
+	}
     void setNewPosition(double posX, double posY) {
         for(WordCloudPane wcp : this.wordCloudPanes){
             wcp.setNewPosition(posX, posY);
@@ -176,13 +210,16 @@ public class WordCloudsScene extends StackPane {
             scrollHandler = new EventHandler<ScrollEvent>() {
                     @Override
                     public void handle(ScrollEvent event) {
+                        if(event.isControlDown()){
+                            zoom_wordCloud(event.getDeltaY(),Screen.getPrimary().getBounds().getWidth()/2,Screen.getPrimary().getBounds().getHeight()/2);
+                        }else{
                         if (!event.isDirect()) {
                                 double height = WordCloudsScene.this.getLayoutBounds().getHeight();
                                 double width = WordCloudsScene.this.getLayoutBounds().getWidth();
                                 WordCloudsScene.this.zoom(event.getDeltaY(), event.getScreenX()/Screen.getPrimary().getBounds().getWidth()*width, event.getScreenY()/Screen.getPrimary().getBounds().getHeight()*height);
                         }
                         event.consume();
-                    }
+                    }}
             };
 
             zoomHandler = new EventHandler<ZoomEvent>() {
