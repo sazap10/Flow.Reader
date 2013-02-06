@@ -125,9 +125,14 @@ public class TextFileReader {
             pages.add(page);
             wordClouds.add(wordCloud);
         }
+        wordCloudLevels.add(wordClouds);// add the first level
 
-        wordCloudLevels = makeCloudLevels(wordClouds);
-
+        ArrayList<ArrayList<WordCloud>> temp_list =makeCloudLevels(wordClouds);
+        
+        for(ArrayList<WordCloud> temp_element:temp_list){
+            wordCloudLevels.add(temp_element);
+        }
+        
         //System.out.println("number of levels:" + wordCloudLevels.size());
         Document document = new Document(pages, wordCloudLevels);
         return document;

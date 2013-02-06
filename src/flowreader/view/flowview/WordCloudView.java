@@ -82,6 +82,7 @@ public class WordCloudView extends Group{
         int count = 0;
           
         Set<Map.Entry<String, Integer>> w = wordCloud.getSortedWordOccurrences().entrySet();
+
         Iterator i = w.iterator();
         while (i.hasNext() && (count < numOfWordsInCloud)){
             

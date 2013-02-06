@@ -266,7 +266,7 @@ public class RibbonView extends Group {
             int cloudInterval = pageInterval;
             int x, y;
             
-            for (int i = 0; i < document.getNumOfCloudLevels(); i++){
+            for (int i = 1; i < document.getNumOfCloudLevels(); i++){
                 currentLevelClouds = document.getCloudLevel(i);
                 x = 0;
                 y = 0;
