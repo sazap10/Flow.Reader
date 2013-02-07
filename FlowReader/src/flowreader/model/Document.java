@@ -21,7 +21,24 @@ import java.awt.Graphics;
 public class Document {
     ArrayList<BufferedImage> inputImages;
     ArrayList<Image> pages;
+    ArrayList<Integer> pageWordCounts;
+    HashMap<String, Integer> documentOccurrences; //wordOccurrences in the document
+    ArrayList<ArrayList<WordCloud>> wordClouds;
     int numOfPages;
+    int numOfCloudLevels;
+    int wordCount;
+    
+     public Document(ArrayList<BufferedImage> pages, ArrayList<Integer> pageWordCounts,  ArrayList<ArrayList<WordCloud>> wordClouds, HashMap<String, Integer> documentOccurrences, int wordCount){
+        this.pages = new ArrayList();
+        this.inputImages = pages;
+        this.pageWordCounts = pageWordCounts;
+        this.wordClouds = wordClouds;
+        this.numOfPages = pages.size();
+        this.numOfCloudLevels = wordClouds.size();
+        this.documentOccurrences = documentOccurrences;
+        this.wordCount = wordCount;
+        setWordCloudValues();
+    }
     public Document(ArrayList<BufferedImage> pages){
         
         this.pages = new ArrayList();
@@ -59,23 +76,8 @@ public class Document {
     
     
     
-    
- /*   ArrayList<Page> pages;
-    HashMap<String, Integer> documentOccurrences; //wordOccurrences in the document
-    ArrayList<ArrayList<WordCloud>> wordClouds;
-    int numOfPages;
-    int numOfCloudLevels;
-    int wordCount;
-    
-    public Document(ArrayList<Page> pages, ArrayList<ArrayList<WordCloud>> wordClouds, HashMap<String, Integer> documentOccurrences, int wordCount){
-        this.pages = pages;
-        this.wordClouds = wordClouds;
-        this.numOfPages = pages.size();
-        this.numOfCloudLevels = wordClouds.size();
-        this.documentOccurrences = documentOccurrences;
-        this.wordCount = wordCount;
-        setWordCloudValues();
-    }
+/*
+   
     
     public ArrayList<Page> getPages(){
         return this.pages;
@@ -84,7 +86,7 @@ public class Document {
     public Page getPage(int page){
         return pages.get(page);
     }
-    
+*/    
     public WordCloud getCloud (int level, int cloudNum){
         System.out.println("returning cloud " + cloudNum + " from level " + level);
         return wordClouds.get(level).get(cloudNum);
@@ -93,11 +95,11 @@ public class Document {
     public ArrayList<WordCloud> getCloudLevel(int level){
         return wordClouds.get(level -1 );
     }
-    */
+
     public int getNumOfPages(){
         return this.numOfPages;
     }
-    /*
+
     public int getNumOfCloudLevels(){
         return this.numOfCloudLevels;
     }
@@ -114,7 +116,7 @@ public class Document {
                 //need to sum the wordCounts from the next (level) pages
                 wordCount = 0;
                 for(int i = 1; i <= level; i++){
-                    wordCount += this.pages.get(currPage - 1).getWordCount();                 
+                    wordCount += this.pageWordCounts.get(currPage - 1);                 
                 }
                 cloud.setWordValues(documentOccurrences, wordCount, this.wordCount);
             }
@@ -122,5 +124,5 @@ public class Document {
             
         }
     }
-    */
+
 }
