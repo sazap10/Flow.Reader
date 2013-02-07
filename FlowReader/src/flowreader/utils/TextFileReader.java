@@ -83,7 +83,7 @@ public class TextFileReader{
                 List<PDPage> pages = document.getDocumentCatalog().getAllPages();
                 for (int i = 0; i < pages.size(); i++) {
                     PDPage pDPage = pages.get(i);
-                    myList.add(pDPage.convertToImage());
+                    myList.add(pDPage.convertToImage(BufferedImage.TYPE_3BYTE_BGR, 60 ));
                 }
                 pageText = getText(document, myList.size());
                  
