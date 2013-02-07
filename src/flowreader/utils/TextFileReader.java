@@ -125,7 +125,7 @@ public class TextFileReader {
             pages.add(page);
             wordClouds.add(wordCloud);
         }
-        wordCloudLevels.add(wordClouds);// add the first level
+        //wordCloudLevels.add(wordClouds);// add the first level
 
         ArrayList<ArrayList<WordCloud>> temp_list =makeCloudLevels(wordClouds);
         

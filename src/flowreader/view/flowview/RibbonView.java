@@ -197,6 +197,8 @@ public class RibbonView extends Group {
 
 
 	public void buildRibbon(Document document) {
+            
+            
 		int i = 0;
 		int x = 0;
 		int y = 0;

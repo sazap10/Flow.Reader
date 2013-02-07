@@ -5,6 +5,8 @@
 package flowreader.view.flowview;
 
 import flowreader.model.Document;
+import flowreader.model.WordCloud;
+import java.util.ArrayList;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -16,7 +18,12 @@ public class FlowViewScene extends StackPane{
     private Document document;
     
     public FlowViewScene(Document document){
-        this.document = document;
+        ArrayList<ArrayList<WordCloud>> wordClouds = new ArrayList<>();
+        wordClouds.add(document.getWordClouds().get(0));
+        for(ArrayList<WordCloud> alwc: document.getWordClouds()){
+            wordClouds.add(alwc);
+        }
+        this.document = new Document(document.getPages(), wordClouds);
         rb = new RibbonView(this);
         this.build();
     }
