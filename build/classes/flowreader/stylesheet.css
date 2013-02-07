@@ -1,0 +1,54 @@
+/* 
+    Document   : Background
+    Created on : 07-Nov-2012, 17:32:19
+    Author     : suparpat
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.root { 
+    -fx-background-color: #B8B8B8;
+}
+
+#closeBtn{
+	-fx-background-color: #C70A0A;
+    -fx-background-radius: 0;
+    -fx-padding: 1 20 1 20;
+    -fx-text-fill: white;
+    -fx-font-size: 17pt;
+    
+}
+
+#closeBtn:hover{
+	-fx-background-color: #EB0707;
+}
+
+#minBtn{
+	-fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 1 15 1 15;
+    -fx-text-fill: black;
+    -fx-font: bold 18pt "Arial";
+    
+}
+
+#minBtn:hover{
+	-fx-background-color: #14167D;
+	-fx-text-fill: white;
+}
+
+#topbarbutton{
+	-fx-background-color: #005888;
+    -fx-background-radius: 0;
+    -fx-padding: 1 20 1 20;
+    -fx-text-fill: white;
+    -fx-font-size: 17pt;
+    
+}
+
+#topbarbutton:hover{
+	-fx-background-color: #020020;
+	-fx-translate-x:1;
+	-fx-translate-y:1;
+}
+
