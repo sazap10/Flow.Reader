@@ -187,34 +187,31 @@ public class RibbonView extends Group {
 		wordCloudGroup = new Group();
 
                 document.resizePages(pageHeight, pageWidth);
-               // ArrayList<WordCloud> clouds = document.getCloudLevel(1); 
-               // ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
+                ArrayList<WordCloud> clouds = document.getCloudLevel(1); 
+               ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
 		while (i < document.getNumOfPages()) {
 
-			//WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
-		//			pageWidth, pageHeight / 3), 1);			
+			WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
+					pageWidth, pageHeight / 3), 1);			
 //			wordCloudGroup.setOpacity(1);
-//			this.wordCloudGroup.getChildren().add(wordCloud);
+			this.wordCloudGroup.getChildren().add(wordCloud);
 
 //			PageView page = new PageView(new Rectangle(x, y + 50
 //					+ (pageHeight / 3), pageWidth, pageHeight));
 //			page.setText(document.getPage(i).getText());
                         ImageView imageView = new ImageView();
-                        imageView.setImage(document.getPage(i));
-                        //Rectangle2D viewportRect = new Rectangle2D(x,y,pageWidth, pageHeight);
-                        //imageView.setViewport(viewportRect);
-                        System.out.println("rendering a new imageview at x="+x+" y="+y);
+                        imageView.setImage(document.getPage(i));                     
 			this.pagesGroup.getChildren().add(imageView);
-                        imageView.relocate(x,y);
+                        imageView.relocate(x,y + 50 + (pageHeight / 3));
 			x += pageWidth + pageInterval;
 			i++;
 		}
                 //add the first level of clouds
-              //  this.wordClouds.add(wordCloudGroup);
+                this.wordClouds.add(wordCloudGroup);
                 
                 //
                 //create the rest of the clouds
-               // createCloudLevelGroups(document);
+                createCloudLevelGroups(document);
                 
 		this.pagesPane.getChildren().add(pagesGroup);
 		this.wordCloudPane.getChildren().add(wordCloudGroup);
@@ -222,7 +219,7 @@ public class RibbonView extends Group {
 		this.getChildren().add(wordCloudGroup);
 
 		// set up zoom levels
-              //  createZoomTable(document.getNumOfCloudLevels());
+                createZoomTable(document.getNumOfCloudLevels());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
@@ -237,7 +234,7 @@ public class RibbonView extends Group {
 	}
         
         //creates all but the first level of wordCloud groups and adds them to the list of groups
-  /*      public void createCloudLevelGroups(Document document){
+        public void createCloudLevelGroups(Document document){
             ArrayList<WordCloud> currentLevelClouds;
             Group currentLevelViews;
             int cloudWidth = pageWidth;
@@ -274,7 +271,7 @@ public class RibbonView extends Group {
 			this.getChildren().add(this.wordClouds.get(i));
 		}
 	}
-
+/*
 	public void switchToPages() {
 		this.getChildren().clear();
 		for (int i = 0; i < this.pages.size(); i++) {
@@ -318,7 +315,7 @@ public class RibbonView extends Group {
 		// add the transformation to the groups
 		// pagesGroup.getTransforms().add(scale);
 		// wordCloudGroup.getTransforms().add(scale2);
-             //    checkCloudLevel();
+                 checkCloudLevel();
 		stackPane.getTransforms().add(scale);
                
 	/*System.out.println("x: " + x + "y: " + y
