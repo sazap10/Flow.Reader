@@ -23,6 +23,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.util.PDFTextStripper;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -35,10 +39,12 @@ public class TextFileReader{
     
     private HashMap<String, Integer> commonWords;
     private HashMap<String, Integer> documentOccurrences; //dict for whole document
+    private ArrayList<Integer> pageWordCounts; //array storing the word count for each page in the book
     private int wordCount = 0;
     public TextFileReader() {
         this.commonWords = new HashMap<>();
         this.documentOccurrences = new HashMap<>();
+        this.pageWordCounts = new ArrayList<>();
        // this.getCommonWords();
     }
 
@@ -68,6 +74,8 @@ public class TextFileReader{
     //reads in the images from the pdf file
     public Document readFile(Rectangle bounds) throws IOException{
     ArrayList myList = new ArrayList<BufferedImage>();
+    ArrayList<String> pageText;
+    ArrayList<ArrayList<WordCloud>> clouds = new ArrayList<ArrayList<WordCloud>>();
         try {
             if (file != null) {
  
@@ -77,6 +85,15 @@ public class TextFileReader{
                     PDPage pDPage = pages.get(i);
                     myList.add(pDPage.convertToImage());
                 }
+                pageText = getText(document, myList.size());
+                 
+                //get the page word counts for each page
+                for(int i = 0; i < pageText.size(); i++){                   
+                   this.pageWordCounts.add(pageText.get(i).split("").length);
+                }
+               
+                
+                clouds = makeWordClouds(pageText);
                 document.close();
 
             }
@@ -86,9 +103,91 @@ public class TextFileReader{
         }
         
         
-        Document myDocument = new Document(myList);
+        Document myDocument = new Document(myList,this.pageWordCounts, clouds, this.documentOccurrences, this.wordCount);
+        System.out.println("ok here");
         return myDocument;
 
+    }
+    
+    
+    //returns an indexed array of strings for each page of the input document
+    public ArrayList<String> getText(PDDocument document, int numOfPages) throws IOException{
+        ArrayList<String> pages = new ArrayList<>();
+        ByteArrayOutputStream bout;
+        OutputStreamWriter writer;
+        try{
+            //set the buffer
+    bout = new ByteArrayOutputStream();
+    writer = new OutputStreamWriter(bout);
+ 
+    //strip the document to the buffer 
+    
+   
+         PDFTextStripper stripper = new PDFTextStripper();
+            for(int i = 1; i <= numOfPages; i++){
+            stripper.setStartPage( i);
+            stripper.setEndPage( i+1 );
+            stripper.writeText(document, writer);
+            bout.flush();
+            writer.flush();
+            String page = bout.toString();
+            System.out.println("page " + i + ": " + page);
+            pages.add(page);
+            }
+        }
+        catch (IOException ex){
+            ex.printStackTrace();
+        }
+        return pages;
+    }
+    
+    //creates wordClouds from page text
+    public ArrayList<ArrayList<WordCloud>> makeWordClouds(ArrayList<String> pages){
+        ArrayList<WordCloud> firstPages = new ArrayList<>();
+        ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<>();
+        HashMap<String, Integer> wordsOccurrences;
+        
+        //create the first level
+        for(String page: pages){
+            wordsOccurrences = getWordsOccurrences(page);
+            WordCloud tmpCloud = new WordCloud(wordsOccurrences);
+            firstPages.add(tmpCloud);
+        }
+        
+        //add the first level to the list
+        wordCloudLevels.add(firstPages);
+        
+        //add each level of merged clouds
+        for (ArrayList<WordCloud> tmpList : makeCloudLevels(firstPages)){
+            wordCloudLevels.add(tmpList);
+        }
+        
+        return wordCloudLevels;
+        
+    }
+    
+    //returns a hashmap of strings in the provided text with their frequency count
+    public HashMap<String, Integer> getWordsOccurrences(String text){
+        String[] words = text.split(" ");
+        HashMap<String,Integer> wordsOccurrences = new HashMap();
+        for(int i = 0; i < words.length; i++){
+            this.wordCount++;
+            String word = trimPunctuation(words[i]);
+            if (!this.commonWords.containsKey(word)) {
+                            if(wordsOccurrences.get(word)!=null){
+                                this.addDocumentOccurrence(word);
+                                wordsOccurrences.put(word, wordsOccurrences.get(word)+1);
+                            }
+                            else{
+                                
+                                this.addDocumentOccurrence(word);
+                                wordsOccurrences.put(word, 1);
+                                
+                            }
+                        }
+        }
+        return wordsOccurrences;
+        
     }
         
     
@@ -180,7 +279,7 @@ public class TextFileReader{
         return document;
     }
     
-
+  */
     
     private ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds){
         ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<ArrayList<WordCloud>>();
@@ -250,7 +349,7 @@ public class TextFileReader{
             }
         }
     }
-    
+   
     //adds a word's occurrence to the document Occurrences Map
     private void addDocumentOccurrence(String word){
         if (this.documentOccurrences.containsKey(word)){
@@ -272,5 +371,5 @@ public class TextFileReader{
     private String trimPunctuation(String word) {
         return word.toLowerCase().replaceAll("\\W", "");
     }
-    * */
+   
 }
