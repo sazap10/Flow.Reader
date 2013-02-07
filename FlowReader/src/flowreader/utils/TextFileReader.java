@@ -131,7 +131,7 @@ public class TextFileReader{
             bout.flush();
             writer.flush();
             String page = bout.toString();
-            System.out.println("page " + i + ": " + page);
+            System.out.println("page " + i + "finished");
             pages.add(page);
             }
         }
