@@ -155,7 +155,7 @@ public abstract class DiveRibbonPane extends StackPane {
         return focusPointInSquare;
     }
 
-    public void appearTransition() {
+    public ParallelTransition appearTransition() {
         int duration = 1000;
 
         FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
@@ -175,10 +175,10 @@ public abstract class DiveRibbonPane extends StackPane {
         ParallelTransition pt = new ParallelTransition();
         pt.getChildren().addAll(ft, st);
         pt.setCycleCount(1);
-        pt.play();
+        return pt;
     }
     
-    public void disappearTransition() {
+    public ParallelTransition disappearTransition() {
         int duration = 1000;
         
         FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
@@ -196,6 +196,6 @@ public abstract class DiveRibbonPane extends StackPane {
         ParallelTransition pt = new ParallelTransition();
         pt.getChildren().addAll(ft, st);
         pt.setCycleCount(1);
-        pt.play();
+        return pt;
     }
 }

@@ -8,7 +8,9 @@ import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import java.util.ArrayList;
+import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -142,11 +144,21 @@ public class DiveViewScene extends StackPane {
                         double focusPoint = current.getFocusPoint();
                         double x = 0 + (previousFocusPoint - focusPoint);
                         current.setNewPosition(x, 0);
-                        
+
                         //We add the current level in the scene
                         DiveViewScene.this.contentPane.getChildren().add(current);
-                        current.appearTransition();
-                        previous.disappearTransition();
+                        ParallelTransition at = current.appearTransition();
+                        ParallelTransition dt = previous.disappearTransition();
+                        at.play();
+                        dt.play();
+                        
+                        dt.setOnFinished(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel+1));
+                            }
+                        });
+                        //DiveViewScene.this.contentPane.getChildren().remove(previous);
                     }
                 }
                 event.consume();
@@ -157,23 +169,31 @@ public class DiveViewScene extends StackPane {
 
     private void diveOut() {
         EventHandler<ScrollEvent> diveOutHandler = new EventHandler<ScrollEvent>() {
-
             @Override
             public void handle(ScrollEvent event) {
-                    if (event.getDeltaY() < 0) {
-                        if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1) {
-                            DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
-                            DiveViewScene.this.currentLevel += 1;
-                            DiveViewScene.this.lp.setHighLight(currentLevel);
-                            
-                            DiveRibbonPane next = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
-                            DiveViewScene.this.contentPane.getChildren().add(next);
-                            next.appearTransition();
-                            current.disappearTransition();
-                        }
+                if (event.getDeltaY() < 0) {
+                    if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1) {
+                        DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        DiveViewScene.this.currentLevel += 1;
+                        DiveViewScene.this.lp.setHighLight(currentLevel);
+
+                        DiveRibbonPane next = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        DiveViewScene.this.contentPane.getChildren().add(next);
+                        ParallelTransition at = next.appearTransition();
+                        ParallelTransition dt = current.disappearTransition();
+                        at.play();
+                        dt.play();
+
+                        dt.setOnFinished(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel-1));
+                            }
+                        });
                     }
-                    event.consume();
                 }
+                event.consume();
+            }
         };
         this.addEventHandler(ScrollEvent.SCROLL, diveOutHandler);
     }
