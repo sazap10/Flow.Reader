@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -168,6 +169,55 @@ public class DiveViewScene extends StackPane {
             }
         };
         this.addEventHandler(ScrollEvent.SCROLL, diveInScrollHandler);
+        
+        EventHandler<ZoomEvent> diveInZoomHandler = new EventHandler<ZoomEvent>() {
+            @Override
+            public void handle(ZoomEvent event) {
+                double delta = event.getZoomFactor() - 1;
+                if (delta > 0 && DiveViewScene.this.otherTransitionsFinished) { // Scroll forward
+                    if (DiveViewScene.this.currentLevel != 0 && DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel).getSelectedIndexes().size()>0) {
+                        DiveViewScene.this.otherTransitionsFinished = false;
+                        //Collect data from the previous level
+                        DiveRibbonPane previous = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        double previousFocusPoint = previous.getFocusPoint();
+                        int previousSelectedIndex = previous.getSelectedIndexes().get(0);
+
+                        // Set up current level
+                        DiveViewScene.this.currentLevel -= 1;
+                        DiveViewScene.this.lp.setHighLight(currentLevel);
+                        DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        if (DiveViewScene.this.currentLevel == 0) {
+                            ArrayList<Integer> ali = new ArrayList<>();
+                            ali.add(previousSelectedIndex);
+                            current.createRibbon(ali);
+                        } else {
+                            current.createRibbon(getIndexesCurrentLevel(previousSelectedIndex));
+                        }
+                        double focusPoint = current.getFocusPoint();
+                        double x = 0 + (previousFocusPoint - focusPoint);
+                        current.setNewPosition(x, 0);
+
+                        //We add the current level in the scene
+                        DiveViewScene.this.contentPane.getChildren().add(current);
+                        ParallelTransition at = current.appearTransitionDiveIn();
+                        ParallelTransition dt = previous.disappearTransitionDiveIn();
+                        at.play();
+                        dt.play();
+                        
+                        dt.setOnFinished(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel+1));
+                                DiveViewScene.this.otherTransitionsFinished = true;
+                            }
+                        });
+                        //DiveViewScene.this.contentPane.getChildren().remove(previous);
+                    }
+                }
+                event.consume();
+            }
+        };
+        this.addEventHandler(ZoomEvent.ZOOM, diveInZoomHandler);
     }
 
     private void diveOut() {
@@ -201,6 +251,38 @@ public class DiveViewScene extends StackPane {
             }
         };
         this.addEventHandler(ScrollEvent.SCROLL, diveOutHandler);
+        
+        EventHandler<ZoomEvent> diveOutZoomHandler = new EventHandler<ZoomEvent>() {
+            @Override
+            public void handle(ZoomEvent event) {
+                double delta = event.getZoomFactor() - 1;
+                if (delta < 0 && DiveViewScene.this.otherTransitionsFinished) {
+                    if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1 && DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel).getSelectedIndexes().size()>0) {
+                        DiveViewScene.this.otherTransitionsFinished = false;
+                        DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        DiveViewScene.this.currentLevel += 1;
+                        DiveViewScene.this.lp.setHighLight(currentLevel);
+
+                        DiveRibbonPane next = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        DiveViewScene.this.contentPane.getChildren().add(next);
+                        ParallelTransition at = next.appearTransitionDiveOut();
+                        ParallelTransition dt = current.disappearTransitionDiveOut();
+                        at.play();
+                        dt.play();
+
+                        dt.setOnFinished(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel-1));
+                                DiveViewScene.this.otherTransitionsFinished = true;
+                            }
+                        });
+                    }
+                }
+                event.consume();
+            }
+        };
+        this.addEventHandler(ZoomEvent.ZOOM, diveOutZoomHandler);
     }
 
     private ArrayList<Integer> getIndexesCurrentLevel(int previousSelectedIndex) {

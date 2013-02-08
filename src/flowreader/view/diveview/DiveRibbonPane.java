@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
@@ -96,6 +97,16 @@ public abstract class DiveRibbonPane extends StackPane {
 
 
         this.addEventHandler(ScrollEvent.SCROLL, selectionHandler);
+        
+        EventHandler<ZoomEvent> selectionZoomHandler = new EventHandler<ZoomEvent>() {
+            @Override
+            public void handle(ZoomEvent event) {
+                DiveRibbonPane.this.highlightSelected();
+            }
+        };
+
+
+        this.addEventHandler(ZoomEvent.ZOOM, selectionZoomHandler);
     }
 
     public void highlightSelected() {
