@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -80,19 +81,15 @@ public abstract class DiveRibbonPane extends StackPane {
     }
     
     private void elementSelection() {
-        EventHandler<MouseEvent> selectionHandler = new EventHandler<MouseEvent>() {
+        EventHandler<ScrollEvent> selectionHandler = new EventHandler<ScrollEvent>() {
             @Override
-            public void handle(MouseEvent event) {
-                if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
-                    if (event.getClickCount() == 1) {
-                        DiveRibbonPane.this.highlightSelected();
-                    }
-                }
+            public void handle(ScrollEvent event) {
+                    DiveRibbonPane.this.highlightSelected();
             }
         };
 
 
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, selectionHandler);
+        this.addEventHandler(ScrollEvent.SCROLL, selectionHandler);
     }
 
     public void highlightSelected() {
@@ -150,5 +147,9 @@ public abstract class DiveRibbonPane extends StackPane {
         double focusPointInSquare = focusSquareWidth/2.0;
         
         return focusPointInSquare;
+    }
+
+    void appearTransition() {
+        
     }
 }

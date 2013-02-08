@@ -48,7 +48,7 @@ public class WordCloudsScene extends StackPane {
             this.wordCloudPanes.add(wcp);
         }
         
-        this.getChildren().add(this.wordCloudPanes.get(0));
+        this.getChildren().add(this.wordCloudPanes.get(this.wordCloudPanes.size()-1));
         
         // Create the zoom levels
         
@@ -101,7 +101,8 @@ public class WordCloudsScene extends StackPane {
         }
                 
     }
-	public void zoom_wordCloud(double deltaY, double x, double y) {
+	
+    public void zoom_wordCloud(double deltaY, double x, double y) {
 		if (deltaY <= 0) {
 			if (curScale < minScale + 1) {
 			} else {

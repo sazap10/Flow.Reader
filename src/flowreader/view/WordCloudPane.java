@@ -52,11 +52,13 @@ public class WordCloudPane extends RibbonPane{
         this.getChildren().add(this.wordCloudGroup);
     }
 
+    @Override
     public void setNewPosition(double posX, double posY) {
         this.wordCloudGroup.setLayoutX(posX);
         this.wordCloudGroup.setLayoutY(posY);
     }
     
+    @Override
     public void move(double dX, double dY) {
         this.wordCloudGroup.setLayoutX(this.wordCloudGroup.getLayoutX()+dX);
         this.wordCloudGroup.setLayoutY(this.wordCloudGroup.getLayoutY()+dY);
