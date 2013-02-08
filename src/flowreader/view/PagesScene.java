@@ -28,17 +28,19 @@ public class PagesScene extends StackPane{
 
      private int maxPageZoom = 100;
      private int curPageZoom = 50;
-     private int minPageZoom = 40;
+     private int minPageZoom = 0;
      private double[] scaleFactors = new double[maxPageZoom + 1];
      
      private EventHandler<MouseEvent> swipeHandler;
      private EventHandler<ScrollEvent> scrollHandler;
      private EventHandler<ZoomEvent> zoomHandler;
      
+     protected WordCloudsScene wcs;
+     
      public PagesScene(ArrayList<Page> pages){
+         this.setId("pagesScene");
          this.pageGroup = new Group();
          this.pagesView = new ArrayList<>();
-         
          // Creation of the pages
          double x=0;
          double y=0;
@@ -57,7 +59,7 @@ public class PagesScene extends StackPane{
         
         this.defineEvents();
         this.setEvents(true);
-        zoom(1,Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight()/2);
+        zoom(1,Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight());
      }
      
     public void zoom(double deltaY, double x, double y) {   
@@ -118,7 +120,8 @@ public class PagesScene extends StackPane{
                         if (!event.isDirect()) {
                                 double height = PagesScene.this.getLayoutBounds().getHeight();
                                 double width = PagesScene.this.getLayoutBounds().getWidth();
-                                PagesScene.this.zoom(event.getDeltaY(), Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight()/2);
+                                PagesScene.this.zoom(event.getDeltaY(), Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight());
+                                wcs.zoom_wordCloud(event.getDeltaY(), Screen.getPrimary().getBounds().getWidth() / 2, 0);
                         }
                         event.consume();
                     }
@@ -146,7 +149,8 @@ public class PagesScene extends StackPane{
                 this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             this.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             this.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-
+    this.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            this.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
 }
 }
 }

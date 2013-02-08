@@ -1,4 +1,4 @@
-package flowreader.view.flowview;
+package flowreader.view.newflowview;
 
 import flowreader.model.WordCloud;
 import flowreader.utils.ValueComparatorInteger;

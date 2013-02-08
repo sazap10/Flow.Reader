@@ -63,7 +63,10 @@ public class WordCloudPane extends RibbonPane{
         this.wordCloudGroup.setLayoutX(this.wordCloudGroup.getLayoutX()+dX);
         this.wordCloudGroup.setLayoutY(this.wordCloudGroup.getLayoutY()+dY);
     }
-    
+        public void actual_move(double X, double Y) {
+        this.wordCloudGroup.setLayoutX(X);
+        this.wordCloudGroup.setLayoutY(Y);
+    }
     public double getGroupWidth(){
         return this.wordCloudGroup.getBoundsInLocal().getWidth();
     }

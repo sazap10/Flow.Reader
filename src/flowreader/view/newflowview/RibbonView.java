@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package flowreader.view.flowview;
+package flowreader.view.newflowview;
 
 import flowreader.model.Document;
 import flowreader.model.Page;
@@ -30,6 +30,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.Screen;
 import javafx.util.Duration;
+import flowreader.view.diveview.*;
 
 /**
  * 
@@ -218,8 +219,8 @@ public class RibbonView extends Group {
                 ArrayList<WordCloudView> cloudViews = new ArrayList<>();
 		while (i < document.getNumOfPages()) {
 
-			WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
-					pageWidth, pageHeight/3), 1);			
+			DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i),x, y + 50 + pageHeight,
+					pageWidth, pageHeight/3);			
 			wordCloudGroup.setOpacity(1);
 			this.wordCloudGroup.getChildren().add(wordCloud);
 
@@ -277,7 +278,7 @@ public class RibbonView extends Group {
                 //render each cloud on this level and add it to the group
                 
                 for (WordCloud wordCloud: currentLevelClouds){
-                   WordCloudView currentView = new WordCloudView(wordCloud, new Rectangle(x, y, cloudWidth, cloudHeight), i);
+                   DiveWordCloud currentView = new DiveWordCloud(wordCloud, x, y, cloudWidth, cloudHeight,i);
                    currentLevelViews.getChildren().add(currentView);
                    x += cloudWidth;                 
                 }

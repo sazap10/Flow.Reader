@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package flowreader.view.flowview;
+package flowreader.view.newflowview;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;

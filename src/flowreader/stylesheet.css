@@ -10,6 +10,18 @@
     -fx-background-color: #B8B8B8;
 }
 
+#theView{
+           /* -fx-background-color: #ABCDEF;*/
+
+}
+#pagesScene{
+        /*-fx-background-color: #000000;*/
+
+}
+#WordCloudsScene{
+            /*-fx-background-color: #000000;*/
+
+}
 #closeBtn{
 	-fx-background-color: #C70A0A;
     -fx-background-radius: 0;

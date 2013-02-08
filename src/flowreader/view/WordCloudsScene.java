@@ -21,145 +21,161 @@ import javafx.util.Duration;
  * @author D-Day
  */
 public class WordCloudsScene extends StackPane {
-    private ArrayList<WordCloudPane> wordCloudPanes;
 
+    private ArrayList<WordCloudPane> wordCloudPanes;
     private int maxZoom;
     private int curZoom;
     private int minZoom = 0;
-    
-    	int maxScale = 100;
-	int minScale = 0;
-	int curScale = 50;
-        	double[] array = new double[maxScale + 1];
-
+    int maxScale = 100;
+    int minScale = 0;
+    int curScale = 50;
+    double[] array = new double[maxScale + 1];
     private int numberOfOpacitylevels = 4;
-    
     private EventHandler<MouseEvent> swipeHandler;
     private EventHandler<ScrollEvent> scrollHandler;
     private EventHandler<ZoomEvent> zoomHandler;
     
-    public WordCloudsScene(ArrayList<ArrayList<WordCloud>> wordClouds){
+     protected PagesScene ps;
+
+    public WordCloudsScene(ArrayList<ArrayList<WordCloud>> wordClouds) {
+        this.setId("WordCloudsScene");
+
         // Creation of the word clouds
         this.wordCloudPanes = new ArrayList<>();
-        double x=0, y=0;
-        for(int i = 0; i<wordClouds.size(); i++){
+        double x = 0, y = 0;
+        for (int i = 0; i < wordClouds.size(); i++) {
             WordCloudPane wcp = new WordCloudPane(wordClouds.get(i), x, y);
-            x = x+ (wcp.getGroupWidth()/4);
+            x = x + (wcp.getGroupWidth() / 4);
             this.wordCloudPanes.add(wcp);
         }
-        
-        this.getChildren().add(this.wordCloudPanes.get(this.wordCloudPanes.size()-1));
-        
+
+        this.getChildren().add(this.wordCloudPanes.get(this.wordCloudPanes.size() - 1));
+
         // Create the zoom levels
-        
-        this.maxZoom = (wordClouds.size()-1)*(this.numberOfOpacitylevels);
+
+        this.maxZoom = (wordClouds.size() - 1) * (this.numberOfOpacitylevels);
         this.curZoom = this.maxZoom;
-        
-        		for (int j = 0; j <= maxScale; j++) {
-			array[j] = Math.pow(1.05, j - 81);
-		}
+
+        for (int j = 0; j <= maxScale; j++) {
+            array[j] = Math.pow(1.05, j - 81);
+        }
         this.defineEvents();
         this.setEvents(true);
-                zoom(1,Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight()/2);
+        zoom_wordCloud(1, Screen.getPrimary().getBounds().getWidth() / 2, 0);
 
     }
-    
+
     public void zoom(double deltaY, double x, double y) {
         // Set the current zoom level
         if (deltaY <= 0) { // If scroll down
-            if(this.curZoom>this.minZoom){
+            if (this.curZoom > this.minZoom) {
                 this.curZoom--;
             }
-        } 
-        else{ // if we scroll up
-            if(this.curZoom<this.maxZoom){
+        } else { // if we scroll up
+            if (this.curZoom < this.maxZoom) {
                 this.curZoom++;
             }
         }
+        double previous_x = this.wordCloudPanes.get(0).getLayoutX();
+        double previous_y = this.wordCloudPanes.get(0).getLayoutY();
+        System.out.println("previous_x " + previous_x + "previous_y " + previous_y);
         this.getChildren().clear();
         //System.out.println("CurrentZoom "+this.curZoom+" - WordCloudLevel "+this.getWordCloudLevel(this.curZoom));
-        if(this.getWordCloudLevel(this.curZoom)!=-1){ // If we are on a word cloud level
-            if(this.curZoom == this.maxZoom){ // if this is the max word cloud level 
+        if (this.getWordCloudLevel(this.curZoom) != -1) { // If we are on a word cloud level
+            if (this.curZoom == this.maxZoom) { // if this is the max word cloud level 
                 this.getChildren().add(this.wordCloudPanes.get(0));
                 this.wordCloudPanes.get(0).setOpacity(1);
-            }
-            else if(this.curZoom == this.minZoom){ // if this is the min word cloud level 
-                this.getChildren().add(this.wordCloudPanes.get(this.wordCloudPanes.size()-1));
-                this.wordCloudPanes.get(this.wordCloudPanes.size()-1).setOpacity(1);
-            }
-            else{ // if this is an other word cloud level
+                //this.actual_move(previous_x,previous_y);
+
+            } else if (this.curZoom == this.minZoom) { // if this is the min word cloud level 
+                this.getChildren().add(this.wordCloudPanes.get(this.wordCloudPanes.size() - 1));
+                this.wordCloudPanes.get(this.wordCloudPanes.size() - 1).setOpacity(1);
+                //this.actual_move(previous_x,previous_y);
+
+
+            } else { // if this is an other word cloud level
                 //System.out.println(""+this.getWordCloudLevel(this.curZoom));
                 this.getChildren().add(this.wordCloudPanes.get(this.getWordCloudLevel(this.curZoom)));
-                this.wordCloudPanes.get(this.wordCloudPanes.size()-1).setOpacity(1);
+                this.wordCloudPanes.get(this.wordCloudPanes.size() - 1).setOpacity(1);
+                //this.actual_move(previous_x,previous_y);
+
             }
-        }
-        else{ // if we are between two levels
+        } else { // if we are between two levels
             int previous = this.getWordCloudLevel(this.getPreviousZoomWcLevel(this.curZoom));
-            int next  = this.getWordCloudLevel(this.getNextZoomWcLevel(this.curZoom));
+            int next = this.getWordCloudLevel(this.getNextZoomWcLevel(this.curZoom));
+
             this.getChildren().add(this.wordCloudPanes.get(previous));
             this.getChildren().add(this.wordCloudPanes.get(next));
-            this.wordCloudPanes.get(previous).setOpacity(this.getOpacity(this.curZoom, this.getNextZoomWcLevel(this.curZoom)));
-            this.wordCloudPanes.get(next).setOpacity(1-this.wordCloudPanes.get(previous).getOpacity());
-        }
-                
-    }
-	
-    public void zoom_wordCloud(double deltaY, double x, double y) {
-		if (deltaY <= 0) {
-			if (curScale < minScale + 1) {
-			} else {
-				curScale--;
-			}
-		} else {
-			if (curScale > maxScale - 1) {
-			} else {
-				curScale++;
-			}
-		}
 
-		Scale scale = new Scale(array[curScale], array[curScale], x, y);
+            this.wordCloudPanes.get(previous).setOpacity(this.getOpacity(this.curZoom, this.getNextZoomWcLevel(this.curZoom)));
+            this.wordCloudPanes.get(next).setOpacity(1 - this.wordCloudPanes.get(previous).getOpacity());
+            //this.actual_move(previous_x,previous_y);
+
+        }
+
+    }
+
+    public void zoom_wordCloud(double deltaY, double x, double y) {
+        if (deltaY <= 0) {
+            if (curScale < minScale + 1) {
+            } else {
+                curScale--;
+            }
+        } else {
+            if (curScale > maxScale - 1) {
+            } else {
+                curScale++;
+            }
+        }
+
+        Scale scale = new Scale(array[curScale], array[curScale], x, y);
 
 //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!"+stackPane.getTransforms().toString());
-		
-                this.getTransforms().clear();
-		this.getTransforms().add(scale);
 
-                                        
-		/*FlowReader.zoomLabel.setText("zoom: "
-				+ ((float) curScale / (float) maxScale) * 100 + "%\ncurScale: "
-				+ curScale + "\nmin Scale: " + minScale + "\nmax Scale: "
-				+ maxScale);*/
-	}
+        this.getTransforms().clear();
+        this.getTransforms().add(scale);
+
+
+        /*FlowReader.zoomLabel.setText("zoom: "
+         + ((float) curScale / (float) maxScale) * 100 + "%\ncurScale: "
+         + curScale + "\nmin Scale: " + minScale + "\nmax Scale: "
+         + maxScale);*/
+    }
+
     void setNewPosition(double posX, double posY) {
-        for(WordCloudPane wcp : this.wordCloudPanes){
+        for (WordCloudPane wcp : this.wordCloudPanes) {
             wcp.setNewPosition(posX, posY);
         }
     }
-    
+
     void move(double dX, double dY) {
-        for(WordCloudPane wcp : this.wordCloudPanes){
+        for (WordCloudPane wcp : this.wordCloudPanes) {
             wcp.move(dX, dY);
         }
     }
-
+    void actual_move(double X, double Y) {
+        for (WordCloudPane wcp : this.wordCloudPanes) {
+            wcp.move(X, Y);
+        }
+    }
     private int getWordCloudLevel(int zoomLevel) {
         int temp = this.minZoom;
-        int i=this.wordCloudPanes.size()-1;
-        while(temp<this.maxZoom && temp!=zoomLevel){
-            temp = temp+this.numberOfOpacitylevels;
+        int i = this.wordCloudPanes.size() - 1;
+        while (temp < this.maxZoom && temp != zoomLevel) {
+            temp = temp + this.numberOfOpacitylevels;
             i--;
         }
-        if(temp==this.maxZoom && zoomLevel<this.maxZoom){
-            i=-1;
+        if (temp == this.maxZoom && zoomLevel < this.maxZoom) {
+            i = -1;
         }
         return i;
     }
 
     private int getNextZoomWcLevel(int zoomLevel) {
         int temp = this.minZoom;
-        int i=this.wordCloudPanes.size();
-        while(temp<zoomLevel){
-            temp = temp+this.numberOfOpacitylevels;
+        int i = this.wordCloudPanes.size();
+        while (temp < zoomLevel) {
+            temp = temp + this.numberOfOpacitylevels;
             i--;
         }
         return temp;
@@ -167,86 +183,91 @@ public class WordCloudsScene extends StackPane {
 
     private int getPreviousZoomWcLevel(int zoomLevel) {
         int temp = this.maxZoom;
-        int i=0;
-        while(temp>zoomLevel){
-            temp = temp-this.numberOfOpacitylevels;
+        int i = 0;
+        while (temp > zoomLevel) {
+            temp = temp - this.numberOfOpacitylevels;
             i++;
         }
         return temp;
     }
 
     private double getOpacity(int curZoom, int previous) {
-        double dop = 1.0/(double)this.numberOfOpacitylevels;
-        int delta = previous-curZoom;
+        double dop = 1.0 / (double) this.numberOfOpacitylevels;
+        int delta = previous - curZoom;
         //System.out.println(""+dop);
-        return delta*dop;
+        return delta * dop;
     }
-    
-        private void defineEvents() {
-            swipeHandler = new EventHandler<MouseEvent>() {
-                MouseEvent previousEvent;
 
-                    @Override
-                    public void handle(MouseEvent event) {
-                            if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-                                    previousEvent = event;
-                                    // System.out.println("PRESSED");
-                            } else if (event.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
+    private void defineEvents() {
+        swipeHandler = new EventHandler<MouseEvent>() {
+            MouseEvent previousEvent;
 
-                                    // System.out.println("DRAGGED");
-                                    double dx = event.getX() - previousEvent.getX();
-                                    double dy = event.getY() - previousEvent.getY();
-                                    move(dx, dy);
-                                    
-                                    TranslateTransition tt = new TranslateTransition(Duration.millis(100), WordCloudsScene.this);
-                                    tt.setByX(dx);
-                                    tt.setByY(dy);
-                                    tt.setCycleCount(0);
-                                    tt.setAutoReverse(true);
-                                    tt.play();
-                            }
-                            previousEvent = event;
-                            event.consume();
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+                    previousEvent = event;
+                    // System.out.println("PRESSED");
+                } else if (event.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
+
+                    // System.out.println("DRAGGED");
+                    double dx = event.getX() - previousEvent.getX();
+                    double dy = event.getY() - previousEvent.getY();
+                    move(dx, dy);
+
+                    TranslateTransition tt = new TranslateTransition(Duration.millis(100), WordCloudsScene.this);
+                    tt.setByX(dx);
+                    tt.setByY(dy);
+                    tt.setCycleCount(0);
+                    tt.setAutoReverse(true);
+                    tt.play();
+                }
+                previousEvent = event;
+                event.consume();
+            }
+        };
+
+        scrollHandler = new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                if (event.isControlDown()) {
+                    zoom_wordCloud(event.getDeltaY(), Screen.getPrimary().getBounds().getWidth() / 2, 0);
+                    ps.zoom(event.getDeltaY(), Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight());
+                    
+                } else {
+                    if (!event.isDirect()) {
+                        double height = WordCloudsScene.this.getLayoutBounds().getHeight();
+                        double width = WordCloudsScene.this.getLayoutBounds().getWidth();
+                        WordCloudsScene.this.zoom(event.getDeltaY(), Screen.getPrimary().getBounds().getMinX(), Screen.getPrimary().getBounds().getMinY());
                     }
-            };
-            
-            scrollHandler = new EventHandler<ScrollEvent>() {
-                    @Override
-                    public void handle(ScrollEvent event) {
-                        if(event.isControlDown()){
-                            zoom_wordCloud(event.getDeltaY(),Screen.getPrimary().getBounds().getWidth()/2,Screen.getPrimary().getBounds().getHeight()/2);
-                        }else{
-                        if (!event.isDirect()) {
-                                double height = WordCloudsScene.this.getLayoutBounds().getHeight();
-                                double width = WordCloudsScene.this.getLayoutBounds().getWidth();
-                                WordCloudsScene.this.zoom(event.getDeltaY(), event.getScreenX()/Screen.getPrimary().getBounds().getWidth()*width, event.getScreenY()/Screen.getPrimary().getBounds().getHeight()*height);
-                        }
-                        event.consume();
-                    }}
-            };
+                    event.consume();
+                }
+            }
+        };
 
-            zoomHandler = new EventHandler<ZoomEvent>() {
-                    @Override
-                    public void handle(ZoomEvent event) {
-                        double delta = event.getZoomFactor() - 1;
-                       WordCloudsScene.this.zoom(delta, event.getX(), event.getY());
-                        event.consume();
-                    }
-            };
-            
-        }
-        
-        public void setEvents(boolean on) {
-            if(on){
+        zoomHandler = new EventHandler<ZoomEvent>() {
+            @Override
+            public void handle(ZoomEvent event) {
+                double delta = event.getZoomFactor() - 1;
+                WordCloudsScene.this.zoom(delta, event.getX(), event.getY());
+                event.consume();
+            }
+        };
+
+    }
+
+    public void setEvents(boolean on) {
+        if (on) {
             this.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             this.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
             this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
             this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
-        }else{
-                this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+        } else {
+            this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             this.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             this.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-
+ this.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            this.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+        }
+    }
 }
-}}

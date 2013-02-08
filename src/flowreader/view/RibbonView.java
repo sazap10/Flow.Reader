@@ -6,7 +6,7 @@ package flowreader.view;
 
 import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
-import flowreader.view.flowview.FlowViewScene;
+import flowreader.view.newflowview.FlowViewScene;
 import flowreader.view.seamlessview.TheViewScene;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
@@ -18,8 +18,8 @@ import javafx.scene.layout.StackPane;
  */
 public class RibbonView extends StackPane {
 
-        private PagesScene pagesPane;
-        private WordCloudsScene wordCloudsPane;
+        protected PagesScene pagesPane;
+        protected WordCloudsScene wordCloudsPane;
         private FlowViewScene flowViewPane;
         private DiveViewScene diveViewPane;
         private TheViewScene theViewPane;
@@ -30,6 +30,8 @@ public class RibbonView extends StackPane {
 	public RibbonView(Document document) {
             this.pagesPane = new PagesScene(document.getPages());
             this.wordCloudsPane = new WordCloudsScene(document.getWordClouds());
+            pagesPane.wcs = wordCloudsPane;
+            wordCloudsPane.ps = pagesPane;
             this.flowViewPane = new FlowViewScene(document);
             this.diveViewPane = new DiveViewScene(document);
             this.theViewPane = new TheViewScene(pagesPane,wordCloudsPane);
