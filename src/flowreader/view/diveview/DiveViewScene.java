@@ -144,8 +144,9 @@ public class DiveViewScene extends StackPane {
                         current.setNewPosition(x, 0);
                         
                         //We add the current level in the scene
-                        current.appearTransition();
                         DiveViewScene.this.contentPane.getChildren().add(current);
+                        current.appearTransition();
+                        previous.disappearTransition();
                     }
                 }
                 event.consume();
@@ -161,10 +162,14 @@ public class DiveViewScene extends StackPane {
             public void handle(ScrollEvent event) {
                     if (event.getDeltaY() < 0) {
                         if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1) {
+                            DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
                             DiveViewScene.this.currentLevel += 1;
                             DiveViewScene.this.lp.setHighLight(currentLevel);
-                            DiveViewScene.this.contentPane.getChildren().clear();
-                            DiveViewScene.this.contentPane.getChildren().add(DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel));
+                            
+                            DiveRibbonPane next = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                            DiveViewScene.this.contentPane.getChildren().add(next);
+                            next.appearTransition();
+                            current.disappearTransition();
                         }
                     }
                     event.consume();

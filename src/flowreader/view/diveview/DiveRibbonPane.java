@@ -5,11 +5,17 @@
 package flowreader.view.diveview;
 
 import java.util.ArrayList;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.transform.Scale;
+import javafx.util.Duration;
 
 /**
  *
@@ -149,7 +155,47 @@ public abstract class DiveRibbonPane extends StackPane {
         return focusPointInSquare;
     }
 
-    void appearTransition() {
+    public void appearTransition() {
+        int duration = 1000;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
+        ft.setFromValue(0);
+        ft.setToValue(1.0);
+        ft.setCycleCount(1);
+        ft.setAutoReverse(true);
         
+        ScaleTransition st = new ScaleTransition(Duration.millis(duration), this);
+        st.setFromX(0.0);
+        st.setFromY(0.0);
+        st.setToX(1.0);
+        st.setToY(1.0);
+        st.setCycleCount(1);
+        st.setAutoReverse(true);
+        
+        ParallelTransition pt = new ParallelTransition();
+        pt.getChildren().addAll(ft, st);
+        pt.setCycleCount(1);
+        pt.play();
+    }
+    
+    public void disappearTransition() {
+        int duration = 1000;
+        
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft.setCycleCount(1);
+        ft.setAutoReverse(true);
+        
+        ScaleTransition st = new ScaleTransition(Duration.millis(duration), this);
+        st.setToX(10f);
+        st.setToY(10f);
+        st.setCycleCount(1);
+        st.setAutoReverse(true);
+        
+        ParallelTransition pt = new ParallelTransition();
+        pt.getChildren().addAll(ft, st);
+        pt.setCycleCount(1);
+        pt.play();
     }
 }
