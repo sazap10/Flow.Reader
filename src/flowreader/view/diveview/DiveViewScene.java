@@ -145,7 +145,8 @@ public class DiveViewScene extends StackPane {
                             current.createRibbon(getIndexesCurrentLevelDiveIn(previousSelectedIndex, DiveViewScene.this.currentLevel));
                         }
                         double focusPoint = current.getFocusPoint();
-                        double x = 0 + (previousFocusPoint - focusPoint);
+                        double x = previousFocusPoint - focusPoint;
+                        System.out.println("FocusPoint "+focusPoint+" Previous focus point "+previousFocusPoint+" New position "+x);
                         current.setNewPosition(x, 0);
 
                         //We add the current level in the scene
@@ -276,14 +277,31 @@ public class DiveViewScene extends StackPane {
                 if (delta < 0 && DiveViewScene.this.otherTransitionsFinished) {
                     if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1 && DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel).getSelectedIndexes().size()>0) {
                         DiveViewScene.this.otherTransitionsFinished = false;
-                        DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        
+                        //Collect data from the previous level
+                        DiveRibbonPane previous = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        double previousFocusPoint = previous.getFocusPoint();
+                        int previousSelectedIndex = previous.getSelectedIndexes().get(0);
+
+                        // Set up current level
                         DiveViewScene.this.currentLevel += 1;
                         DiveViewScene.this.lp.setHighLight(currentLevel);
-
-                        DiveRibbonPane next = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
-                        DiveViewScene.this.contentPane.getChildren().add(next);
-                        ParallelTransition at = next.appearTransitionDiveOut();
-                        ParallelTransition dt = current.disappearTransitionDiveOut();
+                        DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        if (DiveViewScene.this.currentLevel == 0) {
+                            ArrayList<Integer> ali = new ArrayList<>();
+                            ali.add(previousSelectedIndex);
+                            current.createRibbon(ali);
+                        } else {
+                            current.createRibbon(getIndexesCurrentLevelDiveOut(previousSelectedIndex, DiveViewScene.this.currentLevel));
+                        }
+                        double focusPoint = current.getFocusPoint();
+                        double x = 0 + (previousFocusPoint - focusPoint);
+                        current.setNewPosition(x, 0);
+                        
+                        
+                        DiveViewScene.this.contentPane.getChildren().add(current);
+                        ParallelTransition at = current.appearTransitionDiveOut();
+                        ParallelTransition dt = previous.disappearTransitionDiveOut();
                         at.play();
                         dt.play();
 

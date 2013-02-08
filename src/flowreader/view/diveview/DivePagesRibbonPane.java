@@ -25,4 +25,21 @@ public class DivePagesRibbonPane extends DiveRibbonPane{
          this.ribbon.getChildren().addAll(this.ribbonElts);
          this.getChildren().add(this.ribbon);
     }
+    
+    @Override
+    public void createRibbon(ArrayList<Integer> indexes) {
+        this.ribbon.getChildren().clear();
+        this.ribbon.getChildren().addAll(this.ribbonElts);
+        this.selected = indexes;
+    }
+    
+    @Override
+    public double getFocusPoint() {
+
+        double xSelectedElement = (this.elementWidth * this.selected.get(0)) + (this.elementInterval * (this.selected.get(0)));
+        double middleSelectedElement = this.elementWidth / 2.0;
+        double focusPoint = xSelectedElement+middleSelectedElement;
+        //System.out.println("Selected: "+this.selected.get(0)+" Xpages: "+focusPoint);
+        return focusPoint;
+    }
 }

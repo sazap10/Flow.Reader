@@ -29,7 +29,7 @@ public abstract class DiveRibbonPane extends StackPane {
     protected int elementInterval = 5;
     protected double elementWidth;
     protected double elementHeight;
-    private ArrayList<Integer> selected;
+    protected ArrayList<Integer> selected;
 
     public DiveRibbonPane(double x, double y, double elementWidth, double elementHeight) {
         this.ribbon = new Group();
