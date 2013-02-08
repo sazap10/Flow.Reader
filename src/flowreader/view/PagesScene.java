@@ -27,7 +27,7 @@ public class PagesScene extends StackPane{
      private int pageInterval = 5;
 
      private int maxPageZoom = 100;
-     private int curPageZoom = 80;
+     private int curPageZoom = 50;
      private int minPageZoom = 40;
      private double[] scaleFactors = new double[maxPageZoom + 1];
      
@@ -56,7 +56,8 @@ public class PagesScene extends StackPane{
         }
         
         this.defineEvents();
-        this.setEvents();
+        this.setEvents(true);
+        zoom(1,Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight()/2);
      }
      
     public void zoom(double deltaY, double x, double y) {   
@@ -134,11 +135,18 @@ public class PagesScene extends StackPane{
             
         }
     
-    private void setEvents() {
-        this.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-        this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-        this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-        this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
-    }
+        public void setEvents(boolean on) {
+            if(on){
+            this.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+            this.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+            this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+            this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+        }else{
+                this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+            this.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+            this.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+
+}
+}
 }

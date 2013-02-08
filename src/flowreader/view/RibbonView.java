@@ -7,6 +7,7 @@ package flowreader.view;
 import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
 import flowreader.view.flowview.FlowViewScene;
+import flowreader.view.seamlessview.TheViewScene;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -21,7 +22,7 @@ public class RibbonView extends StackPane {
         private WordCloudsScene wordCloudsPane;
         private FlowViewScene flowViewPane;
         private DiveViewScene diveViewPane;
-        
+        private TheViewScene theViewPane;
         public RibbonView(){
             
         }
@@ -31,17 +32,22 @@ public class RibbonView extends StackPane {
             this.wordCloudsPane = new WordCloudsScene(document.getWordClouds());
             this.flowViewPane = new FlowViewScene(document);
             this.diveViewPane = new DiveViewScene(document);
+            this.theViewPane = new TheViewScene(pagesPane,wordCloudsPane);
+
             this.getChildren().add(this.pagesPane);
 	}
 
 	public void switchToWordCloud() {
             this.getChildren().clear();
             this.getChildren().add(this.wordCloudsPane);
+            this.wordCloudsPane.setEvents(true);
 	}
 
 	public void switchToPages() {
             this.getChildren().clear();
             this.getChildren().add(this.pagesPane);
+            this.pagesPane.setEvents(true);
+
 	}
         
         public void switchToFlowView() {
@@ -52,5 +58,11 @@ public class RibbonView extends StackPane {
         public void switchToDiveView() {
             this.getChildren().clear();
             this.getChildren().add(this.diveViewPane);
+        }
+        
+                public void switchToTheView() {
+            this.getChildren().clear();
+            this.getChildren().add(this.theViewPane);
+            this.theViewPane.buildTheView();
         }
 }

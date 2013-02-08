@@ -29,7 +29,7 @@ public class WordCloudsScene extends StackPane {
     
     	int maxScale = 100;
 	int minScale = 0;
-	int curScale = 80;
+	int curScale = 50;
         	double[] array = new double[maxScale + 1];
 
     private int numberOfOpacitylevels = 4;
@@ -59,7 +59,9 @@ public class WordCloudsScene extends StackPane {
 			array[j] = Math.pow(1.05, j - 81);
 		}
         this.defineEvents();
-        this.setEvents();
+        this.setEvents(true);
+                zoom(1,Screen.getPrimary().getBounds().getWidth()/2, Screen.getPrimary().getBounds().getHeight()/2);
+
     }
     
     public void zoom(double deltaY, double x, double y) {
@@ -234,11 +236,17 @@ public class WordCloudsScene extends StackPane {
             
         }
         
-        private void setEvents() {
+        public void setEvents(boolean on) {
+            if(on){
             this.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             this.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
             this.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
             this.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
-        }
+        }else{
+                this.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+            this.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+            this.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+
 }
+}}
