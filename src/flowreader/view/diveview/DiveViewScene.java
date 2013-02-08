@@ -30,6 +30,7 @@ public class DiveViewScene extends StackPane {
     private BorderPane bp;
     private StackPane contentPane;
     private LiftPane lp;
+    private boolean otherTransitionsFinished = true;
 
     public DiveViewScene(Document document) {
         bp = new BorderPane();
@@ -123,8 +124,9 @@ public class DiveViewScene extends StackPane {
         EventHandler<ScrollEvent> diveInScrollHandler = new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
-                if (event.getDeltaY() > 0) { // Scroll forward
-                    if (DiveViewScene.this.currentLevel != 0) {
+                if (event.getDeltaY() > 0 && DiveViewScene.this.otherTransitionsFinished) { // Scroll forward
+                    if (DiveViewScene.this.currentLevel != 0 && DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel).getSelectedIndexes().size()>0) {
+                        DiveViewScene.this.otherTransitionsFinished = false;
                         //Collect data from the previous level
                         DiveRibbonPane previous = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
                         double previousFocusPoint = previous.getFocusPoint();
@@ -156,6 +158,7 @@ public class DiveViewScene extends StackPane {
                             @Override
                             public void handle(ActionEvent event) {
                                 DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel+1));
+                                DiveViewScene.this.otherTransitionsFinished = true;
                             }
                         });
                         //DiveViewScene.this.contentPane.getChildren().remove(previous);
@@ -171,8 +174,9 @@ public class DiveViewScene extends StackPane {
         EventHandler<ScrollEvent> diveOutHandler = new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
-                if (event.getDeltaY() < 0) {
-                    if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1) {
+                if (event.getDeltaY() < 0 && DiveViewScene.this.otherTransitionsFinished) {
+                    if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1 && DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel).getSelectedIndexes().size()>0) {
+                        DiveViewScene.this.otherTransitionsFinished = false;
                         DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
                         DiveViewScene.this.currentLevel += 1;
                         DiveViewScene.this.lp.setHighLight(currentLevel);
@@ -188,6 +192,7 @@ public class DiveViewScene extends StackPane {
                             @Override
                             public void handle(ActionEvent event) {
                                 DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel-1));
+                                DiveViewScene.this.otherTransitionsFinished = true;
                             }
                         });
                     }
