@@ -41,21 +41,21 @@ public abstract class DiveRibbonPane extends StackPane {
         this.elementSelection();
         this.elementHovering();
     }
-    
-    public void createRibbon(ArrayList<Integer> indexes){
+
+    public void createRibbon(ArrayList<Integer> indexes) {
         /*String s = "new group : ";
-        for(Integer i: indexes){
-            s+=i+" ";
-        }
-        System.out.println(s);*/
+         for(Integer i: indexes){
+         s+=i+" ";
+         }
+         System.out.println(s);*/
         this.ribbon.getChildren().clear();
-        for(Integer i : indexes){
+        for (Integer i : indexes) {
             this.ribbon.getChildren().add(this.ribbonElts.get(i));
         }
         this.selected = indexes;
     }
 
-    public double getRibbonLayoutX(){
+    public double getRibbonLayoutX() {
         return this.ribbon.getLayoutX();
     }
 
@@ -78,19 +78,19 @@ public abstract class DiveRibbonPane extends StackPane {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getEventType().equals(MouseEvent.MOUSE_MOVED)) {
-                        DiveRibbonPane.this.highlightHovered();
+                    DiveRibbonPane.this.highlightHovered();
                 }
             }
         };
 
         this.addEventHandler(MouseEvent.MOUSE_MOVED, hoveringHandler);
     }
-    
+
     private void elementSelection() {
         EventHandler<ScrollEvent> selectionHandler = new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
-                    DiveRibbonPane.this.highlightSelected();
+                DiveRibbonPane.this.highlightSelected();
             }
         };
 
@@ -100,62 +100,60 @@ public abstract class DiveRibbonPane extends StackPane {
 
     public void highlightSelected() {
         this.selected.clear();
-        for(int i=0; i<this.ribbonElts.size(); i++){
+        for (int i = 0; i < this.ribbonElts.size(); i++) {
             DiveRibbonElement dre = this.ribbonElts.get(i);
-            if(dre.isHover()){
+            if (dre.isHover()) {
                 dre.setHighlight(true);
                 this.selected.add(i);
-            }
-            else{
+            } else {
                 dre.setHighlight(false);
             }
         }
     }
-    
+
     public void highlightHovered() {
-        for(int i=0; i<this.ribbonElts.size(); i++){
+        for (int i = 0; i < this.ribbonElts.size(); i++) {
             DiveRibbonElement dre = this.ribbonElts.get(i);
-            if(dre.isHover()){
+            if (dre.isHover()) {
                 dre.setHighlight(true);
-            }
-            else{
+            } else {
                 dre.setHighlight(false);
             }
         }
     }
-    
+
     public void highlightIndex(int index) {
         this.ribbonElts.get(index).setHighlight(true);
         this.selected.add(index);
     }
-    
+
     public void highlightAll(boolean on) {
         this.selected.clear();
-        for(int i=0; i<this.ribbonElts.size(); i++){
+        for (int i = 0; i < this.ribbonElts.size(); i++) {
             this.ribbonElts.get(i).setHighlight(on);
-            if(on){
+            if (on) {
                 this.selected.add(i);
             }
         }
     }
-    
-    public ArrayList<Integer> getSelectedIndexes(){
+
+    public ArrayList<Integer> getSelectedIndexes() {
         return this.selected;
     }
-    
-    public int getNumberOfElements(){
+
+    public int getNumberOfElements() {
         return this.ribbonElts.size();
     }
-    
-    public double getFocusPoint(){
-        
-        double focusSquareWidth = (this.elementWidth*this.ribbon.getChildren().size())+(this.elementInterval*(this.ribbon.getChildren().size()));
-        double focusPointInSquare = focusSquareWidth/2.0;
-        
+
+    public double getFocusPoint() {
+
+        double focusSquareWidth = (this.elementWidth * this.ribbon.getChildren().size()) + (this.elementInterval * (this.ribbon.getChildren().size()));
+        double focusPointInSquare = focusSquareWidth / 2.0;
+
         return focusPointInSquare;
     }
 
-    public ParallelTransition appearTransition() {
+    public ParallelTransition appearTransitionDiveIn() {
         int duration = 1000;
 
         FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
@@ -163,7 +161,7 @@ public abstract class DiveRibbonPane extends StackPane {
         ft.setToValue(1.0);
         ft.setCycleCount(1);
         ft.setAutoReverse(true);
-        
+
         ScaleTransition st = new ScaleTransition(Duration.millis(duration), this);
         st.setFromX(0.0);
         st.setFromY(0.0);
@@ -171,28 +169,74 @@ public abstract class DiveRibbonPane extends StackPane {
         st.setToY(1.0);
         st.setCycleCount(1);
         st.setAutoReverse(true);
-        
+
         ParallelTransition pt = new ParallelTransition();
         pt.getChildren().addAll(ft, st);
         pt.setCycleCount(1);
         return pt;
     }
-    
-    public ParallelTransition disappearTransition() {
+
+    public ParallelTransition disappearTransitionDiveIn() {
         int duration = 1000;
-        
+
         FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
         ft.setFromValue(1.0);
         ft.setToValue(0);
         ft.setCycleCount(1);
         ft.setAutoReverse(true);
-        
+
         ScaleTransition st = new ScaleTransition(Duration.millis(duration), this);
         st.setToX(10f);
         st.setToY(10f);
         st.setCycleCount(1);
         st.setAutoReverse(true);
-        
+
+        ParallelTransition pt = new ParallelTransition();
+        pt.getChildren().addAll(ft, st);
+        pt.setCycleCount(1);
+        return pt;
+    }
+
+    public ParallelTransition appearTransitionDiveOut() {
+        int duration = 1000;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
+        ft.setFromValue(0);
+        ft.setToValue(1.0);
+        ft.setCycleCount(1);
+        ft.setAutoReverse(true);
+
+        ScaleTransition st = new ScaleTransition(Duration.millis(duration), this);
+        st.setFromX(10.0);
+        st.setFromY(10.0);
+        st.setToX(1.0);
+        st.setToY(1.0);
+        st.setCycleCount(1);
+        st.setAutoReverse(true);
+
+        ParallelTransition pt = new ParallelTransition();
+        pt.getChildren().addAll(ft, st);
+        pt.setCycleCount(1);
+        return pt;
+    }
+
+    public ParallelTransition disappearTransitionDiveOut() {
+        int duration = 1000;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft.setCycleCount(1);
+        ft.setAutoReverse(true);
+
+        ScaleTransition st = new ScaleTransition(Duration.millis(duration), this);
+        st.setFromX(1.0);
+        st.setFromY(1.0);
+        st.setToX(0.0);
+        st.setToY(0.0);
+        st.setCycleCount(1);
+        st.setAutoReverse(true);
+
         ParallelTransition pt = new ParallelTransition();
         pt.getChildren().addAll(ft, st);
         pt.setCycleCount(1);

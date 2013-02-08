@@ -147,8 +147,8 @@ public class DiveViewScene extends StackPane {
 
                         //We add the current level in the scene
                         DiveViewScene.this.contentPane.getChildren().add(current);
-                        ParallelTransition at = current.appearTransition();
-                        ParallelTransition dt = previous.disappearTransition();
+                        ParallelTransition at = current.appearTransitionDiveIn();
+                        ParallelTransition dt = previous.disappearTransitionDiveIn();
                         at.play();
                         dt.play();
                         
@@ -179,8 +179,8 @@ public class DiveViewScene extends StackPane {
 
                         DiveRibbonPane next = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
                         DiveViewScene.this.contentPane.getChildren().add(next);
-                        ParallelTransition at = next.appearTransition();
-                        ParallelTransition dt = current.disappearTransition();
+                        ParallelTransition at = next.appearTransitionDiveOut();
+                        ParallelTransition dt = current.disappearTransitionDiveOut();
                         at.play();
                         dt.play();
 
