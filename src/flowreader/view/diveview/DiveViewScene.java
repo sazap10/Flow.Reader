@@ -142,7 +142,7 @@ public class DiveViewScene extends StackPane {
                             ali.add(previousSelectedIndex);
                             current.createRibbon(ali);
                         } else {
-                            current.createRibbon(getIndexesCurrentLevel(previousSelectedIndex));
+                            current.createRibbon(getIndexesCurrentLevelDiveIn(previousSelectedIndex, DiveViewScene.this.currentLevel));
                         }
                         double focusPoint = current.getFocusPoint();
                         double x = 0 + (previousFocusPoint - focusPoint);
@@ -191,7 +191,7 @@ public class DiveViewScene extends StackPane {
                             ali.add(previousSelectedIndex);
                             current.createRibbon(ali);
                         } else {
-                            current.createRibbon(getIndexesCurrentLevel(previousSelectedIndex));
+                            current.createRibbon(getIndexesCurrentLevelDiveIn(previousSelectedIndex, DiveViewScene.this.currentLevel));
                         }
                         double focusPoint = current.getFocusPoint();
                         double x = 0 + (previousFocusPoint - focusPoint);
@@ -227,14 +227,31 @@ public class DiveViewScene extends StackPane {
                 if (event.getDeltaY() < 0 && DiveViewScene.this.otherTransitionsFinished) {
                     if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1 && DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel).getSelectedIndexes().size()>0) {
                         DiveViewScene.this.otherTransitionsFinished = false;
-                        DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        
+                        //Collect data from the previous level
+                        DiveRibbonPane previous = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        double previousFocusPoint = previous.getFocusPoint();
+                        int previousSelectedIndex = previous.getSelectedIndexes().get(0);
+
+                        // Set up current level
                         DiveViewScene.this.currentLevel += 1;
                         DiveViewScene.this.lp.setHighLight(currentLevel);
-
-                        DiveRibbonPane next = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
-                        DiveViewScene.this.contentPane.getChildren().add(next);
-                        ParallelTransition at = next.appearTransitionDiveOut();
-                        ParallelTransition dt = current.disappearTransitionDiveOut();
+                        DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+                        if (DiveViewScene.this.currentLevel == 0) {
+                            ArrayList<Integer> ali = new ArrayList<>();
+                            ali.add(previousSelectedIndex);
+                            current.createRibbon(ali);
+                        } else {
+                            current.createRibbon(getIndexesCurrentLevelDiveOut(previousSelectedIndex, DiveViewScene.this.currentLevel));
+                        }
+                        double focusPoint = current.getFocusPoint();
+                        double x = 0 + (previousFocusPoint - focusPoint);
+                        current.setNewPosition(x, 0);
+                        
+                        
+                        DiveViewScene.this.contentPane.getChildren().add(current);
+                        ParallelTransition at = current.appearTransitionDiveOut();
+                        ParallelTransition dt = previous.disappearTransitionDiveOut();
                         at.play();
                         dt.play();
 
@@ -285,13 +302,13 @@ public class DiveViewScene extends StackPane {
         this.addEventHandler(ZoomEvent.ZOOM, diveOutZoomHandler);
     }
 
-    private ArrayList<Integer> getIndexesCurrentLevel(int previousSelectedIndex) {
+    private ArrayList<Integer> getIndexesCurrentLevelDiveIn(int previousSelectedIndex, int level) {
         ArrayList<Integer> temp = new ArrayList<>();
 
         temp.add(previousSelectedIndex * 2);
         temp.add((previousSelectedIndex * 2) + 1);
 
-        if ((this.levels.get(currentLevel).getNumberOfElements() % 2 == 1) && (this.levels.get(currentLevel + 1).getNumberOfElements() - 1 == previousSelectedIndex)) {
+        if ((this.levels.get(level).getNumberOfElements() % 2 == 1) && (this.levels.get(level + 1).getNumberOfElements() - 1 == previousSelectedIndex)) {
             temp.add((previousSelectedIndex * 2) + 2);
         }
 
@@ -300,6 +317,27 @@ public class DiveViewScene extends StackPane {
          s += i + " ";
          }
          System.out.println(s);*/
+        return temp;
+    }
+    
+    private ArrayList<Integer> getIndexesCurrentLevelDiveOut(int previousSelectedIndex, int level) {
+        ArrayList<Integer> temp = new ArrayList<>();
+        
+        if(level == this.levels.size()-1){
+            temp.add(0);
+        }
+        else {
+            if ((this.levels.get(level-1).getNumberOfElements() % 2 == 1) && (this.levels.get(level - 1).getNumberOfElements() - 1 == previousSelectedIndex)) {
+                previousSelectedIndex -= 1;
+            }
+            temp = getIndexesCurrentLevelDiveIn(previousSelectedIndex/4, level-1);
+        }
+
+        /*String s = "Curent Level "+ level+" previous index " + previousSelectedIndex + " current ";
+         for (Integer i : temp) {
+         s += i + " ";
+         }
+        System.out.println(s);*/
         return temp;
     }
 }
