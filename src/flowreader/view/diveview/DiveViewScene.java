@@ -9,14 +9,12 @@ import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import java.util.ArrayList;
 import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 
 /**
  *

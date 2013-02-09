@@ -6,7 +6,6 @@ package flowreader.view.diveview;
 
 import flowreader.model.WordCloud;
 import java.util.ArrayList;
-import javafx.scene.shape.Rectangle;
 
 /**
  *

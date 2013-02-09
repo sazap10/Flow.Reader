@@ -60,4 +60,8 @@ public class DivePage extends DiveRibbonElement{
         }
     }
     
+    public Rectangle pagebound(){
+        return this.pageBoundary;
+    }
+    
 }
