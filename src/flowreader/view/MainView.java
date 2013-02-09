@@ -44,7 +44,13 @@ public class MainView extends BorderPane{
         this.setTop(topBtnsBar);
         ribbon = new RibbonView();
         this.pi = new ProgressIndicator(0.0);
-        this.setBottom(this.pi);
+        pi.setStyle(" -fx-progress-color: #005888;");
+        // changing size without css
+        pi.setPrefSize(100, 100);
+        pi.setMinSize(100, 100);
+        pi.setMaxSize(100, 100);
+        //this.setCenter(ribbon);
+        this.setCenter(this.pi);
     }
     
     private void setUpButtons() {
@@ -120,15 +126,26 @@ public class MainView extends BorderPane{
             @Override
             public void handle(ActionEvent e) {
                 try {
+                    pi = new ProgressIndicator(0.0);
+                    pi.setStyle(" -fx-progress-color: #005888;");
+                    // changing size without css
+                    pi.setPrefSize(100, 100);
+                    pi.setMinSize(100, 100);
+                    pi.setMaxSize(100, 100);
+                    setCenter(pi);
                     pagesSceneButton.setDisable(true);
                     wordCloudsSceneButton.setDisable(true);
                     flowViewSceneButton.setDisable(true);
                     diveViewSceneButton.setDisable(true);
                     seamlessSceneButton.setDisable(true);
                     fileReader = new TextFileReader(MainView.this, pi);
-                    fileReader.startFileChooser(primaryStage);
-                                  
-                    new Thread(fileReader).start();
+                    DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
+                    fileReader.startFileChooser(primaryStage);                    
+                    pi.progressProperty().bind(fileReader.progressProperty());
+                    Thread t = new Thread(fileReader);  
+                    t.start();
+                    Thread t2 = new Thread(dct);  
+                    t2.start();
                     
                 } catch (Exception exception) {
                     System.out.println(exception);
@@ -139,6 +156,7 @@ public class MainView extends BorderPane{
         wordCloudsSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                MainView.this.setCenter(ribbon);
                 ribbon.switchToWordCloud();
             }
         });
@@ -146,6 +164,7 @@ public class MainView extends BorderPane{
         pagesSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                MainView.this.setCenter(ribbon);
                 ribbon.switchToPages();
             }
         });
@@ -153,6 +172,7 @@ public class MainView extends BorderPane{
         flowViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                MainView.this.setCenter(ribbon);
                 ribbon.switchToFlowView();
             }
         });
@@ -160,6 +180,7 @@ public class MainView extends BorderPane{
         diveViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                MainView.this.setCenter(ribbon);
                 ribbon.switchToDiveView();
             }
         });
@@ -167,25 +188,22 @@ public class MainView extends BorderPane{
                 seamlessSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                MainView.this.setCenter(ribbon);
                 ribbon.switchToTheView();
             }
         });
     }
 
-    public void docOpenned(Document doc) {
-        this.ribbon = new RibbonView(doc);
-        System.out.println("pass1");
-        this.setCenter(this.ribbon);
-        System.out.println("pass2");
+    public void docOpenned(Document doc, RibbonView ribbon) {
+        this.ribbon = ribbon;
         BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
-        MainView.this.ribbon.toBack();
-
+        this.ribbon.toBack();
+        
         pagesSceneButton.setDisable(false);
         wordCloudsSceneButton.setDisable(false);
         flowViewSceneButton.setDisable(false);
         diveViewSceneButton.setDisable(false);
         seamlessSceneButton.setDisable(false);
-        
     }
 
     

@@ -7,6 +7,7 @@ package flowreader.utils;
 import flowreader.model.Document;
 import flowreader.view.MainView;
 import flowreader.view.PageView;
+import flowreader.view.RibbonView;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,14 +32,12 @@ public class DocumentCreationTask extends Task{
     
     @Override
     protected Document call() throws Exception {
-        System.out.println("avant");
-        //pi.progressProperty().bind(fileReader.progressProperty());
-        System.out.println("apres");
-        //Document docu = readFile(PageView.textBoundWidth, PageView.textBoundHeight);
-        System.out.println("pass");
-        
         document = (Document) fileReader.get();
-        mv.docOpenned(document);
+        RibbonView ribbon = new RibbonView(document);
+        System.out.println("pass1");
+        //mv.setCenter(ribbon);
+        System.out.println("pass2");
+        mv.docOpenned(document, ribbon);
         return this.document;
     }
     

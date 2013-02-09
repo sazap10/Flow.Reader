@@ -79,26 +79,25 @@ public class TextFileReader extends Task {
 
         Text tempPage = new Text("");
         String pageText = "";
-        
+
         HashMap<String, Integer> wordsOccurrences = new HashMap<>();
-        /*LineNumberReader  lnr = new LineNumberReader(new java.io.FileReader(file));
+        LineNumberReader lnr = new LineNumberReader(new java.io.FileReader(file));
         lnr.skip(Long.MAX_VALUE);
-        int numberOfLines = lnr.getLineNumber();*/
-        
+        int numberOfLines = lnr.getLineNumber();
         //System.out.println(numberOfLines);
         try (LineNumberReader r = new LineNumberReader(new java.io.FileReader(file))) {
             String paragraph, word;
-            int nbligne=0;
+            int nbligne = 0;
             while ((paragraph = r.readLine()) != null) {
                 nbligne++;
-                this.updateProgress(nbligne, 100);
+                this.updateProgress(nbligne, numberOfLines+1);
                 //System.out.println(nbligne);
                 try (Scanner sc = new Scanner(paragraph)) {
                     while (sc.hasNext()) { // while there is words in the line
                         word = sc.next();
                         /*if(this.trimPunctuation(word).equals("apple")){
-                            System.out.println(word+" "+this.trimPunctuation(word));
-                        }*/
+                         System.out.println(word+" "+this.trimPunctuation(word));
+                         }*/
                         double wordWidth = new Text(word).getBoundsInLocal().getWidth();
                         double textWithNewLine = tempPage.getBoundsInLocal().getHeight() + lineHeight;
                         if (textWithNewLine > boundHeight) {
@@ -136,6 +135,7 @@ public class TextFileReader extends Task {
                         spaceLeft = boundWidth;
                     }
                 }
+                            
             }
             //System.out.println("Apple: "+wordsOccurrences.get("apple"));
             Page page = new Page(pageText);
@@ -143,17 +143,18 @@ public class TextFileReader extends Task {
             //System.out.println(""+page.toString());
             pages.add(page);
             wordClouds.add(wordCloud);
-            
+
         }
         //wordCloudLevels.add(wordClouds);// add the first level
 
-        ArrayList<ArrayList<WordCloud>> temp_list =makeCloudLevels(wordClouds);
-        
-        for(ArrayList<WordCloud> temp_element:temp_list){
+        ArrayList<ArrayList<WordCloud>> temp_list = makeCloudLevels(wordClouds);
+
+        for (ArrayList<WordCloud> temp_element : temp_list) {
             wordCloudLevels.add(temp_element);
         }
-        
+
         //System.out.println("number of levels:" + wordCloudLevels.size());
+        
         Document document = new Document(pages, wordCloudLevels);
         System.out.println("fin readfile");
         return document;
@@ -203,31 +204,32 @@ public class TextFileReader extends Task {
     }
 
     private void getCommonWords() {
-     StringBuilder stringBuffer = new StringBuilder();
-     BufferedReader bufferedReader = null;
-     try {
-     bufferedReader = new BufferedReader(new java.io.FileReader(System.getProperty("user.dir")+System.getProperty("file.separator")+"CommonEnglishWords.txt"));
-            
-     String temp_text;
-     while ((temp_text = bufferedReader.readLine()) != null) {
-     //System.out.println(temp_text);
-     this.commonWords.put(temp_text, 1);
-     }
-     } catch (FileNotFoundException ex) {
-     System.out.println("Couldn't find the file!");
-     } catch (IOException ex) {
-     System.out.println("no idea!.. some IOException");
-     } finally {
-     try {
-     if (bufferedReader != null) {
-     bufferedReader.close();
-     }
-     } catch (IOException ex) {
-     System.out.println("couldn't close the file!");
-     }
-     }
-     }
+        StringBuilder stringBuffer = new StringBuilder();
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new java.io.FileReader(System.getProperty("user.dir") + System.getProperty("file.separator") + "CommonEnglishWords.txt"));
+
+            String temp_text;
+            while ((temp_text = bufferedReader.readLine()) != null) {
+                //System.out.println(temp_text);
+                this.commonWords.put(temp_text, 1);
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("Couldn't find the file!");
+        } catch (IOException ex) {
+            System.out.println("no idea!.. some IOException");
+        } finally {
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+            } catch (IOException ex) {
+                System.out.println("couldn't close the file!");
+            }
+        }
+    }
     //removes punctuation from any words found
+
     private String trimPunctuation(String word) {
         String w = word.toLowerCase().replaceAll("\\W", "");
         return w;
@@ -238,8 +240,6 @@ public class TextFileReader extends Task {
         System.out.println("avant readfile");
         Document docu = readFile(PageView.textBoundWidth, PageView.textBoundHeight);
         System.out.println("apres readfile");
-        mv.docOpenned(docu);
-        System.out.println("apres docopenned");
         return docu;
     }
 }
