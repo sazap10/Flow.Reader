@@ -9,7 +9,7 @@ import flowreader.view.diveview.DiveViewScene;
 import flowreader.view.flowview.FlowViewScene;
 import flowreader.view.seamlessview.TheViewScene;
 import javafx.scene.layout.StackPane;
-import newflowview.NewFlowViewScene;
+import flowreader.view.newflowview.NewFlowViewScene;
 
 /**
  * 
