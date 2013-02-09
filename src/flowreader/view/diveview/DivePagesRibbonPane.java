@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 
@@ -49,8 +48,10 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         for (int i = 0; i < this.ribbonElts.size(); i++) {
             if (cullresult.contains(i)) {
                 this.ribbonElts.get(i).setOpacity(1);
+                //this.ribbonElts.get(i).setVisible(true);
             } else {
                 this.ribbonElts.get(i).setOpacity(0);
+                //this.ribbonElts.get(i).setVisible(false);
             }
         }
 
@@ -59,7 +60,9 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
 
     @Override
     public double getFocusPoint() {
-        double xSelectedElement = (this.elementWidth * this.selected.get(0)) + (this.elementInterval * (this.selected.get(0)));
+        //double numberOfPagesBefore = this.culling().size()/2;
+        double numberOfPagesBefore = this.selected.get(0);
+        double xSelectedElement = (this.elementWidth * numberOfPagesBefore) + (this.elementInterval * numberOfPagesBefore);
         double middleSelectedElement = this.elementWidth / 2.0;
         double focusPoint = xSelectedElement + middleSelectedElement;
         return focusPoint;
@@ -84,8 +87,10 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
                     for (int i = 0; i < ribbonElts.size(); i++) {
                         if (cullresult.contains(i)) {
                             ribbonElts.get(i).setOpacity(1);
+                            //ribbonElts.get(i).setVisible(true);
                         } else {
                             ribbonElts.get(i).setOpacity(0);
+                            //ribbonElts.get(i).setVisible(false);
                         }
                     }
 
@@ -107,7 +112,11 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
     }
 
     private ArrayList<Integer> culling() {
-        int numberOfPages = 11;
+        int numberOfPagesInScreen = (int) (Screen.getPrimary().getBounds().getWidth()/this.elementWidth);
+        int numberOfPages = (numberOfPagesInScreen*3);
+        if(numberOfPages%2==0){
+            numberOfPages+=1;
+        }
         ArrayList<Integer> indexToDisplay = new ArrayList<>();
         Integer select = this.selected.get(0);
         for (int i = 0; i < (numberOfPages / 2); i++) {
