@@ -45,23 +45,23 @@ public class MainView extends BorderPane{
         openFileButton.setId("topbarbutton");
         wordCloudsSceneButton = new Button("WordClouds");
         wordCloudsSceneButton.setId("topbarbutton");
-        wordCloudsSceneButton.setDisable(false);
+        wordCloudsSceneButton.setDisable(true);
         
         flowViewSceneButton = new Button("FlowView");
         flowViewSceneButton.setId("topbarbutton");
-        flowViewSceneButton.setDisable(false);
+        flowViewSceneButton.setDisable(true);
         
-        diveViewSceneButton = new Button("DiveView");
+        diveViewSceneButton = new Button("Diving");
         diveViewSceneButton.setId("topbarbutton");
-        diveViewSceneButton.setDisable(false);
+        diveViewSceneButton.setDisable(true);
         
         pagesSceneButton = new Button("Pages");
         pagesSceneButton.setId("topbarbutton");
-        pagesSceneButton.setDisable(false);
+        pagesSceneButton.setDisable(true);
         
-        seamlessSceneButton = new Button("The View");
+        seamlessSceneButton = new Button("Flowing");
         seamlessSceneButton.setId("topbarbutton");
-        seamlessSceneButton.setDisable(false);
+        seamlessSceneButton.setDisable(true);
         
     }
     
@@ -72,9 +72,9 @@ public class MainView extends BorderPane{
 
         HBox mainBtns = new HBox(10);
         mainBtns.getChildren().add(openFileButton);
-        mainBtns.getChildren().add(pagesSceneButton);
-        mainBtns.getChildren().add(wordCloudsSceneButton);
-        mainBtns.getChildren().add(flowViewSceneButton);
+        //mainBtns.getChildren().add(pagesSceneButton);
+        //mainBtns.getChildren().add(wordCloudsSceneButton);
+        //mainBtns.getChildren().add(flowViewSceneButton);
         mainBtns.getChildren().add(diveViewSceneButton);
         mainBtns.getChildren().add(seamlessSceneButton);
 
@@ -107,6 +107,12 @@ public class MainView extends BorderPane{
             @Override
             public void handle(ActionEvent e) {
                 try {
+                    pagesSceneButton.setDisable(true);
+                    wordCloudsSceneButton.setDisable(true);
+                    flowViewSceneButton.setDisable(true);
+                    diveViewSceneButton.setDisable(true);
+                    seamlessSceneButton.setDisable(true);
+                    
                     TextFileReader fileReader = new TextFileReader();
                     fileReader.startFileChooser(primaryStage);     
                     Document document = fileReader.readFile(PageView.textBoundWidth, PageView.textBoundHeight);       
@@ -117,7 +123,11 @@ public class MainView extends BorderPane{
                     BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
                     MainView.this.ribbon.toBack();
 
-
+                    pagesSceneButton.setDisable(false);
+                    wordCloudsSceneButton.setDisable(false);
+                    flowViewSceneButton.setDisable(false);
+                    diveViewSceneButton.setDisable(false);
+                    seamlessSceneButton.setDisable(false);
                 } catch (Exception exception) {
                     System.out.println(exception);
                 }

@@ -8,8 +8,6 @@ import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
 import flowreader.view.flowview.FlowViewScene;
 import flowreader.view.seamlessview.TheViewScene;
-import javafx.geometry.Pos;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -28,13 +26,13 @@ public class RibbonView extends StackPane {
         }
 
 	public RibbonView(Document document) {
-            this.pagesPane = new PagesScene(document.getPages());
-            this.wordCloudsPane = new WordCloudsScene(document.getWordClouds());
-            this.flowViewPane = new FlowViewScene(document);
+            //this.pagesPane = new PagesScene(document.getPages());
+            //this.wordCloudsPane = new WordCloudsScene(document.getWordClouds());
+            //this.flowViewPane = new FlowViewScene(document);
             this.diveViewPane = new DiveViewScene(document);
             this.theViewPane = new TheViewScene(pagesPane,wordCloudsPane);
 
-            this.getChildren().add(this.pagesPane);
+            this.getChildren().add(this.diveViewPane);
 	}
 
 	public void switchToWordCloud() {
@@ -60,7 +58,7 @@ public class RibbonView extends StackPane {
             this.getChildren().add(this.diveViewPane);
         }
         
-                public void switchToTheView() {
+        public void switchToTheView() {
             this.getChildren().clear();
             this.getChildren().add(this.theViewPane);
             this.theViewPane.buildTheView();
