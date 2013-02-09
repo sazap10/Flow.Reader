@@ -8,14 +8,12 @@ import java.util.ArrayList;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 /**
@@ -30,8 +28,9 @@ public abstract class DiveRibbonPane extends StackPane {
     protected double elementWidth;
     protected double elementHeight;
     protected ArrayList<Integer> selected;
+    protected int index;
 
-    public DiveRibbonPane(double x, double y, double elementWidth, double elementHeight) {
+    public DiveRibbonPane(int index, double x, double y, double elementWidth, double elementHeight) {
         this.ribbon = new Group();
         this.ribbonElts = new ArrayList<>();
         this.ribbon.setLayoutX(x);
@@ -40,25 +39,10 @@ public abstract class DiveRibbonPane extends StackPane {
         this.elementHeight = elementHeight;
         this.selected = new ArrayList<>();
         this.elementSelection();
-        this.elementHovering();
+        this.index = index;
     }
 
-    public void createRibbon(ArrayList<Integer> indexes) {
-        /*String s = "new group : ";
-         for(Integer i: indexes){
-         s+=i+" ";
-         }
-         System.out.println(s);*/
-        this.ribbon.getChildren().clear();
-        for (Integer i : indexes) {
-            this.ribbon.getChildren().add(this.ribbonElts.get(i));
-        }
-        this.selected = indexes;
-    }
-
-    public double getRibbonLayoutX() {
-        return this.ribbon.getLayoutX();
-    }
+    public abstract void createRibbon(ArrayList<Integer> indexes);
 
     public void setNewPosition(double posX, double posY) {
         this.ribbon.setLayoutX(posX);
@@ -70,33 +54,24 @@ public abstract class DiveRibbonPane extends StackPane {
         this.ribbon.setLayoutY(this.ribbon.getLayoutY() + dY);
     }
 
-    public double getRibbonWidth() {
-        return this.ribbon.getBoundsInLocal().getWidth();
-    }
-
-    private void elementHovering() {
+    private void elementSelection() {
         EventHandler<MouseEvent> hoveringHandler = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getEventType().equals(MouseEvent.MOUSE_MOVED)) {
-                    DiveRibbonPane.this.highlightHovered();
+                    DiveRibbonPane.this.highlightSelected();
                 }
             }
         };
-
         this.addEventHandler(MouseEvent.MOUSE_MOVED, hoveringHandler);
-    }
-
-    private void elementSelection() {
+        
         EventHandler<ScrollEvent> selectionHandler = new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
                 DiveRibbonPane.this.highlightSelected();
             }
         };
-
-
-        this.addEventHandler(ScrollEvent.SCROLL, selectionHandler);
+        //this.addEventHandler(ScrollEvent.SCROLL, selectionHandler);
         
         EventHandler<ZoomEvent> selectionZoomHandler = new EventHandler<ZoomEvent>() {
             @Override
@@ -104,9 +79,7 @@ public abstract class DiveRibbonPane extends StackPane {
                 DiveRibbonPane.this.highlightSelected();
             }
         };
-
-
-        this.addEventHandler(ZoomEvent.ZOOM, selectionZoomHandler);
+        //this.addEventHandler(ZoomEvent.ZOOM, selectionZoomHandler);
     }
 
     public void highlightSelected() {
@@ -122,32 +95,6 @@ public abstract class DiveRibbonPane extends StackPane {
         }
     }
 
-    public void highlightHovered() {
-        for (int i = 0; i < this.ribbonElts.size(); i++) {
-            DiveRibbonElement dre = this.ribbonElts.get(i);
-            if (dre.isHover()) {
-                dre.setHighlight(true);
-            } else {
-                dre.setHighlight(false);
-            }
-        }
-    }
-
-    public void highlightIndex(int index) {
-        this.ribbonElts.get(index).setHighlight(true);
-        this.selected.add(index);
-    }
-
-    public void highlightAll(boolean on) {
-        this.selected.clear();
-        for (int i = 0; i < this.ribbonElts.size(); i++) {
-            this.ribbonElts.get(i).setHighlight(on);
-            if (on) {
-                this.selected.add(i);
-            }
-        }
-    }
-
     public ArrayList<Integer> getSelectedIndexes() {
         return this.selected;
     }
@@ -156,13 +103,7 @@ public abstract class DiveRibbonPane extends StackPane {
         return this.ribbonElts.size();
     }
 
-    public double getFocusPoint() {
-
-        double focusSquareWidth = (this.elementWidth * this.ribbon.getChildren().size()) + (this.elementInterval * (this.ribbon.getChildren().size()));
-        double focusPointInSquare = focusSquareWidth / 2.0;
-
-        return focusPointInSquare;
-    }
+    public abstract double getFocusPoint();
 
     public ParallelTransition appearTransitionDiveIn() {
         int duration = 1000;

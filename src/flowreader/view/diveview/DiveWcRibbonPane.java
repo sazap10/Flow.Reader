@@ -14,16 +14,32 @@ import javafx.scene.shape.Rectangle;
  */
 public class DiveWcRibbonPane extends DiveRibbonPane{
 
-    public DiveWcRibbonPane(ArrayList<WordCloud> wordClouds, double x, double y) {
-        super(x, y, DiveWordCloud.width, DiveWordCloud.heigth);
+    public DiveWcRibbonPane(int index, ArrayList<WordCloud> wordClouds, double x, double y) {
+        super(index, x, y, DiveWordCloud.width, DiveWordCloud.heigth);
         
         // Creation of the word clouds
         for(WordCloud wc : wordClouds){
             this.ribbonElts.add(new DiveWordCloud(wc, x, y, this.elementWidth, this.elementHeight));
             x = x + this.elementWidth + this.elementInterval;
         }
-        //this.ribbon.getChildren().addAll(this.ribbonElts);
+    }
+    
+    @Override
+    public void createRibbon(ArrayList<Integer> indexes) {
+        this.getChildren().clear();
+        this.ribbon.getChildren().clear();
+        for (Integer i : indexes) {
+            this.ribbon.getChildren().add(this.ribbonElts.get(i));
+        }
+        this.selected = indexes;
         this.getChildren().add(this.ribbon);
+    }
+    
+    @Override
+    public double getFocusPoint() {
+        double focusSquareWidth = (this.elementWidth * this.ribbon.getChildren().size()) + (this.elementInterval * (this.ribbon.getChildren().size()));
+        double focusPointInSquare = focusSquareWidth / 2.0;
+        return focusPointInSquare;
     }
     
 }
