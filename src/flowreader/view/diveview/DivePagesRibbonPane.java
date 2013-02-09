@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Screen;
 import javafx.util.Duration;
 
 /**
@@ -31,14 +32,18 @@ public class DivePagesRibbonPane extends DiveRibbonPane{
     
     @Override
     public void createRibbon(ArrayList<Integer> indexes) {
+        
         this.getChildren().clear();
         this.ribbon.getChildren().clear();
         this.ribbon.getChildren().addAll(this.ribbonElts);
         this.selected = indexes;
         double focusPoint = this.getFocusPoint();
-        double x = 0 - focusPoint;
-        this.ribbon.setLayoutX(500);
+        double x = (Screen.getPrimary().getBounds().getWidth()/2)- focusPoint;
+        
         this.getChildren().add(this.ribbon);
+        
+        System.out.println(x);
+        this.setTranslateX(x);
     }
     
     @Override
