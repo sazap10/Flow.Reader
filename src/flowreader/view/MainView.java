@@ -5,11 +5,20 @@
 package flowreader.view;
 
 import flowreader.model.Document;
+import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.TextFileReader;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RunnableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -26,12 +35,16 @@ public class MainView extends BorderPane{
     private Button openFileButton, pagesSceneButton, wordCloudsSceneButton, flowViewSceneButton, diveViewSceneButton, seamlessSceneButton; // The buttons at the bottom of the page
     
     private RibbonView ribbon; // The ribbon at the center of the page
+    private ProgressIndicator pi;
+    private TextFileReader fileReader;
     
     public MainView(Stage primaryStage){
         this.setUpButtonBar();
         this.setButtonEvents(primaryStage);
         this.setTop(topBtnsBar);
         ribbon = new RibbonView();
+        this.pi = new ProgressIndicator(0.0);
+        this.setBottom(this.pi);
     }
     
     private void setUpButtons() {
@@ -112,22 +125,11 @@ public class MainView extends BorderPane{
                     flowViewSceneButton.setDisable(true);
                     diveViewSceneButton.setDisable(true);
                     seamlessSceneButton.setDisable(true);
+                    fileReader = new TextFileReader(MainView.this, pi);
+                    fileReader.startFileChooser(primaryStage);
+                                  
+                    new Thread(fileReader).start();
                     
-                    TextFileReader fileReader = new TextFileReader();
-                    fileReader.startFileChooser(primaryStage);     
-                    Document document = fileReader.readFile(PageView.textBoundWidth, PageView.textBoundHeight);       
-
-                    MainView.this.ribbon = new RibbonView(document);
-                    
-                    MainView.this.setCenter(MainView.this.ribbon);
-                    BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
-                    MainView.this.ribbon.toBack();
-
-                    pagesSceneButton.setDisable(false);
-                    wordCloudsSceneButton.setDisable(false);
-                    flowViewSceneButton.setDisable(false);
-                    diveViewSceneButton.setDisable(false);
-                    seamlessSceneButton.setDisable(false);
                 } catch (Exception exception) {
                     System.out.println(exception);
                 }
@@ -169,5 +171,23 @@ public class MainView extends BorderPane{
             }
         });
     }
+
+    public void docOpenned(Document doc) {
+        this.ribbon = new RibbonView(doc);
+        System.out.println("pass1");
+        this.setCenter(this.ribbon);
+        System.out.println("pass2");
+        BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
+        MainView.this.ribbon.toBack();
+
+        pagesSceneButton.setDisable(false);
+        wordCloudsSceneButton.setDisable(false);
+        flowViewSceneButton.setDisable(false);
+        diveViewSceneButton.setDisable(false);
+        seamlessSceneButton.setDisable(false);
+        
+    }
+
+    
 
 }

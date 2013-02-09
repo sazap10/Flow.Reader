@@ -7,6 +7,8 @@ package flowreader.utils;
 import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
+import flowreader.view.MainView;
+import flowreader.view.PageView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +17,8 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import javafx.concurrent.Task;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -23,14 +27,19 @@ import javafx.stage.Stage;
  *
  * @author D-Day
  */
-public class TextFileReader {
+public class TextFileReader extends Task {
 
     private File file;
     private HashMap<String, Integer> commonWords;
+    private Document doc;
+    private MainView mv;
+    private ProgressIndicator pi;
 
-    public TextFileReader() {
+    public TextFileReader(MainView mv, ProgressIndicator pi) {
         this.commonWords = new HashMap<>();
         this.getCommonWords();
+        this.mv = mv;
+        this.pi = pi;
     }
 
     public void startFileChooser(Stage primaryStage) {
@@ -57,6 +66,7 @@ public class TextFileReader {
      * @throws IOException
      */
     public Document readFile(double width, double height) throws IOException {
+        System.out.println("Debut readfile");
         ArrayList<Page> pages = new ArrayList<>(); // The list of all the pages
         ArrayList<WordCloud> wordClouds = new ArrayList();
         ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<>();
@@ -69,10 +79,20 @@ public class TextFileReader {
 
         Text tempPage = new Text("");
         String pageText = "";
+        
         HashMap<String, Integer> wordsOccurrences = new HashMap<>();
+        /*LineNumberReader  lnr = new LineNumberReader(new java.io.FileReader(file));
+        lnr.skip(Long.MAX_VALUE);
+        int numberOfLines = lnr.getLineNumber();*/
+        
+        //System.out.println(numberOfLines);
         try (LineNumberReader r = new LineNumberReader(new java.io.FileReader(file))) {
             String paragraph, word;
+            int nbligne=0;
             while ((paragraph = r.readLine()) != null) {
+                nbligne++;
+                this.updateProgress(nbligne, 100);
+                //System.out.println(nbligne);
                 try (Scanner sc = new Scanner(paragraph)) {
                     while (sc.hasNext()) { // while there is words in the line
                         word = sc.next();
@@ -117,13 +137,13 @@ public class TextFileReader {
                     }
                 }
             }
-
             //System.out.println("Apple: "+wordsOccurrences.get("apple"));
             Page page = new Page(pageText);
             WordCloud wordCloud = new WordCloud(wordsOccurrences);
             //System.out.println(""+page.toString());
             pages.add(page);
             wordClouds.add(wordCloud);
+            
         }
         //wordCloudLevels.add(wordClouds);// add the first level
 
@@ -135,13 +155,14 @@ public class TextFileReader {
         
         //System.out.println("number of levels:" + wordCloudLevels.size());
         Document document = new Document(pages, wordCloudLevels);
+        System.out.println("fin readfile");
         return document;
     }
 
     private ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds) {
         ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<>();
         ArrayList<ArrayList<WordCloud>> otherLevels = new ArrayList<>();
-
+        //updateProgress(1, 10);
         localLevels.add(clouds);
 
         ArrayList<WordCloud> currentLevel = new ArrayList<>();
@@ -210,5 +231,15 @@ public class TextFileReader {
     private String trimPunctuation(String word) {
         String w = word.toLowerCase().replaceAll("\\W", "");
         return w;
+    }
+
+    @Override
+    protected Document call() throws Exception {
+        System.out.println("avant readfile");
+        Document docu = readFile(PageView.textBoundWidth, PageView.textBoundHeight);
+        System.out.println("apres readfile");
+        mv.docOpenned(docu);
+        System.out.println("apres docopenned");
+        return docu;
     }
 }
