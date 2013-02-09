@@ -32,7 +32,7 @@ public class DiveWordCloud extends DiveRibbonElement{
     public static double heigth = 500;
     
     
-    DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
+    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
         this.wordCloud = wc;
@@ -43,7 +43,17 @@ public class DiveWordCloud extends DiveRibbonElement{
         this.getChildren().addAll(wordCloudBoundary, cloud);
         renderWordCloud();
     }
-    
+        public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level) {
+        wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
+        wordCloudBoundary.setFill(Color.TRANSPARENT);
+        this.wordCloud = wc;
+        this.words = new ArrayList<>();
+        this.cloud = new FlowPane();
+        this.cloud.setLayoutX(wordCloudBoundary.getX());
+        this.maxFontSize *= level;
+        this.getChildren().addAll(wordCloudBoundary, cloud);
+        renderWordCloud();
+    }
     public double getPageWidth() {
         return wordCloudBoundary.getWidth();
     }
