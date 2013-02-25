@@ -162,14 +162,6 @@ public class MainView extends BorderPane{
             }
         });
         
-        flowViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                MainView.this.setCenter(ribbon);
-                ribbon.switchToFlowView();
-            }
-        });
-        
         diveViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {

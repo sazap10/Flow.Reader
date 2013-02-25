@@ -13,18 +13,18 @@ import javafx.scene.layout.StackPane;
  *
  * @author D-Day
  */
-public class FlowViewScene extends StackPane{
-    private RibbonView rb;
+public class NewFlowViewScene extends StackPane{
+    private NewFlowView rb;
     private Document document;
     
-    public FlowViewScene(Document document){
+    public NewFlowViewScene(Document document){
         ArrayList<ArrayList<WordCloud>> wordClouds = new ArrayList<>();
         wordClouds.add(document.getWordClouds().get(0));
         for(ArrayList<WordCloud> alwc: document.getWordClouds()){
             wordClouds.add(alwc);
         }
         this.document = new Document(document.getPages(), wordClouds);
-        rb = new RibbonView(this);
+        rb = new NewFlowView(this);
         this.build();
     }
     

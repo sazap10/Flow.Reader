@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package flowreader.view.newflowview;
+package flowreader.view.flowview;
 
 import flowreader.model.Document;
 import flowreader.model.Page;
