@@ -237,9 +237,7 @@ public class TextFileReader extends Task {
 
     @Override
     protected Document call() throws Exception {
-        System.out.println("avant readfile");
         Document docu = readFile(PageView.textBoundWidth, PageView.textBoundHeight);
-        System.out.println("apres readfile");
         return docu;
     }
 }
