@@ -7,9 +7,8 @@ package flowreader.view;
 import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
 import flowreader.view.flowview.FlowViewScene;
-import flowreader.view.seamlessview.TheViewScene;
-import javafx.scene.layout.StackPane;
 import flowreader.view.newflowview.NewFlowViewScene;
+import javafx.scene.layout.StackPane;
 
 /**
  * 
@@ -21,8 +20,8 @@ public class RibbonView extends StackPane {
         private WordCloudsScene wordCloudsPane;
         private FlowViewScene flowViewPane;
         private DiveViewScene diveViewPane;
-        private TheViewScene theViewPane;
         private NewFlowViewScene newFlowPane;
+        
         public RibbonView(){
             
         }

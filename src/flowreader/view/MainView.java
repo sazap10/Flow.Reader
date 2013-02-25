@@ -7,13 +7,6 @@ package flowreader.view;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.TextFileReader;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -185,7 +178,7 @@ public class MainView extends BorderPane{
             }
         });
         
-                seamlessSceneButton.setOnAction(new EventHandler<ActionEvent>() {
+        seamlessSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 MainView.this.setCenter(ribbon);
