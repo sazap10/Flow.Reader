@@ -166,7 +166,7 @@ public class NewFlowView extends Group {
             //so if going to level 2, we need to translate by 1 cloudheight = 2^0 = 2^ level-2
             //if going to level 3, need to translate by 
             double numOfHeights;
-            pagesGroup.getTransforms().clear();
+            wordCloudPane.getTransforms().clear();
             
             double magnitude;
             if (level > 1){
@@ -175,11 +175,14 @@ public class NewFlowView extends Group {
                 numOfHeights = 0;
                 
             }
-            magnitude = numOfHeights * (pageHeight/3);
+            magnitude = (pageHeight+20);
             //System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
 
             Translate translate = new Translate(0, magnitude);
-            pagesGroup.getTransforms().add(translate);
+            System.out.println("magnitude! : "+magnitude);
+            wordCloudPane.getTransforms().add(translate);
+                        System.out.println("transformation : "+wordCloudPane.getTransforms().toString());
+
         }
         
         
