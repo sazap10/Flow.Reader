@@ -215,7 +215,6 @@ public class RibbonView extends Group {
                 pagesGroup = new Group();
 		wordCloudGroup = new Group();
                 ArrayList<WordCloud> clouds = document.getCloudLevel(0); 
-                ArrayList<WordCloudView> cloudViews = new ArrayList<>();
 		while (i < document.getNumOfPages()) {
 
 			WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,

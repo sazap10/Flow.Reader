@@ -157,7 +157,7 @@ public class NewFlowView extends Group {
             wordCloudPane.getChildren().clear();
             wordCloudPane.getChildren().add(newLevel);
            
-           // translatePages(level);
+            //translatePages(level);
         }
         
         //translates the pages appropriately to the wordcloud level they are on
@@ -166,7 +166,7 @@ public class NewFlowView extends Group {
             //so if going to level 2, we need to translate by 1 cloudheight = 2^0 = 2^ level-2
             //if going to level 3, need to translate by 
             double numOfHeights;
-            pagesGroup.getTransforms().clear();
+            wordCloudGroup.getTransforms().clear();
             
             double magnitude;
             if (level > 1){
@@ -175,11 +175,11 @@ public class NewFlowView extends Group {
                 numOfHeights = 0;
                 
             }
-            magnitude = numOfHeights * (pageHeight/3);
+            magnitude = numOfHeights * (pageHeight);
             //System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
 
             Translate translate = new Translate(0, magnitude);
-            pagesGroup.getTransforms().add(translate);
+            wordCloudGroup.getTransforms().add(translate);
         }
         
         
@@ -216,11 +216,10 @@ public class NewFlowView extends Group {
                 pagesGroup = new Group();
 		wordCloudGroup = new Group();
                 ArrayList<WordCloud> clouds = document.getCloudLevel(0); 
-                ArrayList<WordCloudView> cloudViews = new ArrayList<>();
 		while (i < document.getNumOfPages()) {
 
 			DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i),x, y + 50 + pageHeight,
-					pageWidth, pageHeight/3);			
+					pageWidth, pageHeight,1);			
 			wordCloudGroup.setOpacity(1);
 			this.wordCloudGroup.getChildren().add(wordCloud);
 
@@ -265,7 +264,7 @@ public class NewFlowView extends Group {
             ArrayList<WordCloud> currentLevelClouds;
             Group currentLevelViews;
             int cloudWidth = pageWidth;
-            int cloudHeight = pageHeight/3;
+            int cloudHeight = pageHeight;
             int cloudInterval = pageInterval;
             int x, y;
             
@@ -278,9 +277,9 @@ public class NewFlowView extends Group {
                 //render each cloud on this level and add it to the group
                 
                 for (WordCloud wordCloud: currentLevelClouds){
-                   DiveWordCloud currentView = new DiveWordCloud(wordCloud, x, y, cloudWidth, cloudHeight,i);
+                   DiveWordCloud currentView = new DiveWordCloud(wordCloud, x, y + 50 + cloudHeight, cloudWidth, cloudHeight,i);
                    currentLevelViews.getChildren().add(currentView);
-                   x += cloudWidth;                 
+                   x += cloudWidth + pageInterval;                 
                 }
                 
                 //add the group, and double dimensions
