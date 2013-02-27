@@ -25,7 +25,7 @@ public class MainView extends BorderPane{
     
     private HBox topBtnsBar; // the button bar at the top of the screen
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, pagesSceneButton, wordCloudsSceneButton, flowViewSceneButton, diveViewSceneButton, seamlessSceneButton; // The buttons at the bottom of the page
+    private Button openFileButton, flowViewSceneButton, diveViewSceneButton; // The buttons at the bottom of the page
     
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
@@ -55,26 +55,14 @@ public class MainView extends BorderPane{
 
         openFileButton = new Button("Open file");
         openFileButton.setId("topbarbutton");
-        wordCloudsSceneButton = new Button("WordClouds");
-        wordCloudsSceneButton.setId("topbarbutton");
-        wordCloudsSceneButton.setDisable(true);
         
-        flowViewSceneButton = new Button("FlowView");
+        flowViewSceneButton = new Button("Flowing");
         flowViewSceneButton.setId("topbarbutton");
         flowViewSceneButton.setDisable(true);
         
         diveViewSceneButton = new Button("Diving");
         diveViewSceneButton.setId("topbarbutton");
         diveViewSceneButton.setDisable(true);
-        
-        pagesSceneButton = new Button("Pages");
-        pagesSceneButton.setId("topbarbutton");
-        pagesSceneButton.setDisable(true);
-        
-        seamlessSceneButton = new Button("Flowing");
-        seamlessSceneButton.setId("topbarbutton");
-        seamlessSceneButton.setDisable(true);
-        
     }
     
     private void setUpButtonBar() {
@@ -84,11 +72,8 @@ public class MainView extends BorderPane{
 
         HBox mainBtns = new HBox(10);
         mainBtns.getChildren().add(openFileButton);
-        //mainBtns.getChildren().add(pagesSceneButton);
-        //mainBtns.getChildren().add(wordCloudsSceneButton);
-        //mainBtns.getChildren().add(flowViewSceneButton);
         mainBtns.getChildren().add(diveViewSceneButton);
-        mainBtns.getChildren().add(seamlessSceneButton);
+        mainBtns.getChildren().add(flowViewSceneButton);
 
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
@@ -126,11 +111,8 @@ public class MainView extends BorderPane{
                     pi.setMinSize(100, 100);
                     pi.setMaxSize(100, 100);
                     setCenter(pi);
-                    pagesSceneButton.setDisable(true);
-                    wordCloudsSceneButton.setDisable(true);
                     flowViewSceneButton.setDisable(true);
                     diveViewSceneButton.setDisable(true);
-                    seamlessSceneButton.setDisable(true);
                     fileReader = new TextFileReader(MainView.this, pi);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
                     fileReader.startFileChooser(primaryStage);                    
@@ -145,22 +127,6 @@ public class MainView extends BorderPane{
                 }
             }
         });
-
-        wordCloudsSceneButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                MainView.this.setCenter(ribbon);
-                ribbon.switchToWordCloud();
-            }
-        });
-        
-        pagesSceneButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                MainView.this.setCenter(ribbon);
-                ribbon.switchToPages();
-            }
-        });
         
         diveViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -170,11 +136,11 @@ public class MainView extends BorderPane{
             }
         });
         
-        seamlessSceneButton.setOnAction(new EventHandler<ActionEvent>() {
+        flowViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 MainView.this.setCenter(ribbon);
-                ribbon.switchToTheView();
+                ribbon.switchToFlowView();
             }
         });
     }
@@ -184,11 +150,8 @@ public class MainView extends BorderPane{
         BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
         this.ribbon.toBack();
         
-        pagesSceneButton.setDisable(false);
-        wordCloudsSceneButton.setDisable(false);
         flowViewSceneButton.setDisable(false);
         diveViewSceneButton.setDisable(false);
-        seamlessSceneButton.setDisable(false);
     }
 
     

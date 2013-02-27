@@ -14,9 +14,6 @@ import javafx.scene.layout.StackPane;
  * @author D-Day
  */
 public class RibbonView extends StackPane {
-
-        private PagesScene pagesPane;
-        private WordCloudsScene wordCloudsPane;
         private DiveViewScene diveViewPane;
         private NewFlowViewScene newFlowPane;
         
@@ -30,21 +27,8 @@ public class RibbonView extends StackPane {
             //this.flowViewPane = new FlowViewScene(document);
             this.diveViewPane = new DiveViewScene(document);
             //this.theViewPane = new TheViewScene(pagesPane,wordCloudsPane);
-this.newFlowPane = new NewFlowViewScene(document);
+            this.newFlowPane = new NewFlowViewScene(document);
             this.getChildren().add(this.diveViewPane);
-	}
-
-	public void switchToWordCloud() {
-            this.getChildren().clear();
-            this.getChildren().add(this.wordCloudsPane);
-            this.wordCloudsPane.setEvents(true);
-	}
-
-	public void switchToPages() {
-            this.getChildren().clear();
-            this.getChildren().add(this.pagesPane);
-            this.pagesPane.setEvents(true);
-
 	}
 
         public void switchToDiveView() {
@@ -52,7 +36,7 @@ this.newFlowPane = new NewFlowViewScene(document);
             this.getChildren().add(this.diveViewPane);
         }
         
-        public void switchToTheView() {
+        public void switchToFlowView() {
             this.getChildren().clear();
             this.getChildren().add(this.newFlowPane);
             
