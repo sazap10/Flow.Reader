@@ -21,11 +21,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.PDFTextStripper;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+
 
 import java.awt.image.BufferedImage;
 
@@ -73,19 +77,21 @@ public class TextFileReader{
     
     //reads in the images from the pdf file
     public Document readFile(Rectangle bounds) throws IOException{
-    ArrayList myList = new ArrayList<BufferedImage>();
     ArrayList<String> pageText;
     ArrayList<ArrayList<WordCloud>> clouds = new ArrayList<ArrayList<WordCloud>>();
+    Document document = new Document(700*2, 500*2);
         try {
             if (file != null) {
  
-                PDDocument document = PDDocument.load(file);
-                List<PDPage> pages = document.getDocumentCatalog().getAllPages();
-                for (int i = 0; i < pages.size(); i++) {
-                    PDPage pDPage = pages.get(i);
-                    myList.add(pDPage.convertToImage(BufferedImage.TYPE_3BYTE_BGR, 60 ));
+                PDDocument pdfDocument = PDDocument.load(file);
+               
+                for (int i = 0; i <  pdfDocument.getNumberOfPages(); i++) {
+                    PDPage pDPage = (PDPage)pdfDocument.getDocumentCatalog().getAllPages().get(i);
+                    WritableImage image = this.BufferedToWritable(pDPage.convertToImage(BufferedImage.TYPE_INT_ARGB_PRE, 60 ));
+                    document.addImage(image);
+                    System.out.println("got an image for page " + i);
                 }
-                pageText = getText(document, myList.size());
+                pageText = getText(pdfDocument, pdfDocument.getNumberOfPages());
                  
                 //get the page word counts for each page
                 for(int i = 0; i < pageText.size(); i++){                   
@@ -94,7 +100,7 @@ public class TextFileReader{
                
                 
                 clouds = makeWordClouds(pageText);
-                document.close();
+                pdfDocument.close();
 
             }
 
@@ -102,11 +108,28 @@ public class TextFileReader{
             ex.printStackTrace();
         }
         
-        
-        Document myDocument = new Document(myList,this.pageWordCounts, clouds, this.documentOccurrences, this.wordCount);
+        System.out.println("about to call document constructor");
+        document.addPageCounts(pageWordCounts);
+        document.addWordClouds(clouds, this.documentOccurrences, this.wordCount);
         System.out.println("ok here");
-        return myDocument;
+        return document;
 
+    }
+    
+    //converts a buffered image to a writeable image
+    public WritableImage BufferedToWritable(BufferedImage bf){
+        WritableImage wr = null;
+        if (bf != null) {
+            wr = new WritableImage(bf.getWidth(), bf.getHeight());
+            PixelWriter pw = wr.getPixelWriter();
+            for (int x = 0; x < bf.getWidth(); x++) {
+                for (int y = 0; y < bf.getHeight(); y++) {
+                    pw.setArgb(x, y, bf.getRGB(x, y));
+                }
+            }
+        }
+ 
+        return wr;
     }
     
     
