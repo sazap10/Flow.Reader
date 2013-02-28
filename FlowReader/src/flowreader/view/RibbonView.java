@@ -26,6 +26,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.util.Duration;
+import javafx.geometry.Bounds;
+import javafx.geometry.BoundingBox;
 import java.util.HashMap;
 import javafx.scene.transform.Translate;
 import javafx.scene.image.Image;
@@ -41,8 +43,8 @@ public class RibbonView extends Group {
 	private ArrayList<PageView> culledPages;
 	private ArrayList<Group> wordClouds;
 	private HashMap<Integer, Integer> zoomTable;
-	int pageWidth = 500;
-	int pageHeight = 700;
+	int pageWidth = 500 * 2;
+	int pageHeight = 700 * 2;
 	int pageInterval = 5;
 	int pagesNumber = 30;
 	int maxScale = 100;
@@ -185,33 +187,32 @@ public class RibbonView extends Group {
 		wordCloudPane = new StackPane();
 		pagesGroup = new Group();
 		wordCloudGroup = new Group();
-
-                document.resizePages(pageHeight, pageWidth);
-                ArrayList<WordCloud> clouds = document.getCloudLevel(1); 
-               ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
+               // ArrayList<WordCloud> clouds = document.getCloudLevel(1); 
+           //    ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
 		while (i < document.getNumOfPages()) {
 
-			WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
-					pageWidth, pageHeight / 3), 1);			
+			//WordCloudView wordCloud = new WordCloudView(clouds.get(i), new Rectangle(x, y,
+			//		pageWidth, pageHeight / 3), 1);			
 //			wordCloudGroup.setOpacity(1);
-			this.wordCloudGroup.getChildren().add(wordCloud);
+		//	this.wordCloudGroup.getChildren().add(wordCloud);
 
 //			PageView page = new PageView(new Rectangle(x, y + 50
 //					+ (pageHeight / 3), pageWidth, pageHeight));
 //			page.setText(document.getPage(i).getText());
-                        ImageView imageView = new ImageView();
-                        imageView.setImage(document.getPage(i));                     
-			this.pagesGroup.getChildren().add(imageView);
-                        imageView.relocate(x,y + 50 + (pageHeight / 3));
+                   
+			this.pagesGroup.getChildren().add(document.getPage(i));
+                        document.getPage(i).relocate(x,y + 50 + (pageHeight / 3));
+                        //document.getPage(i).setVisible(false);
+                        //document.getPage(i).setVisible(false);
 			x += pageWidth + pageInterval;
 			i++;
 		}
                 //add the first level of clouds
                 this.wordClouds.add(wordCloudGroup);
-                
+
                 //
                 //create the rest of the clouds
-                createCloudLevelGroups(document);
+              //  createCloudLevelGroups(document);
                 
 		this.pagesPane.getChildren().add(pagesGroup);
 		this.wordCloudPane.getChildren().add(wordCloudGroup);
@@ -219,11 +220,13 @@ public class RibbonView extends Group {
 		this.getChildren().add(wordCloudGroup);
 
 		// set up zoom levels
+            
                 createZoomTable(document.getNumOfCloudLevels());
 		for (int j = 0; j <= maxScale; j++) {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
 		}
+                this.setVisiblePages();
 		System.out
 				.println("screen properties:" + "\nmax X: "
 						+ screenBounds.getMaxX() + "\nmax Y: "
@@ -233,6 +236,45 @@ public class RibbonView extends Group {
 		this.setRibbonEvents(true);
 	}
         
+        
+        public void setVisiblePages(){
+            screenBounds = Screen.getPrimary().getVisualBounds();
+            Bounds  bounds = this.getLayoutBounds();
+            BoundingBox screenBoundingBox = new BoundingBox(0,0,screenBounds.getMaxX(), screenBounds.getMaxY());
+            System.out.println("height: " + screenBoundingBox.getHeight());
+            System.out.println("width: " + screenBoundingBox.getWidth());
+            double currPageWidth = pageWidth * array[curScale];
+            double currPageHeight = pageHeight * array[curScale];
+            double currPageInterval = pageInterval * array[curScale];
+            System.out.println("layoutx: " +RibbonView.this.getLayoutX() );
+            double x =  (RibbonView.this.getLayoutX() - screenBoundingBox.getWidth() / 2) * -1;
+            double y = (RibbonView.this.getLayoutY() - screenBoundingBox.getHeight() / 2) * -1;
+            System.out.println("curScale: " + array[curScale]);
+            //layoutx is the centre of the screen, so need to translate
+            //any pages back by doing (x - layoutX + screenBoundingBox.getWidth())
+            //needs to be (-layoutx - screenwidth/2)
+            //start of screen should be layoutX - screenBoundingBox.getWidth()
+            for (Node page: this.pagesGroup.getChildren()){
+                
+                //need to modify page's bounds with scale first
+                BoundingBox pageBounds = new BoundingBox(x, y, x + currPageWidth, y + currPageHeight);
+                System.out.println("x: " + x);
+                if(screenBoundingBox.intersects(pageBounds)){
+                    System.out.println("screenwidth: " + screenBoundingBox.getMaxX());
+                    System.out.println("on the screen, so setting visible");
+                    System.out.println("STARTS AT: " + pageBounds.getMinX());;
+                    page.setVisible(true);
+                }
+                else{
+                    System.out.println("off the screen, so disabling visibility");
+                    page.setVisible(false);
+                }
+                x += (currPageWidth + currPageInterval);
+                
+            }
+            
+            
+        }
         //creates all but the first level of wordCloud groups and adds them to the list of groups
         public void createCloudLevelGroups(Document document){
             ArrayList<WordCloud> currentLevelClouds;
@@ -315,8 +357,9 @@ public class RibbonView extends Group {
 		// add the transformation to the groups
 		// pagesGroup.getTransforms().add(scale);
 		// wordCloudGroup.getTransforms().add(scale2);
-                 checkCloudLevel();
+             //    checkCloudLevel();
 		stackPane.getTransforms().add(scale);
+                setVisiblePages();
                
 	/*System.out.println("x: " + x + "y: " + y
 				+ "\nstackPane parent bound x: "
@@ -352,15 +395,21 @@ public class RibbonView extends Group {
 
 			@Override
 			public void handle(MouseEvent event) {
+                             double totalDX = 0;
+                             double totalDY = 0;
 				if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
 					previousEvent = event;
 					// System.out.println("PRESSED");
 				} else if (event.getEventType()
 						.equals(MouseEvent.MOUSE_DRAGGED)) {
 
-					// System.out.println("DRAGGED");
+				//	 System.out.println("DRAGGED");
 					double dx = event.getX() - previousEvent.getX();
 					double dy = event.getY() - previousEvent.getY();
+                                        totalDX += dx;
+                                        totalDY += dy;
+   
+                                        
 					RibbonView.this.setLayoutX(RibbonView.this.getLayoutX()
 							+ dx);
 					RibbonView.this.setLayoutY(RibbonView.this.getLayoutY()
@@ -374,6 +423,12 @@ public class RibbonView extends Group {
 					tt.setAutoReverse(true);
 					tt.play();
 				}
+                                else if (event.getEventType().equals(MouseEvent.MOUSE_RELEASED)){
+                                    //get the change in dx and dy
+                                    System.out.println("finished da mouse drag thang");
+                                    setVisiblePages();
+                                }
+                             
 				previousEvent = event;
 				event.consume();
 			}
@@ -433,8 +488,11 @@ public class RibbonView extends Group {
 				ClipboardContent content = new ClipboardContent();
 				content.putString(((Page) event.getSource()).getText());
 				drag.setContent(content);
-
+                                System.out.println("dragging");
+                                double dx = event.getX();
+                                System.out.println("EVENT X: " + dx);
 				event.consume();
+                               // setVisiblePages();
 			}
 		};
 		int pageNum = 0;
@@ -447,6 +505,7 @@ public class RibbonView extends Group {
 			}
 			pageNum++;
 		}
+               
 
 	}
 
