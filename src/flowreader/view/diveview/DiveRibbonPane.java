@@ -107,7 +107,7 @@ public abstract class DiveRibbonPane extends StackPane {
 
     public ParallelTransition appearTransitionDiveIn() {
         int duration = 1000;
-
+System.out.println("in!");
         FadeTransition ft = new FadeTransition(Duration.millis(duration), this);
         ft.setFromValue(0);
         ft.setToValue(1.0);

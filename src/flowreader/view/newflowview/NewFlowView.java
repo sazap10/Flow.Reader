@@ -31,6 +31,10 @@ import javafx.scene.transform.Translate;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 import flowreader.view.diveview.*;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.event.ActionEvent;
 
 /**
  * 
@@ -148,18 +152,124 @@ public class NewFlowView extends Group {
 
         //function to replace all clouds currently displayed with half the amount (larger ones from next level up)
         public void scaleCloud(int level, int upOrDown){
+            
             //index of list is one less than the level of the cloud, so no need to increase zoom level:
-            Group newLevel = wordClouds.get(level);
+            final Node newLevel = wordClouds.get(level);
             //need to switch out the current group from the stackpane
             previous_x=this.getLayoutX();
             previous_y=this.getLayoutY();
+            
+            final Node previous = wordCloudPane.getChildren().get(0);
+            if(!wordCloudPane.getChildren().contains(newLevel)){
+                                  wordCloudPane.getChildren().add(newLevel);
+            }
 
+            if(upOrDown==-1){
+                // Run the transition effects
+            
+            ParallelTransition at = appearTransitionDiveIn(newLevel);
+            ParallelTransition dt = disappearTransitionDiveIn(previous);
+            at.play();
+            dt.play();
+
+            // When the transition is finished we remove the previous level
+            dt.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
             wordCloudPane.getChildren().clear();
-            wordCloudPane.getChildren().add(newLevel);
+                                  wordCloudPane.getChildren().add(newLevel);
+
+                }
+            });
            
+            }
+            else{
+                // Run the transition effects
+            
+            ParallelTransition at = appearTransitionDiveOut(newLevel);
+            ParallelTransition dt = disappearTransitionDiveOut(previous);
+            at.play();
+            dt.play();
+
+            // When the transition is finished we remove the previous level
+            dt.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+            wordCloudPane.getChildren().clear();
+                                  wordCloudPane.getChildren().add(newLevel);
+
+                }
+            });
+           
+            }
+
             //translatePages(level);
         }
         
+    public ParallelTransition appearTransitionDiveIn(Node victim) {
+        int duration = 1000;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
+        ft.setFromValue(0);
+        ft.setToValue(1.0);
+        ft.setCycleCount(1);
+        ft.setAutoReverse(true);
+
+        
+        ParallelTransition pt = new ParallelTransition();
+        pt.getChildren().addAll(ft);
+        pt.setCycleCount(1);
+        return pt;
+    }
+
+    public ParallelTransition disappearTransitionDiveIn(Node victim) {
+        int duration = 1000;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft.setCycleCount(1);
+        ft.setAutoReverse(true);
+
+      
+
+        ParallelTransition pt = new ParallelTransition();
+        pt.getChildren().addAll(ft);
+        pt.setCycleCount(1);
+        return pt;
+    }
+    
+     public ParallelTransition appearTransitionDiveOut(Node victim) {
+        int duration = 1000;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
+        ft.setFromValue(0);
+        ft.setToValue(1.0);
+        ft.setCycleCount(1);
+        ft.setAutoReverse(true);
+
+
+        ParallelTransition pt = new ParallelTransition();
+        pt.getChildren().addAll(ft);
+        pt.setCycleCount(1);
+        return pt;
+    }
+
+    public ParallelTransition disappearTransitionDiveOut(Node victim) {
+        int duration = 1000;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
+        ft.setFromValue(1.0);
+        ft.setToValue(0);
+        ft.setCycleCount(1);
+        ft.setAutoReverse(true);
+
+
+        ParallelTransition pt = new ParallelTransition();
+        pt.getChildren().addAll(ft);
+        pt.setCycleCount(1);
+        return pt;
+    }
         //translates the pages appropriately to the wordcloud level they are on
         public void translatePages(int level){
             //level is the level we are GOING TO
@@ -279,7 +389,7 @@ public class NewFlowView extends Group {
                 for (WordCloud wordCloud: currentLevelClouds){
                    DiveWordCloud currentView = new DiveWordCloud(wordCloud, x, y + 50 + cloudHeight, cloudWidth, cloudHeight,i);
                    currentLevelViews.getChildren().add(currentView);
-                   x += cloudWidth + pageInterval;                 
+                   x += cloudWidth + cloudInterval;                 
                 }
                 
                 //add the group, and double dimensions
@@ -309,13 +419,13 @@ public class NewFlowView extends Group {
 		if (deltaY <= 0) {
 			if (curScale < minScale + 1) {
 			} else {
-				curScale--;
+				curScale=curScale-2;
 				setOpacity();
 			}
 		} else {
 			if (curScale > maxScale - 1) {
 			} else {
-				curScale++;
+				curScale=curScale+2;
 				setOpacity();
 			}
 		}
