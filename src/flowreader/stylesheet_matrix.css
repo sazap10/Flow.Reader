@@ -7,18 +7,19 @@
 */
 
 .root { 
-    -fx-background-color: #B8B8B8;
+    -fx-background-color: #000000;
 }
 #page_background{
     
-    	-fx-fill: #FFFAF0;
+    	-fx-fill: transparent;
 
 }
 
 #page_text{
-        -fx-fill: #000000;
--fx-font-weight: normal;
+    -fx-fill: #FFFF00;
+    -fx-font-family: monospace;
 }
+
 #closeBtn{
 	-fx-background-color: #C70A0A;
     -fx-background-radius: 0;

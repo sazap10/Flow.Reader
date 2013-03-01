@@ -22,12 +22,14 @@ public class PageView extends Group{
 
     public PageView(Rectangle boundary) {
         pageBoundary = boundary;
-        pageBoundary.setFill(Color.FLORALWHITE);
+        //pageBoundary.setFill(Color.FLORALWHITE);
+        pageBoundary.setId("page_background");
         textBoundWidth = boundary.getWidth() * 0.8;
         textBoundHeight = boundary.getHeight() * 0.8;
         textBound = new Rectangle(textBoundWidth, textBoundHeight);
         textBound.setFill(Color.TRANSPARENT);
         pageText = new Text();
+        pageText.setId("page_text");
         pageText.setX(pageBoundary.getX() + ((pageBoundary.getWidth() - textBound.getWidth()) * 0.5));
         pageText.setY(pageBoundary.getY() + ((pageBoundary.getHeight() - textBound.getHeight()) * 0.5));
         //page = new Group();

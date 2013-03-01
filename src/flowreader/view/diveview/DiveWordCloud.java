@@ -31,7 +31,7 @@ public class DiveWordCloud extends DiveRibbonElement{
     public static double width = 500;
     public static double heigth = 500;
     public int level = 1;
-    
+
     public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
@@ -81,7 +81,7 @@ public class DiveWordCloud extends DiveRibbonElement{
     public double getX() {
         return wordCloudBoundary.getX();
     }
-
+    
     private void renderWordCloud(){
         Set<Map.Entry<String, Integer>> w = this.wordCloud.getSortedWordOccurrences().entrySet();
         Integer[] values;

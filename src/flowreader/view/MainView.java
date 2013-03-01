@@ -4,6 +4,7 @@
  */
 package flowreader.view;
 
+import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.TextFileReader;
@@ -25,7 +26,7 @@ public class MainView extends BorderPane{
     
     private HBox topBtnsBar; // the button bar at the top of the screen
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, flowViewSceneButton, diveViewSceneButton; // The buttons at the bottom of the page
+    private Button openFileButton, flowViewSceneButton, diveViewSceneButton,normalThemeButton,matrixThemeButton; // The buttons at the bottom of the page
     
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
@@ -63,6 +64,14 @@ public class MainView extends BorderPane{
         diveViewSceneButton = new Button("Diving");
         diveViewSceneButton.setId("topbarbutton");
         diveViewSceneButton.setDisable(true);
+        
+        normalThemeButton = new Button("Original Theme");
+        normalThemeButton.setId("topbarbutton");
+        normalThemeButton.setDisable(true);
+        
+            matrixThemeButton = new Button("Matrix Theme");
+        matrixThemeButton.setId("topbarbutton");
+        matrixThemeButton.setDisable(true);
     }
     
     private void setUpButtonBar() {
@@ -74,6 +83,8 @@ public class MainView extends BorderPane{
         mainBtns.getChildren().add(openFileButton);
         mainBtns.getChildren().add(diveViewSceneButton);
         mainBtns.getChildren().add(flowViewSceneButton);
+mainBtns.getChildren().add(normalThemeButton);
+mainBtns.getChildren().add(matrixThemeButton);
 
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
@@ -113,6 +124,8 @@ public class MainView extends BorderPane{
                     setCenter(pi);
                     flowViewSceneButton.setDisable(true);
                     diveViewSceneButton.setDisable(true);
+                    normalThemeButton.setDisable(true);
+                    matrixThemeButton.setDisable(true);
                     fileReader = new TextFileReader(MainView.this, pi);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
                     fileReader.startFileChooser(primaryStage);                    
@@ -143,6 +156,27 @@ public class MainView extends BorderPane{
                 ribbon.switchToFlowView();
             }
         });
+        
+                normalThemeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                     FlowReader.scene.getStylesheets().clear();
+
+        FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+            }
+        });
+                
+                               matrixThemeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                
+                
+                        FlowReader.scene.getStylesheets().clear();
+
+        FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
+
+            }
+        }); 
     }
 
     public void docOpenned(Document doc, RibbonView ribbon) {
@@ -152,6 +186,8 @@ public class MainView extends BorderPane{
         
         flowViewSceneButton.setDisable(false);
         diveViewSceneButton.setDisable(false);
+         normalThemeButton.setDisable(false);
+                    matrixThemeButton.setDisable(false);
     }
 
     

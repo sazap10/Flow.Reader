@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  */
 public class FlowReader extends Application {
     public static Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-    private Scene scene;
+    public static Scene scene;
     private MainView mainView;
 
     @Override
