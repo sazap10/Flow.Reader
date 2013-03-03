@@ -53,8 +53,8 @@ public class NewFlowViewScene extends StackPane {
     public void goToCenter() {
         rb.goToCenter();
     }
-    
-    public void goToReadingMode(){
+
+    public void goToReadingMode() {
         rb.goToReadingMode();
     }
 }

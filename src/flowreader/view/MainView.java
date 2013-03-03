@@ -47,7 +47,7 @@ public class MainView extends BorderPane {
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton,readingModeButton,GlowButton,ResetEffectButton; // The buttons at the bottom of the page
+    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
@@ -56,7 +56,7 @@ public class MainView extends BorderPane {
     public MainView(Stage primaryStage, Scene scene) {
         this.setId("mainview");
         this.setUpButtonBar();
-        this.setButtonEvents(primaryStage,scene);
+        this.setButtonEvents(primaryStage, scene);
         //this.setTop(topBtnsBar);
         //this.setBottom(bottomBtnsBar);
 
@@ -76,7 +76,7 @@ public class MainView extends BorderPane {
     private void setUpButtons() {
         closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
-closeBtn.setCancelButton(true);
+        closeBtn.setCancelButton(true);
 
         minBtn = new Button("_");
         minBtn.setId("minBtn");
@@ -112,19 +112,19 @@ closeBtn.setCancelButton(true);
         verticalLockButton = new Button("Vertical Lock: Off");
         verticalLockButton.setId("topbarbutton");
         verticalLockButton.setDisable(true);
-      
+
         readingModeButton = new Button("Reading Mode");
         readingModeButton.setId("topbarbutton");
         readingModeButton.setDisable(true);
-        
-        GlowButton= new Button("Glow!");
+
+        GlowButton = new Button("Glow!");
         GlowButton.setId("topbarbutton");
         GlowButton.setDisable(true);
-      
-        ResetEffectButton= new Button("Reset Effects");
+
+        ResetEffectButton = new Button("Reset Effects");
         ResetEffectButton.setId("topbarbutton");
         ResetEffectButton.setDisable(true);
-      
+
     }
 
     private void setUpButtonBar() {
@@ -132,16 +132,16 @@ closeBtn.setCancelButton(true);
 
         topBtnsBar = new HBox(10);
         bottomBtnsBar = new HBox(10);
-        
+
         topBtnsBar.setPrefWidth(screenBounds.getWidth());
-topBtnsBar.setMaxWidth(screenBounds.getWidth());
-topBtnsBar.setMinWidth(screenBounds.getWidth());
+        topBtnsBar.setMaxWidth(screenBounds.getWidth());
+        topBtnsBar.setMinWidth(screenBounds.getWidth());
 
-bottomBtnsBar.setPrefWidth(screenBounds.getWidth());
-bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
-bottomBtnsBar.setMinWidth(screenBounds.getWidth());
+        bottomBtnsBar.setPrefWidth(screenBounds.getWidth());
+        bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
+        bottomBtnsBar.setMinWidth(screenBounds.getWidth());
 
-        
+
         HBox mainBtns = new HBox(10);
         HBox configBtns = new HBox(10);
         mainBtns.getChildren().add(openFileButton);
@@ -166,45 +166,43 @@ bottomBtnsBar.setMinWidth(screenBounds.getWidth());
         bottomBtnsBar.getChildren().addAll(configBtns);
     }
 
-    private void setButtonEvents(final Stage primaryStage,final Scene scene) {
+    private void setButtonEvents(final Stage primaryStage, final Scene scene) {
 
         closeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                
+
                 //credit: https://gist.github.com/jewelsea/2992072
-                
-                    final Stage dialog = new Stage(StageStyle.TRANSPARENT);
-    dialog.initOwner(primaryStage);
 
-                    dialog.initModality(Modality.WINDOW_MODAL);
-    dialog.setScene(
-      new Scene(
-        HBoxBuilder.create().styleClass("modal-dialog").children(
-          LabelBuilder.create().text("Are you sure you want to quit FlowReader?").build(),
-          ButtonBuilder.create().text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent actionEvent) {
-              // take action and close the dialog.
-                primaryStage.close();
+                final Stage dialog = new Stage(StageStyle.TRANSPARENT);
+                dialog.initOwner(primaryStage);
 
-              dialog.close();
-            }
-          }).build(),
-          ButtonBuilder.create().text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent actionEvent) {
-              // abort action and close the dialog.
-              dialog.close();
-              primaryStage.setFullScreen(true);
-                            primaryStage.getScene().getRoot().setEffect(null);
-            }
-          }).build()
-        ).build()
-        , Color.TRANSPARENT
-      )
-    );
-        dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
-        primaryStage.getScene().getRoot().setEffect(new BoxBlur());
-        dialog.showAndWait();
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setScene(
+                        new Scene(
+                        HBoxBuilder.create().styleClass("modal-dialog").children(
+                        LabelBuilder.create().text("Are you sure you want to quit FlowReader?").build(),
+                        ButtonBuilder.create().text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        // take action and close the dialog.
+                        primaryStage.close();
+
+                        dialog.close();
+                    }
+                }).build(),
+                        ButtonBuilder.create().text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        // abort action and close the dialog.
+                        dialog.close();
+                        primaryStage.setFullScreen(true);
+                        primaryStage.getScene().getRoot().setEffect(null);
+                    }
+                }).build()).build(), Color.TRANSPARENT));
+                dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
+                primaryStage.getScene().getRoot().setEffect(new BoxBlur());
+                dialog.showAndWait();
 
             }
         });
@@ -234,13 +232,13 @@ bottomBtnsBar.setMinWidth(screenBounds.getWidth());
                     zoomLockButton.setDisable(true);
                     centerButton.setDisable(true);
                     verticalLockButton.setDisable(true);
-readingModeButton.setDisable(true);
-GlowButton.setDisable(true);
-ResetEffectButton.setDisable(true);
+                    readingModeButton.setDisable(true);
+                    GlowButton.setDisable(true);
+                    ResetEffectButton.setDisable(true);
                     fileReader = new TextFileReader(MainView.this, pi);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
                     fileReader.startFileChooser(primaryStage);
-                    
+
                     pi.progressProperty().bind(fileReader.progressProperty());
                     Thread t = new Thread(fileReader);
                     t.start();
@@ -275,7 +273,7 @@ ResetEffectButton.setDisable(true);
                 FlowReader.scene.getStylesheets().clear();
 
                 FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-                                ribbon.setEffect(null);
+                ribbon.setEffect(null);
 
             }
         });
@@ -285,7 +283,7 @@ ResetEffectButton.setDisable(true);
             public void handle(ActionEvent e) {
                 FlowReader.scene.getStylesheets().clear();
                 FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
-                
+
                 scene.setFill(Color.web("000000"));
             }
         });
@@ -326,7 +324,7 @@ ResetEffectButton.setDisable(true);
 
             }
         });
-        
+
         readingModeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -334,15 +332,15 @@ ResetEffectButton.setDisable(true);
 
             }
         });
-        
+
         GlowButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                                ribbon.setEffect(new Glow(0.8));
+                ribbon.setEffect(new Glow(0.8));
 
             }
         });
-        
+
         ResetEffectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {

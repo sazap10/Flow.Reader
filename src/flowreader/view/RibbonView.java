@@ -61,7 +61,8 @@ public class RibbonView extends StackPane {
     public void goToCenter() {
         newFlowPane.goToCenter();
     }
-    public void goToReadingMode(){
+
+    public void goToReadingMode() {
         newFlowPane.goToReadingMode();
     }
 }

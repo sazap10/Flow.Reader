@@ -21,27 +21,28 @@ public class FlowReader extends Application {
     public static Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     public static Scene scene;
     private MainView mainView;
-private Group root;
-private Pane rootPane;
+    private Group root;
+    private Pane rootPane;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Flow Reader");
         primaryStage.setFullScreen(true);
         root = new Group();
         rootPane = new Pane();
-                scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight(),Color.web("B8B8B8"));
-        mainView = new MainView(primaryStage,scene);
+        scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight(), Color.web("B8B8B8"));
+        mainView = new MainView(primaryStage, scene);
 
         //prevent buttons overlapping credit:
         //http://stackoverflow.com/questions/9837529/how-to-solve-the-overlapping-of-the-controls-each-other-belonging-to-two-differe
 
         rootPane.getChildren().add(mainView);
-           rootPane.getChildren().add(mainView.topBtnsBar);
-                rootPane.getChildren().add(mainView.bottomBtnsBar);
-                            mainView.topBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty());
-                            mainView.bottomBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty().add(screenBounds.getHeight()-26));
-        
- mainView.prefWidthProperty().bind(rootPane.widthProperty());
+        rootPane.getChildren().add(mainView.topBtnsBar);
+        rootPane.getChildren().add(mainView.bottomBtnsBar);
+        mainView.topBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty());
+        mainView.bottomBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty().add(screenBounds.getHeight() - 26));
+
+        mainView.prefWidthProperty().bind(rootPane.widthProperty());
         mainView.prefHeightProperty().bind(rootPane.heightProperty());
         root.getChildren().add(rootPane);
         PageView.setUpPageSize(500, 700);

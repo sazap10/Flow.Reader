@@ -99,23 +99,26 @@ public class NewFlowView extends Group {
     }
 
     public void goToCenter() {
-            curScale = 1;
+        curScale = 1;
         x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
         y_coord.set(0);
-            this.currentZoomLevel = maxZoomLevel-1;
-   
-           // zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
-             wordCloudPane.getChildren().clear();
-                    wordCloudPane.getChildren().add(wordClouds.get(maxZoomLevel-1));
+        this.currentZoomLevel = maxZoomLevel - 1;
+
+        // zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
+        wordCloudPane.getChildren().clear();
+        wordCloudPane.getChildren().add(wordClouds.get(maxZoomLevel - 1));
     }
-public void goToReadingMode(){
-    curScale = 80;
-    x_coord.set(0);
-    y_coord.set(0);
-    this.currentZoomLevel = 1;
-            zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
-       wordCloudPane.getChildren().clear();
-                    wordCloudPane.getChildren().add(wordClouds.get(0));}
+
+    public void goToReadingMode() {
+        curScale = 80;
+        x_coord.set(0);
+        y_coord.set(0);
+        this.currentZoomLevel = 1;
+        zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
+        wordCloudPane.getChildren().clear();
+        wordCloudPane.getChildren().add(wordClouds.get(0));
+    }
+
     public boolean getZoomLock() {
         return zoomLock;
     }
@@ -169,8 +172,7 @@ public void goToReadingMode(){
             if ((curScale > zoomTable.get(nextDown)) || (curScale > zoomTable.get(currentZoomLevel))) {
                 scaleCloud(nextDown, -1);
                 currentZoomLevel--;
-            } 
-            else if (curScale < zoomTable.get(nextUp)) {
+            } else if (curScale < zoomTable.get(nextUp)) {
                 scaleCloud(nextUp, 1);
                 currentZoomLevel++;
             }
@@ -190,9 +192,9 @@ public void goToReadingMode(){
 
         //need to switch out the current group from the stackpane
         /*previous_x = this.getLayoutX();
-        previous_y = this.getLayoutY();
-        */
-        
+         previous_y = this.getLayoutY();
+         */
+
         final Node previous = wordCloudPane.getChildren().get(0);
         if (!wordCloudPane.getChildren().contains(newLevel)) {
             wordCloudPane.getChildren().add(newLevel);
@@ -205,7 +207,7 @@ public void goToReadingMode(){
             ParallelTransition dt = disappearTransition(previous);
             at.play();
             dt.play();
-            
+
 
             // When the transition is finished we remove the previous level
             dt.setOnFinished(new EventHandler<ActionEvent>() {
@@ -273,8 +275,6 @@ public void goToReadingMode(){
         pt.setCycleCount(1);
         return pt;
     }
-
-  
 
     //translates the pages appropriately to the wordcloud level they are on
     public void translatePages(int level) {
@@ -455,13 +455,13 @@ public void goToReadingMode(){
         opacity = curScale / (double) opaqueScale;
         //pagesPane.setOpacity(opacity);
         //wordCloudPane.setOpacity(1-opacity);
-        double x = (maxScale-curScale)/100f*200f;
+        double x = (maxScale - curScale) / 100f * 200f;
         System.out.println(Math.round(x));
-                System.out.println("- "+x);
+        System.out.println("- " + x);
 
         VBox.setEffect(null);
-        VBox.setEffect(new BoxBlur(x,x,1));
-    
+        VBox.setEffect(new BoxBlur(x, x, 1));
+
     }
 
     public double getPageWidth() {
