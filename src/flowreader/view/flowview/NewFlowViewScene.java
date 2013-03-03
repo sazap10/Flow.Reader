@@ -50,10 +50,6 @@ public class NewFlowViewScene extends StackPane {
         rb.setVerticalLock(lock);
     }
 
-    public void goToCenter() {
-        rb.goToCenter();
-    }
-
     public void goToReadingMode() {
         rb.goToReadingMode();
     }

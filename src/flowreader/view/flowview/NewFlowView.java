@@ -98,16 +98,6 @@ public class NewFlowView extends Group {
         return this.pages;
     }
 
-    public void goToCenter() {
-        curScale = 1;
-        x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
-        y_coord.set(0);
-        this.currentZoomLevel = maxZoomLevel - 1;
-
-        // zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
-        wordCloudPane.getChildren().clear();
-        wordCloudPane.getChildren().add(wordClouds.get(maxZoomLevel - 1));
-    }
 
     public void goToReadingMode() {
         curScale = 80;

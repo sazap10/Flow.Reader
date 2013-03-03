@@ -17,7 +17,7 @@ public class RibbonView extends StackPane {
 
     private DiveViewScene diveViewPane;
     private NewFlowViewScene newFlowPane;
-
+private Document document;
     public RibbonView() {
     }
 
@@ -29,6 +29,7 @@ public class RibbonView extends StackPane {
         //this.theViewPane = new TheViewScene(pagesPane,wordCloudsPane);
         this.newFlowPane = new NewFlowViewScene(document);
         this.getChildren().add(this.diveViewPane);
+        this.document=document;
     }
 
     public void switchToDiveView() {
@@ -58,8 +59,10 @@ public class RibbonView extends StackPane {
         newFlowPane.setVerticalLock(lock);
     }
 
-    public void goToCenter() {
-        newFlowPane.goToCenter();
+    public void reset() {
+        this.getChildren().clear();
+        newFlowPane = new NewFlowViewScene(document);
+        this.getChildren().add(newFlowPane);
     }
 
     public void goToReadingMode() {

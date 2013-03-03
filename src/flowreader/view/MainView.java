@@ -306,7 +306,7 @@ public class MainView extends BorderPane {
         centerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                ribbon.goToCenter();
+                ribbon.reset();
 
             }
         });
