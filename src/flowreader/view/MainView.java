@@ -8,21 +8,33 @@ import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.TextFileReader;
+import javafx.beans.DefaultProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.DisplacementMap;
+import javafx.scene.effect.FloatMap;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.effect.Glow;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
+import javafx.scene.effect.PerspectiveTransform;
+import javafx.scene.effect.Reflection;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -32,15 +44,21 @@ import javafx.stage.StageStyle;
  */
 public class MainView extends BorderPane {
 
-    private HBox topBtnsBar; // the button bar at the top of the screen
-    private HBox bottomBtnsBar; // the button bar at the bottom of the screen
+    public HBox topBtnsBar; // the button bar at the top of the screen
+    public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton,readingModeButton; // The buttons at the bottom of the page
+    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton,readingModeButton,PerspectiveButton,ResetEffectButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
+    Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
     public MainView(Stage primaryStage) {
+        this.setId("mainview");
+        
+        this.setPrefHeight(screenBounds.getHeight());
+        this.setPrefWidth(screenBounds.getWidth());
+        
         this.setUpButtonBar();
         this.setButtonEvents(primaryStage);
         this.setTop(topBtnsBar);
@@ -102,6 +120,14 @@ closeBtn.setCancelButton(true);
         readingModeButton = new Button("Reading Mode");
         readingModeButton.setId("topbarbutton");
         readingModeButton.setDisable(true);
+        
+        PerspectiveButton= new Button("Perspective");
+        PerspectiveButton.setId("topbarbutton");
+        PerspectiveButton.setDisable(true);
+      
+        ResetEffectButton= new Button("Reset Effects");
+        ResetEffectButton.setId("topbarbutton");
+        ResetEffectButton.setDisable(true);
       
     }
 
@@ -121,6 +147,8 @@ closeBtn.setCancelButton(true);
         configBtns.getChildren().add(centerButton);
         configBtns.getChildren().add(verticalLockButton);
         configBtns.getChildren().add(readingModeButton);
+        configBtns.getChildren().add(PerspectiveButton);
+        configBtns.getChildren().add(ResetEffectButton);
 
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
@@ -201,9 +229,12 @@ closeBtn.setCancelButton(true);
                     centerButton.setDisable(true);
                     verticalLockButton.setDisable(true);
 readingModeButton.setDisable(true);
+PerspectiveButton.setDisable(true);
+ResetEffectButton.setDisable(true);
                     fileReader = new TextFileReader(MainView.this, pi);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
                     fileReader.startFileChooser(primaryStage);
+                    
                     pi.progressProperty().bind(fileReader.progressProperty());
                     Thread t = new Thread(fileReader);
                     t.start();
@@ -238,6 +269,8 @@ readingModeButton.setDisable(true);
                 FlowReader.scene.getStylesheets().clear();
 
                 FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+                                ribbon.setEffect(null);
+
             }
         });
 
@@ -246,6 +279,7 @@ readingModeButton.setDisable(true);
             public void handle(ActionEvent e) {
                 FlowReader.scene.getStylesheets().clear();
                 FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
+                ribbon.setEffect(new Glow(0.8));
             }
         });
 
@@ -293,6 +327,37 @@ readingModeButton.setDisable(true);
 
             }
         });
+        
+        PerspectiveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+int width = 220;
+ int height = 100;
+ 
+ FloatMap floatMap = new FloatMap();
+ floatMap.setWidth(width);
+ floatMap.setHeight(height);
+
+ for (int i = 0; i < width; i++) {
+     double v = (Math.sin(i / 20.0 * Math.PI) - 0.5) / 40.0;
+     for (int j = 0; j < height; j++) {
+         floatMap.setSamples(i, j, 0.0f, (float) v);
+     }
+ }
+
+ DisplacementMap displacementMap = new DisplacementMap();
+ displacementMap.setMapData(floatMap);
+ ribbon.setEffect(displacementMap);
+            }
+        });
+        
+        ResetEffectButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                ribbon.setEffect(null);
+
+            }
+        });
     }
 
     public void docOpenned(Document doc, RibbonView ribbon) {
@@ -307,5 +372,7 @@ readingModeButton.setDisable(true);
         centerButton.setDisable(false);
         verticalLockButton.setDisable(false);
         readingModeButton.setDisable(false);
+        PerspectiveButton.setDisable(false);
+        ResetEffectButton.setDisable(false);
     }
 }

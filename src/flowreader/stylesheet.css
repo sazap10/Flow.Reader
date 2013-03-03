@@ -6,9 +6,11 @@
         Purpose of the stylesheet follows.
 */
 
-.root { 
+
+#mainview{
     -fx-background-color: #B8B8B8;
 }
+
 #page_background{
 
     -fx-fill: #FFFAF0;

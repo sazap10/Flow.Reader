@@ -35,6 +35,9 @@ import flowreader.view.diveview.*;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.event.ActionEvent;
+import javafx.scene.CacheHint;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.GaussianBlur;
 
 /**
  *
@@ -428,13 +431,13 @@ public void goToReadingMode(){
             if (curScale < minScale + 1) {
             } else {
                 curScale = curScale - 1;
-                setOpacity();
+                //setEffect();
             }
         } else {
             if (curScale > maxScale - 1) {
             } else {
                 curScale = curScale + 1;
-                setOpacity();
+                //setEffect();
             }
         }
 
@@ -446,11 +449,18 @@ public void goToReadingMode(){
         stackPane.getTransforms().add(scale);
     }
 
-    public void setOpacity() {
+    public void setEffect() {
         double opacity;
         opacity = curScale / (double) opaqueScale;
         //pagesPane.setOpacity(opacity);
         //wordCloudPane.setOpacity(1-opacity);
+        double x = (maxScale-curScale)/100f*200f;
+        System.out.println(Math.round(x));
+                System.out.println("- "+x);
+
+        VBox.setEffect(null);
+        VBox.setEffect(new BoxBlur(x,x,1));
+    
     }
 
     public double getPageWidth() {
