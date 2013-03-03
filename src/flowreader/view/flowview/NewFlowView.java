@@ -4,6 +4,7 @@
  */
 package flowreader.view.flowview;
 
+import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
@@ -51,7 +52,7 @@ public class NewFlowView extends Group {
     int pagesNumber = 30;
     int maxScale = 100;
     int minScale = 0;
-    int curScale = 80;
+    int curScale = 0;
     int opaqueScale = 100;
     int currentZoomLevel;
     int minZoomLevel = 1;
@@ -77,7 +78,8 @@ public class NewFlowView extends Group {
     Point2D previous_p = new Point2D(0, 0);
     private boolean otherTransitionsFinished = true;
     private boolean zoomLock = false;
-private boolean verticalLock = false;
+private boolean verticalLock = true;
+
     public NewFlowView(StackPane stackPane) {
         this.pages = new ArrayList<>();
         this.wordClouds = new ArrayList<>();
@@ -85,7 +87,7 @@ private boolean verticalLock = false;
         pagesPane = new StackPane();
         wordCloudPane = new StackPane();
         this.zoomTable = new HashMap<>();
-        this.currentZoomLevel = 1;
+        this.currentZoomLevel = maxZoomLevel;
         this.VBox = new VBox();
     }
 
@@ -94,7 +96,7 @@ private boolean verticalLock = false;
     }
     
     public void Center(){
-        x_coord.set(0);
+        x_coord.set(-(VBox.getBoundsInLocal().getWidth()/2));
         y_coord.set(0);
     }
 public boolean getZoomLock(){
@@ -118,13 +120,13 @@ public void setVerticalLock(boolean lock){
         int zoomTable_scale;
         float percent;
         for (int i = 1; i <= zoomLevels; i++) {
-            percent = curScale / (i * 100.0f - 60);
+            percent = 80 / (i * 100.0f - 60);
             zoomTable_scale = (int) (percent * maxScale);
             zoomTable.put(i, zoomTable_scale);
             //System.out.println("put " + zoomTable_scale + "at level " + i);
         }
         maxZoomLevel = zoomLevels;
-
+currentZoomLevel = maxZoomLevel;
     }
 
     public void checkCloudLevel() {
@@ -345,13 +347,17 @@ public void setVerticalLock(boolean lock){
         //StackPane.setAlignment(wordCloudPane,Pos.TOP_CENTER);
         //StackPane.setAlignment(pagesPane, Pos.CENTER);
 
+ 
+       ArrayList<WordCloud> clouds = document.getCloudLevel(0);
+        ArrayList<WordCloudView> cloudViews = new ArrayList<>();
+        
+        
         pagesGroup = new Group();
         wordCloudGroup = new Group();
-        ArrayList<WordCloud> clouds = document.getCloudLevel(0);
-        ArrayList<WordCloudView> cloudViews = new ArrayList<>();
+        
+ 
         while (i < document.getNumOfPages()) {
-
-            DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeight,
+DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeight,
                     pageWidth, pageHeight / 3);
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
@@ -364,15 +370,17 @@ public void setVerticalLock(boolean lock){
             x += pageWidth + pageInterval;
             i++;
         }
-        //add the first level of clouds
+
+        
+          //add the first level of clouds
         this.wordClouds.add(wordCloudGroup);
 
-        //
-        //create the rest of the clouds
+               //create the rest of the clouds
         createCloudLevelGroups(document);
-
+        
+        
         this.pagesPane.getChildren().add(pagesGroup);
-        this.wordCloudPane.getChildren().add(wordCloudGroup);
+        this.wordCloudPane.getChildren().add(wordClouds.get(document.getNumOfCloudLevels()-1));
         stackPane.getChildren().add(VBox);
         // set up zoom levels
         createZoomTable(document.getNumOfCloudLevels());
@@ -389,6 +397,12 @@ public void setVerticalLock(boolean lock){
         t.yProperty().bind(y_coord);
         this.defineRibbonEvents();
         this.setRibbonEvents(true);
+                       
+        zoom(-1,screenBounds.getWidth() / 2,((screenBounds.getHeight() / 2)-(screenBounds.getHeight()*0.38)));
+        Center();
+        x_coord.set(-(VBox.getBoundsInLocal().getWidth()/2));
+        
+        
     }
 
     //creates all but the first level of wordCloud groups and adds them to the list of groups
@@ -441,13 +455,13 @@ public void setVerticalLock(boolean lock){
         if (deltaY <= 0) {
             if (curScale < minScale + 1) {
             } else {
-                curScale = curScale - 2;
+                curScale = curScale - 1;
                 setOpacity();
             }
         } else {
             if (curScale > maxScale - 1) {
             } else {
-                curScale = curScale + 2;
+                curScale = curScale + 1;
                 setOpacity();
             }
         }
@@ -455,17 +469,9 @@ public void setVerticalLock(boolean lock){
         previousScale = scale;
         scale = new Scale(array[curScale], array[curScale], x, y);
 
-//System.out.println("!!!!!!!!!!!!!!!!!!!!!!!"+stackPane.getTransforms().toString());
-
         stackPane.getTransforms().remove(previousScale);
         checkCloudLevel();
         stackPane.getTransforms().add(scale);
-
-
-        /*FlowReader.zoomLabel.setText("zoom: "
-         + ((float) curScale / (float) maxScale) * 100 + "%\ncurScale: "
-         + curScale + "\nmin Scale: " + minScale + "\nmax Scale: "
-         + maxScale);*/
     }
 
     public void setOpacity() {
@@ -524,7 +530,7 @@ public void setVerticalLock(boolean lock){
             public void handle(ScrollEvent event) {
                 if (!event.isDirect() && otherTransitionsFinished) {
                     double x = screenBounds.getWidth() / 2;
-                    double y = screenBounds.getHeight() / 2;
+                    double y = (screenBounds.getHeight() / 2)-(screenBounds.getHeight()*0.35);
                     
                     
                     zoom(event.getDeltaY(), x, y);
@@ -552,14 +558,14 @@ public void setVerticalLock(boolean lock){
             stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            stackPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            stackPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            FlowReader.scene.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            FlowReader.scene.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
         } else {
             stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            stackPane.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            stackPane.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            FlowReader.scene.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            FlowReader.scene.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
         }
 
     }
