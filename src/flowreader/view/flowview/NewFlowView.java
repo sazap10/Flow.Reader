@@ -99,13 +99,14 @@ public class NewFlowView extends Group {
     }
 
     public void goToCenter() {
-            curScale = 0;
+            curScale = 1;
         x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
         y_coord.set(0);
             this.currentZoomLevel = maxZoomLevel-1;
    
-            zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
-            scaleCloud(maxZoomLevel-1,1);
+           // zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
+             wordCloudPane.getChildren().clear();
+                    wordCloudPane.getChildren().add(wordClouds.get(maxZoomLevel-1));
     }
 public void goToReadingMode(){
     curScale = 80;
@@ -113,8 +114,8 @@ public void goToReadingMode(){
     y_coord.set(0);
     this.currentZoomLevel = 1;
             zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
-            scaleCloud(0,1);
-}
+       wordCloudPane.getChildren().clear();
+                    wordCloudPane.getChildren().add(wordClouds.get(0));}
     public boolean getZoomLock() {
         return zoomLock;
     }

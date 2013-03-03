@@ -47,22 +47,18 @@ public class MainView extends BorderPane {
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton,readingModeButton,PerspectiveButton,ResetEffectButton; // The buttons at the bottom of the page
+    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton,readingModeButton,GlowButton,ResetEffectButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
-    public MainView(Stage primaryStage) {
+    public MainView(Stage primaryStage, Scene scene) {
         this.setId("mainview");
-        
-        this.setPrefHeight(screenBounds.getHeight());
-        this.setPrefWidth(screenBounds.getWidth());
-        
         this.setUpButtonBar();
-        this.setButtonEvents(primaryStage);
-        this.setTop(topBtnsBar);
-        this.setBottom(bottomBtnsBar);
+        this.setButtonEvents(primaryStage,scene);
+        //this.setTop(topBtnsBar);
+        //this.setBottom(bottomBtnsBar);
 
         ribbon = new RibbonView();
         this.pi = new ProgressIndicator(0.0);
@@ -121,9 +117,9 @@ closeBtn.setCancelButton(true);
         readingModeButton.setId("topbarbutton");
         readingModeButton.setDisable(true);
         
-        PerspectiveButton= new Button("Perspective");
-        PerspectiveButton.setId("topbarbutton");
-        PerspectiveButton.setDisable(true);
+        GlowButton= new Button("Glow!");
+        GlowButton.setId("topbarbutton");
+        GlowButton.setDisable(true);
       
         ResetEffectButton= new Button("Reset Effects");
         ResetEffectButton.setId("topbarbutton");
@@ -136,6 +132,16 @@ closeBtn.setCancelButton(true);
 
         topBtnsBar = new HBox(10);
         bottomBtnsBar = new HBox(10);
+        
+        topBtnsBar.setPrefWidth(screenBounds.getWidth());
+topBtnsBar.setMaxWidth(screenBounds.getWidth());
+topBtnsBar.setMinWidth(screenBounds.getWidth());
+
+bottomBtnsBar.setPrefWidth(screenBounds.getWidth());
+bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
+bottomBtnsBar.setMinWidth(screenBounds.getWidth());
+
+        
         HBox mainBtns = new HBox(10);
         HBox configBtns = new HBox(10);
         mainBtns.getChildren().add(openFileButton);
@@ -147,7 +153,7 @@ closeBtn.setCancelButton(true);
         configBtns.getChildren().add(centerButton);
         configBtns.getChildren().add(verticalLockButton);
         configBtns.getChildren().add(readingModeButton);
-        configBtns.getChildren().add(PerspectiveButton);
+        configBtns.getChildren().add(GlowButton);
         configBtns.getChildren().add(ResetEffectButton);
 
         HBox winBtnBox = new HBox(10);
@@ -160,7 +166,7 @@ closeBtn.setCancelButton(true);
         bottomBtnsBar.getChildren().addAll(configBtns);
     }
 
-    private void setButtonEvents(final Stage primaryStage) {
+    private void setButtonEvents(final Stage primaryStage,final Scene scene) {
 
         closeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -229,7 +235,7 @@ closeBtn.setCancelButton(true);
                     centerButton.setDisable(true);
                     verticalLockButton.setDisable(true);
 readingModeButton.setDisable(true);
-PerspectiveButton.setDisable(true);
+GlowButton.setDisable(true);
 ResetEffectButton.setDisable(true);
                     fileReader = new TextFileReader(MainView.this, pi);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
@@ -279,7 +285,8 @@ ResetEffectButton.setDisable(true);
             public void handle(ActionEvent e) {
                 FlowReader.scene.getStylesheets().clear();
                 FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
-                ribbon.setEffect(new Glow(0.8));
+                
+                scene.setFill(Color.web("000000"));
             }
         });
 
@@ -328,26 +335,11 @@ ResetEffectButton.setDisable(true);
             }
         });
         
-        PerspectiveButton.setOnAction(new EventHandler<ActionEvent>() {
+        GlowButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-int width = 220;
- int height = 100;
- 
- FloatMap floatMap = new FloatMap();
- floatMap.setWidth(width);
- floatMap.setHeight(height);
+                                ribbon.setEffect(new Glow(0.8));
 
- for (int i = 0; i < width; i++) {
-     double v = (Math.sin(i / 20.0 * Math.PI) - 0.5) / 40.0;
-     for (int j = 0; j < height; j++) {
-         floatMap.setSamples(i, j, 0.0f, (float) v);
-     }
- }
-
- DisplacementMap displacementMap = new DisplacementMap();
- displacementMap.setMapData(floatMap);
- ribbon.setEffect(displacementMap);
             }
         });
         
@@ -372,7 +364,7 @@ int width = 220;
         centerButton.setDisable(false);
         verticalLockButton.setDisable(false);
         readingModeButton.setDisable(false);
-        PerspectiveButton.setDisable(false);
+        GlowButton.setDisable(false);
         ResetEffectButton.setDisable(false);
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -17,7 +18,7 @@ import javafx.stage.Stage;
  */
 public class FlowReader extends Application {
 
-    public static Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+    public static Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     public static Scene scene;
     private MainView mainView;
 private Group root;
@@ -28,15 +29,21 @@ private Pane rootPane;
         primaryStage.setFullScreen(true);
         root = new Group();
         rootPane = new Pane();
-        mainView = new MainView(primaryStage);
-               //rootPane.getChildren().add(mainView.topBtnsBar);
-                //rootPane.getChildren().add(mainView.bottomBtnsBar);
+                scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight(),Color.web("B8B8B8"));
+        mainView = new MainView(primaryStage,scene);
+
+        //prevent buttons overlapping credit:
+        //http://stackoverflow.com/questions/9837529/how-to-solve-the-overlapping-of-the-controls-each-other-belonging-to-two-differe
 
         rootPane.getChildren().add(mainView);
- 
-        root.getChildren().addAll(rootPane);
-        //root.setAutoSizeChildren(true);
-        scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
+           rootPane.getChildren().add(mainView.topBtnsBar);
+                rootPane.getChildren().add(mainView.bottomBtnsBar);
+                            mainView.topBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty());
+                            mainView.bottomBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty().add(screenBounds.getHeight()-26));
+        
+ mainView.prefWidthProperty().bind(rootPane.widthProperty());
+        mainView.prefHeightProperty().bind(rootPane.heightProperty());
+        root.getChildren().add(rootPane);
         PageView.setUpPageSize(500, 700);
 
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
