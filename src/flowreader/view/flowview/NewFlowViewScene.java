@@ -32,7 +32,22 @@ public class NewFlowViewScene extends StackPane{
        rb.buildRibbon(document);
        this.getChildren().add(rb);
     }
+    public boolean getZoomLock(){
+       return rb.getZoomLock();
+    }
+    public void setZoomLock(boolean lock){
+    rb.setZoomLock(lock);
+}
     
+        public boolean getVerticalLock(){
+       return rb.getVerticalLock();
+    }
+    public void setVerticalLock(boolean lock){
+    rb.setVerticalLock(lock);
+}
+    public void Center(){
+        rb.Center();
+    }
 }
 
     

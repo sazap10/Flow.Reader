@@ -10,14 +10,11 @@
     -fx-background-color: #000000;
 }
 #page_background{
-    
-    	-fx-fill: transparent;
-
+    	-fx-fill: #6E6E6E;
 }
 
 #page_text{
     -fx-fill: #FFFF00;
-    -fx-font-family: monospace;
 }
 
 #closeBtn{

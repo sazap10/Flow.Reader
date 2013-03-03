@@ -41,4 +41,21 @@ public class RibbonView extends StackPane {
             this.getChildren().add(this.newFlowPane);
             
         }
+        public boolean getZoomLock(){
+           return newFlowPane.getZoomLock();
+        }
+        public void setZoomLock(boolean lock){
+            newFlowPane.setZoomLock(lock);
+        }
+        
+                public boolean getVerticalLock(){
+           return newFlowPane.getVerticalLock();
+        }
+        public void setVerticalLock(boolean lock){
+            newFlowPane.setVerticalLock(lock);
+        }
+        
+        public void Center(){
+            newFlowPane.Center();
+        }
 }

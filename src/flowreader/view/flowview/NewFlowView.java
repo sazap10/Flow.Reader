@@ -76,7 +76,8 @@ public class NewFlowView extends Group {
     Scale scale = new Scale(1, 1);
     Point2D previous_p = new Point2D(0, 0);
     private boolean otherTransitionsFinished = true;
-
+    private boolean zoomLock = false;
+private boolean verticalLock = false;
     public NewFlowView(StackPane stackPane) {
         this.pages = new ArrayList<>();
         this.wordClouds = new ArrayList<>();
@@ -91,7 +92,25 @@ public class NewFlowView extends Group {
     public ArrayList<PageView> getPages() {
         return this.pages;
     }
+    
+    public void Center(){
+        x_coord.set(0);
+        y_coord.set(0);
+    }
+public boolean getZoomLock(){
+    return zoomLock;
+}
 
+public void setZoomLock(boolean lock){
+    zoomLock = lock;
+}
+public boolean getVerticalLock(){
+    return verticalLock;
+}
+
+public void setVerticalLock(boolean lock){
+    verticalLock = lock;
+}
     // sets the scale needed for the correct level of precision and other stuff
     public void createZoomTable(int zoomLevels) {
         // first, find the final zoom level
@@ -150,8 +169,10 @@ public class NewFlowView extends Group {
 
     //function to replace all clouds currently displayed with half the amount (larger ones from next level up)
     public void scaleCloud(int level, int upOrDown) {
+        if(zoomLock){
         otherTransitionsFinished = false; // Start the transition
-
+        }
+        
         //index of list is one less than the level of the cloud, so no need to increase zoom level:
         final Node newLevel = wordClouds.get(level);
 
@@ -311,8 +332,6 @@ public class NewFlowView extends Group {
     }
 
     public void buildRibbon(Document document) {
-
-
         int i = 0;
         int x = 0;
         int y = 0;
@@ -480,6 +499,9 @@ public class NewFlowView extends Group {
                         // System.out.println("DRAGGED");
                         double dx = event.getX() - previousEvent.getX();
                         double dy = event.getY() - previousEvent.getY();
+                        if(verticalLock){
+                            dy =0;
+                        }
                         TranslateTransition tt = new TranslateTransition(
                                 Duration.millis(100), NewFlowView.this.VBox);
                         tt.setByX(dx);
@@ -503,6 +525,8 @@ public class NewFlowView extends Group {
                 if (!event.isDirect() && otherTransitionsFinished) {
                     double x = screenBounds.getWidth() / 2;
                     double y = screenBounds.getHeight() / 2;
+                    
+                    
                     zoom(event.getDeltaY(), x, y);
 
                 }
