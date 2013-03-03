@@ -22,9 +22,6 @@
   -fx-background-radius: 6;
 }
 
-.modal-dialog:pressed {
-  -fx-cursor: move;
-}
 
 .modal-dialog .button:pressed {
   -fx-cursor: default;

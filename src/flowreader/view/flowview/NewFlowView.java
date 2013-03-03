@@ -95,11 +95,23 @@ public class NewFlowView extends Group {
         return this.pages;
     }
 
-    public void Center() {
+    public void goToCenter() {
+            curScale = 0;
         x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
         y_coord.set(0);
+            this.currentZoomLevel = maxZoomLevel-1;
+   
+            zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
+            scaleCloud(maxZoomLevel-1,1);
     }
-
+public void goToReadingMode(){
+    curScale = 80;
+    x_coord.set(0);
+    y_coord.set(0);
+    this.currentZoomLevel = 1;
+            zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
+            scaleCloud(0,1);
+}
     public boolean getZoomLock() {
         return zoomLock;
     }
@@ -126,7 +138,6 @@ public class NewFlowView extends Group {
             percent = 80 / (i * 100.0f - 60);
             zoomTable_scale = (int) (percent * maxScale);
             zoomTable.put(i, zoomTable_scale);
-            //System.out.println("put " + zoomTable_scale + "at level " + i);
         }
         maxZoomLevel = zoomLevels;
         currentZoomLevel = maxZoomLevel;
@@ -134,13 +145,10 @@ public class NewFlowView extends Group {
 
     public void checkCloudLevel() {
         int nextDown, nextUp;
-        //System.out.println("this is being called with curscale " + curScale);
-        //System.out.println("current zoom level: " + currentZoomLevel);
         int zoomTable_minScale = zoomTable.get(minZoomLevel);
         int zoomTable_maxScale = zoomTable.get(maxZoomLevel);
 
         if ((curScale < zoomTable_minScale + 1) && (curScale > zoomTable_maxScale - 1)) {
-            //System.out.println("curScale is in the confines it should be");             
             if (currentZoomLevel != minZoomLevel) {
                 nextDown = currentZoomLevel - 1;
             } else {
@@ -152,20 +160,15 @@ public class NewFlowView extends Group {
                 nextUp = currentZoomLevel;
             }
 
-
-            //System.out.println("nextdown = " + zoomTable.get(nextDown));
-            //System.out.println("nextup = " + zoomTable.get(nextUp));
             //now nextUp and nextDown have been set, check if we need to scale up or down
             // based on the current scale
             if ((curScale > zoomTable.get(nextDown)) || (curScale > zoomTable.get(currentZoomLevel))) {
                 scaleCloud(nextDown, -1);
                 currentZoomLevel--;
-
-                //System.out.println("scaling cloud down");
-            } else if (curScale < zoomTable.get(nextUp)) {
+            } 
+            else if (curScale < zoomTable.get(nextUp)) {
                 scaleCloud(nextUp, 1);
                 currentZoomLevel++;
-                //System.out.println("scaling cloud up");
             }
 
         }
@@ -175,16 +178,17 @@ public class NewFlowView extends Group {
     //function to replace all clouds currently displayed with half the amount (larger ones from next level up)
     public void scaleCloud(int level, int upOrDown) {
         if (zoomLock) {
-            otherTransitionsFinished = false; // Start the transition
+            otherTransitionsFinished = false;
         }
 
         //index of list is one less than the level of the cloud, so no need to increase zoom level:
         final Node newLevel = wordClouds.get(level);
 
         //need to switch out the current group from the stackpane
-        previous_x = this.getLayoutX();
+        /*previous_x = this.getLayoutX();
         previous_y = this.getLayoutY();
-
+        */
+        
         final Node previous = wordCloudPane.getChildren().get(0);
         if (!wordCloudPane.getChildren().contains(newLevel)) {
             wordCloudPane.getChildren().add(newLevel);
@@ -193,10 +197,11 @@ public class NewFlowView extends Group {
         if (upOrDown == -1) {
             // Run the transition effects
 
-            ParallelTransition at = appearTransitionDiveIn(newLevel);
-            ParallelTransition dt = disappearTransitionDiveIn(previous);
+            ParallelTransition at = appearTransition(newLevel);
+            ParallelTransition dt = disappearTransition(previous);
             at.play();
             dt.play();
+            
 
             // When the transition is finished we remove the previous level
             dt.setOnFinished(new EventHandler<ActionEvent>() {
@@ -211,9 +216,8 @@ public class NewFlowView extends Group {
 
         } else {
             // Run the transition effects
-
-            ParallelTransition at = appearTransitionDiveOut(newLevel);
-            ParallelTransition dt = disappearTransitionDiveOut(previous);
+            ParallelTransition at = appearTransition(newLevel);
+            ParallelTransition dt = disappearTransition(previous);
             at.play();
             dt.play();
 
@@ -233,7 +237,7 @@ public class NewFlowView extends Group {
         //translatePages(level);
     }
 
-    public ParallelTransition appearTransitionDiveIn(Node victim) {
+    public ParallelTransition appearTransition(Node victim) {
         int duration = 700;
 
         FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
@@ -249,7 +253,7 @@ public class NewFlowView extends Group {
         return pt;
     }
 
-    public ParallelTransition disappearTransitionDiveIn(Node victim) {
+    public ParallelTransition disappearTransition(Node victim) {
         int duration = 700;
 
         FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
@@ -266,37 +270,7 @@ public class NewFlowView extends Group {
         return pt;
     }
 
-    public ParallelTransition appearTransitionDiveOut(Node victim) {
-        int duration = 700;
-
-        FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
-        ft.setFromValue(0);
-        ft.setToValue(1.0);
-        ft.setCycleCount(1);
-        ft.setAutoReverse(true);
-
-
-        ParallelTransition pt = new ParallelTransition();
-        pt.getChildren().addAll(ft);
-        pt.setCycleCount(1);
-        return pt;
-    }
-
-    public ParallelTransition disappearTransitionDiveOut(Node victim) {
-        int duration = 700;
-
-        FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
-        ft.setFromValue(1.0);
-        ft.setToValue(0);
-        ft.setCycleCount(1);
-        ft.setAutoReverse(true);
-
-
-        ParallelTransition pt = new ParallelTransition();
-        pt.getChildren().addAll(ft);
-        pt.setCycleCount(1);
-        return pt;
-    }
+  
 
     //translates the pages appropriately to the wordcloud level they are on
     public void translatePages(int level) {
@@ -389,20 +363,15 @@ public class NewFlowView extends Group {
         createZoomTable(document.getNumOfCloudLevels());
         for (int j = 0; j <= maxScale; j++) {
             array[j] = Math.pow(1.05, j - 81);
-            //System.out.println("array[" + j + "]: " + array[j]);
         }
-        /*System.out
-         .println("screen properties:" + "\nmax X: "
-         + screenBounds.getMaxX() + "\nmax Y: "
-         + screenBounds.getMaxY());*/
+
         VBox.getTransforms().add(t);
         t.xProperty().bind(x_coord);
         t.yProperty().bind(y_coord);
         this.defineRibbonEvents();
         this.setRibbonEvents(true);
 
-        zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.38)));
-        Center();
+        zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
         x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
 
 

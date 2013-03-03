@@ -35,7 +35,7 @@ public class MainView extends BorderPane {
     private HBox topBtnsBar; // the button bar at the top of the screen
     private HBox bottomBtnsBar; // the button bar at the bottom of the screen
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton; // The buttons at the bottom of the page
+    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton,readingModeButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
@@ -99,6 +99,10 @@ closeBtn.setCancelButton(true);
         verticalLockButton.setId("topbarbutton");
         verticalLockButton.setDisable(true);
       
+        readingModeButton = new Button("Reading Mode");
+        readingModeButton.setId("topbarbutton");
+        readingModeButton.setDisable(true);
+      
     }
 
     private void setUpButtonBar() {
@@ -116,6 +120,7 @@ closeBtn.setCancelButton(true);
         configBtns.getChildren().add(zoomLockButton);
         configBtns.getChildren().add(centerButton);
         configBtns.getChildren().add(verticalLockButton);
+        configBtns.getChildren().add(readingModeButton);
 
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
@@ -195,7 +200,7 @@ closeBtn.setCancelButton(true);
                     zoomLockButton.setDisable(true);
                     centerButton.setDisable(true);
                     verticalLockButton.setDisable(true);
-
+readingModeButton.setDisable(true);
                     fileReader = new TextFileReader(MainView.this, pi);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
                     fileReader.startFileChooser(primaryStage);
@@ -262,7 +267,7 @@ closeBtn.setCancelButton(true);
         centerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                ribbon.Center();
+                ribbon.goToCenter();
 
             }
         });
@@ -280,6 +285,14 @@ closeBtn.setCancelButton(true);
 
             }
         });
+        
+        readingModeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                ribbon.goToReadingMode();
+
+            }
+        });
     }
 
     public void docOpenned(Document doc, RibbonView ribbon) {
@@ -293,5 +306,6 @@ closeBtn.setCancelButton(true);
         zoomLockButton.setDisable(false);
         centerButton.setDisable(false);
         verticalLockButton.setDisable(false);
+        readingModeButton.setDisable(false);
     }
 }

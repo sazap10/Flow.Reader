@@ -58,7 +58,10 @@ public class RibbonView extends StackPane {
         newFlowPane.setVerticalLock(lock);
     }
 
-    public void Center() {
-        newFlowPane.Center();
+    public void goToCenter() {
+        newFlowPane.goToCenter();
+    }
+    public void goToReadingMode(){
+        newFlowPane.goToReadingMode();
     }
 }
