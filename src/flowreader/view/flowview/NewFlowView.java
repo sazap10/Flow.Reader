@@ -78,7 +78,7 @@ public class NewFlowView extends Group {
     Point2D previous_p = new Point2D(0, 0);
     private boolean otherTransitionsFinished = true;
     private boolean zoomLock = false;
-private boolean verticalLock = true;
+    private boolean verticalLock = true;
 
     public NewFlowView(StackPane stackPane) {
         this.pages = new ArrayList<>();
@@ -94,26 +94,29 @@ private boolean verticalLock = true;
     public ArrayList<PageView> getPages() {
         return this.pages;
     }
-    
-    public void Center(){
-        x_coord.set(-(VBox.getBoundsInLocal().getWidth()/2));
+
+    public void Center() {
+        x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
         y_coord.set(0);
     }
-public boolean getZoomLock(){
-    return zoomLock;
-}
 
-public void setZoomLock(boolean lock){
-    zoomLock = lock;
-}
-public boolean getVerticalLock(){
-    return verticalLock;
-}
+    public boolean getZoomLock() {
+        return zoomLock;
+    }
 
-public void setVerticalLock(boolean lock){
-    verticalLock = lock;
-}
+    public void setZoomLock(boolean lock) {
+        zoomLock = lock;
+    }
+
+    public boolean getVerticalLock() {
+        return verticalLock;
+    }
+
+    public void setVerticalLock(boolean lock) {
+        verticalLock = lock;
+    }
     // sets the scale needed for the correct level of precision and other stuff
+
     public void createZoomTable(int zoomLevels) {
         // first, find the final zoom level
 
@@ -126,7 +129,7 @@ public void setVerticalLock(boolean lock){
             //System.out.println("put " + zoomTable_scale + "at level " + i);
         }
         maxZoomLevel = zoomLevels;
-currentZoomLevel = maxZoomLevel;
+        currentZoomLevel = maxZoomLevel;
     }
 
     public void checkCloudLevel() {
@@ -171,10 +174,10 @@ currentZoomLevel = maxZoomLevel;
 
     //function to replace all clouds currently displayed with half the amount (larger ones from next level up)
     public void scaleCloud(int level, int upOrDown) {
-        if(zoomLock){
-        otherTransitionsFinished = false; // Start the transition
+        if (zoomLock) {
+            otherTransitionsFinished = false; // Start the transition
         }
-        
+
         //index of list is one less than the level of the cloud, so no need to increase zoom level:
         final Node newLevel = wordClouds.get(level);
 
@@ -347,17 +350,17 @@ currentZoomLevel = maxZoomLevel;
         //StackPane.setAlignment(wordCloudPane,Pos.TOP_CENTER);
         //StackPane.setAlignment(pagesPane, Pos.CENTER);
 
- 
-       ArrayList<WordCloud> clouds = document.getCloudLevel(0);
+
+        ArrayList<WordCloud> clouds = document.getCloudLevel(0);
         ArrayList<WordCloudView> cloudViews = new ArrayList<>();
-        
-        
+
+
         pagesGroup = new Group();
         wordCloudGroup = new Group();
-        
- 
+
+
         while (i < document.getNumOfPages()) {
-DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeight,
+            DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeight,
                     pageWidth, pageHeight / 3);
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
@@ -371,16 +374,16 @@ DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeigh
             i++;
         }
 
-        
-          //add the first level of clouds
+
+        //add the first level of clouds
         this.wordClouds.add(wordCloudGroup);
 
-               //create the rest of the clouds
+        //create the rest of the clouds
         createCloudLevelGroups(document);
-        
-        
+
+
         this.pagesPane.getChildren().add(pagesGroup);
-        this.wordCloudPane.getChildren().add(wordClouds.get(document.getNumOfCloudLevels()-1));
+        this.wordCloudPane.getChildren().add(wordClouds.get(document.getNumOfCloudLevels() - 1));
         stackPane.getChildren().add(VBox);
         // set up zoom levels
         createZoomTable(document.getNumOfCloudLevels());
@@ -397,12 +400,12 @@ DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeigh
         t.yProperty().bind(y_coord);
         this.defineRibbonEvents();
         this.setRibbonEvents(true);
-                       
-        zoom(-1,screenBounds.getWidth() / 2,((screenBounds.getHeight() / 2)-(screenBounds.getHeight()*0.38)));
+
+        zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.38)));
         Center();
-        x_coord.set(-(VBox.getBoundsInLocal().getWidth()/2));
-        
-        
+        x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
+
+
     }
 
     //creates all but the first level of wordCloud groups and adds them to the list of groups
@@ -505,8 +508,8 @@ DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeigh
                         // System.out.println("DRAGGED");
                         double dx = event.getX() - previousEvent.getX();
                         double dy = event.getY() - previousEvent.getY();
-                        if(verticalLock){
-                            dy =0;
+                        if (verticalLock) {
+                            dy = 0;
                         }
                         TranslateTransition tt = new TranslateTransition(
                                 Duration.millis(100), NewFlowView.this.VBox);
@@ -530,9 +533,9 @@ DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeigh
             public void handle(ScrollEvent event) {
                 if (!event.isDirect() && otherTransitionsFinished) {
                     double x = screenBounds.getWidth() / 2;
-                    double y = (screenBounds.getHeight() / 2)-(screenBounds.getHeight()*0.35);
-                    
-                    
+                    double y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
+
+
                     zoom(event.getDeltaY(), x, y);
 
                 }

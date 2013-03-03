@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
  *
  * @author D-Day
  */
-public class PageView extends Group{
+public class PageView extends Group {
 
     private Rectangle pageBoundary, textBound;
     private Text pageText;
@@ -34,16 +34,16 @@ public class PageView extends Group{
         pageText.setY(pageBoundary.getY() + ((pageBoundary.getHeight() - textBound.getHeight()) * 0.5));
         //page = new Group();
         this.getChildren().addAll(pageBoundary, pageText);
-        
+
     }
-    
+
     public void setText(String text) {
         pageText.setText(text);
     }
-    
-    public String getText(){
-    	return pageText.getText();
-      
+
+    public String getText() {
+        return pageText.getText();
+
     }
 
     public double getPageWidth() {

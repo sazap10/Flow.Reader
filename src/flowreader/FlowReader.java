@@ -14,6 +14,7 @@ import javafx.stage.Stage;
  * @author D-Day
  */
 public class FlowReader extends Application {
+
     public static Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     public static Scene scene;
     private MainView mainView;
@@ -32,7 +33,6 @@ public class FlowReader extends Application {
         primaryStage.show();
     }
 
-   
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be

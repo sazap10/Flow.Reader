@@ -13,41 +13,44 @@ import javafx.scene.layout.StackPane;
  *
  * @author D-Day
  */
-public class NewFlowViewScene extends StackPane{
+public class NewFlowViewScene extends StackPane {
+
     private NewFlowView rb;
     private Document document;
-    
-    public NewFlowViewScene(Document document){
+
+    public NewFlowViewScene(Document document) {
         ArrayList<ArrayList<WordCloud>> wordClouds = new ArrayList<>();
         wordClouds.add(document.getWordClouds().get(0));
-        for(ArrayList<WordCloud> alwc: document.getWordClouds()){
+        for (ArrayList<WordCloud> alwc : document.getWordClouds()) {
             wordClouds.add(alwc);
         }
         this.document = new Document(document.getPages(), wordClouds);
         rb = new NewFlowView(this);
         this.build();
     }
-    
-    public void build(){
-       rb.buildRibbon(document);
-       this.getChildren().add(rb);
+
+    public void build() {
+        rb.buildRibbon(document);
+        this.getChildren().add(rb);
     }
-    public boolean getZoomLock(){
-       return rb.getZoomLock();
+
+    public boolean getZoomLock() {
+        return rb.getZoomLock();
     }
-    public void setZoomLock(boolean lock){
-    rb.setZoomLock(lock);
-}
-    
-        public boolean getVerticalLock(){
-       return rb.getVerticalLock();
+
+    public void setZoomLock(boolean lock) {
+        rb.setZoomLock(lock);
     }
-    public void setVerticalLock(boolean lock){
-    rb.setVerticalLock(lock);
-}
-    public void Center(){
+
+    public boolean getVerticalLock() {
+        return rb.getVerticalLock();
+    }
+
+    public void setVerticalLock(boolean lock) {
+        rb.setVerticalLock(lock);
+    }
+
+    public void Center() {
         rb.Center();
     }
 }
-
-    
