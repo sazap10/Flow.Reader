@@ -11,12 +11,20 @@ import flowreader.utils.TextFileReader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBuilder;
+import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -54,6 +62,7 @@ public class MainView extends BorderPane {
     private void setUpButtons() {
         closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
+closeBtn.setCancelButton(true);
 
         minBtn = new Button("_");
         minBtn.setId("minBtn");
@@ -89,6 +98,7 @@ public class MainView extends BorderPane {
         verticalLockButton = new Button("Vertical Lock: Off");
         verticalLockButton.setId("topbarbutton");
         verticalLockButton.setDisable(true);
+      
     }
 
     private void setUpButtonBar() {
@@ -122,7 +132,41 @@ public class MainView extends BorderPane {
         closeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                
+                //credit: https://gist.github.com/jewelsea/2992072
+                
+                    final Stage dialog = new Stage(StageStyle.TRANSPARENT);
+    dialog.initOwner(primaryStage);
+
+                    dialog.initModality(Modality.WINDOW_MODAL);
+    dialog.setScene(
+      new Scene(
+        HBoxBuilder.create().styleClass("modal-dialog").children(
+          LabelBuilder.create().text("Are you sure you want to quit FlowReader?").build(),
+          ButtonBuilder.create().text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent actionEvent) {
+              // take action and close the dialog.
                 primaryStage.close();
+
+              dialog.close();
+            }
+          }).build(),
+          ButtonBuilder.create().text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent actionEvent) {
+              // abort action and close the dialog.
+              dialog.close();
+              primaryStage.setFullScreen(true);
+                            primaryStage.getScene().getRoot().setEffect(null);
+            }
+          }).build()
+        ).build()
+        , Color.TRANSPARENT
+      )
+    );
+        dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
+        primaryStage.getScene().getRoot().setEffect(new BoxBlur());
+        dialog.showAndWait();
+
             }
         });
 
