@@ -39,9 +39,14 @@ public class FlowReader extends Application {
         rootPane.getChildren().add(mainView);
         rootPane.getChildren().add(mainView.topBtnsBar);
         rootPane.getChildren().add(mainView.bottomBtnsBar);
+        rootPane.getChildren().add(mainView.sideBtnsBar);
+        
         mainView.topBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty());
-        mainView.bottomBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty().add(screenBounds.getHeight() - 26));
-
+        mainView.bottomBtnsBar.setLayoutY(screenBounds.getHeight() - 26);
+        
+                mainView.sideBtnsBar.setLayoutX(screenBounds.getWidth()-165);
+                mainView.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26*5);
+        
         mainView.prefWidthProperty().bind(rootPane.widthProperty());
         mainView.prefHeightProperty().bind(rootPane.heightProperty());
         root.getChildren().add(rootPane);

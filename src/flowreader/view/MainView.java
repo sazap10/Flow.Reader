@@ -32,6 +32,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
@@ -46,8 +47,9 @@ public class MainView extends BorderPane {
 
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
+     public VBox sideBtnsBar;
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, centerButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton; // The buttons at the bottom of the page
+    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
@@ -105,9 +107,9 @@ public class MainView extends BorderPane {
         zoomLockButton.setId("topbarbutton");
         zoomLockButton.setDisable(true);
 
-        centerButton = new Button("Reset");
-        centerButton.setId("topbarbutton");
-        centerButton.setDisable(true);
+        resetButton = new Button("Reset");
+        resetButton.setId("topbarbutton");
+        resetButton.setDisable(true);
 
         verticalLockButton = new Button("Vertical Lock: Off");
         verticalLockButton.setId("topbarbutton");
@@ -132,7 +134,7 @@ public class MainView extends BorderPane {
 
         topBtnsBar = new HBox(10);
         bottomBtnsBar = new HBox(10);
-
+sideBtnsBar = new VBox(10);
         topBtnsBar.setPrefWidth(screenBounds.getWidth());
         topBtnsBar.setMaxWidth(screenBounds.getWidth());
         topBtnsBar.setMinWidth(screenBounds.getWidth());
@@ -141,21 +143,13 @@ public class MainView extends BorderPane {
         bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
         bottomBtnsBar.setMinWidth(screenBounds.getWidth());
 
-
+        
         HBox mainBtns = new HBox(10);
-        HBox configBtns = new HBox(10);
-        mainBtns.getChildren().add(openFileButton);
-        mainBtns.getChildren().add(diveViewSceneButton);
-        mainBtns.getChildren().add(flowViewSceneButton);
-        configBtns.getChildren().add(normalThemeButton);
-        configBtns.getChildren().add(matrixThemeButton);
-        configBtns.getChildren().add(zoomLockButton);
-        configBtns.getChildren().add(centerButton);
-        configBtns.getChildren().add(verticalLockButton);
-        configBtns.getChildren().add(readingModeButton);
-        configBtns.getChildren().add(GlowButton);
-        configBtns.getChildren().add(ResetEffectButton);
-
+        HBox effectBtns = new HBox(10);
+        VBox configBtns = new VBox(10);
+        mainBtns.getChildren().addAll(openFileButton,diveViewSceneButton,flowViewSceneButton);
+        effectBtns.getChildren().addAll(normalThemeButton,matrixThemeButton,GlowButton,ResetEffectButton);
+configBtns.getChildren().addAll(zoomLockButton,verticalLockButton,readingModeButton,resetButton);
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
         winBtnBox.getChildren().addAll(minBtn, closeBtn);
@@ -163,7 +157,9 @@ public class MainView extends BorderPane {
         HBox.setHgrow(winBtnBox, Priority.ALWAYS);
 
         topBtnsBar.getChildren().addAll(mainBtns, winBtnBox);
-        bottomBtnsBar.getChildren().addAll(configBtns);
+        bottomBtnsBar.getChildren().addAll(effectBtns);
+        sideBtnsBar.getChildren().add(configBtns);
+        configBtns.setAlignment(Pos.CENTER_RIGHT);
     }
 
     private void setButtonEvents(final Stage primaryStage, final Scene scene) {
@@ -230,7 +226,7 @@ public class MainView extends BorderPane {
                     normalThemeButton.setDisable(true);
                     matrixThemeButton.setDisable(true);
                     zoomLockButton.setDisable(true);
-                    centerButton.setDisable(true);
+                    resetButton.setDisable(true);
                     verticalLockButton.setDisable(true);
                     readingModeButton.setDisable(true);
                     GlowButton.setDisable(true);
@@ -274,6 +270,7 @@ public class MainView extends BorderPane {
 
                 FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
                 ribbon.setEffect(null);
+                scene.setFill(Color.web("B8B8B8"));
 
             }
         });
@@ -303,7 +300,7 @@ public class MainView extends BorderPane {
 
             }
         });
-        centerButton.setOnAction(new EventHandler<ActionEvent>() {
+        resetButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 ribbon.reset();
@@ -359,7 +356,7 @@ public class MainView extends BorderPane {
         normalThemeButton.setDisable(false);
         matrixThemeButton.setDisable(false);
         zoomLockButton.setDisable(false);
-        centerButton.setDisable(false);
+        resetButton.setDisable(false);
         verticalLockButton.setDisable(false);
         readingModeButton.setDisable(false);
         GlowButton.setDisable(false);
