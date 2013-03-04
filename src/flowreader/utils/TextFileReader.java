@@ -14,12 +14,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -220,10 +225,12 @@ public class TextFileReader extends Task {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
-File f = new File("CommonEnglishWords.txt");
+            InputStream f;
+            f = TextFileReader.class.getResourceAsStream("CommonEnglishWords.txt");
+//File f = new File("CommonEnglishWords.txt");
 //System.out.println("xx"+f.getAbsolutePath());
 
-            bufferedReader = new BufferedReader(new java.io.FileReader(f));
+            bufferedReader = new BufferedReader(new InputStreamReader(f));
 
             String temp_text;
             while ((temp_text = bufferedReader.readLine()) != null) {
@@ -236,7 +243,7 @@ File f = new File("CommonEnglishWords.txt");
            
         } catch (IOException ex) {
             System.out.println("no idea!.. some IOException");
-        } finally {
+        }finally {
             try {
                 if (bufferedReader != null) {
                     bufferedReader.close();
