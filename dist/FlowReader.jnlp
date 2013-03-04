@@ -10,8 +10,8 @@
     <jfx:javafx-runtime version="2.2+" href="http://javadl.sun.com/webapps/download/GetFile/javafx-latest/windows-i586/javafx2.jnlp"/>
   </resources>
   <resources>
-    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="FlowReader.jar" size="250635" download="eager" />
+    <j2se version="1.6+" java-vm-args="-Xms1700M "  href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="FlowReader.jar" size="324207" download="eager" />
     <jar href="lib/pdfbox-app-1.7.1.jar" size="10409882" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="FlowReader" >

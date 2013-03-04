@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,6 +22,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -52,8 +54,11 @@ public static BorderPane borderPane;
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Flow Reader");
         primaryStage.setFullScreen(true);
+        Group group = new Group();
+        
         borderPane = new BorderPane();
-        scene = new Scene(borderPane, screenBounds.getWidth(), screenBounds.getHeight());
+        group.getChildren().add(borderPane);
+        scene = new Scene(group, screenBounds.getWidth(), screenBounds.getHeight(),Color.BLACK);
 
         mainPane = new StackPane();
         zoomLabel = new Text("zoom label");

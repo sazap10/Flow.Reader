@@ -226,7 +226,7 @@ public class RibbonView extends Group {
 			array[j] = Math.pow(1.05, j - 81);
 			System.out.println("array[" + j + "]: " + array[j]);
 		}
-                this.setVisiblePages();
+                //this.setVisiblePages();
 		System.out
 				.println("screen properties:" + "\nmax X: "
 						+ screenBounds.getMaxX() + "\nmax Y: "
@@ -359,7 +359,7 @@ public class RibbonView extends Group {
 		// wordCloudGroup.getTransforms().add(scale2);
              //    checkCloudLevel();
 		stackPane.getTransforms().add(scale);
-                setVisiblePages();
+                //setVisiblePages();
                
 	/*System.out.println("x: " + x + "y: " + y
 				+ "\nstackPane parent bound x: "
@@ -426,7 +426,7 @@ public class RibbonView extends Group {
                                 else if (event.getEventType().equals(MouseEvent.MOUSE_RELEASED)){
                                     //get the change in dx and dy
                                     System.out.println("finished da mouse drag thang");
-                                    setVisiblePages();
+                                   // setVisiblePages();
                                 }
                              
 				previousEvent = event;

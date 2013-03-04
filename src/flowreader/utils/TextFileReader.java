@@ -87,7 +87,7 @@ public class TextFileReader{
                
                 for (int i = 0; i <  pdfDocument.getNumberOfPages(); i++) {
                     PDPage pDPage = (PDPage)pdfDocument.getDocumentCatalog().getAllPages().get(i);
-                    WritableImage image = this.BufferedToWritable(pDPage.convertToImage(BufferedImage.TYPE_INT_ARGB_PRE, 60 ));
+                    WritableImage image = this.BufferedToWritable(pDPage.convertToImage(BufferedImage.TYPE_USHORT_555_RGB, 60 ));
                     document.addImage(image);
                     System.out.println("got an image for page " + i);
                 }
