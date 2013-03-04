@@ -59,7 +59,7 @@ public class MainView extends BorderPane {
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private EventHandler<KeyEvent> keyHandler;
     private StackPane home;
-    
+    VBox introBox;
     public MainView(Stage primaryStage, Scene scene) {
         this.setId("mainview");
         this.setUpEvents();
@@ -80,6 +80,7 @@ public class MainView extends BorderPane {
         this.buildHomeView();
         this.setCenter(home);
 
+        
         //this.setCenter(this.pi);
 
     }
@@ -96,14 +97,14 @@ public class MainView extends BorderPane {
                 rect.heightProperty().bind(home.heightProperty());
         rect.setFill(Color.DARKSLATEBLUE);
         Text text = new Text();
-        text.setText("Welcome to FlowReader.\n Enjoy!\n\nKeyboard shortcuts:\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
+        text.setText("Welcome to FlowReader.\n Enjoy!\n\nKeyboard shortcuts:\nH: Home\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
                 + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock");
         
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.ALICEBLUE);
         text.setFont(Font.font(null, FontWeight.BOLD, 20));
-        //text.setX(25);
-        //text.setY(65);
+        //text.layoutXProperty().bind(home.widthProperty().divide(2).subtract(text.getBoundsInLocal().getWidth()/2));
+        //text.layoutYProperty().bind(home.heightProperty().divide(2).subtract(text.getBoundsInLocal().getHeight()/2));
         text.setEffect(bloom);
         
     //    Group r = new Group() {};
@@ -127,12 +128,18 @@ text2.setRotate(rot);
 text2.setFont(new Font(fontList.get(randfont),font));
 //r.getChildren().add(text2);
 
+
         
 g.getChildren().add(text2);        
     }
+ introBox = new VBox(10);
+introBox.getChildren().add(pi);
+introBox.getChildren().add(text);
 home.getChildren().add(g);
-home.getChildren().add(text);
-}
+home.getChildren().add(introBox);
+//introBox.autosize();
+introBox.setAlignment(Pos.CENTER);
+    }
     
     private void setUpEvents() {
         keyHandler = new EventHandler<KeyEvent>() {
@@ -188,7 +195,9 @@ home.getChildren().add(text);
                     case "Z":
                         zoomLockButton.fire();
                         break;
-                    
+                    case "H":
+                        homeButton.fire();
+                        break;
                     case "C":
                         readingModeButton.fire();
                         break;
@@ -357,13 +366,16 @@ home.getChildren().add(text);
             @Override
             public void handle(ActionEvent e) {
                 try {
+
                     pi = new ProgressIndicator(0.0);
                     pi.setStyle(" -fx-progress-color: #005888;");
                     // changing size without css
                     pi.setPrefSize(100, 100);
                     pi.setMinSize(100, 100);
                     pi.setMaxSize(100, 100);
-                    setCenter(pi);
+                                        introBox.getChildren().set(0, pi);
+
+                    //setCenter(pi);
                     flowViewSceneButton.setDisable(true);
                     diveViewSceneButton.setDisable(true);
                     homeButton.setDisable(true);

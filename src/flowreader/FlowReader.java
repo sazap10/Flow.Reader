@@ -55,6 +55,7 @@ public class FlowReader extends Application {
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
         primaryStage.setScene(scene);
+
         primaryStage.show();
     }
 
