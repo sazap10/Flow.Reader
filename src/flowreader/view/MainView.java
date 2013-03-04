@@ -28,6 +28,7 @@ import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.effect.Reflection;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
@@ -47,16 +48,19 @@ public class MainView extends BorderPane {
 
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
-     public VBox sideBtnsBar;
+    public VBox sideBtnsBar;
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+    private EventHandler<KeyEvent> keyHandler;
 
     public MainView(Stage primaryStage, Scene scene) {
         this.setId("mainview");
+        this.setUpEvents();
+        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
         this.setUpButtonBar();
         this.setButtonEvents(primaryStage, scene);
         //this.setTop(topBtnsBar);
@@ -75,6 +79,80 @@ public class MainView extends BorderPane {
 
     }
 
+    private void setUpEvents() {
+        keyHandler = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                //System.out.println(event.getCode().toString());
+                switch (event.getCode().toString()) {
+
+                    case "w":
+                    case "W":
+                        ribbon.zoom(1);
+                        break;
+
+                    case "s":
+                    case "S":
+                        ribbon.zoom(-1);
+                        break;
+
+                    case "a":
+                    case "A":
+                        ribbon.swipe("left");
+                        break;
+
+                    case "d":
+                    case "D":
+                        ribbon.swipe("right");
+                        break;
+
+                    case "M":
+                        matrixThemeButton.fire();
+                        break;
+
+                    case "N":
+                        normalThemeButton.fire();
+                        break;
+
+                    case "G":
+                        GlowButton.fire();
+                        break;
+                    case "R":
+                        ResetEffectButton.fire();
+
+                        break;
+                    case "F":
+                        resetButton.fire();
+
+                        break;
+                    case "L":
+                        verticalLockButton.fire();
+                        break;
+                        
+                    case "Z":
+                        zoomLockButton.fire();
+                        break;
+
+                    case "Q":
+                        if (!homeButton.disableProperty().get()) {
+                            if (ribbon.getCurrentView().equals("")) {
+                                diveViewSceneButton.fire();
+                                break;
+                            } else if (ribbon.getCurrentView().equals("DiveView")) {
+                                flowViewSceneButton.fire();
+
+                            } else if (ribbon.getCurrentView().equals("FlowView")) {
+                                homeButton.fire();
+                            } else if (ribbon.getCurrentView().equals("HomeView")) {
+                                diveViewSceneButton.fire();
+                            }
+                        }
+                }
+//event.consume();
+            }
+        };
+    }
+
     private void setUpButtons() {
         closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
@@ -86,6 +164,10 @@ public class MainView extends BorderPane {
         openFileButton = new Button("Open file");
         openFileButton.setId("topbarbutton");
         openFileButton.setDefaultButton(true);
+
+        homeButton = new Button("Home");
+        homeButton.setId("topbarbutton");
+        homeButton.setDisable(true);
 
         flowViewSceneButton = new Button("Flowing");
         flowViewSceneButton.setId("topbarbutton");
@@ -134,7 +216,7 @@ public class MainView extends BorderPane {
 
         topBtnsBar = new HBox(10);
         bottomBtnsBar = new HBox(10);
-sideBtnsBar = new VBox(10);
+        sideBtnsBar = new VBox(10);
         topBtnsBar.setPrefWidth(screenBounds.getWidth());
         topBtnsBar.setMaxWidth(screenBounds.getWidth());
         topBtnsBar.setMinWidth(screenBounds.getWidth());
@@ -143,13 +225,13 @@ sideBtnsBar = new VBox(10);
         bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
         bottomBtnsBar.setMinWidth(screenBounds.getWidth());
 
-        
+
         HBox mainBtns = new HBox(10);
         HBox effectBtns = new HBox(10);
         VBox configBtns = new VBox(10);
-        mainBtns.getChildren().addAll(openFileButton,diveViewSceneButton,flowViewSceneButton);
-        effectBtns.getChildren().addAll(normalThemeButton,matrixThemeButton,GlowButton,ResetEffectButton);
-configBtns.getChildren().addAll(zoomLockButton,verticalLockButton,readingModeButton,resetButton);
+        mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
+        effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
+        configBtns.getChildren().addAll(zoomLockButton, verticalLockButton, readingModeButton, resetButton);
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
         winBtnBox.getChildren().addAll(minBtn, closeBtn);
@@ -182,7 +264,7 @@ configBtns.getChildren().addAll(zoomLockButton,verticalLockButton,readingModeBut
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         // take action and close the dialog.
-System.exit(0);
+                        System.exit(0);
                     }
                 }).build(),
                         ButtonBuilder.create().text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
@@ -194,10 +276,12 @@ System.exit(0);
                         primaryStage.getScene().getRoot().setEffect(null);
                     }
                 }).build()).build(), Color.TRANSPARENT));
-                dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
-                primaryStage.getScene().getRoot().setEffect(new BoxBlur());
+                dialog
+                        .getScene().getStylesheets().add(FlowReader.class
+                        .getResource("modal-dialog.css").toExternalForm());
+                primaryStage.getScene()
+                        .getRoot().setEffect(new BoxBlur());
                 dialog.showAndWait();
-
             }
         });
 
@@ -221,6 +305,7 @@ System.exit(0);
                     setCenter(pi);
                     flowViewSceneButton.setDisable(true);
                     diveViewSceneButton.setDisable(true);
+                    homeButton.setDisable(true);
                     normalThemeButton.setDisable(true);
                     matrixThemeButton.setDisable(true);
                     zoomLockButton.setDisable(true);
@@ -245,6 +330,13 @@ System.exit(0);
             }
         });
 
+        homeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                MainView.this.setCenter(ribbon);
+                ribbon.switchToHomeView();
+            }
+        });
         diveViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -266,8 +358,10 @@ System.exit(0);
             public void handle(ActionEvent e) {
                 FlowReader.scene.getStylesheets().clear();
 
-                FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-                ribbon.setEffect(null);
+                FlowReader.scene.getStylesheets().add(FlowReader.class
+                        .getResource("stylesheet.css").toExternalForm());
+                ribbon.setEffect(
+                        null);
                 scene.setFill(Color.web("B8B8B8"));
 
             }
@@ -277,7 +371,8 @@ System.exit(0);
             @Override
             public void handle(ActionEvent e) {
                 FlowReader.scene.getStylesheets().clear();
-                FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
+                FlowReader.scene.getStylesheets().add(FlowReader.class
+                        .getResource("stylesheet_matrix.css").toExternalForm());
 
                 scene.setFill(Color.web("000000"));
             }
@@ -349,6 +444,7 @@ System.exit(0);
         this.ribbon = ribbon;
         BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
         this.ribbon.toBack();
+        homeButton.setDisable(false);
         flowViewSceneButton.setDisable(false);
         diveViewSceneButton.setDisable(false);
         normalThemeButton.setDisable(false);

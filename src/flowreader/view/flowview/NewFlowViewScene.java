@@ -53,4 +53,18 @@ public class NewFlowViewScene extends StackPane {
     public void goToReadingMode() {
         rb.goToReadingMode();
     }
+
+    public void zoom(int i, double x, double y) {
+        rb.zoom(i, x, y);
+    }
+
+    public void swipe(String direction) {
+        if (direction.equals("left")) {
+            rb.setXCoord(-50);
+        } else if (direction.equals("right")) {
+            rb.setXCoord(50);
+
+        }
+
+    }
 }

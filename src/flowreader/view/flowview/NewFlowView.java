@@ -97,7 +97,15 @@ public class NewFlowView extends Group {
     public ArrayList<PageView> getPages() {
         return this.pages;
     }
-
+public void setXCoord(int diff){
+                            TranslateTransition tt = new TranslateTransition(
+                                Duration.millis(100), NewFlowView.this.VBox);
+                        tt.setByX(diff);
+                        tt.setCycleCount(0);
+                        tt.setAutoReverse(true);
+                        tt.play();
+    x_coord.set(x_coord.doubleValue()+diff);
+}
 
     public void goToReadingMode() {
         curScale = 80;
