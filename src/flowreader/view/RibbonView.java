@@ -85,7 +85,7 @@ public class RibbonView extends StackPane {
     }
 
     public void zoom(int i) {
-        if (currentView.equals("FlowView")) {
+        if (currentView.equals("FlowView")&&newFlowPane.getOtherTransitionsFinished()) {
             double x = screenBounds.getWidth() / 2;
             double y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
             newFlowPane.zoom(i, x, y);

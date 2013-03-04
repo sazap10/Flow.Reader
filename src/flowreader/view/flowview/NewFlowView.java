@@ -80,7 +80,7 @@ public class NewFlowView extends Group {
     Scale scale = new Scale(1, 1);
     Point2D previous_p = new Point2D(0, 0);
     private boolean otherTransitionsFinished = true;
-    private boolean zoomLock = false;
+    private boolean zoomLock = true;
     private boolean verticalLock = true;
 
     public NewFlowView(StackPane stackPane) {
@@ -96,6 +96,10 @@ public class NewFlowView extends Group {
 
     public ArrayList<PageView> getPages() {
         return this.pages;
+    }
+    
+    public boolean getOtherTransitionsFinished(){
+        return otherTransitionsFinished;
     }
 public void setXCoord(int diff){
                             TranslateTransition tt = new TranslateTransition(
@@ -193,22 +197,29 @@ public void setXCoord(int diff){
          previous_y = this.getLayoutY();
          */
 
-        final Node previous = wordCloudPane.getChildren().get(0);
-        if (!wordCloudPane.getChildren().contains(newLevel)) {
+        //final Node previous = wordCloudPane.getChildren().get(0);
+        /*if (!wordCloudPane.getChildren().contains(newLevel)) {
             wordCloudPane.getChildren().add(newLevel);
-        }
+        }*/
 
         if (upOrDown == -1) {
             // Run the transition effects
-
+wordCloudPane.getChildren().clear();
             ParallelTransition at = appearTransition(newLevel);
-            ParallelTransition dt = disappearTransition(previous);
+            wordCloudPane.getChildren().add(newLevel);
+            //ParallelTransition dt = disappearTransition(previous);
             at.play();
-            dt.play();
+                        at.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    otherTransitionsFinished = true; // Transition is finished
+
+                }});
+            //dt.play();
 
 
             // When the transition is finished we remove the previous level
-            dt.setOnFinished(new EventHandler<ActionEvent>() {
+            /*dt.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     wordCloudPane.getChildren().clear();
@@ -216,17 +227,25 @@ public void setXCoord(int diff){
                     otherTransitionsFinished = true; // Transition is finished
 
                 }
-            });
+            });*/
 
         } else {
             // Run the transition effects
+            wordCloudPane.getChildren().clear();
             ParallelTransition at = appearTransition(newLevel);
-            ParallelTransition dt = disappearTransition(previous);
+            wordCloudPane.getChildren().add(newLevel);
+            //ParallelTransition dt = disappearTransition(previous);
             at.play();
-            dt.play();
+            at.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    otherTransitionsFinished = true; // Transition is finished
+
+                }});
+            //dt.play();
 
             // When the transition is finished we remove the previous level
-            dt.setOnFinished(new EventHandler<ActionEvent>() {
+           /* dt.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     wordCloudPane.getChildren().clear();
@@ -234,7 +253,7 @@ public void setXCoord(int diff){
                     otherTransitionsFinished = true; // Transition is finished
 
                 }
-            });
+            });*/
 
         }
 
@@ -242,7 +261,7 @@ public void setXCoord(int diff){
     }
 
     public ParallelTransition appearTransition(Node victim) {
-        int duration = 700;
+        int duration = 550;
 
         FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
         ft.setFromValue(0);
@@ -258,7 +277,7 @@ public void setXCoord(int diff){
     }
 
     public ParallelTransition disappearTransition(Node victim) {
-        int duration = 700;
+        int duration = 550;
 
         FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
         ft.setFromValue(1.0);

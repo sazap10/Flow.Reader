@@ -18,11 +18,11 @@ import javafx.stage.Stage;
  */
 public class FlowReader extends Application {
 
-    public static Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     public static Scene scene;
     private MainView mainView;
     private Group root;
     private Pane rootPane;
+    public Rectangle2D screenBounds = Screen.getPrimary().getBounds();
 
     @Override
     public void start(Stage primaryStage) {

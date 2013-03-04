@@ -67,4 +67,8 @@ public class NewFlowViewScene extends StackPane {
         }
 
     }
+    
+    public boolean getOtherTransitionsFinished(){
+        return rb.getOtherTransitionsFinished();
+    }
 }
