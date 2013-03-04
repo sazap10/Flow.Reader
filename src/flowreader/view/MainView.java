@@ -290,15 +290,15 @@ public class MainView extends BorderPane {
                 dialog.setScene(
                         new Scene(
                         HBoxBuilder.create().styleClass("modal-dialog").children(
-                        LabelBuilder.create().text("Are you sure you want to quit FlowReader?").build(),
-                        ButtonBuilder.create().text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
+                        LabelBuilder.create().text("Are you sure you want to quit FlowReader?").textFill(Color.WHITE).build(),
+                        ButtonBuilder.create().id("ok").text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         // take action and close the dialog.
                         System.exit(0);
                     }
                 }).build(),
-                        ButtonBuilder.create().text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
+                        ButtonBuilder.create().id("cancel").text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         // abort action and close the dialog.
