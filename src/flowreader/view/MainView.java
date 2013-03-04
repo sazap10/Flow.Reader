@@ -8,7 +8,6 @@ import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.TextFileReader;
-import javafx.beans.DefaultProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -20,21 +19,19 @@ import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.effect.DisplacementMap;
-import javafx.scene.effect.FloatMap;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
-import javafx.scene.effect.Light;
-import javafx.scene.effect.Lighting;
-import javafx.scene.effect.PerspectiveTransform;
-import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -56,6 +53,7 @@ public class MainView extends BorderPane {
     private TextFileReader fileReader;
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private EventHandler<KeyEvent> keyHandler;
+    private StackPane home;
 
     public MainView(Stage primaryStage, Scene scene) {
         this.setId("mainview");
@@ -74,8 +72,40 @@ public class MainView extends BorderPane {
         pi.setPrefSize(100, 100);
         pi.setMinSize(100, 100);
         pi.setMaxSize(100, 100);
-        //this.setCenter(ribbon);
-        this.setCenter(this.pi);
+        this.buildHomeView();
+        this.setCenter(home);
+
+        //this.setCenter(this.pi);
+
+    }
+
+    public void buildHomeView() {
+        home = new StackPane();
+
+        Bloom bloom = new Bloom();
+        bloom.setThreshold(0.1);
+
+        Rectangle rect = new Rectangle();
+
+        rect.setX(0);
+        rect.setY(0);
+        rect.setWidth(screenBounds.getWidth());
+        rect.setHeight(screenBounds.getHeight());
+        rect.setFill(Color.web("B8B8B8"));
+
+        Text text = new Text();
+        text.setText("Welcome to FlowReader. Enjoy!\n\nKeyboard shortcuts:\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
+                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock");
+
+
+        text.setFill(Color.ALICEBLUE);
+        text.setFont(Font.font(null, FontWeight.BOLD, 20));
+        text.setX(25);
+        text.setY(65);
+        text.setEffect(bloom);
+
+        home.getChildren().addAll(rect, text);
+
 
     }
 
@@ -128,11 +158,14 @@ public class MainView extends BorderPane {
                     case "L":
                         verticalLockButton.fire();
                         break;
-                        
+
                     case "Z":
                         zoomLockButton.fire();
                         break;
-
+                        
+                    case "C":
+                        readingModeButton.fire();
+                        break;
                     case "Q":
                         if (!homeButton.disableProperty().get()) {
                             if (ribbon.getCurrentView().equals("")) {
@@ -193,7 +226,7 @@ public class MainView extends BorderPane {
         resetButton.setId("topbarbutton");
         resetButton.setDisable(true);
 
-        verticalLockButton = new Button("Vertical Lock: Off");
+        verticalLockButton = new Button("Vertical Lock: On");
         verticalLockButton.setId("topbarbutton");
         verticalLockButton.setDisable(true);
 
@@ -333,13 +366,17 @@ public class MainView extends BorderPane {
         homeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                MainView.this.setCenter(ribbon);
-                ribbon.switchToHomeView();
+                //MainView.this.getChildren().clear();
+                MainView.this.setCenter(home);
+                ribbon.setCurrentView("HomeView");
+
             }
         });
         diveViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                //MainView.this.getChildren().clear();
+
                 MainView.this.setCenter(ribbon);
                 ribbon.switchToDiveView();
             }
@@ -348,6 +385,8 @@ public class MainView extends BorderPane {
         flowViewSceneButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                //MainView.this.getChildren().clear();
+
                 MainView.this.setCenter(ribbon);
                 ribbon.switchToFlowView();
             }
