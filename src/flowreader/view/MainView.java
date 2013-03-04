@@ -20,6 +20,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.Glow;
+import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -87,12 +88,10 @@ public class MainView extends BorderPane {
 
         Rectangle rect = new Rectangle();
 
-        rect.setX(0);
-        rect.setY(0);
+       
         rect.setWidth(screenBounds.getWidth());
         rect.setHeight(screenBounds.getHeight());
-        rect.setFill(Color.web("B8B8B8"));
-
+        rect.setFill(Color.DARKSLATEBLUE);
         Text text = new Text();
         text.setText("Welcome to FlowReader. Enjoy!\n\nKeyboard shortcuts:\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
                 + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock");
@@ -103,7 +102,6 @@ public class MainView extends BorderPane {
         text.setX(25);
         text.setY(65);
         text.setEffect(bloom);
-
         home.getChildren().addAll(rect, text);
 
 
