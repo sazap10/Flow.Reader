@@ -1,1 +1,11 @@
-/dist/
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+/build/classes
+/build/empty
+/build/generated-sources
+/build/built-jar.properties
