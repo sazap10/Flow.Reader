@@ -182,9 +182,7 @@ configBtns.getChildren().addAll(zoomLockButton,verticalLockButton,readingModeBut
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         // take action and close the dialog.
-                        primaryStage.close();
-
-                        dialog.close();
+System.exit(0);
                     }
                 }).build(),
                         ButtonBuilder.create().text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {

@@ -4,6 +4,7 @@
  */
 package flowreader.utils;
 
+import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
@@ -14,14 +15,26 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Scanner;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.ButtonBuilder;
+import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.HBoxBuilder;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -207,7 +220,10 @@ public class TextFileReader extends Task {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new java.io.FileReader(System.getProperty("user.dir") + System.getProperty("file.separator") + "CommonEnglishWords.txt"));
+File f = new File("CommonEnglishWords.txt");
+//System.out.println("xx"+f.getAbsolutePath());
+
+            bufferedReader = new BufferedReader(new java.io.FileReader(f));
 
             String temp_text;
             while ((temp_text = bufferedReader.readLine()) != null) {
@@ -216,6 +232,8 @@ public class TextFileReader extends Task {
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Couldn't find the file!");
+            
+           
         } catch (IOException ex) {
             System.out.println("no idea!.. some IOException");
         } finally {
