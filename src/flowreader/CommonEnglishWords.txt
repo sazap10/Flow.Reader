@@ -15,7 +15,7 @@ on
 are
 with
 as
-i
+I
 his
 they
 be
@@ -47,8 +47,3 @@ our
 above
 though
 am
-her
-me
-my
-she
-its

@@ -1,13 +1,1 @@
-/project_1st_attempt/nbproject/private/
-/project_1st_attempt/build/
-/project_1st_attempt/dist/
-/FlowReader/nbproject/private/
-/FlowReader/build/
-/FlowReader/dist/
-/bin/
-/bin/flowreader/
-/bin/flowreader/core
-/bin/flowreader/data
-/bin/flowreader/view
-/bin/project_1st_attempt/
-*.class
+/dist/

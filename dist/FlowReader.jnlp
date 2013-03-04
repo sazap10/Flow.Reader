@@ -11,7 +11,8 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="FlowReader.jar" size="287959" download="eager" />
+    <jar href="FlowReader.jar" size="250635" download="eager" />
+    <jar href="lib/pdfbox-app-1.7.1.jar" size="10409882" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="FlowReader" >
     <param name="requiredFXVersion" value="2.2+"/>
