@@ -36,6 +36,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -95,14 +96,14 @@ public class MainView extends BorderPane {
                 rect.heightProperty().bind(home.heightProperty());
         rect.setFill(Color.DARKSLATEBLUE);
         Text text = new Text();
-        text.setText("Welcome to FlowReader. Enjoy!\n\nKeyboard shortcuts:\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
+        text.setText("Welcome to FlowReader.\n Enjoy!\n\nKeyboard shortcuts:\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
                 + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock");
         
-        
+        text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.ALICEBLUE);
         text.setFont(Font.font(null, FontWeight.BOLD, 20));
-        text.setX(25);
-        text.setY(65);
+        //text.setX(25);
+        //text.setY(65);
         text.setEffect(bloom);
         
     //    Group r = new Group() {};
