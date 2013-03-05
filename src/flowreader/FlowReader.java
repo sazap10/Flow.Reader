@@ -27,7 +27,13 @@ public class FlowReader extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Flow Reader");
-        primaryStage.setFullScreen(true);
+        if(System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0){
+                    primaryStage.setFullScreen(false);
+
+        }else{
+                    primaryStage.setFullScreen(true);
+
+        }
         root = new Group();
         rootPane = new Pane();
         scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight(), Color.web("B8B8B8"));

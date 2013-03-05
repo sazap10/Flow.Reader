@@ -23,7 +23,6 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.Glow;
-import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -52,7 +51,7 @@ public class MainView extends BorderPane {
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
@@ -98,7 +97,7 @@ public class MainView extends BorderPane {
         rect.setFill(Color.DARKSLATEBLUE);
         Text text = new Text();
         text.setText("Welcome to FlowReader.\n Enjoy!\n\nKeyboard shortcuts:\nH: Home\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
-                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock");
+                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock\n\nNote for Mac OS X users:\nMake sure that you are NOT in full screen mode when opening a file or exiting the program.");
         
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.ALICEBLUE);
@@ -277,6 +276,10 @@ introBox.setAlignment(Pos.CENTER);
         ResetEffectButton.setId("topbarbutton");
         ResetEffectButton.setDisable(true);
         
+        fullScreenButton = new Button("FullScreen");
+        fullScreenButton.setId("topbarbutton");
+        fullScreenButton.setDisable(false);
+        
     }
     
     private void setUpButtonBar() {
@@ -299,7 +302,7 @@ introBox.setAlignment(Pos.CENTER);
         VBox configBtns = new VBox(10);
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
-        configBtns.getChildren().addAll(zoomLockButton, verticalLockButton, readingModeButton, resetButton);
+        configBtns.getChildren().addAll(fullScreenButton,zoomLockButton, verticalLockButton, readingModeButton, resetButton);
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
         winBtnBox.getChildren().addAll(minBtn, closeBtn);
@@ -343,7 +346,6 @@ introBox.setAlignment(Pos.CENTER);
                     public void handle(ActionEvent actionEvent) {
                         // abort action and close the dialog.
                         dialog.close();
-                        primaryStage.setFullScreen(true);
                         primaryStage.getScene().getRoot().setEffect(null);
                     }
                 }).build()).build(), Color.TRANSPARENT));
@@ -387,6 +389,7 @@ introBox.setAlignment(Pos.CENTER);
                     readingModeButton.setDisable(true);
                     GlowButton.setDisable(true);
                     ResetEffectButton.setDisable(true);
+                    
                     fileReader = new TextFileReader(MainView.this, pi);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
                     fileReader.startFileChooser(primaryStage);
@@ -525,6 +528,21 @@ introBox.setAlignment(Pos.CENTER);
             public void handle(ActionEvent e) {
                 ribbon.setEffect(null);
                 
+            }
+        });
+        
+        fullScreenButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+if(primaryStage.isFullScreen()){
+    primaryStage.setFullScreen(false);
+    fullScreenButton.setText("FullScreen");
+}else{
+    primaryStage.setFullScreen(true);
+    fullScreenButton.setText("FullScreen");
+
+}    
             }
         });
     }
