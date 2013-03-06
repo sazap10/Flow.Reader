@@ -368,7 +368,7 @@ introBox.setAlignment(Pos.CENTER);
             @Override
             public void handle(ActionEvent e) {
                 try {
-
+homeButton.fire();
                     pi = new ProgressIndicator(0.0);
                     pi.setStyle(" -fx-progress-color: #005888;");
                     // changing size without css

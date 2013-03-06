@@ -51,7 +51,7 @@ public class FlowReader extends Application {
         mainView.bottomBtnsBar.setLayoutY(screenBounds.getHeight() - 26);
         
                 mainView.sideBtnsBar.setLayoutX(screenBounds.getWidth()-165);
-                mainView.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26*5);
+                mainView.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26*7);
         
         mainView.prefWidthProperty().bind(rootPane.widthProperty());
         mainView.prefHeightProperty().bind(rootPane.heightProperty());
