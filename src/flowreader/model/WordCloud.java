@@ -152,8 +152,6 @@ public class WordCloud {
         ValueComparatorInteger bvc = new ValueComparatorInteger(wordsOccurrences);
         TreeMap<String, Integer> sortedMap = new TreeMap<String, Integer>(bvc);
         sortedMap.putAll(wordsOccurrences);
-        Set<Map.Entry<String, Integer>> w = sortedMap.entrySet();
-        Iterator j = w.iterator();
         return sortedMap;
     }
 }
