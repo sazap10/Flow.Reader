@@ -52,7 +52,7 @@ public class MainView extends BorderPane {
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, splitButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
@@ -60,15 +60,17 @@ public class MainView extends BorderPane {
     private EventHandler<KeyEvent> keyHandler;
     private StackPane home;
     VBox introBox;
-    public MainView(Stage primaryStage, Scene scene) {
+    private boolean split_version;
+    private boolean toggle_buttons = false;
+    public MainView(Stage primaryStage, Scene scene, FlowReader fr,Boolean split_version) {
         this.setId("mainview");
-        this.setUpEvents();
+        this.setUpEvents(fr);
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
         this.setUpButtonBar();
-        this.setButtonEvents(primaryStage, scene);
+        this.setButtonEvents(fr,primaryStage, scene);
         //this.setTop(topBtnsBar);
         //this.setBottom(bottomBtnsBar);
-
+this.split_version=split_version;
         ribbon = new RibbonView();
         this.pi = new ProgressIndicator(0.0);
         
@@ -78,8 +80,8 @@ public class MainView extends BorderPane {
         pi.setMinSize(100, 100);
         pi.setMaxSize(100, 100);
         this.buildHomeView();
-        this.setCenter(home);
 
+        this.setCenter(home);
         
         //this.setCenter(this.pi);
 
@@ -92,13 +94,13 @@ public class MainView extends BorderPane {
         bloom.setThreshold(0.1);
         
         Rectangle rect = new Rectangle();
-        
+        //rect.layoutXProperty().bind(g.layoutXProperty());
+        //rect.layoutYProperty().bind(g.layoutYProperty());
                 rect.widthProperty().bind(home.widthProperty());
                 rect.heightProperty().bind(home.heightProperty());
         rect.setFill(Color.DARKSLATEBLUE);
         Text text = new Text();
-        text.setText("Welcome to FlowReader.\n Enjoy!\n\nKeyboard shortcuts:\nH: Home\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
-                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock");
+        text.setText("Welcome to FlowReader.\n Enjoy! \n\nPress F1 to see keyboard shortcuts.");
         
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.ALICEBLUE);
@@ -141,14 +143,32 @@ home.getChildren().add(introBox);
 introBox.setAlignment(Pos.CENTER);
     }
     
-    private void setUpEvents() {
+    private void setUpEvents(final FlowReader fr) {
         keyHandler = new EventHandler<KeyEvent>() {
 
             @Override
             public void handle(KeyEvent event) {
-                //System.out.println(event.getCode().toString());
+                System.out.println(event.getCode().toString());
                 switch (event.getCode().toString()) {
-                    
+                    case "F1":
+                        if(!split_version){
+                        fr.showShortcuts();}
+                        break;
+                        
+                    case "F11":
+                        if(toggle_buttons){
+                        topBtnsBar.setVisible(true);
+                        sideBtnsBar.setVisible(true);
+                        bottomBtnsBar.setVisible(true);
+                        toggle_buttons=false;}
+                        else{
+                              topBtnsBar.setVisible(false);
+                        sideBtnsBar.setVisible(false);
+                        bottomBtnsBar.setVisible(false);
+                        toggle_buttons=true;
+                        }
+                            break;
+                        
                     case "w":
                     case "W":
                         ribbon.zoom(1);
@@ -277,8 +297,34 @@ introBox.setAlignment(Pos.CENTER);
         ResetEffectButton.setId("topbarbutton");
         ResetEffectButton.setDisable(true);
         
+        splitButton= new Button("Split!");
+        splitButton.setId("topbarbutton");
+        splitButton.setDisable(false);
+        
     }
-    
+    public void splitSetup(boolean split){
+        if(split){
+                topBtnsBar.setPrefWidth(screenBounds.getWidth()/2);
+        topBtnsBar.setMaxWidth(screenBounds.getWidth()/2);
+        topBtnsBar.setMinWidth(screenBounds.getWidth()/2);
+        
+        bottomBtnsBar.setPrefWidth(screenBounds.getWidth()/2);
+        bottomBtnsBar.setMaxWidth(screenBounds.getWidth()/2);
+        bottomBtnsBar.setMinWidth(screenBounds.getWidth()/2);
+        }
+        else{
+                    topBtnsBar.setPrefWidth(screenBounds.getWidth());
+        topBtnsBar.setMaxWidth(screenBounds.getWidth());
+        topBtnsBar.setMinWidth(screenBounds.getWidth());
+        
+        bottomBtnsBar.setPrefWidth(screenBounds.getWidth());
+        bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
+        bottomBtnsBar.setMinWidth(screenBounds.getWidth());
+        
+        
+        }
+        
+    }
     private void setUpButtonBar() {
         this.setUpButtons();
         
@@ -299,7 +345,7 @@ introBox.setAlignment(Pos.CENTER);
         VBox configBtns = new VBox(10);
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
-        configBtns.getChildren().addAll(zoomLockButton, verticalLockButton, readingModeButton, resetButton);
+        configBtns.getChildren().addAll(zoomLockButton, verticalLockButton, readingModeButton,splitButton, resetButton);
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
         winBtnBox.getChildren().addAll(minBtn, closeBtn);
@@ -312,7 +358,7 @@ introBox.setAlignment(Pos.CENTER);
         configBtns.setAlignment(Pos.CENTER_RIGHT);
     }
     
-    private void setButtonEvents(final Stage primaryStage, final Scene scene) {
+    private void setButtonEvents(final FlowReader fr, final Stage primaryStage, final Scene scene) {
         
         closeBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -343,7 +389,7 @@ introBox.setAlignment(Pos.CENTER);
                     public void handle(ActionEvent actionEvent) {
                         // abort action and close the dialog.
                         dialog.close();
-                        primaryStage.setFullScreen(true);
+                        //primaryStage.setFullScreen(true);
                         primaryStage.getScene().getRoot().setEffect(null);
                     }
                 }).build()).build(), Color.TRANSPARENT));
@@ -388,7 +434,7 @@ introBox.setAlignment(Pos.CENTER);
                     GlowButton.setDisable(true);
                     ResetEffectButton.setDisable(true);
                     fileReader = new TextFileReader(MainView.this, pi);
-                    DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
+                    DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this,split_version);
                     fileReader.startFileChooser(primaryStage);
                     
                     pi.progressProperty().bind(fileReader.progressProperty());
@@ -525,6 +571,15 @@ introBox.setAlignment(Pos.CENTER);
             public void handle(ActionEvent e) {
                 ribbon.setEffect(null);
                 
+            }
+        });
+        
+        splitButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                
+fr.split();                
             }
         });
     }

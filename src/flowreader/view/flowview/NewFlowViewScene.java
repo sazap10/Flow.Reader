@@ -18,14 +18,14 @@ public class NewFlowViewScene extends StackPane {
     private NewFlowView rb;
     private Document document;
 
-    public NewFlowViewScene(Document document) {
+    public NewFlowViewScene(Document document,Boolean split_version) {
         ArrayList<ArrayList<WordCloud>> wordClouds = new ArrayList<>();
         wordClouds.add(document.getWordClouds().get(0));
         for (ArrayList<WordCloud> alwc : document.getWordClouds()) {
             wordClouds.add(alwc);
         }
         this.document = new Document(document.getPages(), wordClouds);
-        rb = new NewFlowView(this);
+        rb = new NewFlowView(this,split_version);
         this.build();
     }
 
