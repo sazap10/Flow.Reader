@@ -8,15 +8,7 @@ import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
 import flowreader.view.flowview.NewFlowViewScene;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.DisplacementMap;
-import javafx.scene.effect.FloatMap;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
 /**

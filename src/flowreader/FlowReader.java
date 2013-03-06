@@ -13,7 +13,6 @@ import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.SplitPane;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -52,6 +51,7 @@ private Stage priStage;
         splitPane = new SplitPane();
         splitPane.prefWidthProperty().bind(scene.widthProperty());
         splitPane.prefHeightProperty().bind(scene.heightProperty());
+        
         mainView = new MainView(primaryStage, scene, this,false);
         mainView2 = new MainView(primaryStage, scene, this,true);
 
@@ -59,7 +59,8 @@ private Stage priStage;
         //http://stackoverflow.com/questions/9837529/how-to-solve-the-overlapping-of-the-controls-each-other-belonging-to-two-differe
 
         
-        
+        root.prefHeight(scene.getHeight());
+        root.prefWidth(scene.getWidth());
         
         rootPane.getChildren().add(mainView);
         rootPane.getChildren().add(mainView.topBtnsBar);
@@ -73,7 +74,21 @@ private Stage priStage;
         mainView.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26 * 7);
         
         
-        
+            mainView.prefWidthProperty().bind(rootPane.prefWidthProperty());
+            mainView.prefHeightProperty().bind(rootPane.prefHeightProperty());
+            mainView.minWidthProperty().bind(rootPane.minWidthProperty());
+            mainView.minHeightProperty().bind(rootPane.minHeightProperty());
+            mainView.maxWidthProperty().bind(rootPane.maxWidthProperty());
+            mainView.maxHeightProperty().bind(rootPane.maxHeightProperty());
+                   
+          rootPane.setMaxWidth(screenBounds.getWidth());
+            rootPane.setMinWidth(screenBounds.getWidth());
+            rootPane.setPrefWidth(screenBounds.getWidth());
+            
+                      rootPane.setMaxHeight(screenBounds.getHeight());
+            rootPane.setMinHeight(screenBounds.getHeight());
+            rootPane.setPrefHeight(screenBounds.getHeight());
+            
         rootPane2.getChildren().add(mainView2);
         rootPane2.getChildren().add(mainView2.topBtnsBar);
         rootPane2.getChildren().add(mainView2.bottomBtnsBar);
@@ -95,7 +110,9 @@ private Stage priStage;
         primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
         primaryStage.setScene(scene);
         splitPane.getItems().add(rootPane);
+        
         splitPane.getItems().add(rootPane2);
+       splitPane.setId("splitpane");
         primaryStage.show();
         primaryStage.setResizable(true);
         //splitPane.prefWidthProperty().bind(scene.widthProperty());
@@ -127,7 +144,12 @@ private Stage priStage;
                 dialog.showAndWait();
     }
     public void split() {
+        
+        
         if (split_toggle) {
+            scene.getStylesheets().clear();
+                    scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+
             split_toggle = false;
             root.getChildren().clear();
             root.getChildren().add(rootPane);
@@ -159,6 +181,9 @@ private Stage priStage;
             
             
         } else {
+               scene.getStylesheets().clear();
+                    scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_split.css").toExternalForm());
+
             split_toggle = true;
             root.getChildren().clear();
             splitPane.getItems().clear();
@@ -178,12 +203,12 @@ private Stage priStage;
             mainView.maxWidthProperty().bind(rootPane.maxWidthProperty());
             mainView.maxHeightProperty().bind(rootPane.maxHeightProperty());
                         
-            mainView2.prefWidthProperty().bind(rootPane.prefWidthProperty());
-            mainView2.prefHeightProperty().bind(rootPane.prefHeightProperty());
-            mainView2.minWidthProperty().bind(rootPane.minWidthProperty());
-            mainView2.minHeightProperty().bind(rootPane.minHeightProperty());
-            mainView2.maxWidthProperty().bind(rootPane.maxWidthProperty());
-            mainView2.maxHeightProperty().bind(rootPane.maxHeightProperty());
+            mainView2.prefWidthProperty().bind(rootPane2.prefWidthProperty());
+            mainView2.prefHeightProperty().bind(rootPane2.prefHeightProperty());
+            mainView2.minWidthProperty().bind(rootPane2.minWidthProperty());
+            mainView2.minHeightProperty().bind(rootPane2.minHeightProperty());
+            mainView2.maxWidthProperty().bind(rootPane2.maxWidthProperty());
+            mainView2.maxHeightProperty().bind(rootPane2.maxHeightProperty());
             
             rootPane.setMaxWidth(screenBounds.getWidth() / 2);
             rootPane.setMinWidth(screenBounds.getWidth() / 2);

@@ -486,11 +486,13 @@ introBox.setAlignment(Pos.CENTER);
             @Override
             public void handle(ActionEvent e) {
                 FlowReader.scene.getStylesheets().clear();
-                
-                FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-                ribbon.setEffect(
-                        null);
-                scene.setFill(Color.web("B8B8B8"));
+                                if(FlowReader.split_toggle){
+                                     FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_split.css").toExternalForm());
+                                }else{
+                                         FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+                scene.setFill(Color.web("B8B8B8"));  
+                                }
+         
                 
             }
         });
@@ -499,10 +501,16 @@ introBox.setAlignment(Pos.CENTER);
 
             @Override
             public void handle(ActionEvent e) {
+                
                 FlowReader.scene.getStylesheets().clear();
+                if(FlowReader.split_toggle){
+                     FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix_split.css").toExternalForm());
+                
+                }else{
                 FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
                 
                 scene.setFill(Color.web("000000"));
+                }
             }
         });
         
