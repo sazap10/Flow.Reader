@@ -59,9 +59,13 @@ public class MainView extends BorderPane {
     private EventHandler<KeyEvent> keyHandler;
     private StackPane home;
     VBox introBox;
-    public MainView(Stage primaryStage, Scene scene) {
+        private boolean split_version;
+    private boolean toggle_buttons = false;
+
+    public MainView(FlowReader fr,Stage primaryStage, Scene scene, Boolean split_version) {
         this.setId("mainview");
-        this.setUpEvents();
+        this.split_version=split_version;
+        this.setUpEvents(fr);
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
         this.setUpButtonBar();
         this.setButtonEvents(primaryStage, scene);
@@ -96,9 +100,8 @@ public class MainView extends BorderPane {
                 rect.heightProperty().bind(home.heightProperty());
         rect.setFill(Color.DARKSLATEBLUE);
         Text text = new Text();
-        text.setText("Welcome to FlowReader.\n Enjoy!\n\nKeyboard shortcuts:\nH: Home\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
-                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock\n\nNote for Mac OS X users:\nMake sure that you are NOT in full screen mode when opening a file or exiting the program.");
-        
+               text.setText("Welcome to FlowReader.\n Enjoy! \n\nPress F1 to see keyboard shortcuts.");
+
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.ALICEBLUE);
         text.setFont(Font.font(null, FontWeight.BOLD, 20));
@@ -140,14 +143,31 @@ home.getChildren().add(introBox);
 introBox.setAlignment(Pos.CENTER);
     }
     
-    private void setUpEvents() {
+    private void setUpEvents(final FlowReader fr) {
         keyHandler = new EventHandler<KeyEvent>() {
 
             @Override
             public void handle(KeyEvent event) {
                 //System.out.println(event.getCode().toString());
                 switch (event.getCode().toString()) {
-                    
+                    case "F1":
+                        if(!split_version){
+                        fr.showShortcuts();}
+                        break;
+                        
+                    case "F11":
+                        if(toggle_buttons){
+                        topBtnsBar.setVisible(true);
+                        sideBtnsBar.setVisible(true);
+                        bottomBtnsBar.setVisible(true);
+                        toggle_buttons=false;}
+                        else{
+                              topBtnsBar.setVisible(false);
+                        sideBtnsBar.setVisible(false);
+                        bottomBtnsBar.setVisible(false);
+                        toggle_buttons=true;
+                        }
+                            break;
                     case "w":
                     case "W":
                         ribbon.zoom(1);
