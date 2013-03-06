@@ -54,7 +54,7 @@ public class TextFileReader extends Task {
     private ProgressIndicator pi;
 
     public TextFileReader(MainView mv, ProgressIndicator pi) {
-        this.commonWords = new HashMap<>();
+        this.commonWords = new HashMap<String, Integer>();
         this.getCommonWords();
         this.mv = mv;
         this.pi = pi;
@@ -85,9 +85,9 @@ public class TextFileReader extends Task {
      */
     public Document readFile(double width, double height) throws IOException {
         System.out.println("Debut readfile");
-        ArrayList<Page> pages = new ArrayList<>(); // The list of all the pages
+        ArrayList<Page> pages = new ArrayList<Page>(); // The list of all the pages
         ArrayList<WordCloud> wordClouds = new ArrayList();
-        ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<>();
+        ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<ArrayList<WordCloud>>();
         // Text Wrapper
         double boundWidth = width; // Width of the page
         double boundHeight = height; // Height of the page
@@ -98,7 +98,7 @@ public class TextFileReader extends Task {
         Text tempPage = new Text("");
         String pageText = "";
 
-        HashMap<String, Integer> wordsOccurrences = new HashMap<>();
+        HashMap<String, Integer> wordsOccurrences = new HashMap<String, Integer>();
         LineNumberReader lnr = new LineNumberReader(new java.io.FileReader(file));
         lnr.skip(Long.MAX_VALUE);
         int numberOfLines = lnr.getLineNumber();
@@ -126,7 +126,7 @@ public class TextFileReader extends Task {
                             wordClouds.add(wordCloud);
                             pageText = "";
                             //System.out.println("Apple: "+wordsOccurrences.get("apple"));
-                            wordsOccurrences = new HashMap<>();
+                            wordsOccurrences = new HashMap<String, Integer>();
                         }
                         if (wordWidth + spaceWidth > spaceLeft) {
                             if (!(textWithNewLine > boundHeight)) {
@@ -179,12 +179,12 @@ public class TextFileReader extends Task {
     }
 
     private ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds) {
-        ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<>();
-        ArrayList<ArrayList<WordCloud>> otherLevels = new ArrayList<>();
+        ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<ArrayList<WordCloud>>();
+        ArrayList<ArrayList<WordCloud>> otherLevels = new ArrayList<ArrayList<WordCloud>>();
         //updateProgress(1, 10);
         localLevels.add(clouds);
 
-        ArrayList<WordCloud> currentLevel = new ArrayList<>();
+        ArrayList<WordCloud> currentLevel = new ArrayList<WordCloud>();
         WordCloud cloudB = null;
         boolean haveB = false;
         int listCount = 0;

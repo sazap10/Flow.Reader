@@ -37,7 +37,7 @@ public class DiveWordCloud extends DiveRibbonElement {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
         this.wordCloud = wc;
-        this.words = new ArrayList<>();
+        this.words = new ArrayList<Text>();
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
 
@@ -49,7 +49,7 @@ public class DiveWordCloud extends DiveRibbonElement {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
         this.wordCloud = wc;
-        this.words = new ArrayList<>();
+        this.words = new ArrayList<Text>();
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
         this.cloud.setMinWidth(elementWidth);

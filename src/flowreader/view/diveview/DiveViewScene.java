@@ -39,7 +39,7 @@ public class DiveViewScene extends StackPane {
         lp = new LiftPane(wordClouds.size() + 1);
 
         double x = 0, y = 0;
-        this.levels = new ArrayList<>();
+        this.levels = new ArrayList<DiveRibbonPane>();
         // Creation of the pages
         DiveRibbonPane pagesLevel = new DivePagesRibbonPane(0, pages, x, y);
         this.levels.add(pagesLevel);
@@ -50,7 +50,7 @@ public class DiveViewScene extends StackPane {
             this.levels.add(wcp);
         }
         this.currentLevel = this.levels.size() - 1;
-        ArrayList<Integer> ali = new ArrayList<>();
+        ArrayList<Integer> ali = new ArrayList<Integer>();
         ali.add(0);
         this.levels.get(this.currentLevel).createRibbon(ali);
 
@@ -77,7 +77,7 @@ public class DiveViewScene extends StackPane {
             DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
 
             if (DiveViewScene.this.currentLevel == 0) { // if we are on the pages
-                ArrayList<Integer> ali = new ArrayList<>();
+                ArrayList<Integer> ali = new ArrayList<Integer>();
                 ali.add(previousSelectedIndex); // we select the index selected on the previous level
                 current.createRibbon(ali);
             } else {
@@ -137,7 +137,7 @@ public class DiveViewScene extends StackPane {
     }
 
     private ArrayList<Integer> getIndexesCurrentLevelDiveIn(int previousSelectedIndex, int level) {
-        ArrayList<Integer> temp = new ArrayList<>();
+        ArrayList<Integer> temp = new ArrayList<Integer>();
 
         temp.add(previousSelectedIndex * 2);
         temp.add((previousSelectedIndex * 2) + 1);
@@ -149,7 +149,7 @@ public class DiveViewScene extends StackPane {
     }
 
     private ArrayList<Integer> getIndexesCurrentLevelDiveOut(int previousSelectedIndex, int level) {
-        ArrayList<Integer> temp = new ArrayList<>();
+        ArrayList<Integer> temp = new ArrayList<Integer>();
 
         if (level == this.levels.size() - 1) {
             temp.add(0);

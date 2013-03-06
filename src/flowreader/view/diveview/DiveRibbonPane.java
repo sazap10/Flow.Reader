@@ -32,12 +32,12 @@ public abstract class DiveRibbonPane extends StackPane {
 
     public DiveRibbonPane(int index, double x, double y, double elementWidth, double elementHeight) {
         this.ribbon = new Group();
-        this.ribbonElts = new ArrayList<>();
+        this.ribbonElts = new ArrayList<DiveRibbonElement>();
         this.ribbon.setLayoutX(x);
         this.ribbon.setLayoutY(y);
         this.elementWidth = elementWidth;
         this.elementHeight = elementHeight;
-        this.selected = new ArrayList<>();
+        this.selected = new ArrayList<Integer>();
         this.elementSelection();
         this.index = index;
     }

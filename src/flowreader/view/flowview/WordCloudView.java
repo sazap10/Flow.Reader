@@ -36,7 +36,7 @@ public class WordCloudView extends Group{
         wordCloudBoundary = boundary;
         wordCloudBoundary.setFill(Color.ALICEBLUE);
         this.wordCloud = wordCloud;
-        this.words = new ArrayList<>();
+        this.words = new ArrayList<Text>();
         this.wordObjects = new ArrayList<Word>();
         this.cloud = new FlowPane();
         this.maxFontSize *= level;
@@ -266,7 +266,7 @@ public class WordCloudView extends Group{
     
      private TreeMap<String, Integer> sortWordsOccurrences(HashMap<String, Integer> wordsOccurrences){
         ValueComparatorInteger bvc =  new ValueComparatorInteger(wordsOccurrences);
-        TreeMap<String,Integer> sortedWordsOccurrences = new TreeMap<>(bvc);
+        TreeMap<String,Integer> sortedWordsOccurrences = new TreeMap<String,Integer>(bvc);
         sortedWordsOccurrences.putAll(wordsOccurrences);
         
         //System.out.println("unsorted map: "+wordsOccurrences);

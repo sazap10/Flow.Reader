@@ -19,7 +19,7 @@ public class NewFlowViewScene extends StackPane {
     private Document document;
 
     public NewFlowViewScene(Document document) {
-        ArrayList<ArrayList<WordCloud>> wordClouds = new ArrayList<>();
+        ArrayList<ArrayList<WordCloud>> wordClouds = new ArrayList<ArrayList<WordCloud>>();
         wordClouds.add(document.getWordClouds().get(0));
         for (ArrayList<WordCloud> alwc : document.getWordClouds()) {
             wordClouds.add(alwc);

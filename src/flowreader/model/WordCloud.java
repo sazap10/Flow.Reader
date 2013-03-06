@@ -52,7 +52,7 @@ public class WordCloud{
             this.totalNbOfWords = this.totalNbOfWords + (Integer)e.getValue();
         }
         
-        this.wordsFrequencies = new HashMap<>();
+        this.wordsFrequencies = new HashMap<String, Double>();
         
         for(Entry e: this.wordsOccurrences.entrySet()){
             String key = e.getKey().toString();
@@ -67,7 +67,7 @@ public class WordCloud{
     }
     
     public void calculeWordsFrequenciesOnTotalDocument(WordCloud wcDocument){
-        this.wfOnTotalDocument = new HashMap<>();
+        this.wfOnTotalDocument = new HashMap<String, Double>();
         HashMap<String, Double> wfDoc = wcDocument.getWordFrequencies();
         
         for(Entry e: this.wordsFrequencies.entrySet()){
@@ -101,7 +101,7 @@ public class WordCloud{
       
     private TreeMap<String, Double> sortFreqHashMap(HashMap<String, Double> wordsOccurrences){
         ValueComparatorDouble bvc =  new ValueComparatorDouble(wordsOccurrences);
-        TreeMap<String,Double> sortedMap = new TreeMap<>(bvc);
+        TreeMap<String,Double> sortedMap = new TreeMap<String, Double>(bvc);
         sortedMap.putAll(wordsOccurrences);
         Set<Map.Entry<String, Double>> w = sortedMap.entrySet();
         Iterator j = w.iterator();
@@ -115,7 +115,7 @@ public class WordCloud{
     
     private TreeMap<String, Integer> sortOccHashMap(HashMap<String, Integer> wordsOccurrences){
         ValueComparatorInteger bvc =  new ValueComparatorInteger(wordsOccurrences);
-        TreeMap<String,Integer> sortedMap = new TreeMap<>(bvc);
+        TreeMap<String,Integer> sortedMap = new TreeMap<String, Integer>(bvc);
         sortedMap.putAll(wordsOccurrences);
         Set<Map.Entry<String, Integer>> w = sortedMap.entrySet();
         Iterator j = w.iterator();

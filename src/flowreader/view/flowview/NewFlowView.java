@@ -84,12 +84,12 @@ public class NewFlowView extends Group {
     private boolean verticalLock = true;
 
     public NewFlowView(StackPane stackPane) {
-        this.pages = new ArrayList<>();
-        this.wordClouds = new ArrayList<>();
+        this.pages = new ArrayList<PageView>();
+        this.wordClouds = new ArrayList<Group>();
         this.stackPane = stackPane;
         pagesPane = new StackPane();
         wordCloudPane = new StackPane();
-        this.zoomTable = new HashMap<>();
+        this.zoomTable = new HashMap<Integer, Integer>();
         this.currentZoomLevel = maxZoomLevel;
         this.VBox = new VBox();
     }
@@ -347,7 +347,7 @@ wordCloudPane.getChildren().clear();
 
 
         ArrayList<WordCloud> clouds = document.getCloudLevel(0);
-        ArrayList<WordCloudView> cloudViews = new ArrayList<>();
+        ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
 
 
         pagesGroup = new Group();
@@ -597,7 +597,7 @@ wordCloudPane.getChildren().clear();
     }
 
     public ArrayList<PageView> culling(double sceneWidth) {
-        ArrayList<PageView> clippedPages = new ArrayList<>();
+        ArrayList<PageView> clippedPages = new ArrayList<PageView>();
         double culling_pageWidth = clippedPages.get(0).getPageWidth();
         int noOfPages = (int) Math.ceil(sceneWidth / culling_pageWidth);
         if (noOfPages < pages.size()) {

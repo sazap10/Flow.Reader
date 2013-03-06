@@ -117,7 +117,7 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         if(numberOfPages%2==0){
             numberOfPages+=1;
         }
-        ArrayList<Integer> indexToDisplay = new ArrayList<>();
+        ArrayList<Integer> indexToDisplay = new ArrayList<Integer>();
         Integer select = this.selected.get(0);
         for (int i = 0; i < (numberOfPages / 2); i++) {
             int indexToAdd = select - (i + 1);

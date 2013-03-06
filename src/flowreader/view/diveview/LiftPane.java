@@ -24,7 +24,7 @@ public class LiftPane extends VBox{
     public LiftPane(int nblevel){
         this.setSpacing(5);
         this.getChildren().add(new Rectangle(50, 50, Color.TRANSPARENT));
-        this.levels = new ArrayList<>();
+        this.levels = new ArrayList<StackPane>();
         for(int i=0; i<nblevel; i++){
             StackPane sp = new StackPane();
             Text t = new Text(25, 25, ""+(nblevel-(i+1)));
