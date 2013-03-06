@@ -24,33 +24,17 @@ public class Document {
         }
     }
     
+    /**
+     * @return the pages of the document
+     */
     public ArrayList<Page> getPages(){
         return this.pages;
     }
     
-    public ArrayList<WordCloud> getCloudLevel(int level){
-        return wordClouds.get(level);
-    }
-    
-    public Page getPage(int page){
-        return pages.get(page);
-    }
-    
-    public WordCloud getCloud(int level, int cloudNum){
-        //System.out.println("returning cloud " + cloudNum + " from level " + level);
-        return wordClouds.get(level).get(cloudNum);
-    }
-
-    public int getNumOfPages(){
-        return this.pages.size();
-    }
-    
-    public int getNumOfCloudLevels(){
-        return this.wordClouds.size();
-    }
-    
+    /**
+     * @return all the levels of word clouds of the documents
+     */
     public ArrayList<ArrayList<WordCloud>> getWordClouds(){
         return this.wordClouds;
     }
-    
 }

@@ -352,7 +352,7 @@ public class NewFlowView extends Group {
         //StackPane.setAlignment(pagesPane, Pos.CENTER);
 
 
-        ArrayList<WordCloud> clouds = document.getCloudLevel(0);
+        ArrayList<WordCloud> clouds = document.getWordClouds().get(0);
         ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
 
 
@@ -360,14 +360,14 @@ public class NewFlowView extends Group {
         wordCloudGroup = new Group();
 
 
-        while (i < document.getNumOfPages()) {
+        while (i < document.getPages().size()) {
             DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeight,
                     pageWidth, pageHeight / 3);
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
 
             PageView page = new PageView(new Rectangle(x, y, pageWidth, pageHeight));
-            page.setText(document.getPage(i).getText());
+            page.setText(document.getPages().get(i).getText());
             this.pages.add(page);
             this.pagesGroup.getChildren().add(page);
 
@@ -384,10 +384,10 @@ public class NewFlowView extends Group {
 
 
         this.pagesPane.getChildren().add(pagesGroup);
-        this.wordCloudPane.getChildren().add(wordClouds.get(document.getNumOfCloudLevels() - 1));
+        this.wordCloudPane.getChildren().add(wordClouds.get(document.getWordClouds().size() - 1));
         stackPane.getChildren().add(VBox);
         // set up zoom levels
-        createZoomTable(document.getNumOfCloudLevels());
+        createZoomTable(document.getWordClouds().size());
         for (int j = 0; j <= maxScale; j++) {
             array[j] = Math.pow(1.05, j - 81);
         }
@@ -413,8 +413,8 @@ public class NewFlowView extends Group {
         int cloudInterval = pageInterval;
         int x, y;
 
-        for (int i = 1; i < document.getNumOfCloudLevels(); i++) {
-            currentLevelClouds = document.getCloudLevel(i);
+        for (int i = 1; i < document.getWordClouds().size(); i++) {
+            currentLevelClouds = document.getWordClouds().get(i);
             x = 0;
             y = 0;
             currentLevelViews = new Group();
