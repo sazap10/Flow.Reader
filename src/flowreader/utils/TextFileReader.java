@@ -103,14 +103,16 @@ public class TextFileReader extends Task {
         lnr.skip(Long.MAX_VALUE);
         int numberOfLines = lnr.getLineNumber();
         //System.out.println(numberOfLines);
-        try (LineNumberReader r = new LineNumberReader(new java.io.FileReader(file))) {
+        LineNumberReader r = new LineNumberReader(new java.io.FileReader(file));
+        try{
             String paragraph, word;
             int nbligne = 0;
             while ((paragraph = r.readLine()) != null) {
                 nbligne++;
                 this.updateProgress(nbligne, numberOfLines+1);
                 //System.out.println(nbligne);
-                try (Scanner sc = new Scanner(paragraph)) {
+                Scanner sc = new Scanner(paragraph);
+                try{
                     while (sc.hasNext()) { // while there is words in the line
                         word = sc.next();
                         /*if(this.trimPunctuation(word).equals("apple")){
@@ -153,6 +155,11 @@ public class TextFileReader extends Task {
                         spaceLeft = boundWidth;
                     }
                 }
+                finally{
+                    if(sc!=null){
+                        sc.close();
+                    }
+                }
                             
             }
             //System.out.println("Apple: "+wordsOccurrences.get("apple"));
@@ -162,6 +169,11 @@ public class TextFileReader extends Task {
             pages.add(page);
             wordClouds.add(wordCloud);
 
+        }
+        finally{
+            if(r!=null){
+                r.close();
+            }
         }
         //wordCloudLevels.add(wordClouds);// add the first level
 
