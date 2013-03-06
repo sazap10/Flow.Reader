@@ -82,9 +82,9 @@ public class NewFlowView extends Group {
     private boolean otherTransitionsFinished = true;
     private boolean zoomLock = true;
     private boolean verticalLock = true;
-private boolean split_version = false;
+    private boolean split_version = false;
 
-    public NewFlowView(StackPane stackPane,boolean split_version) {
+    public NewFlowView(StackPane stackPane, boolean split_version) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
         this.stackPane = stackPane;
@@ -93,26 +93,27 @@ private boolean split_version = false;
         this.zoomTable = new HashMap<Integer, Integer>();
         this.currentZoomLevel = maxZoomLevel;
         this.VBox = new VBox();
-                this.split_version=split_version;
+        this.split_version = split_version;
 
     }
 
     public ArrayList<PageView> getPages() {
         return this.pages;
     }
-    
-    public boolean getOtherTransitionsFinished(){
+
+    public boolean getOtherTransitionsFinished() {
         return otherTransitionsFinished;
     }
-public void setXCoord(int diff){
-                            TranslateTransition tt = new TranslateTransition(
-                                Duration.millis(100), NewFlowView.this.VBox);
-                        tt.setByX(diff);
-                        tt.setCycleCount(0);
-                        tt.setAutoReverse(true);
-                        tt.play();
-    x_coord.set(x_coord.doubleValue()+diff);
-}
+
+    public void setXCoord(int diff) {
+        TranslateTransition tt = new TranslateTransition(
+                Duration.millis(100), NewFlowView.this.VBox);
+        tt.setByX(diff);
+        tt.setCycleCount(0);
+        tt.setAutoReverse(true);
+        tt.play();
+        x_coord.set(x_coord.doubleValue() + diff);
+    }
 
     public void goToReadingMode() {
         curScale = 80;
@@ -202,35 +203,36 @@ public void setXCoord(int diff){
 
         //final Node previous = wordCloudPane.getChildren().get(0);
         /*if (!wordCloudPane.getChildren().contains(newLevel)) {
-            wordCloudPane.getChildren().add(newLevel);
-        }*/
+         wordCloudPane.getChildren().add(newLevel);
+         }*/
 
         if (upOrDown == -1) {
             // Run the transition effects
-wordCloudPane.getChildren().clear();
+            wordCloudPane.getChildren().clear();
             ParallelTransition at = appearTransition(newLevel);
             wordCloudPane.getChildren().add(newLevel);
             //ParallelTransition dt = disappearTransition(previous);
             at.play();
-                        at.setOnFinished(new EventHandler<ActionEvent>() {
+            at.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     otherTransitionsFinished = true; // Transition is finished
 
-                }});
+                }
+            });
             //dt.play();
 
 
             // When the transition is finished we remove the previous level
             /*dt.setOnFinished(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    wordCloudPane.getChildren().clear();
-                    wordCloudPane.getChildren().add(newLevel);
-                    otherTransitionsFinished = true; // Transition is finished
+             @Override
+             public void handle(ActionEvent event) {
+             wordCloudPane.getChildren().clear();
+             wordCloudPane.getChildren().add(newLevel);
+             otherTransitionsFinished = true; // Transition is finished
 
-                }
-            });*/
+             }
+             });*/
 
         } else {
             // Run the transition effects
@@ -244,19 +246,20 @@ wordCloudPane.getChildren().clear();
                 public void handle(ActionEvent event) {
                     otherTransitionsFinished = true; // Transition is finished
 
-                }});
+                }
+            });
             //dt.play();
 
             // When the transition is finished we remove the previous level
            /* dt.setOnFinished(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    wordCloudPane.getChildren().clear();
-                    wordCloudPane.getChildren().add(newLevel);
-                    otherTransitionsFinished = true; // Transition is finished
+             @Override
+             public void handle(ActionEvent event) {
+             wordCloudPane.getChildren().clear();
+             wordCloudPane.getChildren().add(newLevel);
+             otherTransitionsFinished = true; // Transition is finished
 
-                }
-            });*/
+             }
+             });*/
 
         }
 
@@ -537,14 +540,13 @@ wordCloudPane.getChildren().clear();
 
 
 
-if(FlowReader.split_toggle){
-                        zoom(event.getDeltaY(), x/2, y);
+                    if (FlowReader.split_toggle) {
+                        zoom(event.getDeltaY(), x / 2, y);
 
-}
-else{
+                    } else {
                         zoom(event.getDeltaY(), x, y);
 
-}
+                    }
                 }
                 event.consume();
 
@@ -568,25 +570,25 @@ else{
             stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            
-            if(!split_version){
-                            FlowReader.rootPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            FlowReader.rootPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
-            }else{
+
+            if (!split_version) {
+                FlowReader.rootPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+                FlowReader.rootPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            } else {
                 FlowReader.rootPane2.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            FlowReader.rootPane2.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+                FlowReader.rootPane2.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
             }
         } else {
             stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            
-                        if(!split_version){
-                                        FlowReader.rootPane.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            FlowReader.rootPane.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
-            }else{
-            FlowReader.rootPane2.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            FlowReader.rootPane2.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+
+            if (!split_version) {
+                FlowReader.rootPane.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+                FlowReader.rootPane.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            } else {
+                FlowReader.rootPane2.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+                FlowReader.rootPane2.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
             }
         }
 
