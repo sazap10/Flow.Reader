@@ -51,7 +51,7 @@ public class MainView extends BorderPane {
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
     private Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton,splitButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
@@ -68,7 +68,7 @@ public class MainView extends BorderPane {
         this.setUpEvents(fr);
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
         this.setUpButtonBar();
-        this.setButtonEvents(primaryStage, scene);
+        this.setButtonEvents(primaryStage, scene,fr);
         //this.setTop(topBtnsBar);
         //this.setBottom(bottomBtnsBar);
 
@@ -87,7 +87,29 @@ public class MainView extends BorderPane {
         //this.setCenter(this.pi);
 
     }
-    
+        public void splitSetup(boolean split){
+        if(split){
+                topBtnsBar.setPrefWidth(screenBounds.getWidth()/2);
+        topBtnsBar.setMaxWidth(screenBounds.getWidth()/2);
+        topBtnsBar.setMinWidth(screenBounds.getWidth()/2);
+        
+        bottomBtnsBar.setPrefWidth(screenBounds.getWidth()/2);
+        bottomBtnsBar.setMaxWidth(screenBounds.getWidth()/2);
+        bottomBtnsBar.setMinWidth(screenBounds.getWidth()/2);
+        }
+        else{
+                    topBtnsBar.setPrefWidth(screenBounds.getWidth());
+        topBtnsBar.setMaxWidth(screenBounds.getWidth());
+        topBtnsBar.setMinWidth(screenBounds.getWidth());
+        
+        bottomBtnsBar.setPrefWidth(screenBounds.getWidth());
+        bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
+        bottomBtnsBar.setMinWidth(screenBounds.getWidth());
+        
+        
+        }
+        
+    }
     public void buildHomeView() {
         home = new StackPane();
         Group g = new Group();
@@ -300,6 +322,9 @@ introBox.setAlignment(Pos.CENTER);
         fullScreenButton.setId("topbarbutton");
         fullScreenButton.setDisable(false);
         
+                splitButton= new Button("Split!");
+        splitButton.setId("topbarbutton");
+        splitButton.setDisable(false);
     }
     
     private void setUpButtonBar() {
@@ -322,7 +347,7 @@ introBox.setAlignment(Pos.CENTER);
         VBox configBtns = new VBox(10);
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
-        configBtns.getChildren().addAll(fullScreenButton,zoomLockButton, verticalLockButton, readingModeButton, resetButton);
+        configBtns.getChildren().addAll(fullScreenButton,zoomLockButton, verticalLockButton, readingModeButton,splitButton, resetButton);
         HBox winBtnBox = new HBox(10);
         winBtnBox.setAlignment(Pos.CENTER_RIGHT);
         winBtnBox.getChildren().addAll(minBtn, closeBtn);
@@ -335,7 +360,7 @@ introBox.setAlignment(Pos.CENTER);
         configBtns.setAlignment(Pos.CENTER_RIGHT);
     }
     
-    private void setButtonEvents(final Stage primaryStage, final Scene scene) {
+    private void setButtonEvents(final Stage primaryStage, final Scene scene, final FlowReader fr) {
         
         closeBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -411,7 +436,7 @@ homeButton.fire();
                     ResetEffectButton.setDisable(true);
                     
                     fileReader = new TextFileReader(MainView.this, pi);
-                    DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this);
+                    DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this,split_version);
                     fileReader.startFileChooser(primaryStage);
                     
                     pi.progressProperty().bind(fileReader.progressProperty());
@@ -460,26 +485,33 @@ homeButton.fire();
         
         normalThemeButton.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override
+             @Override
             public void handle(ActionEvent e) {
                 FlowReader.scene.getStylesheets().clear();
-                
-                FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-                ribbon.setEffect(
-                        null);
-                scene.setFill(Color.web("B8B8B8"));
+                                if(FlowReader.split_toggle){
+                                     FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_split.css").toExternalForm());
+                                }else{
+                                         FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+                scene.setFill(Color.web("B8B8B8"));  
+                                }
+         
                 
             }
         });
         
         matrixThemeButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
+          @Override
             public void handle(ActionEvent e) {
+                
                 FlowReader.scene.getStylesheets().clear();
+                if(FlowReader.split_toggle){
+                     FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix_split.css").toExternalForm());
+                
+                }else{
                 FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
                 
                 scene.setFill(Color.web("000000"));
+                }
             }
         });
         
@@ -563,6 +595,14 @@ if(primaryStage.isFullScreen()){
     fullScreenButton.setText("FullScreen");
 
 }    
+            }
+        });
+                splitButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                
+fr.split();                
             }
         });
     }

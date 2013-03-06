@@ -30,19 +30,22 @@ public class RibbonView extends StackPane {
     private Document document;
     private String currentView = "";
     private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+    private boolean split_version;
 
     public RibbonView() {
     }
 
-    public RibbonView(Document document) {
+    public RibbonView(Document document,Boolean split_version) {
         //this.pagesPane = new PagesScene(document.getPages());
         //this.wordCloudsPane = new WordCloudsScene(document.getWordClouds());
         //this.flowViewPane = new FlowViewScene(document);
         this.diveViewPane = new DiveViewScene(document);
         //this.theViewPane = new TheViewScene(pagesPane,wordCloudsPane);
-        this.newFlowPane = new NewFlowViewScene(document);
+        this.newFlowPane = new NewFlowViewScene(document,split_version);
         this.getChildren().add(this.diveViewPane);
         this.document = document;
+                this.split_version=split_version;
+
     }
 
     public void switchToDiveView() {
@@ -76,7 +79,7 @@ public class RibbonView extends StackPane {
 
     public void reset() {
         this.getChildren().clear();
-        newFlowPane = new NewFlowViewScene(document);
+        newFlowPane = new NewFlowViewScene(document,split_version);
         this.getChildren().add(newFlowPane);
     }
 

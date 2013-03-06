@@ -82,8 +82,9 @@ public class NewFlowView extends Group {
     private boolean otherTransitionsFinished = true;
     private boolean zoomLock = true;
     private boolean verticalLock = true;
+private boolean split_version = false;
 
-    public NewFlowView(StackPane stackPane) {
+    public NewFlowView(StackPane stackPane,boolean split_version) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
         this.stackPane = stackPane;
@@ -92,6 +93,8 @@ public class NewFlowView extends Group {
         this.zoomTable = new HashMap<Integer, Integer>();
         this.currentZoomLevel = maxZoomLevel;
         this.VBox = new VBox();
+                this.split_version=split_version;
+
     }
 
     public ArrayList<PageView> getPages() {
@@ -533,8 +536,15 @@ wordCloudPane.getChildren().clear();
                     double y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
 
 
-                    zoom(event.getDeltaY(), x, y);
 
+if(FlowReader.split_toggle){
+                        zoom(event.getDeltaY(), x/2, y);
+
+}
+else{
+                        zoom(event.getDeltaY(), x, y);
+
+}
                 }
                 event.consume();
 
@@ -558,14 +568,26 @@ wordCloudPane.getChildren().clear();
             stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            FlowReader.scene.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            FlowReader.scene.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            
+            if(!split_version){
+                            FlowReader.rootPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            FlowReader.rootPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            }else{
+                FlowReader.rootPane2.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            FlowReader.rootPane2.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            }
         } else {
             stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
             stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
             stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            FlowReader.scene.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            FlowReader.scene.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            
+                        if(!split_version){
+                                        FlowReader.rootPane.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            FlowReader.rootPane.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            }else{
+            FlowReader.rootPane2.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+            FlowReader.rootPane2.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+            }
         }
 
     }
