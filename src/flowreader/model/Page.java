@@ -13,6 +13,9 @@ public class Page {
         this.text = text;
     }
 
+    /**
+     * @return the text of the page
+     */
     public String getText() {
         return this.text;
     }

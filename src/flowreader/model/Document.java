@@ -19,7 +19,7 @@ public class Document {
         
         for(ArrayList<WordCloud> alwc : wordClouds){
             for(WordCloud wc : alwc){
-                wc.calculeWordsFrequenciesOnTotalDocument(wordClouds.get(wordClouds.size()-1).get(0));
+                wc.getWordsFrequenciesOnTotalDocument(wordClouds.get(wordClouds.size()-1).get(0).getWordFrequencies());
             }
         }
     }
