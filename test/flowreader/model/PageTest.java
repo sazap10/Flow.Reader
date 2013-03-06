@@ -26,4 +26,15 @@ public class PageTest {
         String result = instance.getText();
         assertEquals(expResult, result);
     }
+    
+    /**
+     * Test of getText method, of class Page.
+     */
+    @Test
+    public void testToString() {
+        Page instance = new Page("test text");
+        String expResult = "PAGE \n test text\n\n";
+        String result = instance.toString();
+        assertEquals(expResult, result);
+    }
 }
