@@ -1,7 +1,7 @@
 package flowreader;
 
 import flowreader.model.Page;
-import flowreader.utils.TextFileReader;
+import flowreader.utils.*;
 import flowreader.view.PageView;
 import flowreader.view.RibbonView;
 import flowreader.model.Document;
@@ -134,7 +134,7 @@ public static BorderPane borderPane;
             @Override
             public void handle(ActionEvent e) {
                 try {
-                    TextFileReader fileReader = new TextFileReader();
+                    PDFReader fileReader = new PDFReader();
                     mainPane.getChildren().clear();
                     // wordCloud.getChildren().clear();
                     // fileReader_WordCloud.wordObjects.clear();
