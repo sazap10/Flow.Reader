@@ -5,6 +5,7 @@
 package flowreader.utils;
 
 import flowreader.model.Document;
+import java.io.IOException;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -13,6 +14,6 @@ import javafx.scene.shape.Rectangle;
  */
 public interface FileReader {
     
-    public Document readFile(Rectangle bounds);
+    public Document readFile(Rectangle bounds) throws IOException;
     
 }
