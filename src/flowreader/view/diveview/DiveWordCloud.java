@@ -5,6 +5,7 @@
 package flowreader.view.diveview;
 
 import flowreader.model.WordCloud;
+import flowreader.view.flowview.NewFlowView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -32,6 +33,9 @@ public class DiveWordCloud extends DiveRibbonElement {
     public static double width = 500;
     public static double heigth = 500;
     public int level = 1;
+private int maxFontLevel = 7;
+private NewFlowView nfv;
+private boolean flowview =false;
 
     public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
@@ -45,7 +49,7 @@ public class DiveWordCloud extends DiveRibbonElement {
         renderWordCloud();
     }
 
-    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level) {
+    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level,NewFlowView nfv) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
         this.wordCloud = wc;
@@ -55,7 +59,11 @@ public class DiveWordCloud extends DiveRibbonElement {
         this.cloud.setMinWidth(elementWidth);
         this.cloud.setMaxWidth(elementWidth);
         this.level = level;
+                this.nfv = nfv;
+
         this.getChildren().addAll(wordCloudBoundary, cloud);
+                flowview=true;
+
         renderWordCloud();
     }
 
@@ -150,10 +158,17 @@ public class DiveWordCloud extends DiveRibbonElement {
         int adjustMaxFontSize = this.maxFontSize - this.minFontSize;
         int adjustCurrentFontSize = (percent * adjustMaxFontSize) / 100;
         int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, level - 1);
-
+        if(flowview){
+            System.out.println("DDD "+calculateFontSizeFromLevel(level));
+        currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, calculateFontSizeFromLevel(level));
+        }
         word.setFont(new Font(currentFontSize));
     }
+    private double calculateFontSizeFromLevel(int level){
+                //System.out.println(":o"+level+" "+nfv.getMaxZoomLevel()+" "+maxFontLevel);
 
+        return (((double)level/(double)nfv.getMaxZoomLevel())*(double)maxFontLevel);
+    }
     @Override
     public void setHighlight(boolean on) {
         if (on) {

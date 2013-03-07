@@ -104,7 +104,9 @@ public class NewFlowView extends Group {
     public boolean getOtherTransitionsFinished() {
         return otherTransitionsFinished;
     }
-
+    public int getMaxZoomLevel(){
+        return maxZoomLevel;
+    }
     public void setXCoord(int diff) {
         TranslateTransition tt = new TranslateTransition(
                 Duration.millis(100), NewFlowView.this.VBox);
@@ -352,6 +354,11 @@ public class NewFlowView extends Group {
         //StackPane.setAlignment(pagesPane, Pos.CENTER);
 
 
+        // set up zoom levels
+        createZoomTable(document.getWordClouds().size());
+        for (int j = 0; j <= maxScale; j++) {
+            array[j] = Math.pow(1.05, j - 81);
+        }
         ArrayList<WordCloud> clouds = document.getWordClouds().get(0);
         ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
 
@@ -362,7 +369,7 @@ public class NewFlowView extends Group {
 
         while (i < document.getPages().size()) {
             DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeight,
-                    pageWidth, pageHeight / 3);
+                    pageWidth, pageHeight / 3,1,this);
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
 
@@ -386,11 +393,6 @@ public class NewFlowView extends Group {
         this.pagesPane.getChildren().add(pagesGroup);
         this.wordCloudPane.getChildren().add(wordClouds.get(document.getWordClouds().size() - 1));
         stackPane.getChildren().add(VBox);
-        // set up zoom levels
-        createZoomTable(document.getWordClouds().size());
-        for (int j = 0; j <= maxScale; j++) {
-            array[j] = Math.pow(1.05, j - 81);
-        }
 
         VBox.getTransforms().add(t);
         t.xProperty().bind(x_coord);
@@ -422,7 +424,7 @@ public class NewFlowView extends Group {
             //render each cloud on this level and add it to the group
 
             for (WordCloud wordCloud : currentLevelClouds) {
-                DiveWordCloud currentView = new DiveWordCloud(wordCloud, x, y + 50 + cloudHeight, cloudWidth, cloudHeight, i);
+                DiveWordCloud currentView = new DiveWordCloud(wordCloud, x, y + 50 + cloudHeight, cloudWidth, cloudHeight, i,this);
                 currentLevelViews.getChildren().add(currentView);
                 x += cloudWidth + cloudInterval;
             }
