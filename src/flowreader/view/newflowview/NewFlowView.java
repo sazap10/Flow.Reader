@@ -5,13 +5,16 @@
 package flowreader.view.newflowview;
 
 import flowreader.model.Document;
-import flowreader.model.Page;
 import flowreader.model.WordCloud;
+import flowreader.view.diveview.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -30,7 +33,6 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.Screen;
 import javafx.util.Duration;
-import flowreader.view.diveview.*;
 
 /**
  *
@@ -73,6 +75,7 @@ public class NewFlowView extends Group {
     Scale scale = new Scale(1, 1);
     Point2D previous_p = new Point2D(0, 0);
     double leftx = 0;
+    String pageText = "";
 
     public NewFlowView(StackPane stackPane) {
         this.pages = new ArrayList<>();
@@ -225,6 +228,16 @@ public class NewFlowView extends Group {
             page.setText(document.getPage(i).getText());
             this.pages.add(page);
             this.pagesGroup.getChildren().add(page);
+            page.pressedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+                    if (arg2.booleanValue()) {
+                        pageText= ((PageView)((ReadOnlyProperty<Boolean>)arg0).getBean()).getText();
+                        //pageText=((Text) ((Group) ((ReadOnlyProperty<Boolean>) arg0).getBean()).getChildren().get(1)).getText();
+                        
+                    }
+                }
+            });
 
             x += pageWidth + pageInterval;
             i++;
@@ -254,6 +267,8 @@ public class NewFlowView extends Group {
         t.yProperty().bind(y_coord);
         this.defineRibbonEvents();
         this.setRibbonEvents(true);
+        setDrag();
+        //setPageDragEvent(true);
     }
 
     //creates all but the first level of wordCloud groups and adds them to the list of groups
@@ -372,8 +387,8 @@ public class NewFlowView extends Group {
                     tt.play();
                     x_coord.set(x_coord.doubleValue() + dx);
                     y_coord.set(y_coord.doubleValue() + dy);
-                    leftx+=dx;
-                    System.out.println("left x: "+ x_coord);
+                    leftx += dx;
+                    System.out.println("left x: " + x_coord);
                 }
                 previousEvent = event;
                 event.consume();
@@ -386,7 +401,7 @@ public class NewFlowView extends Group {
                 if (!event.isDirect()) {
                     double x = screenBounds.getWidth() / 2;
                     double y = screenBounds.getHeight() / 2;
-                    zoom(event.getDeltaY(), x, y);
+                    zoom(event.getDeltaY(), event.getX(), event.getY());
 
                 }
                 event.consume();
@@ -405,46 +420,89 @@ public class NewFlowView extends Group {
     }
 
     public void setRibbonEvents(boolean setFlag) {
-        if (setFlag) {
-            stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-            stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-            stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            stackPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            stackPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
-        } else {
-            stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
-            stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
-            stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
-            stackPane.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
-            stackPane.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
-        }
-
+//        if (setFlag) {
+//         stackPane.addEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+//         stackPane.addEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+//         stackPane.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+//         stackPane.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
+//         stackPane.addEventHandler(ZoomEvent.ZOOM, zoomHandler);
+//         } else {
+//         stackPane.removeEventHandler(MouseEvent.MOUSE_DRAGGED, swipeHandler);
+//         stackPane.removeEventHandler(MouseEvent.MOUSE_PRESSED, swipeHandler);
+//         stackPane.removeEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
+//         stackPane.removeEventHandler(ScrollEvent.SCROLL, scrollHandler);
+//         stackPane.removeEventHandler(ZoomEvent.ZOOM, zoomHandler);
+//         }
     }
 
-    public void setPageDragEvent(boolean setFlag) {
-        EventHandler<MouseEvent> dragHandler = new EventHandler<MouseEvent>() {
+    private void setDrag() {
+        EventHandler<MouseEvent> dr = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 Dragboard drag = ((Node) event.getSource())
                         .startDragAndDrop(TransferMode.ANY);
                 ClipboardContent content = new ClipboardContent();
-                content.putString(((Page) event.getSource()).getText());
+                //content.putString(pageText);
+                System.out.println(pageText);
                 drag.setContent(content);
 
                 event.consume();
             }
         };
-        int pageNum = 0;
-        while (pageNum < pages.size()) {
-            if (setFlag) {
-                pages.get(pageNum).setOnDragDetected(dragHandler);
-                // System.out.println(page.getOnDragDetected().toString());
-            } else {
-                pages.get(pageNum).setOnDragDetected(null);
-            }
-            pageNum++;
-        }
+        pagesGroup.setOnDragDetected(dr);
 
+
+//		bottom.setOnDragOver(new EventHandler<DragEvent>() {
+//			public void handle(DragEvent event) {
+//				if (event.getGestureSource() != bottom
+//						&& event.getDragboard().hasString()) {
+//
+//					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+//				}
+//
+//				event.consume();
+//			}
+//		});
+
+//		bottom.setOnDragEntered(new EventHandler<DragEvent>() {
+//			public void handle(DragEvent event) {
+//				/* show to the user that it is an actual gesture target */
+//				if (event.getGestureSource() != bottom
+//						&& event.getDragboard().hasString()) {
+//					bottom.setStyle("-fx-background-color: green");
+//				}
+//
+//				event.consume();
+//			}
+//		});
+
+//		bottom.setOnDragExited(new EventHandler<DragEvent>() {
+//			public void handle(DragEvent event) {
+//				/* mouse moved away, remove the graphical cues */
+//				bottom.setStyle("-fx-background-color: grey");
+//
+//				event.consume();
+//			}
+//		});
+//
+//		bottom.setOnDragDropped(new EventHandler<DragEvent>() {
+//			public void handle(DragEvent event) {
+//				/* if there is a string data on dragboard, read it and use it */
+//				Dragboard db = event.getDragboard();
+//				boolean success = false;
+//				if (db.hasString()) {
+//					createPage(db.getString());
+//					success = true;
+//				}
+//				/*
+//				 * let the source know whether the string was successfully
+//				 * transferred and used
+//				 */
+//				event.setDropCompleted(success);
+//
+//				event.consume();
+//			}
+//		});
     }
 
     public ArrayList<PageView> culling(double sceneWidth) {
