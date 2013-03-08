@@ -51,13 +51,22 @@ private boolean flowview =false;
 
     public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level,NewFlowView nfv) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
-        wordCloudBoundary.setFill(Color.TRANSPARENT);
+        wordCloudBoundary.setFill(Color.AQUA);
         this.wordCloud = wc;
         this.words = new ArrayList<Text>();
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
+                this.cloud.setLayoutY(wordCloudBoundary.getY());
+
         this.cloud.setMinWidth(elementWidth);
+                this.cloud.setPrefWidth(elementWidth);
+
         this.cloud.setMaxWidth(elementWidth);
+        
+          this.cloud.setMinHeight(elementHeigth);
+                this.cloud.setPrefHeight(elementHeigth);
+
+        this.cloud.setMaxHeight(elementHeigth);
         this.level = level;
                 this.nfv = nfv;
 
@@ -164,10 +173,10 @@ private boolean flowview =false;
         }
         word.setFont(new Font(currentFontSize));
     }
-    private double calculateFontSizeFromLevel(int level){
+    public double calculateFontSizeFromLevel(int level){
                 //System.out.println(":o"+level+" "+nfv.getMaxZoomLevel()+" "+maxFontLevel);
 
-        return (((double)level/(double)nfv.getMaxZoomLevel())*(double)maxFontLevel);
+        return (((double)(level-1)/(double)nfv.getMaxZoomLevel())*(double)maxFontLevel);
     }
     @Override
     public void setHighlight(boolean on) {

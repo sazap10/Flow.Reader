@@ -14,6 +14,9 @@
     -fx-fill: #FFFAF0;
 
 }
+#pagespane{
+    -fx-background-color: #000000;
+}
 
 #page_text{
     -fx-fill: #000000;

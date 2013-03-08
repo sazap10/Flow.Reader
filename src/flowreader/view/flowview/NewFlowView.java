@@ -35,6 +35,7 @@ import flowreader.view.diveview.*;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.GaussianBlur;
@@ -152,6 +153,7 @@ public class NewFlowView extends Group {
         for (int i = 1; i <= zoomLevels; i++) {
             percent = 80 / (i * 100.0f - 60);
             zoomTable_scale = (int) (percent * maxScale);
+            System.out.println("put "+i+" "+zoomTable_scale);
             zoomTable.put(i, zoomTable_scale);
         }
         maxZoomLevel = zoomLevels;
@@ -346,7 +348,7 @@ public class NewFlowView extends Group {
         VBox.setMinHeight(1);
         VBox.getChildren().add(pagesPane);
         VBox.getChildren().add(wordCloudPane);
-        VBox.setSpacing(20.0);
+        VBox.setSpacing(1);
 
         //                VBox.getChildren().get(0).setLayoutY(0);
         //VBox.getChildren().get(1).setLayoutY(VBox.getChildren().get(0).getBoundsInLocal().getHeight());
@@ -365,7 +367,8 @@ public class NewFlowView extends Group {
 
         pagesGroup = new Group();
         wordCloudGroup = new Group();
-
+        
+wordCloudPane.setAlignment(Pos.CENTER_LEFT);
 
         while (i < document.getPages().size()) {
             DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeight,
@@ -391,6 +394,7 @@ public class NewFlowView extends Group {
 
 
         this.pagesPane.getChildren().add(pagesGroup);
+        pagesPane.setId("pagespane");
         this.wordCloudPane.getChildren().add(wordClouds.get(document.getWordClouds().size() - 1));
         stackPane.getChildren().add(VBox);
 
@@ -410,9 +414,9 @@ public class NewFlowView extends Group {
     public void createCloudLevelGroups(Document document) {
         ArrayList<WordCloud> currentLevelClouds;
         Group currentLevelViews;
-        int cloudWidth = pageWidth;
-        int cloudHeight = pageHeight;
-        int cloudInterval = pageInterval;
+        double cloudWidth = pageWidth;
+        double cloudHeight = pageHeight;
+        double cloudInterval = pageInterval;
         int x, y;
 
         for (int i = 1; i < document.getWordClouds().size(); i++) {
@@ -422,18 +426,22 @@ public class NewFlowView extends Group {
             currentLevelViews = new Group();
 
             //render each cloud on this level and add it to the group
-
+DiveWordCloud currentView = null;
             for (WordCloud wordCloud : currentLevelClouds) {
-                DiveWordCloud currentView = new DiveWordCloud(wordCloud, x, y + 50 + cloudHeight, cloudWidth, cloudHeight, i,this);
+                 currentView = new DiveWordCloud(wordCloud, x, cloudHeight, cloudWidth, cloudHeight, i,this);
                 currentLevelViews.getChildren().add(currentView);
                 x += cloudWidth + cloudInterval;
             }
 
             //add the group, and double dimensions
             wordClouds.add(currentLevelViews);
-            cloudWidth *= 2;
-            cloudHeight *= 2;
-            cloudInterval *= 2;
+                    double ratio = 1;
+           
+             ratio = (Math.pow((double)2, currentView.calculateFontSizeFromLevel(i)))/(Math.pow((double)2, currentView.calculateFontSizeFromLevel(i-1)));
+          
+            cloudWidth *=ratio;
+            cloudHeight *=ratio;
+            cloudInterval *=ratio;
         }
 
     }
