@@ -171,14 +171,14 @@ public class MainView extends BorderPane {
             @Override
             public void handle(KeyEvent event) {
                 //System.out.println(event.getCode().toString());
-                switch (event.getCode().toString()) {
-                    case "F1":
+                switch (event.getCode()) {
+                    case F1:
                         if (!split_version) {
                             fr.showShortcuts();
                         }
                         break;
 
-                    case "F11":
+                    case F11:
                         if (toggle_buttons) {
                             topBtnsBar.setVisible(true);
                             sideBtnsBar.setVisible(true);
@@ -191,59 +191,63 @@ public class MainView extends BorderPane {
                             toggle_buttons = true;
                         }
                         break;
-                    case "w":
-                    case "W":
+                    case W:
+                    case UP:
+                    case KP_UP:
                         ribbon.zoom(1);
                         break;
 
-                    case "s":
-                    case "S":
+                    case S:
+                    case DOWN:
+                    case KP_DOWN:
                         ribbon.zoom(-1);
                         break;
 
-                    case "a":
-                    case "A":
+                    case A:
+                    case LEFT:
+                    case KP_LEFT:
                         ribbon.swipe("left");
                         break;
 
-                    case "d":
-                    case "D":
+                    case D:
+                    case RIGHT:
+                    case KP_RIGHT:
                         ribbon.swipe("right");
                         break;
 
-                    case "M":
+                    case M:
                         matrixThemeButton.fire();
                         break;
 
-                    case "N":
+                    case N:
                         normalThemeButton.fire();
                         break;
 
-                    case "G":
+                    case G:
                         GlowButton.fire();
                         break;
-                    case "R":
+                    case R:
                         ResetEffectButton.fire();
 
                         break;
-                    case "F":
+                    case F:
                         resetButton.fire();
 
                         break;
-                    case "L":
+                    case L:
                         verticalLockButton.fire();
                         break;
 
-                    case "Z":
+                    case Z:
                         zoomLockButton.fire();
                         break;
-                    case "H":
+                    case H:
                         homeButton.fire();
                         break;
-                    case "C":
+                    case C:
                         readingModeButton.fire();
                         break;
-                    case "Q":
+                    case Q:
                         if (!homeButton.disableProperty().get()) {
                             if (ribbon.getCurrentView().equals("")) {
                                 diveViewSceneButton.fire();
