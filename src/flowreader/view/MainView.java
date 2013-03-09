@@ -23,6 +23,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.Glow;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -66,7 +67,7 @@ public class MainView extends BorderPane {
         this.setId("mainview");
         this.split_version = split_version;
         this.setUpEvents(fr);
-        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
+        primaryStage.addEventHandler(KeyEvent.ANY, keyHandler);
         this.setUpButtonBar();
         this.setButtonEvents(primaryStage, scene, fr);
         //this.setTop(topBtnsBar);
@@ -170,7 +171,6 @@ public class MainView extends BorderPane {
         keyHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                //System.out.println(event.getCode().toString());
                 switch (event.getCode()) {
                     case F1:
                         if (!split_version) {
@@ -262,7 +262,7 @@ public class MainView extends BorderPane {
                             }
                         }
                 }
-//event.consume();
+                event.consume();
             }
         };
     }
