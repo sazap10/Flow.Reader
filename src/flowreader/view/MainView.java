@@ -435,7 +435,7 @@ public class MainView extends BorderPane {
                     GlowButton.setDisable(true);
                     ResetEffectButton.setDisable(true);
 
-                    fileReader = new TextFileReader(MainView.this, pi);
+                    fileReader = new TextFileReader();
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
                     fileReader.startFileChooser(primaryStage);
 
