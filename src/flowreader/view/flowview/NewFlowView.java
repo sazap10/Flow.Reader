@@ -81,9 +81,10 @@ public class NewFlowView extends Group {
     Scale scale = new Scale(1, 1);
     Point2D previous_p = new Point2D(0, 0);
     private boolean otherTransitionsFinished = true;
-    private boolean zoomLock = true;
-    private boolean verticalLock = true;
+    private boolean zoomLock = false;
+    private boolean verticalLock = false;
     private boolean split_version = false;
+    private boolean zoomAtMouse = false;
 
     public NewFlowView(StackPane stackPane, boolean split_version) {
         this.pages = new ArrayList<PageView>();
@@ -98,6 +99,15 @@ public class NewFlowView extends Group {
 
     }
 
+    public boolean toggleZoomCenter() {
+        if (zoomAtMouse) {
+            zoomAtMouse = false;
+        } else {
+            zoomAtMouse = true;
+        }
+        return zoomAtMouse;
+    }
+
     public ArrayList<PageView> getPages() {
         return this.pages;
     }
@@ -105,9 +115,11 @@ public class NewFlowView extends Group {
     public boolean getOtherTransitionsFinished() {
         return otherTransitionsFinished;
     }
-    public int getMaxZoomLevel(){
+
+    public int getMaxZoomLevel() {
         return maxZoomLevel;
     }
+
     public void setXCoord(int diff) {
         TranslateTransition tt = new TranslateTransition(
                 Duration.millis(100), NewFlowView.this.VBox);
@@ -153,6 +165,8 @@ public class NewFlowView extends Group {
         for (int i = 1; i <= zoomLevels; i++) {
             percent = 80 / (i * 100.0f - 60);
             zoomTable_scale = (int) (percent * maxScale);
+             //           zoomTable_scale = (int) (10*i);
+
             System.out.println("put "+i+" "+zoomTable_scale);
             zoomTable.put(i, zoomTable_scale);
         }
@@ -367,12 +381,13 @@ public class NewFlowView extends Group {
 
         pagesGroup = new Group();
         wordCloudGroup = new Group();
-        
-wordCloudPane.setAlignment(Pos.CENTER_LEFT);
+
+        //wordCloudPane.setAlignment(Pos.CENTER_LEFT);
+        wordCloudPane.setAlignment(Pos.CENTER);
 
         while (i < document.getPages().size()) {
-            DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 50 + pageHeight,
-                    pageWidth, pageHeight / 3,1,this);
+            DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 80 + pageHeight,
+                    pageWidth, pageHeight, 1, this);
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
 
@@ -426,22 +441,22 @@ wordCloudPane.setAlignment(Pos.CENTER_LEFT);
             currentLevelViews = new Group();
 
             //render each cloud on this level and add it to the group
-DiveWordCloud currentView = null;
+            DiveWordCloud currentView = null;
             for (WordCloud wordCloud : currentLevelClouds) {
-                 currentView = new DiveWordCloud(wordCloud, x, cloudHeight, cloudWidth, cloudHeight, i,this);
+                currentView = new DiveWordCloud(wordCloud, x, 50+cloudHeight, cloudWidth, cloudHeight, i, this);
                 currentLevelViews.getChildren().add(currentView);
                 x += cloudWidth + cloudInterval;
             }
 
             //add the group, and double dimensions
             wordClouds.add(currentLevelViews);
-                    double ratio = 1;
-           
-             ratio = (Math.pow((double)2, currentView.calculateFontSizeFromLevel(i)))/(Math.pow((double)2, currentView.calculateFontSizeFromLevel(i-1)));
-          
-            cloudWidth *=ratio;
-            cloudHeight *=ratio;
-            cloudInterval *=ratio;
+            double ratio = 1;
+
+            //ratio = (Math.pow((double)2, currentView.calculateFontSizeFromLevel(i)))/(Math.pow((double)2, currentView.calculateFontSizeFromLevel(i-1)));
+            ratio = 2;
+            cloudWidth *= ratio;
+            cloudHeight *= ratio;
+            cloudInterval *= ratio;
         }
 
     }
@@ -475,12 +490,22 @@ DiveWordCloud currentView = null;
             }
         }
 
+
         previousScale = scale;
         scale = new Scale(array[curScale], array[curScale], x, y);
-
         stackPane.getTransforms().remove(previousScale);
+
+        double ori_pos_x = stackPane.getLayoutX();
+        double ori_pos_y = stackPane.getLayoutY();
+        //Translate t1 = new Translate(-x,-y);
+//stackPane.getTransforms().add(t1);
         checkCloudLevel();
         stackPane.getTransforms().add(scale);
+        //                        Translate t2 = new Translate(x,y);
+
+        // stackPane.getTransforms().add(t2);
+
+
     }
 
     public void setEffect() {
@@ -551,11 +576,21 @@ DiveWordCloud currentView = null;
 
 
                     if (FlowReader.split_toggle) {
-                        zoom(event.getDeltaY(), x / 2, y);
+                        if (zoomAtMouse) {
 
+                            zoom(event.getDeltaY(), event.getX(), event.getY());
+                        } else {
+                            zoom(event.getDeltaY(), x / 2, y);
+
+                        }
                     } else {
-                        zoom(event.getDeltaY(), x, y);
 
+                        if (zoomAtMouse) {
+                            zoom(event.getDeltaY(), event.getX(), event.getY());
+                        } else {
+                            zoom(event.getDeltaY(), x, y);
+
+                        }
                     }
                 }
                 event.consume();

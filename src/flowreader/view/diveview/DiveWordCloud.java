@@ -33,9 +33,9 @@ public class DiveWordCloud extends DiveRibbonElement {
     public static double width = 500;
     public static double heigth = 500;
     public int level = 1;
-private int maxFontLevel = 7;
-private NewFlowView nfv;
-private boolean flowview =false;
+    private int maxFontLevel = 7;
+    private NewFlowView nfv;
+    private boolean flowview = false;
 
     public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
@@ -49,29 +49,28 @@ private boolean flowview =false;
         renderWordCloud();
     }
 
-    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level,NewFlowView nfv) {
+    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, NewFlowView nfv) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
-        wordCloudBoundary.setFill(Color.AQUA);
+        wordCloudBoundary.setFill(Color.BEIGE);
         this.wordCloud = wc;
         this.words = new ArrayList<Text>();
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
-                this.cloud.setLayoutY(wordCloudBoundary.getY());
+        this.cloud.setLayoutY(wordCloudBoundary.getY());
 
         this.cloud.setMinWidth(elementWidth);
-                this.cloud.setPrefWidth(elementWidth);
+       this.cloud.setPrefWidth(elementWidth);
+       this.cloud.setMaxWidth(elementWidth);
 
-        this.cloud.setMaxWidth(elementWidth);
-        
-          this.cloud.setMinHeight(elementHeigth);
-                this.cloud.setPrefHeight(elementHeigth);
-
+        this.cloud.setMinHeight(elementHeigth);
+        this.cloud.setPrefHeight(elementHeigth);
         this.cloud.setMaxHeight(elementHeigth);
+
         this.level = level;
-                this.nfv = nfv;
+        this.nfv = nfv;
 
         this.getChildren().addAll(wordCloudBoundary, cloud);
-                flowview=true;
+        flowview = true;
 
         renderWordCloud();
     }
@@ -167,17 +166,19 @@ private boolean flowview =false;
         int adjustMaxFontSize = this.maxFontSize - this.minFontSize;
         int adjustCurrentFontSize = (percent * adjustMaxFontSize) / 100;
         int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, level - 1);
-        if(flowview){
-            System.out.println("DDD "+calculateFontSizeFromLevel(level));
-        currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, calculateFontSizeFromLevel(level));
+        if (flowview) {
+            //System.out.println("DDD "+calculateFontSizeFromLevel(level));
+            //currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, calculateFontSizeFromLevel(level));
         }
         word.setFont(new Font(currentFontSize));
     }
-    public double calculateFontSizeFromLevel(int level){
-                //System.out.println(":o"+level+" "+nfv.getMaxZoomLevel()+" "+maxFontLevel);
 
-        return (((double)(level-1)/(double)nfv.getMaxZoomLevel())*(double)maxFontLevel);
+    public double calculateFontSizeFromLevel(int level) {
+        //System.out.println(":o"+level+" "+nfv.getMaxZoomLevel()+" "+maxFontLevel);
+
+        return (((double) (level - 1) / (double) nfv.getMaxZoomLevel()) * (double) maxFontLevel);
     }
+
     @Override
     public void setHighlight(boolean on) {
         if (on) {

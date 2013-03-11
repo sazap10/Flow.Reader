@@ -33,7 +33,9 @@ public class NewFlowViewScene extends StackPane {
         rb.buildRibbon(document);
         this.getChildren().add(rb);
     }
-
+public boolean toggleZoomCenter(){
+    return rb.toggleZoomCenter();
+}
     public boolean getZoomLock() {
         return rb.getZoomLock();
     }

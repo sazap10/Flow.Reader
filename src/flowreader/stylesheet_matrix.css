@@ -32,7 +32,7 @@
     -fx-background-color: transparent;
     -fx-background-radius: 0;
     -fx-padding: 1 15 1 15;
-    -fx-text-fill: black;
+    -fx-text-fill: white;
     -fx-font: bold 18pt "Arial";
 
 }

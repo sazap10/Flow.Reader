@@ -3,6 +3,8 @@ package flowreader;
 import flowreader.view.MainView;
 import flowreader.view.PageView;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
@@ -13,6 +15,7 @@ import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.SplitPane;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -20,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -36,12 +40,11 @@ public class FlowReader extends Application {
     private SplitPane splitPane;
     public Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private Stage priStage;
-    public static boolean split_toggle = false;
+    public static boolean split_toggle = false, cancelled = false;
 
     @Override
     public void start(Stage primaryStage) {
         this.priStage = primaryStage;
-
         primaryStage.setTitle("Flow Reader");
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
             primaryStage.setFullScreen(false);
@@ -62,7 +65,6 @@ public class FlowReader extends Application {
 
         mainView = new MainView(this, primaryStage, scene, false);
         mainView2 = new MainView(this, primaryStage, scene, true);
-
         //prevent buttons overlapping credit:
         //http://stackoverflow.com/questions/9837529/how-to-solve-the-overlapping-of-the-controls-each-other-belonging-to-two-differe
 
@@ -123,26 +125,96 @@ public class FlowReader extends Application {
         PageView.setUpPageSize(500, 700);
 
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+        scene.widthProperty().addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                        Double width = (Double) newValue;
+                        if (split_toggle) {
+                            rootPane.setMaxWidth(width / 2);
+                            rootPane.setMinWidth(width / 2);
+                            rootPane.setPrefWidth(width / 2);
+                            rootPane2.setMaxWidth(width / 2);
+                            rootPane2.setMinWidth(width / 2);
+                            rootPane2.setPrefWidth(width / 2);
+                        } else {
+                            rootPane.setMaxWidth(width);
+                            rootPane.setMinWidth(width);
+                            rootPane.setPrefWidth(width);
+
+                            mainView.sideBtnsBar.setLayoutX(width - 300);
+
+
+
+                        }
+                    }
+                });
+        scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
+        scene.heightProperty().addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                        Double height = (Double) newValue;
+
+
+
+                        if (split_toggle) {
+
+                            rootPane.setMaxHeight(height / 2);
+                            rootPane.setMinHeight(height / 2);
+                            rootPane.setPrefHeight(height / 2);
+                            rootPane2.setMaxHeight(height / 2);
+                            rootPane2.setMinHeight(height / 2);
+                            rootPane2.setPrefHeight(height / 2);
+                        } else {
+                            rootPane.setMaxHeight(height);
+                            rootPane.setMinHeight(height);
+                            rootPane.setPrefHeight(height);
+                            mainView.bottomBtnsBar.setLayoutY(height - 26);
+                            mainView.sideBtnsBar.setLayoutY(height - 26 * 9);
+
+
+                        }
+                    }
+                });
         primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
         primaryStage.setScene(scene);
         splitPane.getItems().add(rootPane);
         splitPane.getItems().add(rootPane2);
-
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent e) {
+                mainView.closeBtn.fire();
+                if (cancelled) {
+                    e.consume();
+                }
+            }
+        });
         primaryStage.show();
 
     }
 
     public void showShortcuts() {
 
+
         final Stage dialog = new Stage(StageStyle.TRANSPARENT);
         dialog.initOwner(priStage);
 
         dialog.initModality(Modality.WINDOW_MODAL);
-        dialog.setScene(
-                new Scene(
+
+        EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent event) {
+                if (event.getCode().equals(event.getCode().DIGIT1)) {
+                    priStage.getScene().getRoot().setEffect(null);
+                    dialog.close();
+                    event.consume();
+                }
+            }
+        };
+
+        Scene dialog_scene = new Scene(
                 HBoxBuilder.create().styleClass("modal-dialog").children(
-                LabelBuilder.create().text("\n\nKeyboard shortcuts:\nF11: hide/show buttons\nH: Home\nW:Zoom In\nS:Zoom Out\nA: Move Left\nD:Move Right"
-                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ:Switch View\nF: Reset\nC: Reading Mode\nR: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock").textFill(Color.WHITE).build(),
+                LabelBuilder.create().text("\n\nKeyboard shortcuts:\nF: Toggle fullscreen\nB: hide/show buttons\nH: Home\nW: Zoom In\nS: Zoom Out\nA: Move Left\nD: Move Right"
+                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ: Switch View\nR: Reset\nC: Reading Mode\nE: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock\n Y: Split").textFill(Color.WHITE).build(),
                 ButtonBuilder.create().id("ok").text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -151,10 +223,15 @@ public class FlowReader extends Application {
                 dialog.close();
 
             }
-        }).build()).build(), Color.TRANSPARENT));
+        }).build()).build(), Color.TRANSPARENT);
+        dialog_scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
+
+        dialog.setScene(dialog_scene);
+
         dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
         priStage.getScene().getRoot().setEffect(new BoxBlur());
         dialog.showAndWait();
+
     }
 
     public void split() {
@@ -192,6 +269,7 @@ public class FlowReader extends Application {
         } else {
             scene.getStylesheets().clear();
             scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_split.css").toExternalForm());
+            scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
 
             split_toggle = true;
             root.getChildren().clear();

@@ -47,7 +47,9 @@ public class RibbonView extends StackPane {
         this.split_version = split_version;
 
     }
-
+public boolean toggleZoomCenter(){
+    return newFlowPane.toggleZoomCenter();
+}
     public void switchToDiveView() {
         this.getChildren().clear();
         this.getChildren().add(this.diveViewPane);
