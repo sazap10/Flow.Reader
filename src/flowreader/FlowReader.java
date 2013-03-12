@@ -73,23 +73,10 @@ public class FlowReader extends Application {
         rootPane.getChildren().add(mainView.bottomBtnsBar);
         rootPane.getChildren().add(mainView.sideBtnsBar);
 
-
-        mainView.topBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty());
-        mainView.bottomBtnsBar.setLayoutY(screenBounds.getHeight() - 26);
-
-        mainView.sideBtnsBar.setLayoutX(screenBounds.getWidth() - 165);
-        mainView.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26 * 9);
-
         rootPane2.getChildren().add(mainView2);
         rootPane2.getChildren().add(mainView2.topBtnsBar);
         rootPane2.getChildren().add(mainView2.bottomBtnsBar);
         rootPane2.getChildren().add(mainView2.sideBtnsBar);
-
-        mainView2.topBtnsBar.layoutYProperty().bind(rootPane2.layoutYProperty());
-        mainView2.bottomBtnsBar.setLayoutY(screenBounds.getHeight() - 26);
-
-        mainView2.sideBtnsBar.setLayoutX(screenBounds.getWidth() - 165);
-        mainView2.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26 * 9);
 
         mainView.prefWidthProperty().bind(rootPane.prefWidthProperty());
         mainView.prefHeightProperty().bind(rootPane.prefHeightProperty());
@@ -105,22 +92,6 @@ public class FlowReader extends Application {
         mainView2.maxWidthProperty().bind(rootPane2.maxWidthProperty());
         mainView2.maxHeightProperty().bind(rootPane2.maxHeightProperty());
 
-        rootPane.setMaxWidth(screenBounds.getWidth());
-        rootPane.setMinWidth(screenBounds.getWidth());
-        rootPane.setPrefWidth(screenBounds.getWidth());
-
-        rootPane.setMaxHeight(screenBounds.getHeight());
-        rootPane.setMinHeight(screenBounds.getHeight());
-        rootPane.setPrefHeight(screenBounds.getHeight());
-
-        rootPane2.setMaxWidth(screenBounds.getWidth() / 2);
-        rootPane2.setMinWidth(screenBounds.getWidth() / 2);
-        rootPane2.setPrefWidth(screenBounds.getWidth() / 2);
-
-        rootPane2.setMaxHeight(screenBounds.getHeight());
-        rootPane2.setMinHeight(screenBounds.getHeight());
-        rootPane2.setPrefHeight(screenBounds.getHeight());
-
         root.getChildren().add(rootPane);
         PageView.setUpPageSize(500, 700);
 
@@ -130,53 +101,21 @@ public class FlowReader extends Application {
                     @Override
                     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                         Double width = (Double) newValue;
-                        if (split_toggle) {
-                            rootPane.setMaxWidth(width / 2);
-                            rootPane.setMinWidth(width / 2);
-                            rootPane.setPrefWidth(width / 2);
-                            rootPane2.setMaxWidth(width / 2);
-                            rootPane2.setMinWidth(width / 2);
-                            rootPane2.setPrefWidth(width / 2);
-                        } else {
-                            rootPane.setMaxWidth(width);
-                            rootPane.setMinWidth(width);
-                            rootPane.setPrefWidth(width);
-
-                            mainView.sideBtnsBar.setLayoutX(width - 300);
-
-
-
-                        }
+                        setUpSceneX(width);
                     }
                 });
+
+
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         scene.heightProperty().addListener(
                 new ChangeListener() {
                     @Override
                     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                         Double height = (Double) newValue;
-
-
-
-                        if (split_toggle) {
-
-                            rootPane.setMaxHeight(height / 2);
-                            rootPane.setMinHeight(height / 2);
-                            rootPane.setPrefHeight(height / 2);
-                            rootPane2.setMaxHeight(height / 2);
-                            rootPane2.setMinHeight(height / 2);
-                            rootPane2.setPrefHeight(height / 2);
-                        } else {
-                            rootPane.setMaxHeight(height);
-                            rootPane.setMinHeight(height);
-                            rootPane.setPrefHeight(height);
-                            mainView.bottomBtnsBar.setLayoutY(height - 26);
-                            mainView.sideBtnsBar.setLayoutY(height - 26 * 9);
-
-
-                        }
+                        setUpSceneY(height);
                     }
                 });
+
         primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
         primaryStage.setScene(scene);
         splitPane.getItems().add(rootPane);
@@ -189,8 +128,63 @@ public class FlowReader extends Application {
                 }
             }
         });
+
         primaryStage.show();
 
+    }
+
+    public void setUpSceneX(Double width) {
+
+        if (split_toggle) {
+            rootPane.setMaxWidth(width / 2);
+            rootPane.setMinWidth(width / 2);
+            rootPane.setPrefWidth(width / 2);
+            rootPane2.setMaxWidth(width / 2);
+            rootPane2.setMinWidth(width / 2);
+            rootPane2.setPrefWidth(width / 2);
+            mainView.sideBtnsBar.setLayoutX(width / 2 - mainView.sideBtnsBar.getWidth());
+            mainView2.sideBtnsBar.setLayoutX(width / 2 - mainView2.sideBtnsBar.getWidth());
+            mainView2.topBtnsBar.setPrefWidth(width / 2);
+            mainView2.topBtnsBar.setMinWidth(width / 2);
+            mainView2.topBtnsBar.setMaxWidth(width / 2);
+
+        } else {
+            rootPane.setMaxWidth(width);
+            rootPane.setMinWidth(width);
+            rootPane.setPrefWidth(width);
+
+            mainView.sideBtnsBar.setLayoutX(width - mainView.sideBtnsBar.getWidth());
+
+
+
+        }
+    }
+
+    public void setUpSceneY(Double height) {
+
+        if (split_toggle) {
+
+            rootPane.setMaxHeight(height);
+            rootPane.setMinHeight(height);
+            rootPane.setPrefHeight(height);
+            rootPane2.setMaxHeight(height);
+            rootPane2.setMinHeight(height);
+            rootPane2.setPrefHeight(height);
+            mainView.bottomBtnsBar.setLayoutY(height - mainView.bottomBtnsBar.getHeight());
+            mainView2.bottomBtnsBar.setLayoutY(height - mainView.bottomBtnsBar.getHeight());
+            mainView.sideBtnsBar.setLayoutY(height - mainView.sideBtnsBar.getHeight());
+            mainView2.sideBtnsBar.setLayoutY(height - mainView2.sideBtnsBar.getHeight());
+
+
+        } else {
+            rootPane.setMaxHeight(height);
+            rootPane.setMinHeight(height);
+            rootPane.setPrefHeight(height);
+            mainView.bottomBtnsBar.setLayoutY(height - mainView.bottomBtnsBar.getHeight());
+            mainView.sideBtnsBar.setLayoutY(height - mainView.sideBtnsBar.getHeight());
+
+
+        }
     }
 
     public void showShortcuts() {
@@ -244,26 +238,9 @@ public class FlowReader extends Application {
             root.getChildren().clear();
             root.getChildren().add(rootPane);
 
+            setUpSceneX(scene.getWidth());
+            setUpSceneY(scene.getHeight());
 
-            mainView.splitSetup(false);
-            mainView2.splitSetup(false);
-
-            rootPane.setMaxWidth(screenBounds.getWidth());
-            rootPane.setMinWidth(screenBounds.getWidth());
-            rootPane.setPrefWidth(screenBounds.getWidth());
-
-            mainView.topBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty());
-            mainView.bottomBtnsBar.setLayoutY(screenBounds.getHeight() - 26);
-
-            mainView.sideBtnsBar.setLayoutX(screenBounds.getWidth() - 165);
-            mainView.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26 * 9);
-
-
-            mainView2.topBtnsBar.layoutYProperty().bind(rootPane2.layoutYProperty());
-            mainView2.bottomBtnsBar.setLayoutY(screenBounds.getHeight() - 26);
-
-            mainView2.sideBtnsBar.setLayoutX(screenBounds.getWidth() - 165);
-            mainView2.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26 * 9);
 
 
         } else {
@@ -271,38 +248,18 @@ public class FlowReader extends Application {
             scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_split.css").toExternalForm());
             scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
 
+
             split_toggle = true;
             root.getChildren().clear();
             splitPane.getItems().clear();
             splitPane.getItems().add(rootPane);
             splitPane.getItems().add(rootPane2);
             root.getChildren().add(splitPane);
+            
 
+            setUpSceneY(scene.getHeight());
 
-            mainView.splitSetup(true);
-            mainView2.splitSetup(true);
-
-
-
-
-            rootPane.setMaxWidth(screenBounds.getWidth() / 2);
-            rootPane.setMinWidth(screenBounds.getWidth() / 2);
-            rootPane.setPrefWidth(screenBounds.getWidth() / 2);
-
-
-            mainView.topBtnsBar.layoutYProperty().bind(rootPane.layoutYProperty());
-            mainView.bottomBtnsBar.setLayoutY(screenBounds.getHeight() - 26);
-
-            mainView.sideBtnsBar.setLayoutX(screenBounds.getWidth() / 2 - 165);
-            mainView.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26 * 9);
-
-
-            mainView2.topBtnsBar.layoutYProperty().bind(rootPane2.layoutYProperty());
-            mainView2.bottomBtnsBar.setLayoutY(screenBounds.getHeight() - 26);
-
-            mainView2.sideBtnsBar.setLayoutX(screenBounds.getWidth() / 2 - 165);
-            mainView2.sideBtnsBar.setLayoutY(screenBounds.getHeight() - 26 * 9);
-
+            setUpSceneX(scene.getWidth());
 
         }
 

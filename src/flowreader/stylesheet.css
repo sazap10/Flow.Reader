@@ -14,13 +14,15 @@
     -fx-fill: #FFFAF0;
 
 }
-
+.customProgressIndicator .percentage {
+    -fx-fill: #FFFFFF;
+}
 .Tooltip{
     -fx-background-color: linear-gradient(cyan,deepskyblue);
     -fx-font-size: 16;
 }
 #pagespane{
-    -fx-background-color: #000000;
+    -fx-background-color: transparent;
 }
 
 #page_text{
