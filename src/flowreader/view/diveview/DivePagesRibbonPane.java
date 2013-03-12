@@ -9,6 +9,7 @@ import flowreader.view.PageView;
 import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Screen;
 import javafx.util.Duration;
@@ -23,6 +24,7 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         super(index, x, y, PageView.width, PageView.height);
         // Creation of the pages
         for (Page p : pages) {
+            
             this.ribbonElts.add(new DivePage(p.getText(), x, y, this.elementWidth, this.elementHeight));
             x = x + this.elementWidth + this.elementInterval;
         }

@@ -5,6 +5,7 @@
 package flowreader.utils;
 
 import flowreader.model.Document;
+import flowreader.model.TextDocument;
 import flowreader.view.MainView;
 import flowreader.view.RibbonView;
 import javafx.concurrent.Task;
@@ -17,11 +18,11 @@ import javafx.scene.control.ProgressIndicator;
 public class DocumentCreationTask extends Task {
 
     private Document document = null;
-    private TextFileReader fileReader;
+    private Reader fileReader;
     private MainView mv;
     private boolean split_version;
 
-    public DocumentCreationTask(ProgressIndicator pi, TextFileReader fileReader, MainView mv, Boolean split_version) {
+    public DocumentCreationTask(ProgressIndicator pi, Reader fileReader, MainView mv, Boolean split_version) {
         this.fileReader = fileReader;
         this.mv = mv;
         this.split_version = split_version;
@@ -30,7 +31,7 @@ public class DocumentCreationTask extends Task {
 
     @Override
     protected Document call() throws Exception {
-        document = (Document) fileReader.get();
+        document = (Document) fileReader.call();
         RibbonView ribbon = new RibbonView(document, split_version);
         mv.docOpenned(document, ribbon);
         return this.document;

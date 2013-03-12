@@ -19,7 +19,8 @@ public class PageView extends Group {
     private Text pageText;
     //private Group page;
     private double textBoundWidth, textBoundHeight;
-
+    public final double pageWidth = 500;
+    public final double pageHeight = 700;
     public PageView(Rectangle boundary) {
         pageBoundary = boundary;
         //pageBoundary.setFill(Color.FLORALWHITE);

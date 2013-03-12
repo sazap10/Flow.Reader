@@ -165,7 +165,7 @@ public class DiveWordCloud extends DiveRibbonElement {
 
         int adjustMaxFontSize = this.maxFontSize - this.minFontSize;
         int adjustCurrentFontSize = (percent * adjustMaxFontSize) / 100;
-        int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, level - 1);
+        int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, (level - 1));
         if (flowview) {
             //System.out.println("DDD "+calculateFontSizeFromLevel(level));
             //currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, calculateFontSizeFromLevel(level));

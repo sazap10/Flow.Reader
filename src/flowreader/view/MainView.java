@@ -6,7 +6,11 @@ package flowreader.view;
 
 import flowreader.FlowReader;
 import flowreader.model.Document;
+import flowreader.model.TextDocument;
 import flowreader.utils.DocumentCreationTask;
+import flowreader.utils.FileReader;
+import flowreader.utils.PDFFileReader;
+import flowreader.utils.Reader;
 import flowreader.utils.TextFileReader;
 import java.util.List;
 import java.util.Random;
@@ -56,7 +60,7 @@ public class MainView extends BorderPane {
     private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
-    private TextFileReader fileReader;
+    private Reader fileReader;
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private EventHandler<KeyEvent> keyHandler;
     private StackPane home;
@@ -148,9 +152,9 @@ public class MainView extends BorderPane {
             int blue = rand.nextInt(255);
             int font = rand.nextInt(30);
             Text text2 = new Text(x, y, "FlowReader");
-            int rot = rand.nextInt(360);
+            //int rot = rand.nextInt(360);
             text2.setFill(Color.rgb(red, green, blue, .99));
-            text2.setRotate(rot);
+            //text2.setRotate(rot);
             int randfont = rand.nextInt(fontList.size());
             text2.setFont(new Font(fontList.get(randfont), font));
 //r.getChildren().add(text2);
@@ -507,7 +511,7 @@ public class MainView extends BorderPane {
                     GlowButton.setDisable(true);
                     ResetEffectButton.setDisable(true);
 zoomAtMouseButton.setDisable(true);
-                    fileReader = new TextFileReader();
+                    fileReader = new PDFFileReader();
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
                     fileReader.startFileChooser(primaryStage);
 

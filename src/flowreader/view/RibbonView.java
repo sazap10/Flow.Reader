@@ -5,6 +5,7 @@
 package flowreader.view;
 
 import flowreader.model.Document;
+import flowreader.model.TextDocument;
 import flowreader.view.diveview.DiveViewScene;
 import flowreader.view.flowview.NewFlowViewScene;
 import javafx.geometry.Rectangle2D;

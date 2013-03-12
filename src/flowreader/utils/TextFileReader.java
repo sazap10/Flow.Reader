@@ -5,6 +5,7 @@
 package flowreader.utils;
 
 import flowreader.model.Document;
+import flowreader.model.TextDocument;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import flowreader.view.PageView;
@@ -27,21 +28,16 @@ import javafx.stage.Stage;
  *
  * @author D-Day
  */
-public class TextFileReader extends Task {
+public class TextFileReader extends Reader implements FileReader {
 
-    private File file;
-    private HashMap<String, Integer> commonWords;
+  
 
     public TextFileReader() {
         this.commonWords = new HashMap<String, Integer>();
         this.getCommonWords();
     }
     
-    public TextFileReader(File file) {
-        this.commonWords = new HashMap<String, Integer>();
-        this.getCommonWords();
-        this.file = file;
-    }
+
 
     /**
      * Create and start the file chooser
@@ -68,7 +64,7 @@ public class TextFileReader extends Task {
      * @return a document based on the file File
      * @throws IOException
      */
-    public Document readFile(double width, double height) throws IOException {
+    public TextDocument readFile(double width, double height) throws IOException {
         ArrayList<Page> pages = new ArrayList<Page>(); // The list of all the pages
         ArrayList<WordCloud> wordClouds = new ArrayList();
         ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<ArrayList<WordCloud>>();
@@ -89,10 +85,10 @@ public class TextFileReader extends Task {
         LineNumberReader r = new LineNumberReader(new java.io.FileReader(file));
         try {
             String paragraph, word;
-            int nbligne = 0;
+            int pageCount = 0;
             while ((paragraph = r.readLine()) != null) {
-                nbligne++;
-                this.updateProgress(nbligne, numberOfLines + 1);
+                pageCount++;
+                this.updateProgress(pageCount, numberOfLines + 1);
                 Scanner sc = new Scanner(paragraph);
                 try {
                     while (sc.hasNext()) { // while there is words in the line
@@ -155,7 +151,7 @@ public class TextFileReader extends Task {
             wordCloudLevels.add(temp_element);
         }
 
-        Document document = new Document(pages, wordCloudLevels);
+        TextDocument document = new TextDocument(pages, wordCloudLevels);
         return document;
     }
 
@@ -163,95 +159,25 @@ public class TextFileReader extends Task {
      * @param clouds
      * @return all the levels of word clouds based on the first level call clouds
      */
-    public ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds) {
-        ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<ArrayList<WordCloud>>();
-        ArrayList<ArrayList<WordCloud>> otherLevels = new ArrayList<ArrayList<WordCloud>>();
-        //updateProgress(1, 10);
-        localLevels.add(clouds);
-
-        ArrayList<WordCloud> currentLevel = new ArrayList<WordCloud>();
-        WordCloud cloudB = null;
-        boolean haveB = false;
-        int listCount = 0;
-        int lastIndex = clouds.size() - 1;
-
-        // there is only one word cloud on the previous level
-        if (lastIndex == 0) {
-            //localLevels.add(clouds);
-            return localLevels;
-        }
-
-        // Get through the previous level of cloud to create the current level
-        for (WordCloud cloud : clouds) {
-            if (haveB && (cloudB != null)) {
-                WordCloud newCloud = new WordCloud(cloud, cloudB);
-                // if odd number of cloud merge of three clouds
-                if (clouds.indexOf(cloud) + 1 == lastIndex) {
-                    WordCloud triCloud = new WordCloud(newCloud, clouds.get(lastIndex));
-                    currentLevel.add(triCloud);
-                } else { // else add the new cloud to the level
-                    currentLevel.add(newCloud);
-                }
-                haveB = false;
-            } else {
-                cloudB = cloud;
-                haveB = true;
-            }
-
-        }
-        otherLevels = makeCloudLevels(currentLevel);
-        for (ArrayList<WordCloud> cloudList : otherLevels) { // add otherLevels to localLevels
-            localLevels.add(cloudList);
-        }
-        return localLevels;
-    }
+   
 
     /**
      * @return an hashmap containing all the common words 
      */
-    public final HashMap<String, Integer> getCommonWords() {
-        StringBuilder stringBuffer = new StringBuilder();
-        BufferedReader bufferedReader = null;
-        try {
-            InputStream f;
-            f = TextFileReader.class.getResourceAsStream("CommonEnglishWords.txt");
-
-            bufferedReader = new BufferedReader(new InputStreamReader(f));
-
-            String temp_text;
-            while ((temp_text = bufferedReader.readLine()) != null) {
-                this.commonWords.put(temp_text, 1);
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println("Couldn't find the file!");
-
-
-        } catch (IOException ex) {
-            System.out.println("no idea!.. some IOException");
-        } finally {
-            try {
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-            } catch (IOException ex) {
-                System.out.println("couldn't close the file!");
-            }
-        }
-        return this.commonWords;
-    }
+   
 
     /**
      * @param word
      * @return word without any punctuation
      */
-    public String trimPunctuation(String word) {
-        String w = word.toLowerCase().replaceAll("\\W", "");
-        return w;
-    }
 
-    @Override
-    protected Document call() throws Exception {
-        Document docu = readFile(PageView.textBoundWidth, PageView.textBoundHeight);
+    
+        @Override
+    public Document call() throws IOException {
+        TextDocument docu = readFile(PageView.textBoundWidth, PageView.textBoundHeight);
         return docu;
     }
+    
+
+    
 }

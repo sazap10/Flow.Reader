@@ -6,6 +6,7 @@ package flowreader.view.flowview;
 
 import flowreader.FlowReader;
 import flowreader.model.Document;
+import flowreader.model.TextDocument;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class NewFlowView extends Group {
     int pageHeight = 700;
     int pageInterval = 5;
     int pagesNumber = 30;
-    int maxScale = 100;
+    int maxScale = 1000;
     int minScale = 0;
     int curScale = 0;
     int opaqueScale = 100;
@@ -162,13 +163,27 @@ public class NewFlowView extends Group {
 
         int zoomTable_scale;
         float percent;
-        for (int i = 1; i <= zoomLevels; i++) {
+       /* for (int i = 1; i <= zoomLevels; i++) {
             percent = 80 / (i * 100.0f - 60);
             zoomTable_scale = (int) (percent * maxScale);
              //           zoomTable_scale = (int) (10*i);
 
             System.out.println("put "+i+" "+zoomTable_scale);
             zoomTable.put(i, zoomTable_scale);
+        }
+    */
+        //set the percentage linear increment
+        int inc = (int) (100.0f / zoomLevels);
+        
+        //walk the increments to 100 building the table
+        int tmpScale = 100;
+        int currLevel = 1;
+        for (int i = zoomLevels; i >= 1; i--){
+            zoomTable.put(currLevel, tmpScale);
+            System.out.println("put "+currLevel+" "+tmpScale);
+            tmpScale = tmpScale - inc;
+            currLevel++;
+            
         }
         maxZoomLevel = zoomLevels;
         currentZoomLevel = maxZoomLevel;
@@ -391,10 +406,9 @@ public class NewFlowView extends Group {
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
 
-            PageView page = new PageView(new Rectangle(x, y, pageWidth, pageHeight));
-            page.setText(document.getPages().get(i).getText());
-            this.pages.add(page);
+            Group page = document.getPageViews().get(i);
             this.pagesGroup.getChildren().add(page);
+            page.relocate(x,y + 50 + (pageHeight / 3));
 
             x += pageWidth + pageInterval;
             i++;
