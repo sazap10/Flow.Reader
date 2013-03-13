@@ -12,9 +12,24 @@ import javafx.scene.Node;
  *
  * @author Pat
  */
-public interface Document {
+public class Document {
     
-    public ArrayList<ArrayList<WordCloud>> getWordClouds();
-    public ArrayList<Group> getPageViews();
-    public ArrayList<Page> getPages();
+    private ArrayList<ArrayList<WordCloud>> wordClouds;
+    private ArrayList<Page> pages;
+    
+    public Document(ArrayList<Page> pages, ArrayList<ArrayList<WordCloud>> wordClouds){
+        this.pages = pages;
+        this.wordClouds = wordClouds;
+    }
+    
+    public ArrayList<Page> getPages(){
+        return pages;
+    }
+    
+    /**
+     * @return all the levels of word clouds of the documents
+     */
+    public ArrayList<ArrayList<WordCloud>> getWordClouds(){
+        return this.wordClouds;
+    }
 }

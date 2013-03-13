@@ -5,7 +5,6 @@
 package flowreader.utils;
 
 import flowreader.model.Document;
-import flowreader.model.TextDocument;
 import flowreader.view.MainView;
 import flowreader.view.RibbonView;
 import javafx.concurrent.Task;

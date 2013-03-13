@@ -6,7 +6,6 @@ package flowreader.view.flowview;
 
 import flowreader.FlowReader;
 import flowreader.model.Document;
-import flowreader.model.TextDocument;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import java.util.ArrayList;

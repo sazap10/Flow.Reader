@@ -6,12 +6,13 @@ package flowreader.view;
 
 import flowreader.FlowReader;
 import flowreader.model.Document;
-import flowreader.model.TextDocument;
 import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.FileReader;
 import flowreader.utils.PDFFileReader;
 import flowreader.utils.Reader;
 import flowreader.utils.TextFileReader;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javafx.event.ActionEvent;
@@ -42,6 +43,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -511,10 +513,17 @@ public class MainView extends BorderPane {
                     GlowButton.setDisable(true);
                     ResetEffectButton.setDisable(true);
 zoomAtMouseButton.setDisable(true);
-                    fileReader = new PDFFileReader();
-                    DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
-                    fileReader.startFileChooser(primaryStage);
-
+                    
+                   File file = startFileChooser(primaryStage);
+                    String name = file.getName();
+                    if (name.endsWith(".txt")){
+                        fileReader = new TextFileReader();
+                    }
+                    else if(name.endsWith(".pdf")){
+                        fileReader = new PDFFileReader();
+                    }
+                    fileReader.setFile(file);
+                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);                  
                     pi.progressProperty().bind(fileReader.progressProperty());
                     Thread t = new Thread(fileReader);
                     t.start();
@@ -702,5 +711,25 @@ zoomAtMouseButton.setText("Zoom method: cursor position(ish)");
         GlowButton.setDisable(false);
         ResetEffectButton.setDisable(false);
         zoomAtMouseButton.setDisable(false);
+    }
+    
+     public File startFileChooser(Stage primaryStage) {
+        //start file chooser
+        File f = new File(System.getProperty("user.dir"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Please choose a text file to read");
+        fileChooser.setInitialDirectory(f);
+
+        //Set extension filter
+        ArrayList<String> extensions = new ArrayList<>();
+        extensions.add("*.pdf");
+        extensions.add("*.txt");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf), Text files (*.txt)", extensions);
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        //Show save file dialog
+        f = fileChooser.showOpenDialog(primaryStage);
+        return f;
+
     }
 }

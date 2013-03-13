@@ -7,9 +7,8 @@ package flowreader.utils;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import flowreader.model.Document;
-import flowreader.model.PDFDocument;
-import flowreader.model.TextDocument;
-import flowreader.view.PageView;
+import flowreader.model.PDFPage;
+import flowreader.view.TxtPageView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,43 +59,35 @@ public class PDFFileReader extends Reader implements FileReader{
     
     
     //reads in the images from the pdf file
-    public PDFDocument readFile(double a, double b) throws IOException{
+    public Document readFile(double a, double b) throws IOException{
     ArrayList<String> pageText;
     ArrayList<ArrayList<WordCloud>> clouds = new ArrayList<ArrayList<WordCloud>>();
-    PDFDocument document = new PDFDocument(700, 500);
-    System.out.println("I am being run");
+    ArrayList<Page> pages = new ArrayList<>();
         try {
             if (file != null) {
-                   System.out.println("file is not null");
+               
                 PDDocument pdfDocument = PDDocument.load(file);
-                                  System.out.println("i am loaded!");
+                 pageText = getText(pdfDocument, pdfDocument.getNumberOfPages());
                 System.out.println(pdfDocument.getNumberOfPages());
                 for (int i = 0; i <  pdfDocument.getNumberOfPages(); i++) {
-                     System.out.println("about to read in an image");
                     PDPage pDPage = (PDPage)pdfDocument.getDocumentCatalog().getAllPages().get(i);
                     WritableImage image = this.BufferedToWritable(pDPage.convertToImage(BufferedImage.TYPE_USHORT_555_RGB, 60 ));
-                    System.out.println("image conversion complete");
-                    document.addImage(image);
+                    pages.add(new PDFPage(pageText.get(i), image));
                     System.out.println("got an image for " + i);
-                    this.updateProgress(i, pdfDocument.getNumberOfPages() + 1);
+                    this.updateProgress(i, pdfDocument.getNumberOfPages());
                 }
                 
                 
-                pageText = getText(pdfDocument, pdfDocument.getNumberOfPages());
                 
                 
-                  //create pageObjects
-                ArrayList<Page> pageModels = new ArrayList();
-                for (String page : pageText){
-                    Page pageModel = new Page(page);
-                    pageModels.add(pageModel);
-                }
-                document.setPages(pageModels);
+               
+
               
                 
                 clouds = makeWordClouds(pageText);
+                
                 pdfDocument.close();
-
+                return new Document(pages, clouds);
             }
             else{
                 System.out.println("file is null");

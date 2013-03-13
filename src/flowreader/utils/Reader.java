@@ -5,9 +5,8 @@
 package flowreader.utils;
 
 import flowreader.model.Document;
-import flowreader.model.TextDocument;
 import flowreader.model.WordCloud;
-import flowreader.view.PageView;
+import flowreader.view.TxtPageView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,27 +35,17 @@ public abstract class Reader extends Task implements FileReader {
 
     }
     
-       public void startFileChooser(Stage primaryStage) {
-        //start file chooser
-        File f = new File(System.getProperty("user.dir"));
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Please choose a text file to read");
-        fileChooser.setInitialDirectory(f);
-
-        //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        //Show save file dialog
-        file = fileChooser.showOpenDialog(primaryStage);
-
-    }
+      
     
     @Override
     public Document call() throws IOException{
         System.out.println("I am about to call readfile");
-        Document docu = this.readFile(PageView.textBoundHeight, PageView.textBoundWidth);
+        Document docu = this.readFile(TxtPageView.textBoundHeight, TxtPageView.textBoundWidth);
         return docu;
+    }
+    
+    public void setFile(File file){
+        this.file = file;
     }
 
      public final HashMap<String, Integer> getCommonWords() {

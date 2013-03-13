@@ -1,7 +1,7 @@
 package flowreader;
 
 import flowreader.view.MainView;
-import flowreader.view.PageView;
+import flowreader.view.TxtPageView;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -122,7 +122,7 @@ public class FlowReader extends Application {
         rootPane2.setPrefHeight(screenBounds.getHeight());
 
         root.getChildren().add(rootPane);
-        PageView.setUpPageSize(500, 700);
+        TxtPageView.setUpPageSize(500, 700);
 
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         scene.widthProperty().addListener(

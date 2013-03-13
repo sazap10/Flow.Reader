@@ -5,6 +5,7 @@
 package flowreader.view.diveview;
 
 import flowreader.view.PageView;
+import flowreader.view.TxtPageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -21,7 +22,7 @@ public class DivePage extends DiveRibbonElement{
     DivePage(String text, double x, double y, double elementWidth, double elementHeigth) {
         pageBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
         pageBoundary.setFill(Color.FLORALWHITE);
-        textBound = new Rectangle(PageView.textBoundWidth, PageView.textBoundHeight);
+        textBound = new Rectangle(TxtPageView.textBoundWidth, TxtPageView.textBoundHeight);
         textBound.setFill(Color.TRANSPARENT);
         pageText = new Text();
         pageText.setX(pageBoundary.getX() + ((pageBoundary.getWidth() - textBound.getWidth()) * 0.5));
@@ -34,8 +35,8 @@ public class DivePage extends DiveRibbonElement{
     public static void setUpPageSize(double width, double height){
         PageView.width = width;
         PageView.height = height;
-        PageView.textBoundWidth = width * 0.8;
-        PageView.textBoundHeight = height * 0.8;
+        TxtPageView.textBoundWidth = width * 0.8;
+        TxtPageView.textBoundHeight = height * 0.8;
     }
 
     public void setX(double x) {

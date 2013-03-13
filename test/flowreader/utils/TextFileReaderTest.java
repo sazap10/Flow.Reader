@@ -7,7 +7,7 @@ package flowreader.utils;
 import flowreader.model.TextDocument;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
-import flowreader.view.PageView;
+import flowreader.view.TxtPageView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class TextFileReaderTest {
 
         TextDocument expResult = new TextDocument(pages, llwc);
 
-        TextDocument result = this.tfr.readFile(PageView.textBoundWidth, PageView.textBoundHeight);
+        TextDocument result = this.tfr.readFile(TxtPageView.textBoundWidth, TxtPageView.textBoundHeight);
         assertEquals(expResult.getPages().get(0).getText(), result.getPages().get(0).getText());
         
         ArrayList<ArrayList<WordCloud>> expclouds = expResult.getWordClouds();

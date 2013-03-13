@@ -5,10 +5,9 @@
 package flowreader.utils;
 
 import flowreader.model.Document;
-import flowreader.model.TextDocument;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
-import flowreader.view.PageView;
+import flowreader.view.TxtPageView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -64,7 +63,7 @@ public class TextFileReader extends Reader implements FileReader {
      * @return a document based on the file File
      * @throws IOException
      */
-    public TextDocument readFile(double width, double height) throws IOException {
+    public Document readFile(double width, double height) throws IOException {
         ArrayList<Page> pages = new ArrayList<Page>(); // The list of all the pages
         ArrayList<WordCloud> wordClouds = new ArrayList();
         ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<ArrayList<WordCloud>>();
@@ -151,7 +150,7 @@ public class TextFileReader extends Reader implements FileReader {
             wordCloudLevels.add(temp_element);
         }
 
-        TextDocument document = new TextDocument(pages, wordCloudLevels);
+        Document document = new Document(pages, wordCloudLevels);
         return document;
     }
 
@@ -174,7 +173,7 @@ public class TextFileReader extends Reader implements FileReader {
     
         @Override
     public Document call() throws IOException {
-        TextDocument docu = readFile(PageView.textBoundWidth, PageView.textBoundHeight);
+        Document docu = readFile(TxtPageView.textBoundWidth, TxtPageView.textBoundHeight);
         return docu;
     }
     
