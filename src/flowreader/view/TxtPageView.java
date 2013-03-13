@@ -4,6 +4,7 @@
  */
 package flowreader.view;
 
+import flowreader.model.Page;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -28,6 +29,17 @@ public class TxtPageView extends PageView{
         pageText.setY(pageBoundary.getY() + ((pageBoundary.getHeight() - textBound.getHeight()) * 0.5));
         this.getChildren().add(pageText);
         pageText.setText(text);
+    }
+    
+    public TxtPageView(Page page) {
+        super(0, 0);
+        textBound = new Rectangle(textBoundWidth, textBoundHeight);
+        textBound.setFill(Color.TRANSPARENT);
+        pageText = new Text();
+        pageText.setX(pageBoundary.getX() + ((pageBoundary.getWidth() - textBound.getWidth()) * 0.5));
+        pageText.setY(pageBoundary.getY() + ((pageBoundary.getHeight() - textBound.getHeight()) * 0.5));
+        this.getChildren().add(pageText);
+        pageText.setText(page.getText());
     }
     
     public static void setUpPageSize(double width, double height){

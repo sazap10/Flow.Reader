@@ -4,6 +4,7 @@
  */
 package flowreader.view.diveview;
 
+import flowreader.view.DiveRibbonElement;
 import java.util.ArrayList;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;

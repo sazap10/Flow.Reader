@@ -76,14 +76,6 @@ public class PDFFileReader extends Reader implements FileReader{
                     System.out.println("got an image for " + i);
                     this.updateProgress(i, pdfDocument.getNumberOfPages());
                 }
-                
-                
-                
-                
-               
-
-              
-                
                 clouds = makeWordClouds(pageText);
                 
                 pdfDocument.close();
@@ -166,7 +158,7 @@ public class PDFFileReader extends Reader implements FileReader{
         }
         
         //add the first level to the list
-        wordCloudLevels.add(firstPages);
+       // wordCloudLevels.add(firstPages);
         
         //add each level of merged clouds
         for (ArrayList<WordCloud> tmpList : makeCloudLevels(firstPages)){

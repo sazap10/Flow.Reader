@@ -4,6 +4,7 @@
  */
 package flowreader.view.diveview;
 
+import flowreader.view.DiveRibbonElement;
 import flowreader.model.WordCloud;
 import flowreader.view.flowview.NewFlowView;
 import java.util.ArrayList;

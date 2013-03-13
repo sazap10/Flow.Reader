@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
  *
  * @author D-Day
  */
-public abstract class PageView extends Group {
+public abstract class PageView extends DiveRibbonElement {
 
     protected Rectangle pageBoundary;
     public static double width;
@@ -33,8 +33,8 @@ public abstract class PageView extends Group {
     }
 
     public static void setUpPageSize(double width, double height) {
-        TxtPageView.width = width;
-        TxtPageView.height = height;
+        PageView.width = width;
+        PageView.height = height;
     }
 
     public double getPageWidth() {
@@ -51,5 +51,16 @@ public abstract class PageView extends Group {
 
     public double getX() {
         return pageBoundary.getX();
+    }
+    
+    
+    @Override
+    public void setHighlight(boolean on) {
+        if(on){
+            this.pageBoundary.setOpacity(1);
+        }
+        else{
+            this.pageBoundary.setOpacity(0.5);
+        }
     }
 }

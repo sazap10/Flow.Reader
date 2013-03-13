@@ -4,6 +4,7 @@
  */
 package flowreader.view.diveview;
 
+import flowreader.view.DiveRibbonElement;
 import flowreader.view.PageView;
 import flowreader.view.TxtPageView;
 import javafx.scene.paint.Color;

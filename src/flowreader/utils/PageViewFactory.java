@@ -6,7 +6,9 @@ package flowreader.utils;
 
 import flowreader.model.PDFPage;
 import flowreader.model.Page;
+import flowreader.view.PDFPageView;
 import flowreader.view.PageView;
+import flowreader.view.TxtPageView;
 
 /**
  *
@@ -21,9 +23,11 @@ public  class PageViewFactory {
      */
     public static PageView getView(Page page){
         if(page instanceof PDFPage){
-            return new PDFPageView(page);
+            return new PDFPageView((PDFPage)page);
         }
-        else return new TxtPageView(page)
+        else{
+            return new TxtPageView(page);
+        }
         
     }
     

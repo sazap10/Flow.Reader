@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class DocumentTest {
 
-    private TextDocument doc;
+    private Document doc;
 
     public DocumentTest() {
     }
@@ -41,7 +41,7 @@ public class DocumentTest {
         ArrayList<ArrayList<WordCloud>> llwc = new ArrayList<ArrayList<WordCloud>>();
         llwc.add(lwc);
 
-        this.doc = new TextDocument(pages, llwc);
+        this.doc = new Document(pages, llwc);
     }
 
     @After

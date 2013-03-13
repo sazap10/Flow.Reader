@@ -4,7 +4,10 @@
  */
 package flowreader.view.diveview;
 
+import flowreader.view.DiveRibbonElement;
 import flowreader.model.Page;
+import flowreader.utils.PageViewFactory;
+import flowreader.view.PageView;
 import flowreader.view.TxtPageView;
 import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
@@ -24,8 +27,10 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         super(index, x, y, TxtPageView.width, TxtPageView.height);
         // Creation of the pages
         for (Page p : pages) {
-            
-            this.ribbonElts.add(new DivePage(p.getText(), x, y, this.elementWidth, this.elementHeight));
+            System.out.println("pages ");
+            PageView pv = PageViewFactory.getView(p); 
+            pv.relocate(x,y + 50 + (PageView.height / 3));
+            this.ribbonElts.add(pv);
             x = x + this.elementWidth + this.elementInterval;
         }
 

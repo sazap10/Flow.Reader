@@ -8,6 +8,8 @@ import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
+import flowreader.utils.PageViewFactory;
+import flowreader.view.PageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.animation.TranslateTransition;
@@ -405,7 +407,7 @@ public class NewFlowView extends Group {
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
 
-            Group page = document.getPageViews().get(i);
+            Group page = PageViewFactory.getView(document.getPages().get(i));
             this.pagesGroup.getChildren().add(page);
             page.relocate(x,y + 50 + (pageHeight / 3));
 

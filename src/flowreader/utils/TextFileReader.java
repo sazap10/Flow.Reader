@@ -97,6 +97,7 @@ public class TextFileReader extends Reader implements FileReader {
                         if (textWithNewLine > boundHeight) {
                             Page page = new Page(pageText);
                             WordCloud wordCloud = new WordCloud(wordsOccurrences);
+                            System.out.println("adding page"+page.getText());
                             pages.add(page);
                             wordClouds.add(wordCloud);
                             pageText = "";
@@ -135,6 +136,7 @@ public class TextFileReader extends Reader implements FileReader {
             }
             Page page = new Page(pageText);
             WordCloud wordCloud = new WordCloud(wordsOccurrences);
+            System.out.println("adding page"+page.getText());
             pages.add(page);
             wordClouds.add(wordCloud);
 
@@ -150,6 +152,7 @@ public class TextFileReader extends Reader implements FileReader {
             wordCloudLevels.add(temp_element);
         }
 
+        System.out.println("nbpages "+pages.size());
         Document document = new Document(pages, wordCloudLevels);
         return document;
     }

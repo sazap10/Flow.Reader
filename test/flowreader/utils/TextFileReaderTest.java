@@ -4,7 +4,7 @@
  */
 package flowreader.utils;
 
-import flowreader.model.TextDocument;
+import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import flowreader.view.TxtPageView;
@@ -42,7 +42,7 @@ public class TextFileReaderTest {
     @Before
     public void setUp() {
         File f = new File("C:\\Users\\D-Day\\Workspace\\Flow.Reader\\books\\test.txt");
-        tfr = new TextFileReader(f);
+        //tfr = new TextFileReader(f);
     }
     
     @After
@@ -68,9 +68,9 @@ public class TextFileReaderTest {
         ArrayList<ArrayList<WordCloud>> llwc = new ArrayList<ArrayList<WordCloud>>();
         llwc.add(lwc);
 
-        TextDocument expResult = new TextDocument(pages, llwc);
+        Document expResult = new Document(pages, llwc);
 
-        TextDocument result = this.tfr.readFile(TxtPageView.textBoundWidth, TxtPageView.textBoundHeight);
+        Document result = this.tfr.readFile(TxtPageView.textBoundWidth, TxtPageView.textBoundHeight);
         assertEquals(expResult.getPages().get(0).getText(), result.getPages().get(0).getText());
         
         ArrayList<ArrayList<WordCloud>> expclouds = expResult.getWordClouds();
@@ -142,8 +142,8 @@ public class TextFileReaderTest {
     public void testCall() throws Exception {
         System.out.println("call");
         TextFileReader instance = new TextFileReader();
-        TextDocument expResult = null;
-        TextDocument result = instance.call();
+        Document expResult = null;
+        Document result = instance.call();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
