@@ -67,7 +67,7 @@ public class DiveWordCloud extends DiveRibbonElement {
         this.cloud.setMinHeight(elementHeigth);
         this.cloud.setPrefHeight(elementHeigth);
         this.cloud.setMaxHeight(elementHeigth);
-
+//this.cloud.setPrefWrapLength(elementWidth);
         this.level = level;
         this.nfv = nfv;
 
@@ -75,8 +75,12 @@ public class DiveWordCloud extends DiveRibbonElement {
 
         cloud.setAlignment(Pos.TOP_CENTER);
         flowview = true;
-
+setNumOfWordsInCloud(level);
         renderWordCloud();
+    }
+    
+    public void setNumOfWordsInCloud(int level){
+        numOfWordsInCloud = level*4;
     }
 
     public double getPageWidth() {

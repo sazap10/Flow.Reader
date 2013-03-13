@@ -179,7 +179,7 @@ public class NewFlowView extends Group {
 
     public void createZoomTable(int zoomLevels) {
         // first, find the final zoom level
-
+/*
         int zoomTable_scale;
         float percent;
         for (int i = 1; i <= zoomLevels; i++) {
@@ -191,22 +191,23 @@ public class NewFlowView extends Group {
             zoomTable.put(i, zoomTable_scale);
         }
 
-        /*
         
+        */
          //set the percentage linear increment
-         int inc = (int) (100.0f / zoomLevels);
-        
+         int inc = (int) (maxScale*0.85 / (zoomLevels-1));
          //walk the increments to 100 building the table
-         int tmpScale = 100;
-         int currLevel = 1;
+         int tmpScale = 1;
+         int currLevel = zoomLevels;
+         
+                
          for (int i = zoomLevels; i >= 1; i--){
          zoomTable.put(currLevel, tmpScale);
          System.out.println("put "+currLevel+" "+tmpScale);
-         tmpScale = tmpScale - inc;
-         currLevel++;
+         tmpScale = tmpScale + inc;
+         currLevel--;
             
          }
-         */
+         
 
         maxZoomLevel = zoomLevels;
         currentZoomLevel = maxZoomLevel;
