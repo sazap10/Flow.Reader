@@ -6,7 +6,6 @@ package flowreader.view;
 
 import flowreader.model.PDFPage;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 
 /**
  *

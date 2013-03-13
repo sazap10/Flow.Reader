@@ -10,16 +10,22 @@ import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import flowreader.utils.PageViewFactory;
 import flowreader.view.PageView;
+import flowreader.view.diveview.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -28,25 +34,16 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.Screen;
 import javafx.util.Duration;
-import flowreader.view.diveview.*;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
-import javafx.scene.CacheHint;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.effect.GaussianBlur;
 
 /**
  *
  * @author D-Day
  */
-public class NewFlowView extends Group {
+public class FlowView extends Group {
 
     private ArrayList<PageView> pages;
     private ArrayList<PageView> culledPages;
@@ -88,7 +85,7 @@ public class NewFlowView extends Group {
     private boolean split_version = false;
     private boolean zoomAtMouse = false;
 
-    public NewFlowView(StackPane stackPane, boolean split_version) {
+    public FlowView(StackPane stackPane, boolean split_version) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
         this.stackPane = stackPane;
@@ -124,7 +121,7 @@ public class NewFlowView extends Group {
 
     public void setXCoord(int diff) {
         TranslateTransition tt = new TranslateTransition(
-                Duration.millis(100), NewFlowView.this.VBox);
+                Duration.millis(100), FlowView.this.VBox);
         tt.setByX(diff);
         tt.setCycleCount(0);
         tt.setAutoReverse(true);
@@ -565,7 +562,7 @@ public class NewFlowView extends Group {
                             dy = 0;
                         }
                         TranslateTransition tt = new TranslateTransition(
-                                Duration.millis(100), NewFlowView.this.VBox);
+                                Duration.millis(100), FlowView.this.VBox);
                         tt.setByX(dx);
                         tt.setByY(dy);
                         tt.setCycleCount(0);
@@ -618,7 +615,7 @@ public class NewFlowView extends Group {
             public void handle(ZoomEvent event) {
                 if (otherTransitionsFinished) {
                     double delta = event.getZoomFactor() - 1;
-                    NewFlowView.this.zoom(delta, event.getX(), event.getY());
+                    FlowView.this.zoom(delta, event.getX(), event.getY());
                     event.consume();
                 }
             }

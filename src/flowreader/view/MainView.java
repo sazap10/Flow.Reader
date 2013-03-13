@@ -7,7 +7,6 @@ package flowreader.view;
 import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
-import flowreader.utils.FileReader;
 import flowreader.utils.PDFFileReader;
 import flowreader.utils.Reader;
 import flowreader.utils.TextFileReader;
@@ -29,7 +28,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.Glow;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -54,7 +52,6 @@ import javafx.stage.StageStyle;
  * @author D-Day
  */
 public class MainView extends BorderPane {
-
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
@@ -77,8 +74,6 @@ public class MainView extends BorderPane {
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
         this.setUpButtonBar();
         this.setButtonEvents(primaryStage, scene, fr);
-        //this.setTop(topBtnsBar);
-        //this.setBottom(bottomBtnsBar);
 
         ribbon = new RibbonView();
         this.pi = new ProgressIndicator(0.0);
@@ -90,10 +85,6 @@ public class MainView extends BorderPane {
         pi.setMaxSize(100, 100);
         this.buildHomeView();
         this.setCenter(home);
-
-
-        //this.setCenter(this.pi);
-
     }
 
     public void splitSetup(boolean split) {
@@ -113,10 +104,7 @@ public class MainView extends BorderPane {
             bottomBtnsBar.setPrefWidth(screenBounds.getWidth());
             bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
             bottomBtnsBar.setMinWidth(screenBounds.getWidth());
-
-
         }
-
     }
 
     public void buildHomeView() {
@@ -136,12 +124,8 @@ public class MainView extends BorderPane {
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.ALICEBLUE);
         text.setFont(Font.font(null, FontWeight.BOLD, 20));
-        //text.layoutXProperty().bind(home.widthProperty().divide(2).subtract(text.getBoundsInLocal().getWidth()/2));
-        //text.layoutYProperty().bind(home.heightProperty().divide(2).subtract(text.getBoundsInLocal().getHeight()/2));
         text.setEffect(bloom);
 
-        //    Group r = new Group() {};
-//Scene scene = new Scene(r, 300, 250, Color.WHITE);
         Random rand = new Random(System.currentTimeMillis());
         home.getChildren().addAll(rect);
         List<String> fontList = Font.getFontNames();
@@ -154,15 +138,9 @@ public class MainView extends BorderPane {
             int blue = rand.nextInt(255);
             int font = rand.nextInt(30);
             Text text2 = new Text(x, y, "FlowReader");
-            //int rot = rand.nextInt(360);
             text2.setFill(Color.rgb(red, green, blue, .99));
-            //text2.setRotate(rot);
             int randfont = rand.nextInt(fontList.size());
             text2.setFont(new Font(fontList.get(randfont), font));
-//r.getChildren().add(text2);
-
-
-
             g.getChildren().add(text2);
         }
         introBox = new VBox(10);
@@ -170,7 +148,6 @@ public class MainView extends BorderPane {
         introBox.getChildren().add(text);
         home.getChildren().add(g);
         home.getChildren().add(introBox);
-//introBox.autosize();
         introBox.setAlignment(Pos.CENTER);
     }
 
@@ -243,8 +220,8 @@ public class MainView extends BorderPane {
                         break;
 
                     case Y:
-                        if(!split_version){
-                        splitButton.fire();
+                        if (!split_version) {
+                            splitButton.fire();
                         }
                         break;
 
@@ -390,8 +367,8 @@ public class MainView extends BorderPane {
         splitT.getStyleClass().add("Tooltip");
         splitButton.setTooltip(splitT);
 
-        
-        zoomAtMouseButton= new Button("Zoom method: default center");
+
+        zoomAtMouseButton = new Button("Zoom method: default center");
         zoomAtMouseButton.setId("topbarbutton");
         zoomAtMouseButton.setDisable(true);
         Tooltip zoomAtMouseT = new Tooltip("Toggle between centering the zoom position at default screen location or at cursor position");
@@ -421,11 +398,11 @@ public class MainView extends BorderPane {
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
             effectBtns.getChildren().addAll(GlowButton, ResetEffectButton);
-            configBtns.getChildren().addAll(zoomLockButton, verticalLockButton,zoomAtMouseButton, readingModeButton, splitButton, resetButton);
+            configBtns.getChildren().addAll(zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton, resetButton);
 
         } else {
             effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
-            configBtns.getChildren().addAll(fullScreenButton, zoomLockButton, verticalLockButton, zoomAtMouseButton,readingModeButton, splitButton, resetButton);
+            configBtns.getChildren().addAll(fullScreenButton, zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton, resetButton);
 
         }
 
@@ -470,7 +447,7 @@ public class MainView extends BorderPane {
                     public void handle(ActionEvent actionEvent) {
                         // abort action and close the dialog.
                         dialog.close();
-                                fr.cancelled=true;
+                        fr.cancelled = true;
                         primaryStage.getScene().getRoot().setEffect(null);
                     }
                 }).build()).build(), Color.TRANSPARENT));
@@ -512,18 +489,17 @@ public class MainView extends BorderPane {
                     readingModeButton.setDisable(true);
                     GlowButton.setDisable(true);
                     ResetEffectButton.setDisable(true);
-zoomAtMouseButton.setDisable(true);
-                    
-                   File file = startFileChooser(primaryStage);
+                    zoomAtMouseButton.setDisable(true);
+
+                    File file = startFileChooser(primaryStage);
                     String name = file.getName();
-                    if (name.endsWith(".txt")){
+                    if (name.endsWith(".txt")) {
                         fileReader = new TextFileReader();
-                    }
-                    else if(name.endsWith(".pdf")){
+                    } else if (name.endsWith(".pdf")) {
                         fileReader = new PDFFileReader();
                     }
                     fileReader.setFile(file);
-                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);                  
+                    DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
                     pi.progressProperty().bind(fileReader.progressProperty());
                     Thread t = new Thread(fileReader);
                     t.start();
@@ -680,18 +656,18 @@ zoomAtMouseButton.setDisable(true);
                 fr.split();
             }
         });
-        
+
         zoomAtMouseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                if(ribbon.toggleZoomCenter()){
+                if (ribbon.toggleZoomCenter()) {
 
-zoomAtMouseButton.setText("Zoom method: cursor position(ish)");
-            }
-                else{
+                    zoomAtMouseButton.setText("Zoom method: cursor position(ish)");
+                } else {
                     zoomAtMouseButton.setText("Zoom method: default center");
 
-                }}
+                }
+            }
         });
     }
 
@@ -712,8 +688,8 @@ zoomAtMouseButton.setText("Zoom method: cursor position(ish)");
         ResetEffectButton.setDisable(false);
         zoomAtMouseButton.setDisable(false);
     }
-    
-     public File startFileChooser(Stage primaryStage) {
+
+    public File startFileChooser(Stage primaryStage) {
         //start file chooser
         File f = new File(System.getProperty("user.dir"));
         FileChooser fileChooser = new FileChooser();

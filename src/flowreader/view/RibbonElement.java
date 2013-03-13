@@ -10,7 +10,7 @@ import javafx.scene.Group;
  *
  * @author D-Day
  */
-public abstract class DiveRibbonElement extends Group{
+public abstract class RibbonElement extends Group{
 
     public abstract void setHighlight(boolean on);
     

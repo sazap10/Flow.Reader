@@ -4,7 +4,7 @@
  */
 package flowreader.view.diveview;
 
-import flowreader.view.DiveRibbonElement;
+import flowreader.view.RibbonElement;
 import flowreader.model.Page;
 import flowreader.utils.PageViewFactory;
 import flowreader.view.PageView;
@@ -34,7 +34,7 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
             x = x + this.elementWidth + this.elementInterval;
         }
 
-        for (DiveRibbonElement dre : this.ribbonElts) {
+        for (RibbonElement dre : this.ribbonElts) {
             dre.setOpacity(0);
         }
         

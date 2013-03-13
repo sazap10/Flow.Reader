@@ -4,9 +4,9 @@
  */
 package flowreader.view.diveview;
 
-import flowreader.view.DiveRibbonElement;
+import flowreader.view.RibbonElement;
 import flowreader.model.WordCloud;
-import flowreader.view.flowview.NewFlowView;
+import flowreader.view.flowview.FlowView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
  *
  * @author D-Day
  */
-public class DiveWordCloud extends DiveRibbonElement {
+public class DiveWordCloud extends RibbonElement {
 
     private Rectangle wordCloudBoundary;
     private WordCloud wordCloud;
@@ -35,7 +35,7 @@ public class DiveWordCloud extends DiveRibbonElement {
     public static double heigth = 500;
     public int level = 1;
     private int maxFontLevel = 7;
-    private NewFlowView nfv;
+    private FlowView nfv;
     private boolean flowview = false;
 
     public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
@@ -50,7 +50,7 @@ public class DiveWordCloud extends DiveRibbonElement {
         renderWordCloud();
     }
 
-    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, NewFlowView nfv) {
+    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, FlowView nfv) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
         wordCloudBoundary.setFill(Color.BEIGE);
         this.wordCloud = wc;

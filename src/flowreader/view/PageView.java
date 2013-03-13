@@ -4,7 +4,6 @@
  */
 package flowreader.view;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -12,7 +11,7 @@ import javafx.scene.shape.Rectangle;
  *
  * @author D-Day
  */
-public abstract class PageView extends DiveRibbonElement {
+public abstract class PageView extends RibbonElement {
 
     protected Rectangle pageBoundary;
     public static double width;
@@ -45,10 +44,6 @@ public abstract class PageView extends DiveRibbonElement {
         return pageBoundary.getHeight();
     }
     
-    public void setX(double x) {
-        pageBoundary.setX(x);
-    }
-
     public double getX() {
         return pageBoundary.getX();
     }

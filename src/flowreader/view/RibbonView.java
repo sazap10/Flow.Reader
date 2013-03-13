@@ -6,17 +6,9 @@ package flowreader.view;
 
 import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
-import flowreader.view.flowview.NewFlowViewScene;
+import flowreader.view.flowview.FlowViewScene;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.DisplacementMap;
-import javafx.scene.effect.FloatMap;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
 /**
@@ -26,7 +18,7 @@ import javafx.stage.Screen;
 public class RibbonView extends StackPane {
 
     private DiveViewScene diveViewPane;
-    private NewFlowViewScene newFlowPane;
+    private FlowViewScene newFlowPane;
     private Document document;
     private String currentView = "";
     private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
@@ -36,12 +28,8 @@ public class RibbonView extends StackPane {
     }
 
     public RibbonView(Document document, Boolean split_version) {
-        //this.pagesPane = new PagesScene(document.getPages());
-        //this.wordCloudsPane = new WordCloudsScene(document.getWordClouds());
-        //this.flowViewPane = new FlowViewScene(document);
         this.diveViewPane = new DiveViewScene(document);
-        //this.theViewPane = new TheViewScene(pagesPane,wordCloudsPane);
-        this.newFlowPane = new NewFlowViewScene(document, split_version);
+        this.newFlowPane = new FlowViewScene(document, split_version);
         this.getChildren().add(this.diveViewPane);
         this.document = document;
         this.split_version = split_version;
@@ -83,7 +71,7 @@ public class RibbonView extends StackPane {
 
     public void reset() {
         this.getChildren().clear();
-        newFlowPane = new NewFlowViewScene(document, split_version);
+        newFlowPane = new FlowViewScene(document, split_version);
         this.getChildren().add(newFlowPane);
     }
 

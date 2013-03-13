@@ -13,19 +13,19 @@ import javafx.scene.layout.StackPane;
  *
  * @author D-Day
  */
-public class NewFlowViewScene extends StackPane {
+public class FlowViewScene extends StackPane {
 
-    private NewFlowView rb;
+    private FlowView rb;
     private Document document;
 
-    public NewFlowViewScene(Document document, Boolean split_version) {
+    public FlowViewScene(Document document, Boolean split_version) {
         ArrayList<ArrayList<WordCloud>> wordClouds = new ArrayList<ArrayList<WordCloud>>();
         wordClouds.add(document.getWordClouds().get(0));
         for (ArrayList<WordCloud> alwc : document.getWordClouds()) {
             wordClouds.add(alwc);
         }
         this.document = new Document(document.getPages(), wordClouds);
-        rb = new NewFlowView(this, split_version);
+        rb = new FlowView(this, split_version);
         this.build();
     }
 
@@ -33,9 +33,11 @@ public class NewFlowViewScene extends StackPane {
         rb.buildRibbon(document);
         this.getChildren().add(rb);
     }
-public boolean toggleZoomCenter(){
-    return rb.toggleZoomCenter();
-}
+
+    public boolean toggleZoomCenter() {
+        return rb.toggleZoomCenter();
+    }
+
     public boolean getZoomLock() {
         return rb.getZoomLock();
     }

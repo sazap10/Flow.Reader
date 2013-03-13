@@ -5,7 +5,6 @@
 package flowreader.view;
 
 import flowreader.model.Page;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -80,13 +79,5 @@ public class TxtPageView extends PageView{
     public void setPageHeight(double height) {
         pageBoundary.setHeight(height);
         textBound.setHeight(height * 0.8);
-
-    }
-
-    @Override
-    public void setX(double x) {
-        pageBoundary.setX(x);
-        textBound.setX(x + (pageBoundary.getWidth() * 0.1));
-        textBound.setY(pageBoundary.getY() + pageBoundary.getHeight() * 0.1);
     }
 }
