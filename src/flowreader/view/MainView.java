@@ -9,7 +9,9 @@ import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.PdfFileReader;
 import flowreader.utils.TextFileReader;
+import flowreader.utils.FileReader;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javafx.event.ActionEvent;
@@ -104,7 +106,7 @@ public class MainView extends BorderPane{
         fileChooser.setInitialDirectory(f);
 
         //Set extension filter
-        ArrayList<String> extensions = new ArrayList<>();
+        ArrayList<String> extensions = new ArrayList<String>();
         extensions.add("*.pdf");
         extensions.add("*.txt");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf), Text files (*.txt)", extensions);

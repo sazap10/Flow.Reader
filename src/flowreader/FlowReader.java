@@ -3,6 +3,7 @@ package flowreader;
 import flowreader.view.MainView;
 import flowreader.view.PageView;
 import flowreader.view.RibbonView;
+import flowreader.view.TextPageView;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -101,7 +102,7 @@ public class FlowReader extends Application {
         mainView2.maxHeightProperty().bind(rootPane2.maxHeightProperty());
 
         root.getChildren().add(rootPane);
-        PageView.setUpPageSize(page_width, page_height);
+        TextPageView.setUpPageSize(page_width, page_height);
 
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         scene.widthProperty().addListener(
@@ -307,7 +308,7 @@ public class FlowReader extends Application {
             public void handle(KeyEvent event) {
                 if (event.getCode().equals(event.getCode().ENTER)) {
                     int width = Integer.valueOf(ta.getText());
-                    PageView.setUpPageSize(width, 700);
+                    TextPageView.setUpPageSize(width, 700);
                     page_width = width;
 
 
@@ -326,7 +327,7 @@ public class FlowReader extends Application {
             public void handle(ActionEvent actionEvent) {
                 // take action and close the dialog.
                 int width = Integer.valueOf(ta.getText());
-                PageView.setUpPageSize(width, 700);
+                TextPageView.setUpPageSize(width, 700);
                 ribbon.setPageWidth(width);
                 priStage.getScene().getRoot().setEffect(null);
                 dialog.close();
