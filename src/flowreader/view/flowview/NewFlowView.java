@@ -359,11 +359,10 @@ public class NewFlowView extends Group {
         int i = 0;
         int x = 0;
         int y = 0;
-        VBox.setMinHeight(1);
+        VBox.setMinHeight(2);
         VBox.getChildren().add(pagesPane);
         VBox.getChildren().add(wordCloudPane);
         VBox.setSpacing(1);
-
         //                VBox.getChildren().get(0).setLayoutY(0);
         //VBox.getChildren().get(1).setLayoutY(VBox.getChildren().get(0).getBoundsInLocal().getHeight());
         //StackPane.setAlignment(wordCloudPane,Pos.TOP_CENTER);
@@ -386,7 +385,7 @@ public class NewFlowView extends Group {
         wordCloudPane.setAlignment(Pos.CENTER);
 
         while (i < document.getPages().size()) {
-            DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, y + 80 + pageHeight,
+            DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, pageHeight,
                     pageWidth, pageHeight, 1, this);
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
@@ -450,7 +449,7 @@ public class NewFlowView extends Group {
             //render each cloud on this level and add it to the group
             DiveWordCloud currentView = null;
             for (WordCloud wordCloud : currentLevelClouds) {
-                currentView = new DiveWordCloud(wordCloud, x, 50+cloudHeight, cloudWidth, cloudHeight, i, this);
+                currentView = new DiveWordCloud(wordCloud, x, cloudHeight, cloudWidth, cloudHeight, i, this);
                 currentLevelViews.getChildren().add(currentView);
                 x += cloudWidth + cloudInterval;
             }
