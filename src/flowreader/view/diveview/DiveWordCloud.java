@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
@@ -59,7 +60,7 @@ public class DiveWordCloud extends DiveRibbonElement {
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
         this.cloud.setLayoutY(wordCloudBoundary.getY());
-
+/*
         this.cloud.setMinWidth(elementWidth);
         this.cloud.setPrefWidth(elementWidth);
         this.cloud.setMaxWidth(elementWidth);
@@ -67,12 +68,12 @@ public class DiveWordCloud extends DiveRibbonElement {
         this.cloud.setMinHeight(elementHeigth);
         this.cloud.setPrefHeight(elementHeigth);
         this.cloud.setMaxHeight(elementHeigth);
-//this.cloud.setPrefWrapLength(elementWidth);
+*/
+        this.cloud.setPrefWrapLength(elementWidth);
+
         this.level = level;
         this.nfv = nfv;
-
         this.getChildren().addAll(wordCloudBoundary, cloud);
-
         cloud.setAlignment(Pos.TOP_CENTER);
         flowview = true;
 setNumOfWordsInCloud(level);
@@ -138,7 +139,7 @@ setNumOfWordsInCloud(level);
         //System.out.println("New Cloud");
         for (int k = 0; k < values.length; k++) {
             this.setWordSize(this.words.get(k), values[k], values);
-            this.words.get(k).setWrappingWidth(this.words.get(k).getLayoutBounds().getWidth() + 20);
+            this.words.get(k).setWrappingWidth(this.words.get(k).getLayoutBounds().getWidth() + Math.pow(2, level));
             //System.out.println(this.words.get(k).getText()+" "+values[k]);
         }
 

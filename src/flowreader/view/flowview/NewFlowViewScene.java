@@ -34,6 +34,13 @@ public class NewFlowViewScene extends StackPane {
         this.getChildren().add(rb);
     }
     
+    
+    public void goUp(){
+        rb.goUp();
+    }
+    public void goDown(){
+        rb.goDown();
+    }
     public boolean toggleText(){
         return rb.toggleText();
     }

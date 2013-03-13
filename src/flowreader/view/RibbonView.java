@@ -47,6 +47,12 @@ public class RibbonView extends StackPane {
         this.split_version = split_version;
 
     }
+    public void goDown(){
+        newFlowPane.goDown();
+    }
+    public void goUp(){
+        newFlowPane.goUp();
+    }
     public boolean toggleText(){
         return newFlowPane.toggleText();
     }
