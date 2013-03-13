@@ -2,6 +2,7 @@ package flowreader;
 
 import flowreader.view.MainView;
 import flowreader.view.PageView;
+import flowreader.view.RibbonView;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -41,7 +43,10 @@ public class FlowReader extends Application {
     private SplitPane splitPane;
     public Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private Stage priStage;
-    public static boolean split_toggle = false, cancelled = false;
+    public static boolean split_toggle = false;
+              public static boolean cancelled = false;
+    public static int page_width = 500;
+    public static int page_height = 700;
 
     @Override
     public void start(Stage primaryStage) {
@@ -96,7 +101,7 @@ public class FlowReader extends Application {
         mainView2.maxHeightProperty().bind(rootPane2.maxHeightProperty());
 
         root.getChildren().add(rootPane);
-        PageView.setUpPageSize(500, 700);
+        PageView.setUpPageSize(page_width, page_height);
 
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         scene.widthProperty().addListener(
@@ -258,13 +263,90 @@ public class FlowReader extends Application {
             splitPane.getItems().add(rootPane);
             splitPane.getItems().add(rootPane2);
             root.getChildren().add(splitPane);
-            
+
 
             setUpSceneY(scene.getHeight());
 
             setUpSceneX(scene.getWidth());
 
         }
+
+    }
+
+    public void setPageWidth(final RibbonView ribbon) {
+
+        final Stage dialog = new Stage(StageStyle.TRANSPARENT);
+        dialog.initOwner(priStage);
+
+        dialog.initModality(Modality.WINDOW_MODAL);
+
+        final TextArea ta = new TextArea();
+        ta.setPrefColumnCount(5);
+        ta.setPrefRowCount(1);
+
+        ta.lengthProperty().addListener(new ChangeListener<Number>(){
+ 
+	@Override
+	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {              
+		 
+		 if(newValue.intValue() > oldValue.intValue()){
+			char ch = ta.getText().charAt(oldValue.intValue());
+			System.out.println("Length:"+ oldValue+"  "+ newValue +" "+ch);                   
+ 
+			//Check if the new character is the number or other's
+			if(!(ch >= '0' && ch <= '9' )){       
+                 
+				//if it's not number then just setText to previous one
+				ta.setText(ta.getText().substring(0,ta.getText().length()-1)); 
+			}
+		}
+	}
+	
+});
+        EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent event) {
+                if (event.getCode().equals(event.getCode().ENTER)) {
+                    int width = Integer.valueOf(ta.getText());
+                    PageView.setUpPageSize(width, 700);
+                    page_width = width;
+
+
+                    priStage.getScene().getRoot().setEffect(null);
+                    dialog.close();
+                }
+            }
+        };
+
+        Scene dialog_scene = new Scene(
+                HBoxBuilder.create().styleClass("modal-dialog").children(
+                LabelBuilder.create().text("Please enter new page width:\n(recommended range: 300-800, default: 500)").textFill(Color.WHITE).build(),
+                ta,
+                ButtonBuilder.create().id("ok").text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                // take action and close the dialog.
+                int width = Integer.valueOf(ta.getText());
+                PageView.setUpPageSize(width, 700);
+                ribbon.setPageWidth(width);
+                priStage.getScene().getRoot().setEffect(null);
+                dialog.close();
+
+            }
+        }).build(),ButtonBuilder.create().id("cancel").text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        // abort action and close the dialog.
+                        dialog.close();
+                        cancelled = true;
+                        priStage.getScene().getRoot().setEffect(null);
+                    }}).build()).build(), Color.TRANSPARENT);
+        ta.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
+
+        dialog.setScene(dialog_scene);
+
+        dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
+        priStage.getScene().getRoot().setEffect(new BoxBlur());
+        dialog.showAndWait();
 
     }
 

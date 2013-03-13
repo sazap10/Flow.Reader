@@ -17,8 +17,10 @@ public class NewFlowViewScene extends StackPane {
 
     private NewFlowView rb;
     private Document document;
-
+private boolean split_version;
     public NewFlowViewScene(Document document, Boolean split_version) {
+                this.split_version=split_version;
+
         ArrayList<ArrayList<WordCloud>> wordClouds = new ArrayList<ArrayList<WordCloud>>();
         wordClouds.add(document.getWordClouds().get(0));
         for (ArrayList<WordCloud> alwc : document.getWordClouds()) {
@@ -33,13 +35,24 @@ public class NewFlowViewScene extends StackPane {
         rb.buildRibbon(document);
         this.getChildren().add(rb);
     }
-    
-    
+      public void setPageWidth(int width){
+        rb = new NewFlowView(this, split_version,width,700);
+        this.getChildren().clear();
+        build();
+    }
+    public void setPageHeight(int height){
+        rb = new NewFlowView(this, split_version,500,height);
+           this.getChildren().clear();
+        build();
+    }
     public void goUp(){
         rb.goUp();
     }
     public void goDown(){
         rb.goDown();
+    }
+        public boolean toggleWordCloud(){
+        return rb.toggleWordCloud();
     }
     public boolean toggleText(){
         return rb.toggleText();
