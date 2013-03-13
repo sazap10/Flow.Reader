@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonBuilder;
@@ -58,6 +59,8 @@ public class FlowReader extends Application {
         rootPane2 = new Pane();
 
         scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight(), Color.web("B8B8B8"));
+//root.setCache(true);
+//root.setCacheHint(CacheHint.SCALE);
 
         splitPane = new SplitPane();
         splitPane.prefWidthProperty().bind(scene.widthProperty());

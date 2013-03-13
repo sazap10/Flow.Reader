@@ -85,6 +85,7 @@ public class NewFlowView extends Group {
     private boolean verticalLock = false;
     private boolean split_version = false;
     private boolean zoomAtMouse = false;
+    private boolean text_visible = true;
 
     public NewFlowView(StackPane stackPane, boolean split_version) {
         this.pages = new ArrayList<PageView>();
@@ -97,6 +98,25 @@ public class NewFlowView extends Group {
         this.VBox = new VBox();
         this.split_version = split_version;
 
+    }
+
+    public boolean toggleText() {
+        if (text_visible) {
+            text_visible = false;
+            for (int i = 1; i < pagesGroup.getChildren().size(); i++) {
+
+                PageView p = (PageView) pagesGroup.getChildren().get(i);
+                p.toggleTextVisible(text_visible);
+            }
+        } else {
+            text_visible = true;
+            for (int i = 1; i < pagesGroup.getChildren().size(); i++) {
+
+                PageView p = (PageView) pagesGroup.getChildren().get(i);
+                p.toggleTextVisible(text_visible);
+            }
+        }
+        return text_visible;
     }
 
     public boolean toggleZoomCenter() {
@@ -165,11 +185,29 @@ public class NewFlowView extends Group {
         for (int i = 1; i <= zoomLevels; i++) {
             percent = 80 / (i * 100.0f - 60);
             zoomTable_scale = (int) (percent * maxScale);
-             //           zoomTable_scale = (int) (10*i);
+            //           zoomTable_scale = (int) (10*i);
 
-            System.out.println("put "+i+" "+zoomTable_scale);
+            System.out.println("put " + i + " " + zoomTable_scale);
             zoomTable.put(i, zoomTable_scale);
         }
+
+        /*
+        
+         //set the percentage linear increment
+         int inc = (int) (100.0f / zoomLevels);
+        
+         //walk the increments to 100 building the table
+         int tmpScale = 100;
+         int currLevel = 1;
+         for (int i = zoomLevels; i >= 1; i--){
+         zoomTable.put(currLevel, tmpScale);
+         System.out.println("put "+currLevel+" "+tmpScale);
+         tmpScale = tmpScale - inc;
+         currLevel++;
+            
+         }
+         */
+
         maxZoomLevel = zoomLevels;
         currentZoomLevel = maxZoomLevel;
     }
@@ -417,15 +455,15 @@ public class NewFlowView extends Group {
         t.yProperty().bind(y_coord);
         this.defineRibbonEvents();
         this.setRibbonEvents(true);
-                    double zoom_x = screenBounds.getWidth() / 2;
-                    double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
+        double zoom_x = screenBounds.getWidth() / 2;
+        double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
 
-                    if (FlowReader.split_toggle) {
-                            zoom(-1, zoom_x / 2, zoom_y);      
-                    } else {
-                            zoom(-1, zoom_x, zoom_y);
-                    }
-                
+        if (FlowReader.split_toggle) {
+            zoom(-1, zoom_x / 2, zoom_y);
+        } else {
+            zoom(-1, zoom_x, zoom_y);
+        }
+
         x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
 
 
@@ -506,9 +544,9 @@ public class NewFlowView extends Group {
         //Translate t1 = new Translate(-x,-y);
 //stackPane.getTransforms().add(t1);
         checkCloudLevel();
-        if(stackPane.getTransforms().size()>0){
-        stackPane.getTransforms().set(0, scale);}
-        else{
+        if (stackPane.getTransforms().size() > 0) {
+            stackPane.getTransforms().set(0, scale);
+        } else {
             stackPane.getTransforms().add(scale);
         }
         //                        Translate t2 = new Translate(x,y);
@@ -559,13 +597,13 @@ public class NewFlowView extends Group {
                         if (verticalLock) {
                             dy = 0;
                         }
-                        TranslateTransition tt = new TranslateTransition(
+                      /*  TranslateTransition tt = new TranslateTransition(
                                 Duration.millis(100), NewFlowView.this.VBox);
                         tt.setByX(dx);
                         tt.setByY(dy);
                         tt.setCycleCount(0);
                         tt.setAutoReverse(true);
-                        tt.play();
+                        tt.play();*/
                         x_coord.set(x_coord.doubleValue() + dx);
                         y_coord.set(y_coord.doubleValue() + dy);
 

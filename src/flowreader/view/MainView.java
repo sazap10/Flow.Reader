@@ -53,7 +53,7 @@ public class MainView extends BorderPane {
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
     public Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton,TextButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private TextFileReader fileReader;
@@ -371,6 +371,12 @@ public class MainView extends BorderPane {
         zoomAtMouseT.getStyleClass().add("Tooltip");
         zoomAtMouseButton.setTooltip(zoomAtMouseT);
 
+        TextButton = new Button("Text: On");
+        TextButton.setId("topbarbutton");
+        TextButton.setDisable(true);
+        Tooltip TextButtonT = new Tooltip("Make text in Flow View visible/invisible");
+        zoomAtMouseT.getStyleClass().add("Tooltip");
+        TextButton.setTooltip(TextButtonT);
     }
 
     private void setUpButtonBar() {
@@ -394,11 +400,11 @@ public class MainView extends BorderPane {
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
             effectBtns.getChildren().addAll(GlowButton, ResetEffectButton);
-            configBtns.getChildren().addAll(zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton, resetButton);
+            configBtns.getChildren().addAll(zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton,TextButton, resetButton);
 
         } else {
             effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
-            configBtns.getChildren().addAll(fullScreenButton, zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton, resetButton);
+            configBtns.getChildren().addAll(fullScreenButton, zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton,TextButton, resetButton);
 
         }
 
@@ -488,6 +494,8 @@ public class MainView extends BorderPane {
                     GlowButton.setDisable(true);
                     ResetEffectButton.setDisable(true);
                     zoomAtMouseButton.setDisable(true);
+                    TextButton.setDisable(true);
+                    
                     fileReader = new TextFileReader();
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
                     fileReader.startFileChooser(primaryStage);
@@ -661,6 +669,17 @@ public class MainView extends BorderPane {
                 }
             }
         });
+        
+        TextButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (ribbon.toggleText()) {
+
+TextButton.setText("Text: On");                } else {
+TextButton.setText("Text: Off");    
+                }
+            }
+        });
     }
 
     public void docOpenned(Document doc, RibbonView ribbon) {
@@ -679,5 +698,6 @@ public class MainView extends BorderPane {
         GlowButton.setDisable(false);
         ResetEffectButton.setDisable(false);
         zoomAtMouseButton.setDisable(false);
+        TextButton.setDisable(false);
     }
 }

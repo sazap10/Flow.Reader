@@ -32,6 +32,7 @@ public class PageView extends Group{
         //page = new Group();
         this.getChildren().addAll(pageBoundary, pageText);
         pageText.setText(text);
+        
     }
     
     public static void setUpPageSize(double width, double height){

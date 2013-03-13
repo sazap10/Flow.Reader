@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import javafx.geometry.Pos;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -29,7 +30,7 @@ public class DiveWordCloud extends DiveRibbonElement {
     private FlowPane cloud;
     private Integer maxFontSize = 90;
     private Integer minFontSize = 14;
-    private Integer numOfWordsInCloud = 14;
+    private Integer numOfWordsInCloud = 10;
     public static double width = 500;
     public static double heigth = 500;
     public int level = 1;
@@ -50,9 +51,9 @@ public class DiveWordCloud extends DiveRibbonElement {
     }
 
     public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, NewFlowView nfv) {
-        wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
-        wordCloudBoundary.setFill(Color.WHITE);
-        wordCloudBoundary.setOpacity(0.5);
+        wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth * 2);
+        wordCloudBoundary.setFill(Color.TRANSPARENT);
+        //wordCloudBoundary.setOpacity(0.5);
         this.wordCloud = wc;
         this.words = new ArrayList<Text>();
         this.cloud = new FlowPane();
@@ -60,8 +61,8 @@ public class DiveWordCloud extends DiveRibbonElement {
         this.cloud.setLayoutY(wordCloudBoundary.getY());
 
         this.cloud.setMinWidth(elementWidth);
-       this.cloud.setPrefWidth(elementWidth);
-       this.cloud.setMaxWidth(elementWidth);
+        this.cloud.setPrefWidth(elementWidth);
+        this.cloud.setMaxWidth(elementWidth);
 
         this.cloud.setMinHeight(elementHeigth);
         this.cloud.setPrefHeight(elementHeigth);
@@ -71,12 +72,12 @@ public class DiveWordCloud extends DiveRibbonElement {
         this.nfv = nfv;
 
         this.getChildren().addAll(wordCloudBoundary, cloud);
+
+        cloud.setAlignment(Pos.TOP_CENTER);
         flowview = true;
 
         renderWordCloud();
     }
-    
-    
 
     public double getPageWidth() {
         return wordCloudBoundary.getWidth();
@@ -170,25 +171,31 @@ public class DiveWordCloud extends DiveRibbonElement {
         int adjustCurrentFontSize = (percent * adjustMaxFontSize) / 100;
         int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, level - 1);
         if (flowview) {
-            currentFontSize = (int)((adjustCurrentFontSize + this.minFontSize) * getFontSize(level));
+            currentFontSize = (int) ((adjustCurrentFontSize + this.minFontSize) * getFontSize(level));
             //System.out.println("DDD "+calculateFontSizeFromLevel(level));
             //currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, calculateFontSizeFromLevel(level));
         }
         word.setFont(new Font(currentFontSize));
     }
-    public double getFontSize(int level){
-        double maximumFontSize =6;
+
+    public double getFontSize(int level) {
+        double maximumFontSize = 6;
         int maxWordCloudLevel = nfv.getMaxZoomLevel();
+      
+        if (maxWordCloudLevel < maximumFontSize + 1) {
+            maximumFontSize = maxWordCloudLevel -1;
+        }
+            double step = maximumFontSize / maxWordCloudLevel;
+           double result = (int) Math.pow(2, level * step);
         
-        double step = maximumFontSize/maxWordCloudLevel;
-        double result = (int) Math.pow(2, level*step);
-                //System.out.println(level);
+
+        //System.out.println(level);
 
         //System.out.println(step);
-        
+
         //System.out.println(result);
         return result;
-        
+
     }
 
     public double calculateFontSizeFromLevel(int level) {

@@ -47,6 +47,9 @@ public class RibbonView extends StackPane {
         this.split_version = split_version;
 
     }
+    public boolean toggleText(){
+        return newFlowPane.toggleText();
+    }
 public boolean toggleZoomCenter(){
     return newFlowPane.toggleZoomCenter();
 }
