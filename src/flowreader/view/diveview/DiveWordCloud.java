@@ -5,6 +5,7 @@
 package flowreader.view.diveview;
 
 import flowreader.model.WordCloud;
+import flowreader.view.RibbonElement;
 import flowreader.view.flowview.NewFlowView;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +24,7 @@ import javafx.scene.text.Text;
  *
  * @author D-Day
  */
-public class DiveWordCloud extends DiveRibbonElement {
+public class DiveWordCloud extends RibbonElement {
 
     private Rectangle wordCloudBoundary;
     private WordCloud wordCloud;

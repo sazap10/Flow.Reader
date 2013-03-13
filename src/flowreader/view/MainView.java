@@ -7,7 +7,9 @@ package flowreader.view;
 import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
+import flowreader.utils.PdfFileReader;
 import flowreader.utils.TextFileReader;
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 import javafx.event.ActionEvent;
@@ -21,12 +23,10 @@ import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextAreaBuilder;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.Glow;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -40,6 +40,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -49,8 +50,7 @@ import javafx.stage.StageStyle;
  *
  * @author D-Day
  */
-public class MainView extends BorderPane {
-
+public class MainView extends BorderPane{
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
@@ -61,7 +61,7 @@ public class MainView extends BorderPane {
     private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
-    private TextFileReader fileReader;
+    private FileReader fileReader;
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private EventHandler<KeyEvent> keyHandler;
     private StackPane home;
@@ -91,8 +91,28 @@ public class MainView extends BorderPane {
         this.buildHomeView();
         this.setCenter(home);
 
-configButton.fire();
+        configButton.fire();
         //this.setCenter(this.pi);
+
+    }
+
+    public File startFileChooser(Stage primaryStage) {
+        //start file chooser
+        File f = new File(System.getProperty("user.dir"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Please choose a text file to read");
+        fileChooser.setInitialDirectory(f);
+
+        //Set extension filter
+        ArrayList<String> extensions = new ArrayList<>();
+        extensions.add("*.pdf");
+        extensions.add("*.txt");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf), Text files (*.txt)", extensions);
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        //Show save file dialog
+        f = fileChooser.showOpenDialog(primaryStage);
+        return f;
 
     }
 
@@ -541,10 +561,14 @@ configButton.fire();
 
                     //setCenter(pi);
 
-                    fileReader = new TextFileReader();
+                    File file = startFileChooser(primaryStage);
+                    String name = file.getName();
+                    if (name.endsWith(".txt")) {
+                        fileReader = new TextFileReader(file);
+                    } else if (name.endsWith(".pdf")) {
+                        fileReader = new PdfFileReader(file);
+                    }
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
-                    fileReader.startFileChooser(primaryStage);
-
                     pi.progressProperty().bind(fileReader.progressProperty());
                     Thread t = new Thread(fileReader);
                     t.start();
@@ -811,7 +835,7 @@ configButton.fire();
         wordCloudButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-             if (ribbon.toggleWordCloud()) {
+                if (ribbon.toggleWordCloud()) {
 
                     TextButton.setText("Ribbon: On");
                 } else {

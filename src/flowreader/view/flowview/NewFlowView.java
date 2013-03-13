@@ -8,6 +8,8 @@ import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
+import flowreader.utils.PageViewFactory;
+import flowreader.view.PageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.animation.TranslateTransition;
@@ -39,6 +41,7 @@ import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.GaussianBlur;
+import javax.swing.text.FlowView;
 
 /**
  *
@@ -103,7 +106,8 @@ public class NewFlowView extends Group {
         this.split_version = split_version;
 
     }
-   public NewFlowView(StackPane stackPane, boolean split_version,int width,int height) {
+
+    public NewFlowView(StackPane stackPane, boolean split_version, int width, int height) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
         this.stackPane = stackPane;
@@ -113,10 +117,9 @@ public class NewFlowView extends Group {
         this.currentZoomLevel = maxZoomLevel;
         this.VBox = new VBox();
         this.split_version = split_version;
-this.pageWidth=width;
-this.pageHeight=height;
+        this.pageWidth = width;
+        this.pageHeight = height;
     }
-
 
     public void goUp() {
         if (currentZoomLevel < maxZoomLevel) {
@@ -144,16 +147,16 @@ this.pageHeight=height;
 
         }
     }
-    
-    public boolean toggleWordCloud(){
-                if (wordcloud_visible) {
+
+    public boolean toggleWordCloud() {
+        if (wordcloud_visible) {
             wordcloud_visible = false;
-          wordCloudPane.setVisible(wordcloud_visible);
+            wordCloudPane.setVisible(wordcloud_visible);
         } else {
             wordcloud_visible = true;
-          wordCloudPane.setVisible(wordcloud_visible);
+            wordCloudPane.setVisible(wordcloud_visible);
 
-            
+
         }
         return text_visible;
     }
@@ -164,14 +167,14 @@ this.pageHeight=height;
             for (int i = 1; i < pagesGroup.getChildren().size(); i++) {
 
                 PageView p = (PageView) pagesGroup.getChildren().get(i);
-                p.toggleTextVisible(text_visible);
+                //p.toggleTextVisible(text_visible);
             }
         } else {
             text_visible = true;
             for (int i = 1; i < pagesGroup.getChildren().size(); i++) {
 
                 PageView p = (PageView) pagesGroup.getChildren().get(i);
-                p.toggleTextVisible(text_visible);
+                //p.toggleTextVisible(text_visible);
             }
         }
         return text_visible;
@@ -489,10 +492,9 @@ this.pageHeight=height;
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
 
-            PageView page = new PageView(new Rectangle(x, y, pageWidth, pageHeight));
-            page.setText(document.getPages().get(i).getText());
-            this.pages.add(page);
+            Group page = PageViewFactory.getView(document.getPages().get(i));
             this.pagesGroup.getChildren().add(page);
+            page.relocate(x,y + 50 + (pageHeight / 3));
 
             x += pageWidth + pageInterval;
             i++;

@@ -4,6 +4,7 @@
  */
 package flowreader.view.diveview;
 
+import flowreader.view.RibbonElement;
 import java.util.ArrayList;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -23,7 +24,7 @@ import javafx.util.Duration;
 public abstract class DiveRibbonPane extends StackPane {
 
     protected Group ribbon;
-    protected ArrayList<DiveRibbonElement> ribbonElts;
+    protected ArrayList<RibbonElement> ribbonElts;
     protected int elementInterval = 5;
     protected double elementWidth;
     protected double elementHeight;
@@ -32,7 +33,7 @@ public abstract class DiveRibbonPane extends StackPane {
 
     public DiveRibbonPane(int index, double x, double y, double elementWidth, double elementHeight) {
         this.ribbon = new Group();
-        this.ribbonElts = new ArrayList<DiveRibbonElement>();
+        this.ribbonElts = new ArrayList<RibbonElement>();
         this.ribbon.setLayoutX(x);
         this.ribbon.setLayoutY(y);
         this.elementWidth = elementWidth;
@@ -85,7 +86,7 @@ public abstract class DiveRibbonPane extends StackPane {
     public void highlightSelected() {
         this.selected.clear();
         for (int i = 0; i < this.ribbonElts.size(); i++) {
-            DiveRibbonElement dre = this.ribbonElts.get(i);
+            RibbonElement dre = this.ribbonElts.get(i);
             if (dre.isHover()) {
                 dre.setHighlight(true);
                 this.selected.add(i);
