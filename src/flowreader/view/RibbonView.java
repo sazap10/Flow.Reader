@@ -23,11 +23,13 @@ public class RibbonView extends StackPane {
     private String currentView = "";
     private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private boolean split_version;
+    private boolean initialsed = false;
 
     public RibbonView() {
     }
 
     public RibbonView(Document document, Boolean split_version) {
+        this.initialsed = true;
         this.diveViewPane = new DiveViewScene(document);
         this.newFlowPane = new FlowViewScene(document, split_version);
         this.getChildren().add(this.diveViewPane);
@@ -97,11 +99,14 @@ public class RibbonView extends StackPane {
     public void reset() {
         this.getChildren().clear();
         newFlowPane = new FlowViewScene(document, split_version);
+        newFlowPane.setPageWidth(flowreader.FlowReader.page_width);
         this.getChildren().add(newFlowPane);
     }
 
     public void goToReadingMode() {
-        newFlowPane.goToReadingMode();
+        if (initialsed) {
+            newFlowPane.goToReadingMode();
+        }
     }
 
     public void zoom(int i) {
