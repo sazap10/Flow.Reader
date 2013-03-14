@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- *
+ * A word cloud is a set of word with their corresponding number of occurrences in the document
  * @author Jim
  */
 public class WordCloud {

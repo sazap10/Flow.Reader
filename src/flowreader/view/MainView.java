@@ -134,7 +134,7 @@ public class MainView extends BorderPane {
         introBox = new VBox(10);
         introBox.getChildren().add(pi);
         introBox.getChildren().add(text);
-        home.getChildren().add(g);
+        //home.getChildren().add(g);
         home.getChildren().add(introBox);
         introBox.setAlignment(Pos.CENTER);
     }

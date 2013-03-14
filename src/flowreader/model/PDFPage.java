@@ -7,7 +7,7 @@ package flowreader.model;
 import javafx.scene.image.WritableImage;
 
 /**
- *
+ * A PDFpage is the representation of a page in a pdf document it contains the text of the page and also the image of it.
  * @author D-Day
  */
 public class PDFPage extends Page{
@@ -18,6 +18,9 @@ public class PDFPage extends Page{
         this.image = image;
     }
     
+    /**
+     * @return the image of the page
+     */
     public WritableImage getImage(){
         return image;
     }

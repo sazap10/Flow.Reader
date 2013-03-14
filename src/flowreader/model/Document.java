@@ -5,11 +5,9 @@
 package flowreader.model;
 
 import java.util.ArrayList;
-import javafx.scene.Group;
-import javafx.scene.Node;
 
 /**
- *
+ * A document contains a list of pages and the word clouds that corresponds to these pages
  * @author Pat
  */
 public class Document {
@@ -22,6 +20,9 @@ public class Document {
         this.wordClouds = wordClouds;
     }
     
+    /**
+     * @return all the pages 
+     */
     public ArrayList<Page> getPages(){
         return pages;
     }
