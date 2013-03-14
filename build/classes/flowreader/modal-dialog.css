@@ -1,0 +1,54 @@
+/**
+ * modal-dialog.css
+ * place in same directory as WebViewConfirm.java
+ * ensure your build system copies the file to your build output directory
+ */
+
+ #ok{
+    -fx-background-color: #005888;
+    -fx-background-radius: 0;
+    -fx-padding: 1 20 1 20;
+    -fx-text-fill: white;
+
+}
+
+#ok:hover{
+    -fx-background-color: #020020;
+}
+
+ #cancel{
+    -fx-background-color: #eee;
+    -fx-background-radius: 0;
+    -fx-padding: 1 20 1 20;
+    -fx-text-fill: black;
+
+}
+
+#cancel:hover{
+    -fx-background-color: #bbb;
+
+}
+ 
+ 
+.root {
+  -fx-glass-color: #14167D;
+}
+
+.modal-dialog {
+  -fx-padding: 50;
+  -fx-spacing: 10;
+  -fx-alignment: center;
+  -fx-font-size: 20;
+  -fx-background-color: #14167D;
+  -fx-background-insets: 12;
+}
+
+
+.modal-dialog .button:pressed {
+  -fx-cursor: default;
+}
+
+.confirmation-results {
+  -fx-background-color: white;
+  -fx-padding: 5;
+}

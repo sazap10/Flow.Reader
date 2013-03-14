@@ -1,0 +1,12 @@
+/* 
+    Document   : Background
+    Created on : 07-Nov-2012, 17:32:19
+    Author     : suparpat
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+#mainview{
+    -fx-background-color: #000000;
+}
