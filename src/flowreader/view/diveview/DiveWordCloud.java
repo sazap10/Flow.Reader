@@ -75,8 +75,12 @@ this.wordCloud = wc;
         this.getChildren().addAll(wordCloudBoundary, cloud);
         cloud.setAlignment(Pos.TOP_CENTER);
         flowview = true;
-
-        renderWordCloud();
+setNumOfWordsInCloud(level);
+         renderWordCloud();
+     }
+    
+    public void setNumOfWordsInCloud(int level){
+        numOfWordsInCloud = level*4;
     }
 
     public double getPageWidth() {

@@ -5,7 +5,7 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
-/build/classes
-/build/empty
-/build/generated-sources
-/build/built-jar.properties
+build/classes
+build/empty
+build/generated-sources
+build/built-jar.properties

@@ -54,7 +54,7 @@ public class FlowView extends Group {
     int pageHeight = 700;
     int pageInterval = 5;
     int pagesNumber = 30;
-    int maxScale = 1000;
+    int maxScale = 100;
     int minScale = 0;
     int curScale = 0;
     int opaqueScale = 100;
@@ -174,39 +174,41 @@ private boolean text_visible = true;
         verticalLock = lock;
     }
     // sets the scale needed for the correct level of precision and other stuff
-
-    public void createZoomTable(int zoomLevels) {
+  public void createZoomTable(int zoomLevels) {
         // first, find the final zoom level
-
+/*
         int zoomTable_scale;
         float percent;
         for (int i = 1; i <= zoomLevels; i++) {
             percent = 80 / (i * 100.0f - 60);
             zoomTable_scale = (int) (percent * maxScale);
-             //           zoomTable_scale = (int) (10*i);
+            //           zoomTable_scale = (int) (10*i);
 
-            System.out.println("put "+i+" "+zoomTable_scale);
+            System.out.println("put " + i + " " + zoomTable_scale);
             zoomTable.put(i, zoomTable_scale);
         }
-    
-        /*
-        //set the percentage linear increment
-        int inc = (int) (100.0f / zoomLevels);
+
         
-        //walk the increments to 100 building the table
-        int tmpScale = 100;
-        int currLevel = 1;
-        for (int i = zoomLevels; i >= 1; i--){
-            zoomTable.put(currLevel, tmpScale);
-            System.out.println("put "+currLevel+" "+tmpScale);
-            tmpScale = tmpScale - inc;
-            currLevel++;
+        */
+         //set the percentage linear increment
+         int inc = (int) (maxScale*0.85 / (zoomLevels-1));
+         //walk the increments to 100 building the table
+         int tmpScale = 1;
+         int currLevel = zoomLevels;
+         
+                
+         for (int i = zoomLevels; i >= 1; i--){
+         zoomTable.put(currLevel, tmpScale);
+         System.out.println("put "+currLevel+" "+tmpScale);
+         tmpScale = tmpScale + inc;
+         currLevel--;
             
-        }*/
+         }
+         
+
         maxZoomLevel = zoomLevels;
         currentZoomLevel = maxZoomLevel;
     }
-
     public void checkCloudLevel() {
         int nextDown, nextUp;
         int zoomTable_minScale = zoomTable.get(minZoomLevel);
