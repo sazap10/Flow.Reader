@@ -4,6 +4,7 @@
  */
 package flowreader.view.flowview;
 
+import flowreader.view.WordCloudView;
 import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.model.Page;
@@ -485,7 +486,7 @@ public class FlowView extends Group {
         wordCloudPane.setAlignment(Pos.CENTER);
 
         while (i < document.getPages().size()) {
-            DiveWordCloud wordCloud = new DiveWordCloud(clouds.get(i), x, pageHeight,
+            WordCloudView wordCloud = new WordCloudView(clouds.get(i), x, pageHeight,
                     pageWidth, pageHeight, 1, this);
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
@@ -544,9 +545,9 @@ public class FlowView extends Group {
             currentLevelViews = new Group();
 
             //render each cloud on this level and add it to the group
-            DiveWordCloud currentView = null;
+            WordCloudView currentView = null;
             for (WordCloud wordCloud : currentLevelClouds) {
-                currentView = new DiveWordCloud(wordCloud, x, cloudHeight, cloudWidth, cloudHeight, i, this);
+                currentView = new WordCloudView(wordCloud, x, cloudHeight, cloudWidth, cloudHeight, i, this);
                 currentLevelViews.getChildren().add(currentView);
                 x += cloudWidth + cloudInterval;
             }

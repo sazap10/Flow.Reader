@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package flowreader.view.diveview;
+package flowreader.view;
 
 import flowreader.view.RibbonElement;
 import flowreader.model.WordCloud;
@@ -23,7 +23,7 @@ import javafx.scene.text.Text;
  *
  * @author D-Day
  */
-public class DiveWordCloud extends RibbonElement {
+public class WordCloudView extends RibbonElement {
 
     private Rectangle wordCloudBoundary;
     private WordCloud wordCloud;
@@ -39,7 +39,7 @@ public class DiveWordCloud extends RibbonElement {
     private FlowView nfv;
     private boolean flowview = false;
 
-    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
+    public WordCloudView(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
         this.wordCloud = wc;
@@ -51,7 +51,7 @@ public class DiveWordCloud extends RibbonElement {
         renderWordCloud();
     }
 
-    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, FlowView nfv) {
+    public WordCloudView(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, FlowView nfv) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth * 2);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
         //wordCloudBoundary.setOpacity(0.5);

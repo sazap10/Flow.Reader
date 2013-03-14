@@ -4,6 +4,7 @@
  */
 package flowreader.view.diveview;
 
+import flowreader.view.WordCloudView;
 import flowreader.model.WordCloud;
 import java.util.ArrayList;
 
@@ -14,11 +15,11 @@ import java.util.ArrayList;
 public class DiveWcRibbonPane extends DiveRibbonPane{
 
     public DiveWcRibbonPane(int index, ArrayList<WordCloud> wordClouds, double x, double y) {
-        super(index, x, y, DiveWordCloud.width, DiveWordCloud.heigth);
+        super(index, x, y, WordCloudView.width, WordCloudView.heigth);
         
         // Creation of the word clouds
         for(WordCloud wc : wordClouds){
-            this.ribbonElts.add(new DiveWordCloud(wc, x, y, this.elementWidth, this.elementHeight));
+            this.ribbonElts.add(new WordCloudView(wc, x, y, this.elementWidth, this.elementHeight));
             x = x + this.elementWidth + this.elementInterval;
         }
     }
