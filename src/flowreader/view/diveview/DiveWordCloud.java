@@ -80,7 +80,7 @@ setNumOfWordsInCloud(level);
      }
     
     public void setNumOfWordsInCloud(int level){
-        numOfWordsInCloud = level*4;
+        numOfWordsInCloud = level*3;
     }
 
     public double getPageWidth() {
