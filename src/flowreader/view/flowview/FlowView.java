@@ -491,7 +491,7 @@ public class FlowView extends Group {
             wordCloudGroup.setOpacity(1);
             this.wordCloudGroup.getChildren().add(wordCloud);
 
-            Group page = PageViewFactory.getView(document.getPages().get(i));
+            Group page = PageViewFactory.getPageView(document.getPages().get(i));
             this.pagesGroup.getChildren().add(page);
             page.relocate(x, y + 50 + (pageHeight / 3));
 

@@ -28,7 +28,7 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         // Creation of the pages
         for (Page p : pages) {
             System.out.println("pages ");
-            PageView pv = PageViewFactory.getView(p); 
+            PageView pv = PageViewFactory.getPageView(p); 
             pv.relocate(x,y + 50 + (PageView.height / 3));
             this.ribbonElts.add(pv);
             x = x + this.elementWidth + this.elementInterval;

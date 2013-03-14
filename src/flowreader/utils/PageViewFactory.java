@@ -11,7 +11,7 @@ import flowreader.view.PageView;
 import flowreader.view.TextPageView;
 
 /**
- *
+ * Factory that creates page object depending on the file type
  * @author D-Day
  */
 public  class PageViewFactory {
@@ -21,7 +21,7 @@ public  class PageViewFactory {
      * @param page
      * @return the corresponding pageView
      */
-    public static PageView getView(Page page){
+    public static PageView getPageView(Page page){
         if(page instanceof PDFPage){
             return new PDFPageView((PDFPage)page);
         }

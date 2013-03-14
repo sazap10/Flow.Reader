@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 /**
- *
+ * Compare two key in a map(integer) by their value
  * @author D-Day
  */
 public class ValueComparatorInteger implements Comparator<String> {
