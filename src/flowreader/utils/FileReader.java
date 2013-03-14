@@ -38,7 +38,7 @@ public abstract class FileReader extends Task {
 
     @Override
     public Document call() throws IOException {
-        Document docu = this.readFile(TextPageView.textBoundHeight, TextPageView.textBoundWidth);
+        Document docu = readFile(TextPageView.textBoundWidth, TextPageView.textBoundHeight);
         return docu;
     }
 
