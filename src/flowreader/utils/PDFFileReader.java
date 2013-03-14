@@ -4,36 +4,21 @@
  */
 package flowreader.utils;
 
-import flowreader.model.Page;
-import flowreader.model.WordCloud;
 import flowreader.model.Document;
 import flowreader.model.PDFPage;
-import flowreader.view.TxtPageView;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
+import flowreader.model.Page;
+import flowreader.model.WordCloud;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.LineNumberReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Scanner;
-import java.util.TreeMap;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.PDFTextStripper;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-
-
-import java.awt.image.BufferedImage;
 
 /**
  *
