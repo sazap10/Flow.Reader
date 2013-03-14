@@ -53,11 +53,12 @@ import javafx.stage.StageStyle;
  * @author D-Day
  */
 public class MainView extends BorderPane {
+
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
     public Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, ThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private Reader fileReader;
@@ -67,11 +68,12 @@ public class MainView extends BorderPane {
     VBox introBox;
     private boolean split_version;
     private boolean toggle_buttons = false;
- private HBox mainBtns;	 	
-	    private HBox effectBtns;	 	
-	    private VBox configBtns;
+    private HBox mainBtns;
+    private HBox effectBtns;
+    private VBox configBtns;
     private boolean configOn = true;
-    
+    private boolean isGlow = false;
+
     public MainView(FlowReader fr, Stage primaryStage, Scene scene, Boolean split_version) {
         this.setId("mainview");
         this.split_version = split_version;
@@ -82,7 +84,7 @@ public class MainView extends BorderPane {
 
         ribbon = new RibbonView();
         this.pi = new ProgressIndicator(0.0);
- pi.getStyleClass().add("customProgressIndicator");
+        pi.getStyleClass().add("customProgressIndicator");
         pi.setStyle(" -fx-progress-color: #005888;");
         // changing size without css
         pi.setPrefSize(100, 100);
@@ -92,7 +94,6 @@ public class MainView extends BorderPane {
         this.setCenter(home);
         configButton.fire();
     }
-
 
     public void buildHomeView() {
         home = new StackPane();
@@ -150,7 +151,7 @@ public class MainView extends BorderPane {
                         break;
 
                     case F:
-                       if (!split_version) {
+                        if (!split_version) {
                             fullScreenButton.fire();
                         }
                         break;
@@ -191,12 +192,8 @@ public class MainView extends BorderPane {
                         ribbon.swipe("right");
                         break;
 
-                    case M:
-                        matrixThemeButton.fire();
-                        break;
-
-                    case N:
-                        normalThemeButton.fire();
+                    case T:
+                        ThemeButton.fire();
                         break;
 
                     case G:
@@ -214,11 +211,7 @@ public class MainView extends BorderPane {
                         }
                         break;
 
-                    case E:
-                        ResetEffectButton.fire();
-
-                        break;
-                    case L:
+                    case V:
                         verticalLockButton.fire();
                         break;
 
@@ -252,6 +245,7 @@ public class MainView extends BorderPane {
     }
 
     private void setUpButtons() {
+        int minWidth = 200;
         closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
         closeBtn.setCancelButton(true);
@@ -286,19 +280,12 @@ public class MainView extends BorderPane {
         diveViewSceneT.getStyleClass().add("Tooltip");
         diveViewSceneButton.setTooltip(diveViewSceneT);
 
-        normalThemeButton = new Button("Original Theme");
-        normalThemeButton.setId("topbarbutton");
-        normalThemeButton.setDisable(true);
-        Tooltip normalThemeT = new Tooltip("Change theme style to the orginal Flow Reader's great theme");
-        normalThemeT.getStyleClass().add("Tooltip");
-        normalThemeButton.setTooltip(normalThemeT);
-
-        matrixThemeButton = new Button("Matrix Theme");
-        matrixThemeButton.setId("topbarbutton");
-        matrixThemeButton.setDisable(true);
-        Tooltip matrixThemeT = new Tooltip("Change theme style to the awesome Matrix theme");
+        ThemeButton = new Button("Change Theme");
+        ThemeButton.setId("topbarbutton");
+        ThemeButton.setDisable(true);
+        Tooltip matrixThemeT = new Tooltip("Change theme style");
         matrixThemeT.getStyleClass().add("Tooltip");
-        matrixThemeButton.setTooltip(matrixThemeT);
+        ThemeButton.setTooltip(matrixThemeT);
 
         zoomLockButton = new Button("Zoom Lock: Off");
         zoomLockButton.setId("topbarbutton");
@@ -306,6 +293,7 @@ public class MainView extends BorderPane {
         Tooltip zoomLockT = new Tooltip("Toggle waiting for next word cloud level transition");
         zoomLockT.getStyleClass().add("Tooltip");
         zoomLockButton.setTooltip(zoomLockT);
+        zoomLockButton.setMinWidth(minWidth);
 
         resetButton = new Button("Reset");
         resetButton.setId("topbarbutton");
@@ -320,6 +308,7 @@ public class MainView extends BorderPane {
         Tooltip verticalLockT = new Tooltip("Toggle enabling/disabling moving the ribbon vertically");
         verticalLockT.getStyleClass().add("Tooltip");
         verticalLockButton.setTooltip(verticalLockT);
+        verticalLockButton.setMinWidth(minWidth);
 
         readingModeButton = new Button("Reading Mode");
         readingModeButton.setId("topbarbutton");
@@ -335,19 +324,13 @@ public class MainView extends BorderPane {
         glowT.getStyleClass().add("Tooltip");
         GlowButton.setTooltip(glowT);
 
-        ResetEffectButton = new Button("Reset Effects");
-        ResetEffectButton.setId("topbarbutton");
-        ResetEffectButton.setDisable(true);
-        Tooltip ResetEffectT = new Tooltip("Remove any effect previously enabled");
-        ResetEffectT.getStyleClass().add("Tooltip");
-        ResetEffectButton.setTooltip(ResetEffectT);
-
         fullScreenButton = new Button("FullScreen: On");
         fullScreenButton.setId("topbarbutton");
         fullScreenButton.setDisable(false);
         Tooltip fullScreenT = new Tooltip("Toggle full screen");
         fullScreenT.getStyleClass().add("Tooltip");
         fullScreenButton.setTooltip(fullScreenT);
+        fullScreenButton.setMinWidth(minWidth);
 
         splitButton = new Button("Split!");
         splitButton.setId("topbarbutton");
@@ -355,6 +338,7 @@ public class MainView extends BorderPane {
         Tooltip splitT = new Tooltip("Create another instance of flowreader -- FlowReader x 2!");
         splitT.getStyleClass().add("Tooltip");
         splitButton.setTooltip(splitT);
+        splitButton.setMinWidth(minWidth);
 
 
         zoomAtMouseButton = new Button("Zoom: Center");
@@ -363,6 +347,7 @@ public class MainView extends BorderPane {
         Tooltip zoomAtMouseT = new Tooltip("Toggle between centering the zoom position at default screen location or at cursor position");
         zoomAtMouseT.getStyleClass().add("Tooltip");
         zoomAtMouseButton.setTooltip(zoomAtMouseT);
+        zoomAtMouseButton.setMinWidth(minWidth);
 
         TextButton = new Button("Text: On");
         TextButton.setId("topbarbutton");
@@ -370,28 +355,31 @@ public class MainView extends BorderPane {
         Tooltip TextButtonT = new Tooltip("Make text in Flow View visible/invisible");
         TextButtonT.getStyleClass().add("Tooltip");
         TextButton.setTooltip(TextButtonT);
-        
-        upButton= new Button("-");
+        TextButton.setMinWidth(minWidth);
+
+        upButton = new Button("-");
         upButton.setId("topbarbutton");
         upButton.setDisable(true);
         Tooltip upButtonT = new Tooltip("Jump up to next word cloud");
         upButtonT.getStyleClass().add("Tooltip");
         upButton.setTooltip(upButtonT);
-        
+        upButton.setMinWidth(minWidth);
+
         downButton = new Button("+");
         downButton.setId("topbarbutton");
         downButton.setDisable(true);
         Tooltip downButtonT = new Tooltip("Jump down to next word cloud");
         downButtonT.getStyleClass().add("Tooltip");
         downButton.setTooltip(downButtonT);
-        
-        
+        downButton.setMinWidth(minWidth);
+
         pageWidthButton = new Button("Set Page Width");
         pageWidthButton.setId("topbarbutton");
         pageWidthButton.setDisable(false);
         Tooltip pageWidthButtonT = new Tooltip("Set page width in Flow View");
         pageWidthButtonT.getStyleClass().add("Tooltip");
         pageWidthButton.setTooltip(pageWidthButtonT);
+        pageWidthButton.setMinWidth(minWidth);
 
         pageHeightButton = new Button("Set Page Height");
         pageHeightButton.setId("topbarbutton");
@@ -399,6 +387,7 @@ public class MainView extends BorderPane {
         Tooltip pageHeightButtonT = new Tooltip("Set page height in Flow View");
         pageHeightButtonT.getStyleClass().add("Tooltip");
         pageHeightButton.setTooltip(pageHeightButtonT);
+        pageHeightButton.setMinWidth(minWidth);
 
         closeDocButton = new Button("Close Document");
         closeDocButton.setId("topbarbutton");
@@ -406,6 +395,7 @@ public class MainView extends BorderPane {
         Tooltip closeDocButtonT = new Tooltip("Close the current document");
         closeDocButtonT.getStyleClass().add("Tooltip");
         closeDocButton.setTooltip(closeDocButtonT);
+        closeDocButton.setMinWidth(minWidth);
 
         configButton = new Button("Show config");
         configButton.setId("topbarbutton");
@@ -413,6 +403,7 @@ public class MainView extends BorderPane {
         Tooltip configButtonT = new Tooltip("Show/hide config buttons");
         configButtonT.getStyleClass().add("Tooltip");
         configButton.setTooltip(configButtonT);
+        configButton.setMinWidth(minWidth);
 
         wordCloudButton = new Button("Word Cloud: On");
         wordCloudButton.setId("topbarbutton");
@@ -420,6 +411,7 @@ public class MainView extends BorderPane {
         Tooltip wordCloudButtonT = new Tooltip("Show/hide word clouds in Flow View");
         wordCloudButtonT.getStyleClass().add("Tooltip");
         wordCloudButton.setTooltip(wordCloudButtonT);
+        wordCloudButton.setMinWidth(minWidth);
     }
 
     private void setUpButtonBar() {
@@ -437,19 +429,19 @@ public class MainView extends BorderPane {
         bottomBtnsBar.setMinWidth(screenBounds.getWidth());
 
 
-         mainBtns = new HBox(10);
-         effectBtns = new HBox(10);
-         configBtns = new VBox(10);
+        mainBtns = new HBox(10);
+        effectBtns = new HBox(10);
+        configBtns = new VBox(10);
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
-            effectBtns.getChildren().addAll(GlowButton, ResetEffectButton);
-configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
-                    zoomAtMouseButton, readingModeButton, pageWidthButton, splitButton, TextButton, wordCloudButton, resetButton, closeDocButton, configButton);
+            effectBtns.getChildren().addAll(GlowButton, readingModeButton, resetButton);
+            configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
+                    zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
+
         } else {
-            effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
-configBtns.getChildren().addAll(downButton, upButton, fullScreenButton, zoomLockButton,
-                    verticalLockButton, zoomAtMouseButton, readingModeButton, pageWidthButton, splitButton, TextButton, wordCloudButton,
-                    resetButton, closeDocButton, configButton);
+            effectBtns.getChildren().addAll(ThemeButton, GlowButton, readingModeButton, resetButton);
+            configBtns.getChildren().addAll(downButton, upButton, fullScreenButton, zoomLockButton,
+                    verticalLockButton, zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
 
         }
 
@@ -523,11 +515,11 @@ configBtns.getChildren().addAll(downButton, upButton, fullScreenButton, zoomLock
                     pi.setMinSize(100, 100);
                     pi.setMaxSize(100, 100);
                     pi.getStyleClass().add("customProgressIndicator");
-                    
+
                     introBox.getChildren().set(0, pi);
 
                     //setCenter(pi);
-fileReader = new TextFileReader();
+                    fileReader = new TextFileReader();
                     File file = startFileChooser(primaryStage);
                     String name = file.getName();
                     if (name.endsWith(".txt")) {
@@ -538,8 +530,8 @@ fileReader = new TextFileReader();
                     fileReader.setFile(file);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
                     pi.progressProperty().bind(fileReader.progressProperty());
-                  //  Thread t = new Thread(fileReader);
-                //    t.start();
+                    //  Thread t = new Thread(fileReader);
+                    //    t.start();
                     Thread t2 = new Thread(dct);
                     t2.start();
 
@@ -578,35 +570,28 @@ fileReader = new TextFileReader();
             }
         });
 
-        normalThemeButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                FlowReader.scene.getStylesheets().clear();
-                if (FlowReader.split_toggle) {
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_split.css").toExternalForm());
-                } else {
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-                    scene.setFill(Color.web("B8B8B8"));
-                }
 
-
-            }
-        });
-
-        matrixThemeButton.setOnAction(new EventHandler<ActionEvent>() {
+        ThemeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
 
+                fr.current_theme = (fr.current_theme + 1) % fr.themes.size();
+
+                String theme = fr.themes.get(fr.current_theme);
                 FlowReader.scene.getStylesheets().clear();
                 if (FlowReader.split_toggle) {
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix_split.css").toExternalForm());
+                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource(theme).toExternalForm());
+                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource(theme.substring(0, theme.indexOf(".")).concat("_split.css")).toExternalForm());
 
                 } else {
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
-
-                    scene.setFill(Color.web("000000"));
+                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource(theme).toExternalForm());
+                    if (theme.equals("stylesheet_matrix.css")) {
+                        scene.setFill(Color.web("000000"));
+                    } else {
+                        if (theme.equals("stylesheet.css")) {
+                            scene.setFill(Color.web("B8B8B8"));
+                        }
+                    }
                 }
             }
         });
@@ -660,18 +645,18 @@ fileReader = new TextFileReader();
         GlowButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                ribbon.setEffect(new Glow(0.8));
+                if (isGlow) {
+                    ribbon.setEffect(null);
 
+                } else {
+                    ribbon.setEffect(new Glow(0.8));
+
+                }
+                isGlow = !isGlow;
             }
         });
 
-        ResetEffectButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                ribbon.setEffect(null);
 
-            }
-        });
 
         fullScreenButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -706,36 +691,37 @@ fileReader = new TextFileReader();
                 }
             }
         });
-        
+
         TextButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 if (ribbon.toggleText()) {
 
-TextButton.setText("Text: On");                } else {
-TextButton.setText("Text: Off");    
+                    TextButton.setText("Text: On");
+                } else {
+                    TextButton.setText("Text: Off");
                 }
             }
         });
-        
+
         upButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                
+
                 ribbon.goUp();
-        
+
             }
         });
-                downButton.setOnAction(new EventHandler<ActionEvent>() {
+        downButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                
-                                ribbon.goDown();
 
-         
+                ribbon.goDown();
+
+
             }
         });
-                pageWidthButton.setOnAction(new EventHandler<ActionEvent>() {
+        pageWidthButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
 
@@ -784,10 +770,12 @@ TextButton.setText("Text: Off");
 
                 dialog.setScene(dialog_scene);
 
-                dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
-                primaryStage.getScene().getRoot().setEffect(new BoxBlur());
+                dialog
+                        .getScene().getStylesheets().add(FlowReader.class
+                        .getResource("modal-dialog.css").toExternalForm());
+                primaryStage.getScene()
+                        .getRoot().setEffect(new BoxBlur());
                 dialog.showAndWait();
-
             }
         });
 
@@ -802,7 +790,7 @@ TextButton.setText("Text: Off");
         wordCloudButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-             if (ribbon.toggleWordCloud()) {
+                if (ribbon.toggleWordCloud()) {
 
                     TextButton.setText("Ribbon: On");
                 } else {
@@ -835,21 +823,24 @@ TextButton.setText("Text: Off");
         this.ribbon = ribbon;
         BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
         this.ribbon.toBack();
+        openFileButton.setDisable(true);
         homeButton.setDisable(false);
         flowViewSceneButton.setDisable(false);
         diveViewSceneButton.setDisable(false);
-        normalThemeButton.setDisable(false);
-        matrixThemeButton.setDisable(false);
+        ThemeButton.setDisable(false);
         zoomLockButton.setDisable(false);
         resetButton.setDisable(false);
         verticalLockButton.setDisable(false);
         readingModeButton.setDisable(false);
         GlowButton.setDisable(false);
-        ResetEffectButton.setDisable(false);
         zoomAtMouseButton.setDisable(false);
         TextButton.setDisable(false);
-         upButton.setDisable(false);
+        upButton.setDisable(false);
         downButton.setDisable(false);
+        pageWidthButton.setDisable(true);
+        pageHeightButton.setDisable(true);
+        closeDocButton.setDisable(false);
+
     }
 
     public File startFileChooser(Stage primaryStage) {
@@ -871,7 +862,7 @@ TextButton.setText("Text: Off");
         return f;
 
     }
-    
+
     public void docClosed() {
         homeButton.fire();
 
@@ -881,14 +872,12 @@ TextButton.setText("Text: Off");
         homeButton.setDisable(true);
         flowViewSceneButton.setDisable(true);
         diveViewSceneButton.setDisable(true);
-        normalThemeButton.setDisable(true);
-        matrixThemeButton.setDisable(true);
+        ThemeButton.setDisable(true);
         zoomLockButton.setDisable(true);
         resetButton.setDisable(true);
         verticalLockButton.setDisable(true);
         readingModeButton.setDisable(true);
         GlowButton.setDisable(true);
-        ResetEffectButton.setDisable(true);
         zoomAtMouseButton.setDisable(true);
         TextButton.setDisable(true);
         upButton.setDisable(true);

@@ -4,6 +4,7 @@ import flowreader.view.MainView;
 import flowreader.view.PageView;
 import flowreader.view.RibbonView;
 import flowreader.view.TxtPageView;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,10 +45,15 @@ public class FlowReader extends Application {
     public Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private Stage priStage;
     public static boolean split_toggle = false, cancelled = false;
-public static int page_width = 500;	 	
-	    public static int page_height = 700;
+    public static int page_width = 500;
+    public static int page_height = 700;
+    public static int current_theme = 0;
+public static ArrayList<String> themes = new ArrayList<String>();
     @Override
     public void start(Stage primaryStage) {
+                        themes.add("stylesheet.css");
+        themes.add("stylesheet_matrix.css");
+
         this.priStage = primaryStage;
         primaryStage.setTitle("Flow Reader");
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
@@ -209,7 +215,7 @@ public static int page_width = 500;
         Scene dialog_scene = new Scene(
                 HBoxBuilder.create().styleClass("modal-dialog").children(
                 LabelBuilder.create().text("\n\nKeyboard shortcuts:\nF: Toggle fullscreen\nB: hide/show buttons\nH: Home\nW: Zoom In\nS: Zoom Out\nA: Move Left\nD: Move Right"
-                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ: Switch View\nR: Reset\nC: Reading Mode\nE: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock\n Y: Split").textFill(Color.WHITE).build(),
+                + "\nT: Change Theme\nG: Glow!\nQ: Switch View\nR: Reset\nC: Reading Mode\nL: Vertical Lock\nZ: Zoom Lock\n Y: Split").textFill(Color.WHITE).build(),
                 ButtonBuilder.create().id("ok").text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -263,7 +269,8 @@ public static int page_width = 500;
         }
 
     }
-public void setPageWidth(final RibbonView ribbon) {
+
+    public void setPageWidth(final RibbonView ribbon) {
 
         final Stage dialog = new Stage(StageStyle.TRANSPARENT);
         dialog.initOwner(priStage);
@@ -274,25 +281,23 @@ public void setPageWidth(final RibbonView ribbon) {
         ta.setPrefColumnCount(5);
         ta.setPrefRowCount(1);
 
-        ta.lengthProperty().addListener(new ChangeListener<Number>(){
- 
-	@Override
-	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {              
-		 
-		 if(newValue.intValue() > oldValue.intValue()){
-			char ch = ta.getText().charAt(oldValue.intValue());
-			System.out.println("Length:"+ oldValue+"  "+ newValue +" "+ch);                   
- 
-			//Check if the new character is the number or other's
-			if(!(ch >= '0' && ch <= '9' )){       
-                 
-				//if it's not number then just setText to previous one
-				ta.setText(ta.getText().substring(0,ta.getText().length()-1)); 
-			}
-		}
-	}
-	
-});
+        ta.lengthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                if (newValue.intValue() > oldValue.intValue()) {
+                    char ch = ta.getText().charAt(oldValue.intValue());
+                    System.out.println("Length:" + oldValue + "  " + newValue + " " + ch);
+
+                    //Check if the new character is the number or other's
+                    if (!(ch >= '0' && ch <= '9')) {
+
+                        //if it's not number then just setText to previous one
+                        ta.setText(ta.getText().substring(0, ta.getText().length() - 1));
+                    }
+                }
+            }
+        });
         EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
             public void handle(KeyEvent event) {
                 if (event.getCode().equals(event.getCode().ENTER)) {
@@ -322,14 +327,15 @@ public void setPageWidth(final RibbonView ribbon) {
                 dialog.close();
 
             }
-        }).build(),ButtonBuilder.create().id("cancel").text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        // abort action and close the dialog.
-                        dialog.close();
-                        cancelled = true;
-                        priStage.getScene().getRoot().setEffect(null);
-                    }}).build()).build(), Color.TRANSPARENT);
+        }).build(), ButtonBuilder.create().id("cancel").text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                // abort action and close the dialog.
+                dialog.close();
+                cancelled = true;
+                priStage.getScene().getRoot().setEffect(null);
+            }
+        }).build()).build(), Color.TRANSPARENT);
         ta.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
 
         dialog.setScene(dialog_scene);

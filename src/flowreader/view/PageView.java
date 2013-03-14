@@ -19,7 +19,8 @@ public abstract class PageView extends RibbonElement {
 
     public PageView(double x, double y) {
         pageBoundary = new Rectangle(x, y, width, height);
-        pageBoundary.setFill(Color.FLORALWHITE);
+        //pageBoundary.setFill(Color.FLORALWHITE);
+        pageBoundary.setId("page_background");
         this.getChildren().add(pageBoundary);
     }
 

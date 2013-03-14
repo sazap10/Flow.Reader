@@ -52,35 +52,38 @@ public class DiveWordCloud extends RibbonElement {
     }
 
     public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, FlowView nfv) {
-  wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth * 2);
+        wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth * 2);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
         //wordCloudBoundary.setOpacity(0.5);
-this.wordCloud = wc;
+        this.wordCloud = wc;
         this.words = new ArrayList<Text>();
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
         this.cloud.setLayoutY(wordCloudBoundary.getY());
+        /*
+         this.cloud.setMinWidth(elementWidth);
+         this.cloud.setPrefWidth(elementWidth);
+         this.cloud.setMaxWidth(elementWidth);
 
-        this.cloud.setMinWidth(elementWidth);
-       this.cloud.setPrefWidth(elementWidth);
-       this.cloud.setMaxWidth(elementWidth);
-
-        this.cloud.setMinHeight(elementHeigth);
-        this.cloud.setPrefHeight(elementHeigth);
-        this.cloud.setMaxHeight(elementHeigth);
- this.cloud.setPrefWrapLength(elementWidth);
+         this.cloud.setMinHeight(elementHeigth);
+         this.cloud.setPrefHeight(elementHeigth);
+         this.cloud.setMaxHeight(elementHeigth);
+         */
+        this.cloud.setPrefWrapLength(elementWidth);
         this.level = level;
         this.nfv = nfv;
 
         this.getChildren().addAll(wordCloudBoundary, cloud);
         cloud.setAlignment(Pos.TOP_CENTER);
         flowview = true;
-setNumOfWordsInCloud(level);
-         renderWordCloud();
-     }
-    
-    public void setNumOfWordsInCloud(int level){
-        numOfWordsInCloud = level*3;
+        if (flowview) {
+            setNumOfWordsInCloud(level);
+        }
+        renderWordCloud();
+    }
+
+    public void setNumOfWordsInCloud(int level) {
+        numOfWordsInCloud = level * 3;
     }
 
     public double getPageWidth() {
@@ -175,29 +178,31 @@ setNumOfWordsInCloud(level);
         int adjustCurrentFontSize = (percent * adjustMaxFontSize) / 100;
         int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, (level - 1));
         if (flowview) {
-            currentFontSize = (int)((adjustCurrentFontSize + this.minFontSize) * getFontSize(level));
+            currentFontSize = (int) ((adjustCurrentFontSize + this.minFontSize) * getFontSize(level));
             //System.out.println("DDD "+calculateFontSizeFromLevel(level));
             //currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, calculateFontSizeFromLevel(level));
         }
         word.setFont(new Font(currentFontSize));
     }
-    public double getFontSize(int level){
-        double maximumFontSize =6;
+
+    public double getFontSize(int level) {
+        double maximumFontSize = 6;
         int maxWordCloudLevel = nfv.getMaxZoomLevel();
-                if (maxWordCloudLevel < maximumFontSize + 1) {
-            maximumFontSize = maxWordCloudLevel -1;
+        if (maxWordCloudLevel < maximumFontSize + 1) {
+            maximumFontSize = maxWordCloudLevel - 1;
         }
-            double step = maximumFontSize / maxWordCloudLevel;
-           double result = (int) Math.pow(2, level * step);
-         
-                //System.out.println(level);
+        double step = maximumFontSize / maxWordCloudLevel;
+        double result = (int) Math.pow(2, level * step);
+
+        //System.out.println(level);
 
         //System.out.println(step);
-        
+
         //System.out.println(result);
         return result;
-        
+
     }
+
     public double calculateFontSizeFromLevel(int level) {
         //System.out.println(":o"+level+" "+nfv.getMaxZoomLevel()+" "+maxFontLevel);
 

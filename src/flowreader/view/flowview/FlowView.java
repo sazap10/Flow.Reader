@@ -90,7 +90,6 @@ private boolean text_visible = true;
     double zoom_x = screenBounds.getWidth() / 2;
     double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
     private Document doc;
-    
     public FlowView(StackPane stackPane, boolean split_version,int width,int height) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
