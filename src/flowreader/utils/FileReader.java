@@ -23,32 +23,33 @@ import javafx.stage.Stage;
  *
  * @author Jim
  */
-public abstract class Reader extends Task implements FileReader {
-    
-      protected File file;
+public abstract class FileReader extends Task{
+
+    protected File file;
     protected HashMap<String, Integer> commonWords;
     protected Document document;
-    public Reader(){
+
+    public FileReader() {
 
         this.commonWords = new HashMap<String, Integer>();
         this.getCommonWords();
 
     }
-    
-      
-    
+
+    public abstract Document readFile(double width, double height) throws IOException;
+
     @Override
-    public Document call() throws IOException{
+    public Document call() throws IOException {
         System.out.println("I am about to call readfile");
         Document docu = this.readFile(TextPageView.textBoundHeight, TextPageView.textBoundWidth);
         return docu;
     }
-    
-    public void setFile(File file){
+
+    public void setFile(File file) {
         this.file = file;
     }
 
-     public final HashMap<String, Integer> getCommonWords() {
+    public final HashMap<String, Integer> getCommonWords() {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
@@ -78,8 +79,8 @@ public abstract class Reader extends Task implements FileReader {
         }
         return this.commonWords;
     }
-     
-      public ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds) {
+
+    public ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds) {
         ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<ArrayList<WordCloud>>();
         ArrayList<ArrayList<WordCloud>> otherLevels = new ArrayList<ArrayList<WordCloud>>();
         //updateProgress(1, 10);
@@ -121,10 +122,9 @@ public abstract class Reader extends Task implements FileReader {
         }
         return localLevels;
     }
-      
-          public String trimPunctuation(String word) {
+
+    public String trimPunctuation(String word) {
         String w = word.toLowerCase().replaceAll("\\W", "");
         return w;
     }
-    
 }

@@ -17,11 +17,11 @@ import javafx.scene.control.ProgressIndicator;
 public class DocumentCreationTask extends Task {
 
     private Document document = null;
-    private Reader fileReader;
+    private FileReader fileReader;
     private MainView mv;
     private boolean split_version;
 
-    public DocumentCreationTask(ProgressIndicator pi, Reader fileReader, MainView mv, Boolean split_version) {
+    public DocumentCreationTask(ProgressIndicator pi, FileReader fileReader, MainView mv, Boolean split_version) {
         this.fileReader = fileReader;
         this.mv = mv;
         this.split_version = split_version;

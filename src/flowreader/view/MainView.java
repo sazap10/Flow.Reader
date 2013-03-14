@@ -8,7 +8,7 @@ import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.PDFFileReader;
-import flowreader.utils.Reader;
+import flowreader.utils.FileReader;
 import flowreader.utils.TextFileReader;
 import java.io.File;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class MainView extends BorderPane {
     private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, ThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
-    private Reader fileReader;
+    private FileReader fileReader;
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private EventHandler<KeyEvent> keyHandler;
     private StackPane home;

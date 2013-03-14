@@ -27,7 +27,7 @@ import javafx.stage.Stage;
  *
  * @author D-Day
  */
-public class TextFileReader extends Reader implements FileReader {
+public class TextFileReader extends FileReader{
 
   
 

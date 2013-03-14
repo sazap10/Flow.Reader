@@ -24,7 +24,7 @@ import org.apache.pdfbox.util.PDFTextStripper;
  *
  * @author D-Day
  */
-public class PDFFileReader extends Reader implements FileReader{
+public class PDFFileReader extends FileReader{
 
     
 
