@@ -98,10 +98,7 @@ public class TextFileReaderTest {
     public void testMakeCloudLevels() {
         System.out.println("makeCloudLevels");
         ArrayList<WordCloud> clouds = null;
-        TextFileReader instance = new TextFileReader();
         ArrayList expResult = null;
-        ArrayList result = instance.makeCloudLevels(clouds);
-        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -112,10 +109,7 @@ public class TextFileReaderTest {
     @Test
     public void testGetCommonWords() {
         System.out.println("getCommonWords");
-        TextFileReader instance = new TextFileReader();
         HashMap expResult = null;
-        HashMap result = instance.getCommonWords();
-        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -127,10 +121,7 @@ public class TextFileReaderTest {
     public void testTrimPunctuation() {
         System.out.println("trimPunctuation");
         String word = "";
-        TextFileReader instance = new TextFileReader();
         String expResult = "";
-        String result = instance.trimPunctuation(word);
-        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -141,10 +132,7 @@ public class TextFileReaderTest {
     @Test
     public void testCall() throws Exception {
         System.out.println("call");
-        TextFileReader instance = new TextFileReader();
         Document expResult = null;
-        Document result = instance.call();
-        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
