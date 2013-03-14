@@ -23,24 +23,21 @@ import javafx.stage.Stage;
  *
  * @author Jim
  */
-public abstract class FileReader extends Task{
+public abstract class FileReader extends Task {
 
     protected File file;
     protected HashMap<String, Integer> commonWords;
     protected Document document;
 
     public FileReader() {
-
         this.commonWords = new HashMap<String, Integer>();
         this.getCommonWords();
-
     }
 
     public abstract Document readFile(double width, double height) throws IOException;
 
     @Override
     public Document call() throws IOException {
-        System.out.println("I am about to call readfile");
         Document docu = this.readFile(TextPageView.textBoundHeight, TextPageView.textBoundWidth);
         return docu;
     }

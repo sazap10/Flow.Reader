@@ -27,34 +27,10 @@ import javafx.stage.Stage;
  *
  * @author D-Day
  */
-public class TextFileReader extends FileReader{
-
-  
+public class TextFileReader extends FileReader {
 
     public TextFileReader() {
-        this.commonWords = new HashMap<String, Integer>();
-        this.getCommonWords();
-    }
-    
-
-
-    /**
-     * Create and start the file chooser
-     * @param primaryStage 
-     */
-    public void startFileChooser(Stage primaryStage) {
-        //start file chooser
-        File f = new File(System.getProperty("user.dir"));
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Please choose a text file to read");
-        fileChooser.setInitialDirectory(f);
-
-        //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        //Show save file dialog
-        file = fileChooser.showOpenDialog(primaryStage);
+        super();
     }
 
     /**
@@ -97,7 +73,7 @@ public class TextFileReader extends FileReader{
                         if (textWithNewLine > boundHeight) {
                             Page page = new Page(pageText);
                             WordCloud wordCloud = new WordCloud(wordsOccurrences);
-                            System.out.println("adding page"+page.getText());
+                            System.out.println("adding page" + page.getText());
                             pages.add(page);
                             wordClouds.add(wordCloud);
                             pageText = "";
@@ -136,7 +112,7 @@ public class TextFileReader extends FileReader{
             }
             Page page = new Page(pageText);
             WordCloud wordCloud = new WordCloud(wordsOccurrences);
-            System.out.println("adding page"+page.getText());
+            System.out.println("adding page" + page.getText());
             pages.add(page);
             wordClouds.add(wordCloud);
 
@@ -152,34 +128,9 @@ public class TextFileReader extends FileReader{
             wordCloudLevels.add(temp_element);
         }
 
-        System.out.println("nbpages "+pages.size());
+        System.out.println("nbpages " + pages.size());
         Document document = new Document(pages, wordCloudLevels);
         return document;
     }
 
-    /**
-     * @param clouds
-     * @return all the levels of word clouds based on the first level call clouds
-     */
-   
-
-    /**
-     * @return an hashmap containing all the common words 
-     */
-   
-
-    /**
-     * @param word
-     * @return word without any punctuation
-     */
-
-    
-        @Override
-    public Document call() throws IOException {
-        Document docu = readFile(TextPageView.textBoundWidth, TextPageView.textBoundHeight);
-        return docu;
-    }
-    
-
-    
 }
