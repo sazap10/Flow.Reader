@@ -9,3 +9,7 @@ build/classes
 build/empty
 build/generated-sources
 build/built-jar.properties
+private
+/nbproject/private/private.properties
+/nbproject/private/configs/Run_as_WebStart.properties
+/nbproject/private/configs/Run_in_Browser.properties
