@@ -86,10 +86,26 @@ public class FlowView extends Group {
     private boolean split_version = false;
     private boolean zoomAtMouse = false;
 private boolean text_visible = true;
+    private boolean wordcloud_visible = true;
+    double zoom_x = screenBounds.getWidth() / 2;
+    double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
+    private Document doc;
+    
+    public FlowView(StackPane stackPane, boolean split_version,int width,int height) {
+        this.pages = new ArrayList<PageView>();
+        this.wordClouds = new ArrayList<Group>();
+        this.stackPane = stackPane;
+        pagesPane = new StackPane();
+        wordCloudPane = new StackPane();
+        this.zoomTable = new HashMap<Integer, Integer>();
+        this.currentZoomLevel = maxZoomLevel;
+        this.VBox = new VBox();
+        this.split_version = split_version;
+this.pageWidth=width;
+this.pageHeight=height;
 
-double zoom_x = screenBounds.getWidth() / 2;
-        double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
-    public FlowView(StackPane stackPane, boolean split_version) {
+    }
+      public FlowView(StackPane stackPane, boolean split_version) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
         this.stackPane = stackPane;
@@ -100,7 +116,9 @@ double zoom_x = screenBounds.getWidth() / 2;
         this.VBox = new VBox();
         this.split_version = split_version;
 
+
     }
+    
     public boolean toggleText() {
         if (text_visible) {
             text_visible = false;
@@ -118,6 +136,18 @@ double zoom_x = screenBounds.getWidth() / 2;
             }
         }
         return text_visible;
+    }
+        public boolean toggleWordCloud(){
+                if (wordcloud_visible) {
+            wordcloud_visible = false;
+          wordCloudPane.setVisible(wordcloud_visible);
+        } else {
+            wordcloud_visible = true;
+          wordCloudPane.setVisible(wordcloud_visible);
+
+            
+        }
+        return wordcloud_visible;
     }
 public void goUp(){
     if(currentZoomLevel<maxZoomLevel){

@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
@@ -56,7 +57,7 @@ public class MainView extends BorderPane {
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
     public Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton,TextButton,upButton,downButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private Reader fileReader;
@@ -66,7 +67,11 @@ public class MainView extends BorderPane {
     VBox introBox;
     private boolean split_version;
     private boolean toggle_buttons = false;
-
+ private HBox mainBtns;	 	
+	    private HBox effectBtns;	 	
+	    private VBox configBtns;
+    private boolean configOn = true;
+    
     public MainView(FlowReader fr, Stage primaryStage, Scene scene, Boolean split_version) {
         this.setId("mainview");
         this.split_version = split_version;
@@ -85,6 +90,7 @@ public class MainView extends BorderPane {
         pi.setMaxSize(100, 100);
         this.buildHomeView();
         this.setCenter(home);
+        configButton.fire();
     }
 
 
@@ -378,6 +384,42 @@ public class MainView extends BorderPane {
         Tooltip downButtonT = new Tooltip("Jump down to next word cloud");
         downButtonT.getStyleClass().add("Tooltip");
         downButton.setTooltip(downButtonT);
+        
+        
+        pageWidthButton = new Button("Set Page Width");
+        pageWidthButton.setId("topbarbutton");
+        pageWidthButton.setDisable(false);
+        Tooltip pageWidthButtonT = new Tooltip("Set page width in Flow View");
+        pageWidthButtonT.getStyleClass().add("Tooltip");
+        pageWidthButton.setTooltip(pageWidthButtonT);
+
+        pageHeightButton = new Button("Set Page Height");
+        pageHeightButton.setId("topbarbutton");
+        pageHeightButton.setDisable(false);
+        Tooltip pageHeightButtonT = new Tooltip("Set page height in Flow View");
+        pageHeightButtonT.getStyleClass().add("Tooltip");
+        pageHeightButton.setTooltip(pageHeightButtonT);
+
+        closeDocButton = new Button("Close Document");
+        closeDocButton.setId("topbarbutton");
+        closeDocButton.setDisable(true);
+        Tooltip closeDocButtonT = new Tooltip("Close the current document");
+        closeDocButtonT.getStyleClass().add("Tooltip");
+        closeDocButton.setTooltip(closeDocButtonT);
+
+        configButton = new Button("Show config");
+        configButton.setId("topbarbutton");
+        configButton.setDisable(false);
+        Tooltip configButtonT = new Tooltip("Show/hide config buttons");
+        configButtonT.getStyleClass().add("Tooltip");
+        configButton.setTooltip(configButtonT);
+
+        wordCloudButton = new Button("Word Cloud: On");
+        wordCloudButton.setId("topbarbutton");
+        wordCloudButton.setDisable(true);
+        Tooltip wordCloudButtonT = new Tooltip("Show/hide word clouds in Flow View");
+        wordCloudButtonT.getStyleClass().add("Tooltip");
+        wordCloudButton.setTooltip(wordCloudButtonT);
     }
 
     private void setUpButtonBar() {
@@ -395,17 +437,19 @@ public class MainView extends BorderPane {
         bottomBtnsBar.setMinWidth(screenBounds.getWidth());
 
 
-        HBox mainBtns = new HBox(10);
-        HBox effectBtns = new HBox(10);
-        VBox configBtns = new VBox(10);
+         mainBtns = new HBox(10);
+         effectBtns = new HBox(10);
+         configBtns = new VBox(10);
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
             effectBtns.getChildren().addAll(GlowButton, ResetEffectButton);
-            configBtns.getChildren().addAll(downButton,upButton,zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton,TextButton, resetButton);
-
+configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
+                    zoomAtMouseButton, readingModeButton, pageWidthButton, splitButton, TextButton, wordCloudButton, resetButton, closeDocButton, configButton);
         } else {
             effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
-            configBtns.getChildren().addAll(downButton,upButton,fullScreenButton, zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton,TextButton, resetButton);
+configBtns.getChildren().addAll(downButton, upButton, fullScreenButton, zoomLockButton,
+                    verticalLockButton, zoomAtMouseButton, readingModeButton, pageWidthButton, splitButton, TextButton, wordCloudButton,
+                    resetButton, closeDocButton, configButton);
 
         }
 
@@ -483,21 +527,7 @@ public class MainView extends BorderPane {
                     introBox.getChildren().set(0, pi);
 
                     //setCenter(pi);
-                    flowViewSceneButton.setDisable(true);
-                    diveViewSceneButton.setDisable(true);
-                    homeButton.setDisable(true);
-                    normalThemeButton.setDisable(true);
-                    matrixThemeButton.setDisable(true);
-                    zoomLockButton.setDisable(true);
-                    resetButton.setDisable(true);
-                    verticalLockButton.setDisable(true);
-                    readingModeButton.setDisable(true);
-                    GlowButton.setDisable(true);
-                    ResetEffectButton.setDisable(true);
-                    zoomAtMouseButton.setDisable(true);
-TextButton.setDisable(true);
-upButton.setDisable(true);
-                    downButton.setDisable(true);
+fileReader = new TextFileReader();
                     File file = startFileChooser(primaryStage);
                     String name = file.getName();
                     if (name.endsWith(".txt")) {
@@ -705,6 +735,100 @@ TextButton.setText("Text: Off");
          
             }
         });
+                pageWidthButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+                fr.setPageWidth(ribbon);
+
+            }
+        });
+
+        pageHeightButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+                final Stage dialog = new Stage(StageStyle.TRANSPARENT);
+                dialog.initOwner(primaryStage);
+
+                dialog.initModality(Modality.WINDOW_MODAL);
+                /*
+                 EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
+                 public void handle(KeyEvent event) {
+                 if (event.getCode().equals(event.getCode().DIGIT1)) {
+                 primaryStage.getScene().getRoot().setEffect(null);
+                 dialog.close();
+                 event.consume();
+                 }
+                 }
+                 };
+                 */
+                final TextArea ta = new TextArea();
+                ta.setPrefColumnCount(5);
+                ta.setPrefRowCount(1);
+                Scene dialog_scene = new Scene(
+                        HBoxBuilder.create().styleClass("modal-dialog").children(
+                        LabelBuilder.create().text("Please enter new page height (recommended range: 400-2000):").textFill(Color.WHITE).build(),
+                        ta,
+                        ButtonBuilder.create().id("ok").text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        // take action and close the dialog.
+                        ribbon.setPageHeight(Integer.valueOf(ta.getText()));
+                        primaryStage.getScene().getRoot().setEffect(null);
+                        dialog.close();
+
+                    }
+                }).build()).build(), Color.TRANSPARENT);
+                dialog_scene.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
+
+                dialog.setScene(dialog_scene);
+
+                dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
+                primaryStage.getScene().getRoot().setEffect(new BoxBlur());
+                dialog.showAndWait();
+
+            }
+        });
+
+        closeDocButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+                docClosed();
+            }
+        });
+
+        wordCloudButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+             if (ribbon.toggleWordCloud()) {
+
+                    TextButton.setText("Ribbon: On");
+                } else {
+                    TextButton.setText("Ribbon: Off");
+                }
+            }
+        });
+
+        configButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                configOn = !configOn;
+                if (configOn) {
+                    configButton.setText("Hide config");
+                } else {
+                    configButton.setText("Show config");
+                }
+                for (int i = 0; i < configBtns.getChildren().size(); i++) {
+                    if (!configBtns.getChildren().get(i).equals(configButton)) {
+                        configBtns.getChildren().get(i).setVisible(configOn);
+                    }
+                }
+            }
+        });
+
+
     }
 
     public void docOpenned(Document doc, RibbonView ribbon) {
@@ -746,5 +870,32 @@ TextButton.setText("Text: Off");
         f = fileChooser.showOpenDialog(primaryStage);
         return f;
 
+    }
+    
+    public void docClosed() {
+        homeButton.fire();
+
+        this.ribbon = new RibbonView();
+        System.gc();
+        openFileButton.setDisable(false);
+        homeButton.setDisable(true);
+        flowViewSceneButton.setDisable(true);
+        diveViewSceneButton.setDisable(true);
+        normalThemeButton.setDisable(true);
+        matrixThemeButton.setDisable(true);
+        zoomLockButton.setDisable(true);
+        resetButton.setDisable(true);
+        verticalLockButton.setDisable(true);
+        readingModeButton.setDisable(true);
+        GlowButton.setDisable(true);
+        ResetEffectButton.setDisable(true);
+        zoomAtMouseButton.setDisable(true);
+        TextButton.setDisable(true);
+        upButton.setDisable(true);
+        downButton.setDisable(true);
+        pageHeightButton.setDisable(false);
+        pageWidthButton.setDisable(false);
+        closeDocButton.setDisable(true);
+        wordCloudButton.setDisable(true);
     }
 }
