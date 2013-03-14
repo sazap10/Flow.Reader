@@ -22,7 +22,7 @@
     -fx-font-size: 16;
 }
 #pagespane{
-    -fx-background-color: #transparent;
+    -fx-background-color: transparent;
 }
 
 #page_text{
