@@ -32,7 +32,7 @@ public class DiveWordCloud extends RibbonElement {
     private FlowPane cloud;
     private Integer maxFontSize = 90;
     private Integer minFontSize = 14;
-    private Integer numOfWordsInCloud = 10;
+    private Integer numOfWordsInCloud = 16;
     public static double width = 500;
     public static double heigth = 500;
     public int level = 1;
@@ -61,15 +61,15 @@ public class DiveWordCloud extends RibbonElement {
         this.cloud = new FlowPane();
         this.cloud.setLayoutX(wordCloudBoundary.getX());
         this.cloud.setLayoutY(wordCloudBoundary.getY());
-/*
-        this.cloud.setMinWidth(elementWidth);
-        this.cloud.setPrefWidth(elementWidth);
-        this.cloud.setMaxWidth(elementWidth);
+        /*
+         this.cloud.setMinWidth(elementWidth);
+         this.cloud.setPrefWidth(elementWidth);
+         this.cloud.setMaxWidth(elementWidth);
 
-        this.cloud.setMinHeight(elementHeigth);
-        this.cloud.setPrefHeight(elementHeigth);
-        this.cloud.setMaxHeight(elementHeigth);
-*/
+         this.cloud.setMinHeight(elementHeigth);
+         this.cloud.setPrefHeight(elementHeigth);
+         this.cloud.setMaxHeight(elementHeigth);
+         */
         this.cloud.setPrefWrapLength(elementWidth);
 
         this.level = level;
@@ -77,12 +77,14 @@ public class DiveWordCloud extends RibbonElement {
         this.getChildren().addAll(wordCloudBoundary, cloud);
         cloud.setAlignment(Pos.TOP_CENTER);
         flowview = true;
-setNumOfWordsInCloud(level);
+        if (flowview) {
+            setNumOfWordsInCloud(level);
+        }
         renderWordCloud();
     }
-    
-    public void setNumOfWordsInCloud(int level){
-        numOfWordsInCloud = level*3;
+
+    public void setNumOfWordsInCloud(int level) {
+        numOfWordsInCloud = level * 3;
     }
 
     public double getPageWidth() {
@@ -140,7 +142,7 @@ setNumOfWordsInCloud(level);
         //System.out.println("New Cloud");
         for (int k = 0; k < values.length; k++) {
             this.setWordSize(this.words.get(k), values[k], values);
-            this.words.get(k).setWrappingWidth(this.words.get(k).getLayoutBounds().getWidth() + Math.pow(2, level));
+            this.words.get(k).setWrappingWidth(this.words.get(k).getLayoutBounds().getWidth() + 20);
             //System.out.println(this.words.get(k).getText()+" "+values[k]);
         }
 
@@ -187,13 +189,13 @@ setNumOfWordsInCloud(level);
     public double getFontSize(int level) {
         double maximumFontSize = 6;
         int maxWordCloudLevel = nfv.getMaxZoomLevel();
-      
+
         if (maxWordCloudLevel < maximumFontSize + 1) {
-            maximumFontSize = maxWordCloudLevel -1;
+            maximumFontSize = maxWordCloudLevel - 1;
         }
-            double step = maximumFontSize / maxWordCloudLevel;
-           double result = (int) Math.pow(2, level * step);
-        
+        double step = maximumFontSize / maxWordCloudLevel;
+        double result = (int) Math.pow(2, level * step);
+
 
         //System.out.println(level);
 

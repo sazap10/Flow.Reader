@@ -253,7 +253,7 @@ public class MainView extends BorderPane{
                         ResetEffectButton.fire();
 
                         break;
-                    case L:
+                    case V:
                         verticalLockButton.fire();
                         break;
 
@@ -287,6 +287,8 @@ public class MainView extends BorderPane{
     }
 
     private void setUpButtons() {
+        
+        int minWidth = 200;
         closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
         closeBtn.setCancelButton(true);
@@ -341,6 +343,7 @@ public class MainView extends BorderPane{
         Tooltip zoomLockT = new Tooltip("Toggle waiting for next word cloud level transition");
         zoomLockT.getStyleClass().add("Tooltip");
         zoomLockButton.setTooltip(zoomLockT);
+zoomLockButton.setMinWidth(minWidth);
 
         resetButton = new Button("Reset");
         resetButton.setId("topbarbutton");
@@ -355,6 +358,7 @@ public class MainView extends BorderPane{
         Tooltip verticalLockT = new Tooltip("Toggle enabling/disabling moving the ribbon vertically");
         verticalLockT.getStyleClass().add("Tooltip");
         verticalLockButton.setTooltip(verticalLockT);
+verticalLockButton.setMinWidth(minWidth);
 
         readingModeButton = new Button("Reading Mode");
         readingModeButton.setId("topbarbutton");
@@ -383,6 +387,7 @@ public class MainView extends BorderPane{
         Tooltip fullScreenT = new Tooltip("Toggle full screen");
         fullScreenT.getStyleClass().add("Tooltip");
         fullScreenButton.setTooltip(fullScreenT);
+fullScreenButton.setMinWidth(minWidth);
 
         splitButton = new Button("Split!");
         splitButton.setId("topbarbutton");
@@ -390,6 +395,7 @@ public class MainView extends BorderPane{
         Tooltip splitT = new Tooltip("Create another instance of flowreader -- FlowReader x 2!");
         splitT.getStyleClass().add("Tooltip");
         splitButton.setTooltip(splitT);
+splitButton.setMinWidth(minWidth);
 
 
         zoomAtMouseButton = new Button("Zoom method: Center");
@@ -398,6 +404,7 @@ public class MainView extends BorderPane{
         Tooltip zoomAtMouseT = new Tooltip("Toggle between centering the zoom position at default screen location or at cursor position");
         zoomAtMouseT.getStyleClass().add("Tooltip");
         zoomAtMouseButton.setTooltip(zoomAtMouseT);
+zoomAtMouseButton.setMinWidth(minWidth);
 
         TextButton = new Button("Text: On");
         TextButton.setId("topbarbutton");
@@ -405,20 +412,23 @@ public class MainView extends BorderPane{
         Tooltip TextButtonT = new Tooltip("Make text in Flow View visible/invisible");
         TextButtonT.getStyleClass().add("Tooltip");
         TextButton.setTooltip(TextButtonT);
+TextButton.setMinWidth(minWidth);
 
-        upButton = new Button("Up");
+        upButton = new Button("-");
         upButton.setId("topbarbutton");
         upButton.setDisable(true);
         Tooltip upButtonT = new Tooltip("Jump up to next word cloud");
         upButtonT.getStyleClass().add("Tooltip");
         upButton.setTooltip(upButtonT);
+upButton.setMinWidth(minWidth);
 
-        downButton = new Button("Down");
+        downButton = new Button("+");
         downButton.setId("topbarbutton");
         downButton.setDisable(true);
         Tooltip downButtonT = new Tooltip("Jump down to next word cloud");
         downButtonT.getStyleClass().add("Tooltip");
         downButton.setTooltip(downButtonT);
+downButton.setMinWidth(minWidth);
 
         pageWidthButton = new Button("Set Page Width");
         pageWidthButton.setId("topbarbutton");
@@ -426,6 +436,7 @@ public class MainView extends BorderPane{
         Tooltip pageWidthButtonT = new Tooltip("Set page width in Flow View");
         pageWidthButtonT.getStyleClass().add("Tooltip");
         pageWidthButton.setTooltip(pageWidthButtonT);
+pageWidthButton.setMinWidth(minWidth);
 
         pageHeightButton = new Button("Set Page Height");
         pageHeightButton.setId("topbarbutton");
@@ -433,6 +444,7 @@ public class MainView extends BorderPane{
         Tooltip pageHeightButtonT = new Tooltip("Set page height in Flow View");
         pageHeightButtonT.getStyleClass().add("Tooltip");
         pageHeightButton.setTooltip(pageHeightButtonT);
+pageHeightButton.setMinWidth(minWidth);
 
         closeDocButton = new Button("Close Document");
         closeDocButton.setId("topbarbutton");
@@ -440,6 +452,7 @@ public class MainView extends BorderPane{
         Tooltip closeDocButtonT = new Tooltip("Close the current document");
         closeDocButtonT.getStyleClass().add("Tooltip");
         closeDocButton.setTooltip(closeDocButtonT);
+closeDocButton.setMinWidth(minWidth);
 
         configButton = new Button("Show config");
         configButton.setId("topbarbutton");
@@ -447,6 +460,7 @@ public class MainView extends BorderPane{
         Tooltip configButtonT = new Tooltip("Show/hide config buttons");
         configButtonT.getStyleClass().add("Tooltip");
         configButton.setTooltip(configButtonT);
+configButton.setMinWidth(minWidth);
 
         wordCloudButton = new Button("Word Cloud: On");
         wordCloudButton.setId("topbarbutton");
@@ -454,6 +468,7 @@ public class MainView extends BorderPane{
         Tooltip wordCloudButtonT = new Tooltip("Show/hide word clouds in Flow View");
         wordCloudButtonT.getStyleClass().add("Tooltip");
         wordCloudButton.setTooltip(wordCloudButtonT);
+        wordCloudButton.setMinWidth(minWidth);
     }
 
     private void setUpButtonBar() {
@@ -476,15 +491,15 @@ public class MainView extends BorderPane{
         configBtns = new VBox(10);
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
-            effectBtns.getChildren().addAll(GlowButton, ResetEffectButton);
+            effectBtns.getChildren().addAll(GlowButton, ResetEffectButton,readingModeButton,resetButton);
             configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
-                    zoomAtMouseButton, readingModeButton, pageWidthButton, splitButton, TextButton, wordCloudButton, resetButton, closeDocButton, configButton);
+                    zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
 
         } else {
-            effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
+            effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton,readingModeButton,resetButton);
             configBtns.getChildren().addAll(downButton, upButton, fullScreenButton, zoomLockButton,
-                    verticalLockButton, zoomAtMouseButton, readingModeButton, pageWidthButton, splitButton, TextButton, wordCloudButton,
-                    resetButton, closeDocButton, configButton);
+                    verticalLockButton, zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton
+                    , closeDocButton, configButton);
 
         }
 
