@@ -1,7 +1,7 @@
 nbproject/private/
-build/
+build/*
 nbbuild/
-dist/
+dist/*
 nbdist/
 nbactions.xml
 nb-configuration.xml
@@ -14,3 +14,4 @@ private
 /nbproject/private/configs/Run_as_WebStart.properties
 /nbproject/private/configs/Run_in_Browser.properties
 configs
+dist
