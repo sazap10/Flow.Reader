@@ -11,7 +11,7 @@ import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import flowreader.utils.PageViewFactory;
 import flowreader.view.PageView;
-import flowreader.view.TxtPageView;
+import flowreader.view.TextPageView;
 import flowreader.view.diveview.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,14 +126,14 @@ public class FlowView extends Group {
             text_visible = false;
             for (int i = 0; i < pagesGroup.getChildren().size(); i++) {
 
-                TxtPageView p = (TxtPageView) pagesGroup.getChildren().get(i);
+                TextPageView p = (TextPageView) pagesGroup.getChildren().get(i);
                 p.toggleTextVisible(text_visible);
             }
         } else {
             text_visible = true;
             for (int i = 0; i < pagesGroup.getChildren().size(); i++) {
 
-                TxtPageView p = (TxtPageView) pagesGroup.getChildren().get(i);
+                TextPageView p = (TextPageView) pagesGroup.getChildren().get(i);
                 p.toggleTextVisible(text_visible);
             }
         }

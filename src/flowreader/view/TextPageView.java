@@ -13,14 +13,14 @@ import javafx.scene.text.Text;
  *
  * @author D-Day
  */
-public class TxtPageView extends PageView {
+public class TextPageView extends PageView {
 
     private Rectangle textBound;
     private Text pageText;
     public static double textBoundWidth;
     public static double textBoundHeight;
 
-    public TxtPageView(double x, double y, String text) {
+    public TextPageView(double x, double y, String text) {
         super(x, y);
 
         textBound = new Rectangle(textBoundWidth, textBoundHeight);
@@ -34,7 +34,7 @@ public class TxtPageView extends PageView {
         pageText.setText(text);
     }
 
-    public TxtPageView(Page page) {
+    public TextPageView(Page page) {
         super(0, 0);
         textBound = new Rectangle(textBoundWidth, textBoundHeight);
         textBound.setFill(Color.TRANSPARENT);
@@ -53,8 +53,8 @@ public class TxtPageView extends PageView {
 
     public static void setUpPageSize(double width, double height) {
         PageView.setUpPageSize(width, height);
-        TxtPageView.textBoundWidth = width * 0.8;
-        TxtPageView.textBoundHeight = height * 0.8;
+        TextPageView.textBoundWidth = width * 0.8;
+        TextPageView.textBoundHeight = height * 0.8;
     }
 
     public void setText(String text) {

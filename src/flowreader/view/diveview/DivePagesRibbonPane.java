@@ -8,7 +8,7 @@ import flowreader.view.RibbonElement;
 import flowreader.model.Page;
 import flowreader.utils.PageViewFactory;
 import flowreader.view.PageView;
-import flowreader.view.TxtPageView;
+import flowreader.view.TextPageView;
 import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -24,7 +24,7 @@ import javafx.util.Duration;
 public class DivePagesRibbonPane extends DiveRibbonPane {
 
     public DivePagesRibbonPane(int index, ArrayList<Page> pages, double x, double y) {
-        super(index, x, y, TxtPageView.width, TxtPageView.height);
+        super(index, x, y, TextPageView.width, TextPageView.height);
         // Creation of the pages
         for (Page p : pages) {
             System.out.println("pages ");

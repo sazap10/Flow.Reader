@@ -6,7 +6,7 @@ package flowreader.utils;
 
 import flowreader.model.Document;
 import flowreader.model.WordCloud;
-import flowreader.view.TxtPageView;
+import flowreader.view.TextPageView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +40,7 @@ public abstract class Reader extends Task implements FileReader {
     @Override
     public Document call() throws IOException{
         System.out.println("I am about to call readfile");
-        Document docu = this.readFile(TxtPageView.textBoundHeight, TxtPageView.textBoundWidth);
+        Document docu = this.readFile(TextPageView.textBoundHeight, TextPageView.textBoundWidth);
         return docu;
     }
     

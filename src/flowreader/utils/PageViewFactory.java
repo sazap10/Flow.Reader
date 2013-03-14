@@ -8,7 +8,7 @@ import flowreader.model.PDFPage;
 import flowreader.model.Page;
 import flowreader.view.PDFPageView;
 import flowreader.view.PageView;
-import flowreader.view.TxtPageView;
+import flowreader.view.TextPageView;
 
 /**
  *
@@ -26,7 +26,7 @@ public  class PageViewFactory {
             return new PDFPageView((PDFPage)page);
         }
         else{
-            return new TxtPageView(page);
+            return new TextPageView(page);
         }
         
     }
