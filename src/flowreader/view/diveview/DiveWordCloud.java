@@ -4,15 +4,14 @@
  */
 package flowreader.view.diveview;
 
-import flowreader.model.WordCloud;
 import flowreader.view.RibbonElement;
-import flowreader.view.flowview.NewFlowView;
+import flowreader.model.WordCloud;
+import flowreader.view.flowview.FlowView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
@@ -37,7 +36,7 @@ public class DiveWordCloud extends RibbonElement {
     public static double heigth = 500;
     public int level = 1;
     private int maxFontLevel = 7;
-    private NewFlowView nfv;
+    private FlowView nfv;
     private boolean flowview = false;
 
     public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
@@ -52,7 +51,7 @@ public class DiveWordCloud extends RibbonElement {
         renderWordCloud();
     }
 
-    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, NewFlowView nfv) {
+    public DiveWordCloud(WordCloud wc, double x, double y, double elementWidth, double elementHeigth, int level, FlowView nfv) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth * 2);
         wordCloudBoundary.setFill(Color.TRANSPARENT);
         //wordCloudBoundary.setOpacity(0.5);
@@ -71,9 +70,9 @@ public class DiveWordCloud extends RibbonElement {
          this.cloud.setMaxHeight(elementHeigth);
          */
         this.cloud.setPrefWrapLength(elementWidth);
-
         this.level = level;
         this.nfv = nfv;
+
         this.getChildren().addAll(wordCloudBoundary, cloud);
         cloud.setAlignment(Pos.TOP_CENTER);
         flowview = true;
@@ -177,7 +176,7 @@ public class DiveWordCloud extends RibbonElement {
 
         int adjustMaxFontSize = this.maxFontSize - this.minFontSize;
         int adjustCurrentFontSize = (percent * adjustMaxFontSize) / 100;
-        int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, level - 1);
+        int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, (level - 1));
         if (flowview) {
             currentFontSize = (int) ((adjustCurrentFontSize + this.minFontSize) * getFontSize(level));
             //System.out.println("DDD "+calculateFontSizeFromLevel(level));
@@ -189,13 +188,11 @@ public class DiveWordCloud extends RibbonElement {
     public double getFontSize(int level) {
         double maximumFontSize = 6;
         int maxWordCloudLevel = nfv.getMaxZoomLevel();
-
         if (maxWordCloudLevel < maximumFontSize + 1) {
             maximumFontSize = maxWordCloudLevel - 1;
         }
         double step = maximumFontSize / maxWordCloudLevel;
         double result = (int) Math.pow(2, level * step);
-
 
         //System.out.println(level);
 

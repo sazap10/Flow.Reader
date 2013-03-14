@@ -6,17 +6,9 @@ package flowreader.view;
 
 import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
-import flowreader.view.flowview.NewFlowViewScene;
+import flowreader.view.flowview.FlowViewScene;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.effect.Bloom;
-import javafx.scene.effect.DisplacementMap;
-import javafx.scene.effect.FloatMap;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
 /**
@@ -26,49 +18,55 @@ import javafx.stage.Screen;
 public class RibbonView extends StackPane {
 
     private DiveViewScene diveViewPane;
-    private NewFlowViewScene newFlowPane;
+    private FlowViewScene newFlowPane;
     private Document document;
     private String currentView = "";
     private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private boolean split_version;
+    private boolean initialsed = false;
 
     public RibbonView() {
     }
 
     public RibbonView(Document document, Boolean split_version) {
-        //this.pagesPane = new PagesScene(document.getPages());
-        //this.wordCloudsPane = new WordCloudsScene(document.getWordClouds());
-        //this.flowViewPane = new FlowViewScene(document);
+        this.initialsed = true;
         this.diveViewPane = new DiveViewScene(document);
-        //this.theViewPane = new TheViewScene(pagesPane,wordCloudsPane);
-        this.newFlowPane = new NewFlowViewScene(document, split_version);
+        this.newFlowPane = new FlowViewScene(document, split_version);
         this.getChildren().add(this.diveViewPane);
         this.document = document;
         this.split_version = split_version;
 
     }
-        public void setPageWidth(int width){
-            newFlowPane.setPageWidth(width);
+
+    public void setPageWidth(int width) {
+        newFlowPane.setPageWidth(width);
     }
-            public void setPageHeight(int height){
-            newFlowPane.setPageHeight(height);
+
+    public void setPageHeight(int height) {
+        newFlowPane.setPageHeight(height);
     }
-    public void goDown(){
-        newFlowPane.goDown();
-    }
-    public void goUp(){
-        newFlowPane.goUp();
-    }
-    public boolean toggleWordCloud(){
-                return newFlowPane.toggleWordCloud();
+
+    public boolean toggleWordCloud() {
+        return newFlowPane.toggleWordCloud();
 
     }
-    public boolean toggleText(){
+
+    public boolean toggleText() {
         return newFlowPane.toggleText();
     }
-public boolean toggleZoomCenter(){
-    return newFlowPane.toggleZoomCenter();
-}
+
+    public void goDown() {
+        newFlowPane.goDown();
+    }
+
+    public void goUp() {
+        newFlowPane.goUp();
+    }
+
+    public boolean toggleZoomCenter() {
+        return newFlowPane.toggleZoomCenter();
+    }
+
     public void switchToDiveView() {
         this.getChildren().clear();
         this.getChildren().add(this.diveViewPane);
@@ -100,12 +98,15 @@ public boolean toggleZoomCenter(){
 
     public void reset() {
         this.getChildren().clear();
-        newFlowPane = new NewFlowViewScene(document, split_version);
+        newFlowPane = new FlowViewScene(document, split_version);
+        newFlowPane.setPageWidth(flowreader.FlowReader.page_width);
         this.getChildren().add(newFlowPane);
     }
 
     public void goToReadingMode() {
-        newFlowPane.goToReadingMode();
+        if (initialsed) {
+            newFlowPane.goToReadingMode();
+        }
     }
 
     public void zoom(int i) {

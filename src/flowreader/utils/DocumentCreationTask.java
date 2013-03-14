@@ -17,11 +17,11 @@ import javafx.scene.control.ProgressIndicator;
 public class DocumentCreationTask extends Task {
 
     private Document document = null;
-    private FileReader fileReader;
+    private Reader fileReader;
     private MainView mv;
     private boolean split_version;
 
-    public DocumentCreationTask(ProgressIndicator pi, FileReader fileReader, MainView mv, Boolean split_version) {
+    public DocumentCreationTask(ProgressIndicator pi, Reader fileReader, MainView mv, Boolean split_version) {
         this.fileReader = fileReader;
         this.mv = mv;
         this.split_version = split_version;
@@ -30,7 +30,7 @@ public class DocumentCreationTask extends Task {
 
     @Override
     protected Document call() throws Exception {
-        document = (Document) fileReader.get();
+        document = (Document) fileReader.call();
         RibbonView ribbon = new RibbonView(document, split_version);
         mv.docOpenned(document, ribbon);
         return this.document;

@@ -7,27 +7,56 @@ package flowreader.utils;
 import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
+import flowreader.view.TxtPageView;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import javafx.concurrent.Task;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  *
  * @author D-Day
  */
-public class TextFileReader extends FileReader{
+public class TextFileReader extends Reader implements FileReader {
+
+  
 
     public TextFileReader() {
-        super();
+        this.commonWords = new HashMap<String, Integer>();
+        this.getCommonWords();
     }
     
-    public TextFileReader(File file) {
-        super(file);
+
+
+    /**
+     * Create and start the file chooser
+     * @param primaryStage 
+     */
+    public void startFileChooser(Stage primaryStage) {
+        //start file chooser
+        File f = new File(System.getProperty("user.dir"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Please choose a text file to read");
+        fileChooser.setInitialDirectory(f);
+
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        //Show save file dialog
+        file = fileChooser.showOpenDialog(primaryStage);
     }
+
     /**
      * @param bounds the boundaries of the page used to know how much text
      * contains a page
@@ -55,10 +84,10 @@ public class TextFileReader extends FileReader{
         LineNumberReader r = new LineNumberReader(new java.io.FileReader(file));
         try {
             String paragraph, word;
-            int nbligne = 0;
+            int pageCount = 0;
             while ((paragraph = r.readLine()) != null) {
-                nbligne++;
-                this.updateProgress(nbligne, numberOfLines + 1);
+                pageCount++;
+                this.updateProgress(pageCount, numberOfLines + 1);
                 Scanner sc = new Scanner(paragraph);
                 try {
                     while (sc.hasNext()) { // while there is words in the line
@@ -68,6 +97,7 @@ public class TextFileReader extends FileReader{
                         if (textWithNewLine > boundHeight) {
                             Page page = new Page(pageText);
                             WordCloud wordCloud = new WordCloud(wordsOccurrences);
+                            System.out.println("adding page"+page.getText());
                             pages.add(page);
                             wordClouds.add(wordCloud);
                             pageText = "";
@@ -106,6 +136,7 @@ public class TextFileReader extends FileReader{
             }
             Page page = new Page(pageText);
             WordCloud wordCloud = new WordCloud(wordsOccurrences);
+            System.out.println("adding page"+page.getText());
             pages.add(page);
             wordClouds.add(wordCloud);
 
@@ -121,8 +152,34 @@ public class TextFileReader extends FileReader{
             wordCloudLevels.add(temp_element);
         }
 
+        System.out.println("nbpages "+pages.size());
         Document document = new Document(pages, wordCloudLevels);
         return document;
     }
 
+    /**
+     * @param clouds
+     * @return all the levels of word clouds based on the first level call clouds
+     */
+   
+
+    /**
+     * @return an hashmap containing all the common words 
+     */
+   
+
+    /**
+     * @param word
+     * @return word without any punctuation
+     */
+
+    
+        @Override
+    public Document call() throws IOException {
+        Document docu = readFile(TxtPageView.textBoundWidth, TxtPageView.textBoundHeight);
+        return docu;
+    }
+    
+
+    
 }

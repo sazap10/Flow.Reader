@@ -7,9 +7,9 @@ package flowreader.view;
 import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
-import flowreader.utils.PdfFileReader;
+import flowreader.utils.PDFFileReader;
+import flowreader.utils.Reader;
 import flowreader.utils.TextFileReader;
-import flowreader.utils.FileReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,25 +52,27 @@ import javafx.stage.StageStyle;
  *
  * @author D-Day
  */
-public class MainView extends BorderPane{
+public class MainView extends BorderPane {
+
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
-    private HBox mainBtns;
-    private HBox effectBtns;
-    private VBox configBtns;
     public Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, ThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
-    private FileReader fileReader;
+    private Reader fileReader;
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private EventHandler<KeyEvent> keyHandler;
     private StackPane home;
     VBox introBox;
     private boolean split_version;
     private boolean toggle_buttons = false;
+    private HBox mainBtns;
+    private HBox effectBtns;
+    private VBox configBtns;
     private boolean configOn = true;
+    private boolean isGlow = false;
 
     public MainView(FlowReader fr, Stage primaryStage, Scene scene, Boolean split_version) {
         this.setId("mainview");
@@ -79,8 +81,6 @@ public class MainView extends BorderPane{
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
         this.setUpButtonBar();
         this.setButtonEvents(primaryStage, scene, fr);
-        //this.setTop(topBtnsBar);
-        //this.setBottom(bottomBtnsBar);
 
         ribbon = new RibbonView();
         this.pi = new ProgressIndicator(0.0);
@@ -92,30 +92,7 @@ public class MainView extends BorderPane{
         pi.setMaxSize(100, 100);
         this.buildHomeView();
         this.setCenter(home);
-
         configButton.fire();
-        //this.setCenter(this.pi);
-
-    }
-
-    public File startFileChooser(Stage primaryStage) {
-        //start file chooser
-        File f = new File(System.getProperty("user.dir"));
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Please choose a text file to read");
-        fileChooser.setInitialDirectory(f);
-
-        //Set extension filter
-        ArrayList<String> extensions = new ArrayList<String>();
-        extensions.add("*.pdf");
-        extensions.add("*.txt");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf), Text files (*.txt)", extensions);
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        //Show save file dialog
-        f = fileChooser.showOpenDialog(primaryStage);
-        return f;
-
     }
 
     public void buildHomeView() {
@@ -135,12 +112,8 @@ public class MainView extends BorderPane{
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.ALICEBLUE);
         text.setFont(Font.font(null, FontWeight.BOLD, 20));
-        //text.layoutXProperty().bind(home.widthProperty().divide(2).subtract(text.getBoundsInLocal().getWidth()/2));
-        //text.layoutYProperty().bind(home.heightProperty().divide(2).subtract(text.getBoundsInLocal().getHeight()/2));
         text.setEffect(bloom);
 
-        //    Group r = new Group() {};
-//Scene scene = new Scene(r, 300, 250, Color.WHITE);
         Random rand = new Random(System.currentTimeMillis());
         home.getChildren().addAll(rect);
         List<String> fontList = Font.getFontNames();
@@ -153,15 +126,9 @@ public class MainView extends BorderPane{
             int blue = rand.nextInt(255);
             int font = rand.nextInt(30);
             Text text2 = new Text(x, y, "FlowReader");
-            //int rot = rand.nextInt(360);
             text2.setFill(Color.rgb(red, green, blue, .99));
-            //text2.setRotate(rot);
             int randfont = rand.nextInt(fontList.size());
             text2.setFont(new Font(fontList.get(randfont), font));
-//r.getChildren().add(text2);
-
-
-
             g.getChildren().add(text2);
         }
         introBox = new VBox(10);
@@ -169,7 +136,6 @@ public class MainView extends BorderPane{
         introBox.getChildren().add(text);
         home.getChildren().add(g);
         home.getChildren().add(introBox);
-//introBox.autosize();
         introBox.setAlignment(Pos.CENTER);
     }
 
@@ -226,12 +192,8 @@ public class MainView extends BorderPane{
                         ribbon.swipe("right");
                         break;
 
-                    case M:
-                        matrixThemeButton.fire();
-                        break;
-
-                    case N:
-                        normalThemeButton.fire();
+                    case T:
+                        ThemeButton.fire();
                         break;
 
                     case G:
@@ -249,10 +211,6 @@ public class MainView extends BorderPane{
                         }
                         break;
 
-                    case E:
-                        ResetEffectButton.fire();
-
-                        break;
                     case V:
                         verticalLockButton.fire();
                         break;
@@ -287,7 +245,6 @@ public class MainView extends BorderPane{
     }
 
     private void setUpButtons() {
-        
         int minWidth = 200;
         closeBtn = new Button("x");
         closeBtn.setId("closeBtn");
@@ -323,19 +280,12 @@ public class MainView extends BorderPane{
         diveViewSceneT.getStyleClass().add("Tooltip");
         diveViewSceneButton.setTooltip(diveViewSceneT);
 
-        normalThemeButton = new Button("Original Theme");
-        normalThemeButton.setId("topbarbutton");
-        normalThemeButton.setDisable(true);
-        Tooltip normalThemeT = new Tooltip("Change theme style to the orginal Flow Reader's great theme");
-        normalThemeT.getStyleClass().add("Tooltip");
-        normalThemeButton.setTooltip(normalThemeT);
-
-        matrixThemeButton = new Button("Matrix Theme");
-        matrixThemeButton.setId("topbarbutton");
-        matrixThemeButton.setDisable(true);
-        Tooltip matrixThemeT = new Tooltip("Change theme style to the awesome Matrix theme");
+        ThemeButton = new Button("Change Theme");
+        ThemeButton.setId("topbarbutton");
+        ThemeButton.setDisable(true);
+        Tooltip matrixThemeT = new Tooltip("Change theme style");
         matrixThemeT.getStyleClass().add("Tooltip");
-        matrixThemeButton.setTooltip(matrixThemeT);
+        ThemeButton.setTooltip(matrixThemeT);
 
         zoomLockButton = new Button("Zoom Lock: Off");
         zoomLockButton.setId("topbarbutton");
@@ -343,7 +293,7 @@ public class MainView extends BorderPane{
         Tooltip zoomLockT = new Tooltip("Toggle waiting for next word cloud level transition");
         zoomLockT.getStyleClass().add("Tooltip");
         zoomLockButton.setTooltip(zoomLockT);
-zoomLockButton.setMinWidth(minWidth);
+        zoomLockButton.setMinWidth(minWidth);
 
         resetButton = new Button("Reset");
         resetButton.setId("topbarbutton");
@@ -358,7 +308,7 @@ zoomLockButton.setMinWidth(minWidth);
         Tooltip verticalLockT = new Tooltip("Toggle enabling/disabling moving the ribbon vertically");
         verticalLockT.getStyleClass().add("Tooltip");
         verticalLockButton.setTooltip(verticalLockT);
-verticalLockButton.setMinWidth(minWidth);
+        verticalLockButton.setMinWidth(minWidth);
 
         readingModeButton = new Button("Reading Mode");
         readingModeButton.setId("topbarbutton");
@@ -374,20 +324,13 @@ verticalLockButton.setMinWidth(minWidth);
         glowT.getStyleClass().add("Tooltip");
         GlowButton.setTooltip(glowT);
 
-        ResetEffectButton = new Button("Reset Effects");
-        ResetEffectButton.setId("topbarbutton");
-        ResetEffectButton.setDisable(true);
-        Tooltip ResetEffectT = new Tooltip("Remove any effect previously enabled");
-        ResetEffectT.getStyleClass().add("Tooltip");
-        ResetEffectButton.setTooltip(ResetEffectT);
-
         fullScreenButton = new Button("FullScreen: On");
         fullScreenButton.setId("topbarbutton");
         fullScreenButton.setDisable(false);
         Tooltip fullScreenT = new Tooltip("Toggle full screen");
         fullScreenT.getStyleClass().add("Tooltip");
         fullScreenButton.setTooltip(fullScreenT);
-fullScreenButton.setMinWidth(minWidth);
+        fullScreenButton.setMinWidth(minWidth);
 
         splitButton = new Button("Split!");
         splitButton.setId("topbarbutton");
@@ -395,16 +338,16 @@ fullScreenButton.setMinWidth(minWidth);
         Tooltip splitT = new Tooltip("Create another instance of flowreader -- FlowReader x 2!");
         splitT.getStyleClass().add("Tooltip");
         splitButton.setTooltip(splitT);
-splitButton.setMinWidth(minWidth);
+        splitButton.setMinWidth(minWidth);
 
 
-        zoomAtMouseButton = new Button("Zoom method: Center");
+        zoomAtMouseButton = new Button("Zoom: Center");
         zoomAtMouseButton.setId("topbarbutton");
         zoomAtMouseButton.setDisable(true);
         Tooltip zoomAtMouseT = new Tooltip("Toggle between centering the zoom position at default screen location or at cursor position");
         zoomAtMouseT.getStyleClass().add("Tooltip");
         zoomAtMouseButton.setTooltip(zoomAtMouseT);
-zoomAtMouseButton.setMinWidth(minWidth);
+        zoomAtMouseButton.setMinWidth(minWidth);
 
         TextButton = new Button("Text: On");
         TextButton.setId("topbarbutton");
@@ -412,7 +355,7 @@ zoomAtMouseButton.setMinWidth(minWidth);
         Tooltip TextButtonT = new Tooltip("Make text in Flow View visible/invisible");
         TextButtonT.getStyleClass().add("Tooltip");
         TextButton.setTooltip(TextButtonT);
-TextButton.setMinWidth(minWidth);
+        TextButton.setMinWidth(minWidth);
 
         upButton = new Button("-");
         upButton.setId("topbarbutton");
@@ -420,7 +363,7 @@ TextButton.setMinWidth(minWidth);
         Tooltip upButtonT = new Tooltip("Jump up to next word cloud");
         upButtonT.getStyleClass().add("Tooltip");
         upButton.setTooltip(upButtonT);
-upButton.setMinWidth(minWidth);
+        upButton.setMinWidth(minWidth);
 
         downButton = new Button("+");
         downButton.setId("topbarbutton");
@@ -428,7 +371,7 @@ upButton.setMinWidth(minWidth);
         Tooltip downButtonT = new Tooltip("Jump down to next word cloud");
         downButtonT.getStyleClass().add("Tooltip");
         downButton.setTooltip(downButtonT);
-downButton.setMinWidth(minWidth);
+        downButton.setMinWidth(minWidth);
 
         pageWidthButton = new Button("Set Page Width");
         pageWidthButton.setId("topbarbutton");
@@ -436,7 +379,7 @@ downButton.setMinWidth(minWidth);
         Tooltip pageWidthButtonT = new Tooltip("Set page width in Flow View");
         pageWidthButtonT.getStyleClass().add("Tooltip");
         pageWidthButton.setTooltip(pageWidthButtonT);
-pageWidthButton.setMinWidth(minWidth);
+        pageWidthButton.setMinWidth(minWidth);
 
         pageHeightButton = new Button("Set Page Height");
         pageHeightButton.setId("topbarbutton");
@@ -444,7 +387,7 @@ pageWidthButton.setMinWidth(minWidth);
         Tooltip pageHeightButtonT = new Tooltip("Set page height in Flow View");
         pageHeightButtonT.getStyleClass().add("Tooltip");
         pageHeightButton.setTooltip(pageHeightButtonT);
-pageHeightButton.setMinWidth(minWidth);
+        pageHeightButton.setMinWidth(minWidth);
 
         closeDocButton = new Button("Close Document");
         closeDocButton.setId("topbarbutton");
@@ -452,7 +395,7 @@ pageHeightButton.setMinWidth(minWidth);
         Tooltip closeDocButtonT = new Tooltip("Close the current document");
         closeDocButtonT.getStyleClass().add("Tooltip");
         closeDocButton.setTooltip(closeDocButtonT);
-closeDocButton.setMinWidth(minWidth);
+        closeDocButton.setMinWidth(minWidth);
 
         configButton = new Button("Show config");
         configButton.setId("topbarbutton");
@@ -460,7 +403,7 @@ closeDocButton.setMinWidth(minWidth);
         Tooltip configButtonT = new Tooltip("Show/hide config buttons");
         configButtonT.getStyleClass().add("Tooltip");
         configButton.setTooltip(configButtonT);
-configButton.setMinWidth(minWidth);
+        configButton.setMinWidth(minWidth);
 
         wordCloudButton = new Button("Word Cloud: On");
         wordCloudButton.setId("topbarbutton");
@@ -491,15 +434,14 @@ configButton.setMinWidth(minWidth);
         configBtns = new VBox(10);
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
-            effectBtns.getChildren().addAll(GlowButton, ResetEffectButton,readingModeButton,resetButton);
+            effectBtns.getChildren().addAll(GlowButton, readingModeButton, resetButton);
             configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
                     zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
 
         } else {
-            effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton,readingModeButton,resetButton);
+            effectBtns.getChildren().addAll(ThemeButton, GlowButton, readingModeButton, resetButton);
             configBtns.getChildren().addAll(downButton, upButton, fullScreenButton, zoomLockButton,
-                    verticalLockButton, zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton
-                    , closeDocButton, configButton);
+                    verticalLockButton, zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
 
         }
 
@@ -577,18 +519,19 @@ configButton.setMinWidth(minWidth);
                     introBox.getChildren().set(0, pi);
 
                     //setCenter(pi);
-
+                    fileReader = new TextFileReader();
                     File file = startFileChooser(primaryStage);
                     String name = file.getName();
                     if (name.endsWith(".txt")) {
-                        fileReader = new TextFileReader(file);
+                        fileReader = new TextFileReader();
                     } else if (name.endsWith(".pdf")) {
-                        fileReader = new PdfFileReader(file);
+                        fileReader = new PDFFileReader();
                     }
+                    fileReader.setFile(file);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
                     pi.progressProperty().bind(fileReader.progressProperty());
-                    Thread t = new Thread(fileReader);
-                    t.start();
+                    //  Thread t = new Thread(fileReader);
+                    //    t.start();
                     Thread t2 = new Thread(dct);
                     t2.start();
 
@@ -627,35 +570,28 @@ configButton.setMinWidth(minWidth);
             }
         });
 
-        normalThemeButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                FlowReader.scene.getStylesheets().clear();
-                if (FlowReader.split_toggle) {
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_split.css").toExternalForm());
-                } else {
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
-                    scene.setFill(Color.web("B8B8B8"));
-                }
 
-
-            }
-        });
-
-        matrixThemeButton.setOnAction(new EventHandler<ActionEvent>() {
+        ThemeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
 
+                fr.current_theme = (fr.current_theme + 1) % fr.themes.size();
+
+                String theme = fr.themes.get(fr.current_theme);
                 FlowReader.scene.getStylesheets().clear();
                 if (FlowReader.split_toggle) {
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix_split.css").toExternalForm());
+                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource(theme).toExternalForm());
+                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource(theme.substring(0, theme.indexOf(".")).concat("_split.css")).toExternalForm());
 
                 } else {
-                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource("stylesheet_matrix.css").toExternalForm());
-
-                    scene.setFill(Color.web("000000"));
+                    FlowReader.scene.getStylesheets().add(FlowReader.class.getResource(theme).toExternalForm());
+                    if (theme.equals("stylesheet_matrix.css")) {
+                        scene.setFill(Color.web("000000"));
+                    } else {
+                        if (theme.equals("stylesheet.css")) {
+                            scene.setFill(Color.web("B8B8B8"));
+                        }
+                    }
                 }
             }
         });
@@ -709,18 +645,18 @@ configButton.setMinWidth(minWidth);
         GlowButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                ribbon.setEffect(new Glow(0.8));
+                if (isGlow) {
+                    ribbon.setEffect(null);
 
+                } else {
+                    ribbon.setEffect(new Glow(0.8));
+
+                }
+                isGlow = !isGlow;
             }
         });
 
-        ResetEffectButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                ribbon.setEffect(null);
 
-            }
-        });
 
         fullScreenButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -748,9 +684,9 @@ configButton.setMinWidth(minWidth);
             public void handle(ActionEvent e) {
                 if (ribbon.toggleZoomCenter()) {
 
-                    zoomAtMouseButton.setText("Zoom method: Cursor");
+                    zoomAtMouseButton.setText("Zoom: Cursor");
                 } else {
-                    zoomAtMouseButton.setText("Zoom method: Center");
+                    zoomAtMouseButton.setText("Zoom: Center");
 
                 }
             }
@@ -834,10 +770,12 @@ configButton.setMinWidth(minWidth);
 
                 dialog.setScene(dialog_scene);
 
-                dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
-                primaryStage.getScene().getRoot().setEffect(new BoxBlur());
+                dialog
+                        .getScene().getStylesheets().add(FlowReader.class
+                        .getResource("modal-dialog.css").toExternalForm());
+                primaryStage.getScene()
+                        .getRoot().setEffect(new BoxBlur());
                 dialog.showAndWait();
-
             }
         });
 
@@ -884,48 +822,65 @@ configButton.setMinWidth(minWidth);
     public void docOpenned(Document doc, RibbonView ribbon) {
         this.ribbon = ribbon;
         ribbon.setPageWidth(FlowReader.page_width);
-
         BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
         this.ribbon.toBack();
         openFileButton.setDisable(true);
         homeButton.setDisable(false);
         flowViewSceneButton.setDisable(false);
         diveViewSceneButton.setDisable(false);
-        normalThemeButton.setDisable(false);
-        matrixThemeButton.setDisable(false);
+        ThemeButton.setDisable(false);
         zoomLockButton.setDisable(false);
         resetButton.setDisable(false);
         verticalLockButton.setDisable(false);
         readingModeButton.setDisable(false);
         GlowButton.setDisable(false);
-        ResetEffectButton.setDisable(false);
         zoomAtMouseButton.setDisable(false);
         TextButton.setDisable(false);
         upButton.setDisable(false);
         downButton.setDisable(false);
-        pageHeightButton.setDisable(true);
         pageWidthButton.setDisable(true);
+        pageHeightButton.setDisable(true);
         closeDocButton.setDisable(false);
         wordCloudButton.setDisable(false);
+
+    }
+
+    public File startFileChooser(Stage primaryStage) {
+        //start file chooser
+        File f = new File(System.getProperty("user.dir"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Please choose a text file to read");
+        fileChooser.setInitialDirectory(f);
+
+        //Set extension filter
+        ArrayList<String> extensions = new ArrayList<>();
+        extensions.add("*.pdf");
+        extensions.add("*.txt");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf), Text files (*.txt)", extensions);
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        //Show save file dialog
+        f = fileChooser.showOpenDialog(primaryStage);
+        return f;
+
     }
 
     public void docClosed() {
         homeButton.fire();
 
         this.ribbon = new RibbonView();
+        
         System.gc();
         openFileButton.setDisable(false);
         homeButton.setDisable(true);
         flowViewSceneButton.setDisable(true);
         diveViewSceneButton.setDisable(true);
-        normalThemeButton.setDisable(true);
-        matrixThemeButton.setDisable(true);
+        ThemeButton.setDisable(true);
         zoomLockButton.setDisable(true);
         resetButton.setDisable(true);
         verticalLockButton.setDisable(true);
         readingModeButton.setDisable(true);
         GlowButton.setDisable(true);
-        ResetEffectButton.setDisable(true);
         zoomAtMouseButton.setDisable(true);
         TextButton.setDisable(true);
         upButton.setDisable(true);

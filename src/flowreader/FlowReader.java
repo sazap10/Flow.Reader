@@ -3,14 +3,14 @@ package flowreader;
 import flowreader.view.MainView;
 import flowreader.view.PageView;
 import flowreader.view.RibbonView;
-import flowreader.view.TextPageView;
+import flowreader.view.TxtPageView;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonBuilder;
@@ -44,13 +44,17 @@ public class FlowReader extends Application {
     private SplitPane splitPane;
     public Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private Stage priStage;
-    public static boolean split_toggle = false;
-              public static boolean cancelled = false;
+    public static boolean split_toggle = false, cancelled = false;
     public static int page_width = 500;
     public static int page_height = 700;
+    public static int current_theme = 0;
+    public static ArrayList<String> themes = new ArrayList<String>();
 
     @Override
     public void start(Stage primaryStage) {
+        themes.add("stylesheet.css");
+        themes.add("stylesheet_matrix.css");
+
         this.priStage = primaryStage;
         primaryStage.setTitle("Flow Reader");
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
@@ -65,8 +69,6 @@ public class FlowReader extends Application {
         rootPane2 = new Pane();
 
         scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight(), Color.web("B8B8B8"));
-//root.setCache(true);
-//root.setCacheHint(CacheHint.SCALE);
 
         splitPane = new SplitPane();
         splitPane.prefWidthProperty().bind(scene.widthProperty());
@@ -81,6 +83,7 @@ public class FlowReader extends Application {
         rootPane.getChildren().add(mainView.topBtnsBar);
         rootPane.getChildren().add(mainView.bottomBtnsBar);
         rootPane.getChildren().add(mainView.sideBtnsBar);
+
 
         rootPane2.getChildren().add(mainView2);
         rootPane2.getChildren().add(mainView2.topBtnsBar);
@@ -102,7 +105,7 @@ public class FlowReader extends Application {
         mainView2.maxHeightProperty().bind(rootPane2.maxHeightProperty());
 
         root.getChildren().add(rootPane);
-        TextPageView.setUpPageSize(page_width, page_height);
+        TxtPageView.setUpPageSize(500, 700);
 
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         scene.widthProperty().addListener(
@@ -113,8 +116,6 @@ public class FlowReader extends Application {
                         setUpSceneX(width);
                     }
                 });
-
-
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         scene.heightProperty().addListener(
                 new ChangeListener() {
@@ -122,9 +123,9 @@ public class FlowReader extends Application {
                     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                         Double height = (Double) newValue;
                         setUpSceneY(height);
+
                     }
                 });
-
         primaryStage.getIcons().add(new Image(this.getClass().getResource("logo.png").toExternalForm()));
         primaryStage.setScene(scene);
         splitPane.getItems().add(rootPane);
@@ -137,13 +138,11 @@ public class FlowReader extends Application {
                 }
             }
         });
-
         primaryStage.show();
 
     }
 
-    public void setUpSceneX(Double width) {
-
+    public void setUpSceneX(double width) {
         if (split_toggle) {
             rootPane.setMaxWidth(width / 2);
             rootPane.setMinWidth(width / 2);
@@ -217,7 +216,7 @@ public class FlowReader extends Application {
         Scene dialog_scene = new Scene(
                 HBoxBuilder.create().styleClass("modal-dialog").children(
                 LabelBuilder.create().text("\n\nKeyboard shortcuts:\nF: Toggle fullscreen\nB: hide/show buttons\nH: Home\nW: Zoom In\nS: Zoom Out\nA: Move Left\nD: Move Right"
-                + "\nM: Matrix Theme\nN: Normal Theme\nG: Glow!\nQ: Switch View\nR: Reset\nC: Reading Mode\nE: Reset Effect\nL: Vertical Lock\nZ: Zoom Lock\n Y: Split").textFill(Color.WHITE).build(),
+                + "\nT: Change Theme\nG: Glow!\nQ: Switch View\nR: Reset\nC: Reading Mode\nL: Vertical Lock\nZ: Zoom Lock\n Y: Split").textFill(Color.WHITE).build(),
                 ButtonBuilder.create().id("ok").text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -249,8 +248,6 @@ public class FlowReader extends Application {
 
             setUpSceneX(scene.getWidth());
             setUpSceneY(scene.getHeight());
-
-
 
         } else {
             scene.getStylesheets().clear();
@@ -285,33 +282,35 @@ public class FlowReader extends Application {
         ta.setPrefColumnCount(5);
         ta.setPrefRowCount(1);
 
-        ta.lengthProperty().addListener(new ChangeListener<Number>(){
- 
-	@Override
-	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {              
-		 
-		 if(newValue.intValue() > oldValue.intValue()){
-			char ch = ta.getText().charAt(oldValue.intValue());
-			System.out.println("Length:"+ oldValue+"  "+ newValue +" "+ch);                   
- 
-			//Check if the new character is the number or other's
-			if(!(ch >= '0' && ch <= '9' )){       
-                 
-				//if it's not number then just setText to previous one
-				ta.setText(ta.getText().substring(0,ta.getText().length()-1)); 
-			}
-		}
-	}
-	
-});
+        ta.lengthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                if (newValue.intValue() > oldValue.intValue()) {
+                    char ch = ta.getText().charAt(oldValue.intValue());
+                    System.out.println("Length:" + oldValue + "  " + newValue + " " + ch);
+
+                    //Check if the new character is the number or other's
+                    if (!(ch >= '0' && ch <= '9')) {
+
+                        //if it's not number then just setText to previous one
+                        ta.setText(ta.getText().substring(0, ta.getText().length() - 1));
+                    }
+                }
+            }
+        });
         EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
             public void handle(KeyEvent event) {
                 if (event.getCode().equals(event.getCode().ENTER)) {
-                    int width = Integer.valueOf(ta.getText());
-                    TextPageView.setUpPageSize(width, 700);
+                    // take action and close the dialog.
+                    String input = ta.getText();
+                    if (input.equals("")) {
+                        dialog.close();
+                    }
+                    int width = Integer.valueOf(input);
                     page_width = width;
-
-
+                    TxtPageView.setUpPageSize(page_width, 700);
+                    //ribbon.setPageWidth(width);
                     priStage.getScene().getRoot().setEffect(null);
                     dialog.close();
                 }
@@ -326,21 +325,27 @@ public class FlowReader extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // take action and close the dialog.
-                int width = Integer.valueOf(ta.getText());
-                TextPageView.setUpPageSize(width, 700);
-                ribbon.setPageWidth(width);
+                String input = ta.getText();
+                if (input.equals("")) {
+                    dialog.close();
+                }
+                int width = Integer.valueOf(input);
+                page_width = width;
+                TxtPageView.setUpPageSize(page_width, 700);
+                //ribbon.setPageWidth(width);
                 priStage.getScene().getRoot().setEffect(null);
                 dialog.close();
 
             }
-        }).build(),ButtonBuilder.create().id("cancel").text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        // abort action and close the dialog.
-                        dialog.close();
-                        cancelled = true;
-                        priStage.getScene().getRoot().setEffect(null);
-                    }}).build()).build(), Color.TRANSPARENT);
+        }).build(), ButtonBuilder.create().id("cancel").text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                // abort action and close the dialog.
+                dialog.close();
+                cancelled = true;
+                priStage.getScene().getRoot().setEffect(null);
+            }
+        }).build()).build(), Color.TRANSPARENT);
         ta.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
 
         dialog.setScene(dialog_scene);
