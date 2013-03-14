@@ -1,7 +1,6 @@
 package flowreader;
 
 import flowreader.view.MainView;
-import flowreader.view.PageView;
 import flowreader.view.RibbonView;
 import flowreader.view.TextPageView;
 import java.util.ArrayList;
@@ -196,8 +195,6 @@ public class FlowReader extends Application {
     }
 
     public void showShortcuts() {
-
-
         final Stage dialog = new Stage(StageStyle.TRANSPARENT);
         dialog.initOwner(priStage);
 
@@ -288,7 +285,6 @@ public class FlowReader extends Application {
 
                 if (newValue.intValue() > oldValue.intValue()) {
                     char ch = ta.getText().charAt(oldValue.intValue());
-                    System.out.println("Length:" + oldValue + "  " + newValue + " " + ch);
 
                     //Check if the new character is the number or other's
                     if (!(ch >= '0' && ch <= '9')) {
@@ -299,6 +295,7 @@ public class FlowReader extends Application {
                 }
             }
         });
+        
         EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
             public void handle(KeyEvent event) {
                 if (event.getCode().equals(event.getCode().ENTER)) {
