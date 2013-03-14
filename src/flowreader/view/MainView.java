@@ -519,21 +519,17 @@ public class MainView extends BorderPane {
                     introBox.getChildren().set(0, pi);
 
                     //setCenter(pi);
-                    fileReader = new TextFileReader();
                     File file = startFileChooser(primaryStage);
                     String name = file.getName();
                     if (name.endsWith(".txt")) {
-                        fileReader = new TextFileReader();
+                        fileReader = new TextFileReader(file);
                     } else if (name.endsWith(".pdf")) {
-                        fileReader = new PDFFileReader();
+                        fileReader = new PDFFileReader(file);
                     }
-                    fileReader.setFile(file);
-                    DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
+                    DocumentCreationTask dct = new DocumentCreationTask(fileReader, MainView.this, split_version);
                     pi.progressProperty().bind(fileReader.progressProperty());
-                    //  Thread t = new Thread(fileReader);
-                    //    t.start();
-                    Thread t2 = new Thread(dct);
-                    t2.start();
+                    Thread t = new Thread(dct);
+                    t.start();
 
                 } catch (Exception exception) {
                     System.out.println(exception);

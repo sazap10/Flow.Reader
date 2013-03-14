@@ -7,6 +7,7 @@ package flowreader.utils;
 import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
+import flowreader.view.MainView;
 import flowreader.view.TextPageView;
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,8 +30,8 @@ import javafx.stage.Stage;
  */
 public class TextFileReader extends FileReader {
 
-    public TextFileReader() {
-        super();
+    public TextFileReader(File file) {
+        super(file);
     }
 
     /**

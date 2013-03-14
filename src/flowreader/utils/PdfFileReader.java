@@ -8,8 +8,10 @@ import flowreader.model.Document;
 import flowreader.model.PDFPage;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
+import flowreader.view.MainView;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -26,8 +28,8 @@ import org.apache.pdfbox.util.PDFTextStripper;
  */
 public class PDFFileReader extends FileReader {
 
-    public PDFFileReader() {
-        super();
+    public PDFFileReader(File file) {
+        super(file);
     }
 
     /**

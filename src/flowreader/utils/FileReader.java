@@ -6,6 +6,8 @@ package flowreader.utils;
 
 import flowreader.model.Document;
 import flowreader.model.WordCloud;
+import flowreader.view.MainView;
+import flowreader.view.RibbonView;
 import flowreader.view.TextPageView;
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,10 +30,13 @@ public abstract class FileReader extends Task {
     protected File file;
     protected HashMap<String, Integer> commonWords;
     protected Document document;
+    private MainView mv;
+    private boolean split_version;
 
-    public FileReader() {
+    public FileReader(File file) {
         this.commonWords = new HashMap<String, Integer>();
         this.getCommonWords();
+        this.file = file;
     }
 
     public abstract Document readFile(double width, double height) throws IOException;
@@ -40,10 +45,6 @@ public abstract class FileReader extends Task {
     public Document call() throws IOException {
         Document docu = readFile(TextPageView.textBoundWidth, TextPageView.textBoundHeight);
         return docu;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
     }
 
     public final HashMap<String, Integer> getCommonWords() {
