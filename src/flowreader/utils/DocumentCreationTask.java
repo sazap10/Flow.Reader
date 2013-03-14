@@ -9,10 +9,9 @@ import flowreader.view.MainView;
 import flowreader.view.RibbonView;
 import flowreader.view.TextPageView;
 import javafx.concurrent.Task;
-import javafx.scene.control.ProgressIndicator;
 
 /**
- *
+ * Task that creates a document and make the mainview react when the creation of the document is finished
  * @author D-Day
  */
 public class DocumentCreationTask extends Task {
@@ -26,7 +25,6 @@ public class DocumentCreationTask extends Task {
         this.fileReader = fileReader;
         this.mv = mv;
         this.split_version = split_version;
-
     }
 
     @Override

@@ -39,6 +39,7 @@ public class PDFFileReader extends FileReader {
      * occurrences
      * @throws IOException
      */
+    @Override
     public Document readFile(double a, double b) throws IOException {
         ArrayList<String> pageText;
         ArrayList<ArrayList<WordCloud>> clouds = new ArrayList<ArrayList<WordCloud>>();
@@ -48,13 +49,11 @@ public class PDFFileReader extends FileReader {
 
                 PDDocument pdfDocument = PDDocument.load(file);
                 pageText = getText(pdfDocument, pdfDocument.getNumberOfPages());
-                System.out.println(pdfDocument.getNumberOfPages());
                 for (int i = 0; i < pdfDocument.getNumberOfPages(); i++) {
                     PDPage pDPage = (PDPage) pdfDocument.getDocumentCatalog().getAllPages().get(i);
                     WritableImage image = this.BufferedToWritable(pDPage.convertToImage(BufferedImage.TYPE_USHORT_555_RGB, 60));
                     pages.add(new PDFPage(pageText.get(i), image));
-                    System.out.println("got an image for " + i);
-                    this.updateProgress(i, pdfDocument.getNumberOfPages());
+                    this.updateProgress(i+1, pdfDocument.getNumberOfPages());
                 }
                 clouds = makeWordClouds(pageText);
 
@@ -68,9 +67,6 @@ public class PDFFileReader extends FileReader {
             ex.printStackTrace();
         }
 
-        System.out.println("about to call document constructor");
-
-        System.out.println("ok here");
         return document;
 
     }
@@ -112,7 +108,6 @@ public class PDFFileReader extends FileReader {
                 bout.flush();
                 writer.flush();
                 String page = bout.toString();
-                System.out.println("page " + i + "finished");
                 pages.add(page);
             }
         } catch (IOException ex) {

@@ -6,8 +6,6 @@ package flowreader.utils;
 
 import flowreader.model.Document;
 import flowreader.model.WordCloud;
-import flowreader.view.MainView;
-import flowreader.view.RibbonView;
 import flowreader.view.TextPageView;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,8 +16,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.concurrent.Task;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 /**
  *
@@ -30,8 +26,6 @@ public abstract class FileReader extends Task {
     protected File file;
     protected HashMap<String, Integer> commonWords;
     protected Document document;
-    private MainView mv;
-    private boolean split_version;
 
     public FileReader(File file) {
         this.commonWords = new HashMap<String, Integer>();
