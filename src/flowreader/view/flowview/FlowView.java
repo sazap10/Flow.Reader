@@ -10,6 +10,7 @@ import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import flowreader.utils.PageViewFactory;
 import flowreader.view.PageView;
+import flowreader.view.TxtPageView;
 import flowreader.view.diveview.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,7 +85,7 @@ public class FlowView extends Group {
     private boolean verticalLock = false;
     private boolean split_version = false;
     private boolean zoomAtMouse = false;
-
+private boolean text_visible = true;
     public FlowView(StackPane stackPane, boolean split_version) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
@@ -96,6 +97,24 @@ public class FlowView extends Group {
         this.VBox = new VBox();
         this.split_version = split_version;
 
+    }
+    public boolean toggleText() {
+        if (text_visible) {
+            text_visible = false;
+            for (int i = 0; i < pagesGroup.getChildren().size(); i++) {
+
+                TxtPageView p = (TxtPageView) pagesGroup.getChildren().get(i);
+                p.toggleTextVisible(text_visible);
+            }
+        } else {
+            text_visible = true;
+            for (int i = 0; i < pagesGroup.getChildren().size(); i++) {
+
+                TxtPageView p = (TxtPageView) pagesGroup.getChildren().get(i);
+                p.toggleTextVisible(text_visible);
+            }
+        }
+        return text_visible;
     }
 
     public boolean toggleZoomCenter() {
@@ -161,7 +180,7 @@ public class FlowView extends Group {
 
         int zoomTable_scale;
         float percent;
-       /* for (int i = 1; i <= zoomLevels; i++) {
+        for (int i = 1; i <= zoomLevels; i++) {
             percent = 80 / (i * 100.0f - 60);
             zoomTable_scale = (int) (percent * maxScale);
              //           zoomTable_scale = (int) (10*i);
@@ -169,7 +188,8 @@ public class FlowView extends Group {
             System.out.println("put "+i+" "+zoomTable_scale);
             zoomTable.put(i, zoomTable_scale);
         }
-    */
+    
+        /*
         //set the percentage linear increment
         int inc = (int) (100.0f / zoomLevels);
         
@@ -182,7 +202,7 @@ public class FlowView extends Group {
             tmpScale = tmpScale - inc;
             currLevel++;
             
-        }
+        }*/
         maxZoomLevel = zoomLevels;
         currentZoomLevel = maxZoomLevel;
     }
@@ -572,14 +592,14 @@ if(stackPane.getTransforms().size()>0){
                         double dy = event.getY() - previousEvent.getY();
                         if (verticalLock) {
                             dy = 0;
-                        }
+                        }/*
                         TranslateTransition tt = new TranslateTransition(
                                 Duration.millis(100), FlowView.this.VBox);
                         tt.setByX(dx);
                         tt.setByY(dy);
                         tt.setCycleCount(0);
                         tt.setAutoReverse(true);
-                        tt.play();
+                        tt.play();*/
                         x_coord.set(x_coord.doubleValue() + dx);
                         y_coord.set(y_coord.doubleValue() + dy);
 

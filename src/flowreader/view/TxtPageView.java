@@ -40,7 +40,9 @@ public class TxtPageView extends PageView{
         this.getChildren().add(pageText);
         pageText.setText(page.getText());
     }
-    
+    public void toggleTextVisible(boolean visible){
+        pageText.setVisible(visible);
+    }
     public static void setUpPageSize(double width, double height){
         PageView.setUpPageSize(width, height);
         TxtPageView.textBoundWidth = width * 0.8;
