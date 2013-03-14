@@ -7,25 +7,16 @@ package flowreader.utils;
 import flowreader.model.Document;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
-import flowreader.view.MainView;
-import flowreader.view.TextPageView;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import javafx.concurrent.Task;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 /**
- *
+ * Read a text file and transform it in a Document object
  * @author D-Day
  */
 public class TextFileReader extends FileReader {
@@ -34,12 +25,7 @@ public class TextFileReader extends FileReader {
         super(file);
     }
 
-    /**
-     * @param bounds the boundaries of the page used to know how much text
-     * contains a page
-     * @return a document based on the file File
-     * @throws IOException
-     */
+    @Override
     public Document readFile(double width, double height) throws IOException {
         ArrayList<Page> pages = new ArrayList<Page>(); // The list of all the pages
         ArrayList<WordCloud> wordClouds = new ArrayList();
@@ -127,8 +113,7 @@ public class TextFileReader extends FileReader {
             wordCloudLevels.add(temp_element);
         }
 
-        Document document = new Document(pages, wordCloudLevels);
+        document = new Document(pages, wordCloudLevels);
         return document;
     }
-
 }

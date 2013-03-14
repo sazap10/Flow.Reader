@@ -8,7 +8,6 @@ import flowreader.model.Document;
 import flowreader.model.PDFPage;
 import flowreader.model.Page;
 import flowreader.model.WordCloud;
-import flowreader.view.MainView;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -23,7 +22,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 /**
- *
+ * Read a PDF file and transform it in a Document object
  * @author D-Day
  */
 public class PDFFileReader extends FileReader {
@@ -32,13 +31,6 @@ public class PDFFileReader extends FileReader {
         super(file);
     }
 
-    /**
-     * @param bounds the boundaries of the page used to know how much text
-     * contains a page
-     * @return a list of pages that contains the text of each page and the words
-     * occurrences
-     * @throws IOException
-     */
     @Override
     public Document readFile(double a, double b) throws IOException {
         ArrayList<String> pageText;
@@ -53,7 +45,7 @@ public class PDFFileReader extends FileReader {
                     PDPage pDPage = (PDPage) pdfDocument.getDocumentCatalog().getAllPages().get(i);
                     WritableImage image = this.BufferedToWritable(pDPage.convertToImage(BufferedImage.TYPE_USHORT_555_RGB, 60));
                     pages.add(new PDFPage(pageText.get(i), image));
-                    this.updateProgress(i+1, pdfDocument.getNumberOfPages());
+                    this.updateProgress(i + 1, pdfDocument.getNumberOfPages());
                 }
                 clouds = makeWordClouds(pageText);
 
@@ -71,7 +63,10 @@ public class PDFFileReader extends FileReader {
 
     }
 
-    //converts a buffered image to a writeable image
+    /**
+     * @param bf
+     * @return a writable image based on bf
+     */
     public WritableImage BufferedToWritable(BufferedImage bf) {
         WritableImage wr = null;
         if (bf != null) {
@@ -87,7 +82,12 @@ public class PDFFileReader extends FileReader {
         return wr;
     }
 
-    //returns an indexed array of strings for each page of the input document
+    /**
+     * @param document
+     * @param numOfPages
+     * @return an indexed array of strings for each page of the input document
+     * @throws IOException 
+     */
     public ArrayList<String> getText(PDDocument document, int numOfPages) throws IOException {
         ArrayList<String> pages = new ArrayList<>();
         ByteArrayOutputStream bout;
@@ -98,8 +98,6 @@ public class PDFFileReader extends FileReader {
             writer = new OutputStreamWriter(bout);
 
             //strip the document to the buffer 
-
-
             PDFTextStripper stripper = new PDFTextStripper();
             for (int i = 1; i <= numOfPages; i++) {
                 stripper.setStartPage(i);
@@ -116,7 +114,10 @@ public class PDFFileReader extends FileReader {
         return pages;
     }
 
-    //creates wordClouds from page text
+    /**
+     * @param pages
+     * @return wordClouds from page text
+     */
     public ArrayList<ArrayList<WordCloud>> makeWordClouds(ArrayList<String> pages) {
         ArrayList<WordCloud> firstPages = new ArrayList<>();
         ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<>();
@@ -129,9 +130,6 @@ public class PDFFileReader extends FileReader {
             firstPages.add(tmpCloud);
         }
 
-        //add the first level to the list
-        // wordCloudLevels.add(firstPages);
-
         //add each level of merged clouds
         for (ArrayList<WordCloud> tmpList : makeCloudLevels(firstPages)) {
             wordCloudLevels.add(tmpList);
@@ -140,8 +138,11 @@ public class PDFFileReader extends FileReader {
         return wordCloudLevels;
 
     }
-
-    //returns a hashmap of strings in the provided text with their frequency count
+ 
+    /**
+     * @param text
+     * @return a hashmap of strings in the provided text with their frequency count
+     */
     public HashMap<String, Integer> getWordsOccurrences(String text) {
         String[] words = text.split(" ");
         HashMap<String, Integer> wordsOccurrences = new HashMap();
@@ -160,6 +161,5 @@ public class PDFFileReader extends FileReader {
             }
         }
         return wordsOccurrences;
-
     }
 }

@@ -18,6 +18,7 @@ import java.util.HashMap;
 import javafx.concurrent.Task;
 
 /**
+ * Read a file and transform it in a Document object
  *
  * @author Jim
  */
@@ -33,6 +34,12 @@ public abstract class FileReader extends Task {
         this.file = file;
     }
 
+    /**
+     * @param width
+     * @param height
+     * @return a document based on file
+     * @throws IOException
+     */
     public abstract Document readFile(double width, double height) throws IOException;
 
     @Override
@@ -41,6 +48,10 @@ public abstract class FileReader extends Task {
         return docu;
     }
 
+    /**
+     * @return a hashmap that contains all the common words in the
+     * commonWords.txt file
+     */
     public final HashMap<String, Integer> getCommonWords() {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
@@ -72,6 +83,10 @@ public abstract class FileReader extends Task {
         return this.commonWords;
     }
 
+    /**
+     * @param clouds
+     * @return all the cloud levels that are based on the first level clouds
+     */
     public ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds) {
         ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<ArrayList<WordCloud>>();
         ArrayList<ArrayList<WordCloud>> otherLevels = new ArrayList<ArrayList<WordCloud>>();
@@ -115,6 +130,10 @@ public abstract class FileReader extends Task {
         return localLevels;
     }
 
+    /**
+     * @param word
+     * @return word without any punctuation
+     */
     public String trimPunctuation(String word) {
         String w = word.toLowerCase().replaceAll("\\W", "");
         return w;
