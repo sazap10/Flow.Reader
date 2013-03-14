@@ -77,7 +77,7 @@ public class MainView extends BorderPane {
 
         ribbon = new RibbonView();
         this.pi = new ProgressIndicator(0.0);
-
+ pi.getStyleClass().add("customProgressIndicator");
         pi.setStyle(" -fx-progress-color: #005888;");
         // changing size without css
         pi.setPrefSize(100, 100);
@@ -87,25 +87,6 @@ public class MainView extends BorderPane {
         this.setCenter(home);
     }
 
-    public void splitSetup(boolean split) {
-        if (split) {
-            topBtnsBar.setPrefWidth(screenBounds.getWidth() / 2);
-            topBtnsBar.setMaxWidth(screenBounds.getWidth() / 2);
-            topBtnsBar.setMinWidth(screenBounds.getWidth() / 2);
-
-            bottomBtnsBar.setPrefWidth(screenBounds.getWidth() / 2);
-            bottomBtnsBar.setMaxWidth(screenBounds.getWidth() / 2);
-            bottomBtnsBar.setMinWidth(screenBounds.getWidth() / 2);
-        } else {
-            topBtnsBar.setPrefWidth(screenBounds.getWidth());
-            topBtnsBar.setMaxWidth(screenBounds.getWidth());
-            topBtnsBar.setMinWidth(screenBounds.getWidth());
-
-            bottomBtnsBar.setPrefWidth(screenBounds.getWidth());
-            bottomBtnsBar.setMaxWidth(screenBounds.getWidth());
-            bottomBtnsBar.setMinWidth(screenBounds.getWidth());
-        }
-    }
 
     public void buildHomeView() {
         home = new StackPane();
@@ -119,7 +100,7 @@ public class MainView extends BorderPane {
         rect.heightProperty().bind(home.heightProperty());
         rect.setFill(Color.DARKSLATEBLUE);
         Text text = new Text();
-        text.setText("Welcome to FlowReader.\n Enjoy! \n\nPress number 1 to see keyboard shortcuts.\n\nNote: In Mac OS X, dialogs do not appear in full screen mode. \n(Use mac's version of full screen instead seems to overcome this problem.) \n --The button at top right corner");
+        text.setText("Welcome to FlowReader.\n Enjoy! \n\nPress number 1 to see keyboard shortcuts.\n\nNote: In Mac OS X, dialogs do not appear in full screen mode. \n(Using Mac's version of full screen instead seems to overcome this problem.) \n (The button at top right corner)");
 
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFill(Color.ALICEBLUE);
@@ -163,7 +144,9 @@ public class MainView extends BorderPane {
                         break;
 
                     case F:
-                        fullScreenButton.fire();
+                       if (!split_version) {
+                            fullScreenButton.fire();
+                        }
                         break;
                     case B:
                         if (toggle_buttons) {
@@ -353,7 +336,7 @@ public class MainView extends BorderPane {
         ResetEffectT.getStyleClass().add("Tooltip");
         ResetEffectButton.setTooltip(ResetEffectT);
 
-        fullScreenButton = new Button("FullScreen");
+        fullScreenButton = new Button("FullScreen: On");
         fullScreenButton.setId("topbarbutton");
         fullScreenButton.setDisable(false);
         Tooltip fullScreenT = new Tooltip("Toggle full screen");
@@ -368,7 +351,7 @@ public class MainView extends BorderPane {
         splitButton.setTooltip(splitT);
 
 
-        zoomAtMouseButton = new Button("Zoom method: default center");
+        zoomAtMouseButton = new Button("Zoom: Center");
         zoomAtMouseButton.setId("topbarbutton");
         zoomAtMouseButton.setDisable(true);
         Tooltip zoomAtMouseT = new Tooltip("Toggle between centering the zoom position at default screen location or at cursor position");
@@ -475,6 +458,8 @@ public class MainView extends BorderPane {
                     pi.setPrefSize(100, 100);
                     pi.setMinSize(100, 100);
                     pi.setMaxSize(100, 100);
+                    pi.getStyleClass().add("customProgressIndicator");
+                    
                     introBox.getChildren().set(0, pi);
 
                     //setCenter(pi);
@@ -641,10 +626,10 @@ public class MainView extends BorderPane {
             public void handle(ActionEvent e) {
                 if (primaryStage.isFullScreen()) {
                     primaryStage.setFullScreen(false);
-                    fullScreenButton.setText("FullScreen");
+                    fullScreenButton.setText("FullScreen: Off");
                 } else {
                     primaryStage.setFullScreen(true);
-                    fullScreenButton.setText("FullScreen");
+                    fullScreenButton.setText("FullScreen: On");
 
                 }
             }
@@ -662,9 +647,9 @@ public class MainView extends BorderPane {
             public void handle(ActionEvent e) {
                 if (ribbon.toggleZoomCenter()) {
 
-                    zoomAtMouseButton.setText("Zoom method: cursor position(ish)");
+                    zoomAtMouseButton.setText("Zoom: Cursor");
                 } else {
-                    zoomAtMouseButton.setText("Zoom method: default center");
+                    zoomAtMouseButton.setText("Zoom: Center");
 
                 }
             }

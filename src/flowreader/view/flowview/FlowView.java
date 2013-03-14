@@ -389,7 +389,7 @@ public class FlowView extends Group {
             array[j] = Math.pow(1.05, j - 81);
         }
         ArrayList<WordCloud> clouds = document.getWordClouds().get(0);
-        ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
+        //ArrayList<WordCloudView> cloudViews = new ArrayList<WordCloudView>();
 
 
         pagesGroup = new Group();
@@ -431,8 +431,16 @@ public class FlowView extends Group {
         this.defineRibbonEvents();
         this.setRibbonEvents(true);
 
-        zoom(-1, screenBounds.getWidth() / 2, ((screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35)));
-        x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
+     double zoom_x = screenBounds.getWidth() / 2;
+                    double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
+
+                    if (FlowReader.split_toggle) {
+                            zoom(-1, zoom_x / 2, zoom_y);      
+                    } else {
+                            zoom(-1, zoom_x, zoom_y);
+                    }
+                
+                    x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
 
 
     }
@@ -505,19 +513,23 @@ public class FlowView extends Group {
 
         previousScale = scale;
         scale = new Scale(array[curScale], array[curScale], x, y);
-        stackPane.getTransforms().remove(previousScale);
+        //stackPane.getTransforms().remove(previousScale);
 
         double ori_pos_x = stackPane.getLayoutX();
         double ori_pos_y = stackPane.getLayoutY();
         //Translate t1 = new Translate(-x,-y);
 //stackPane.getTransforms().add(t1);
         checkCloudLevel();
-        stackPane.getTransforms().add(scale);
+        //stackPane.getTransforms().add(scale);
         //                        Translate t2 = new Translate(x,y);
 
         // stackPane.getTransforms().add(t2);
 
-
+if(stackPane.getTransforms().size()>0){
+        stackPane.getTransforms().set(0, scale);}
+        else{
+            stackPane.getTransforms().add(scale);
+        }
     }
 
     public void setEffect() {
