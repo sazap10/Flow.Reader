@@ -48,10 +48,11 @@ public class FlowReader extends Application {
     public static int page_width = 500;
     public static int page_height = 700;
     public static int current_theme = 0;
-public static ArrayList<String> themes = new ArrayList<String>();
+    public static ArrayList<String> themes = new ArrayList<String>();
+
     @Override
     public void start(Stage primaryStage) {
-                        themes.add("stylesheet.css");
+        themes.add("stylesheet.css");
         themes.add("stylesheet_matrix.css");
 
         this.priStage = primaryStage;
@@ -301,11 +302,15 @@ public static ArrayList<String> themes = new ArrayList<String>();
         EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
             public void handle(KeyEvent event) {
                 if (event.getCode().equals(event.getCode().ENTER)) {
-                    int width = Integer.valueOf(ta.getText());
-                    TxtPageView.setUpPageSize(width, 700);
+                    // take action and close the dialog.
+                    String input = ta.getText();
+                    if (input.equals("")) {
+                        dialog.close();
+                    }
+                    int width = Integer.valueOf(input);
                     page_width = width;
-
-
+                    TxtPageView.setUpPageSize(page_width, 700);
+                    //ribbon.setPageWidth(width);
                     priStage.getScene().getRoot().setEffect(null);
                     dialog.close();
                 }
@@ -320,9 +325,14 @@ public static ArrayList<String> themes = new ArrayList<String>();
             @Override
             public void handle(ActionEvent actionEvent) {
                 // take action and close the dialog.
-                int width = Integer.valueOf(ta.getText());
-                TxtPageView.setUpPageSize(width, 700);
-                ribbon.setPageWidth(width);
+                String input = ta.getText();
+                if (input.equals("")) {
+                    dialog.close();
+                }
+                int width = Integer.valueOf(input);
+                page_width = width;
+                TxtPageView.setUpPageSize(page_width, 700);
+                //ribbon.setPageWidth(width);
                 priStage.getScene().getRoot().setEffect(null);
                 dialog.close();
 

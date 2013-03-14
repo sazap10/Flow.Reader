@@ -85,12 +85,13 @@ public class FlowView extends Group {
     private boolean verticalLock = false;
     private boolean split_version = false;
     private boolean zoomAtMouse = false;
-private boolean text_visible = true;
+    private boolean text_visible = true;
     private boolean wordcloud_visible = true;
     double zoom_x = screenBounds.getWidth() / 2;
     double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
     private Document doc;
-    public FlowView(StackPane stackPane, boolean split_version,int width,int height) {
+
+    public FlowView(StackPane stackPane, boolean split_version, int width, int height) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
         this.stackPane = stackPane;
@@ -100,11 +101,12 @@ private boolean text_visible = true;
         this.currentZoomLevel = maxZoomLevel;
         this.VBox = new VBox();
         this.split_version = split_version;
-this.pageWidth=width;
-this.pageHeight=height;
+        this.pageWidth = width;
+        this.pageHeight = height;
 
     }
-      public FlowView(StackPane stackPane, boolean split_version) {
+
+    public FlowView(StackPane stackPane, boolean split_version) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
         this.stackPane = stackPane;
@@ -117,7 +119,7 @@ this.pageHeight=height;
 
 
     }
-    
+
     public boolean toggleText() {
         if (text_visible) {
             text_visible = false;
@@ -136,44 +138,47 @@ this.pageHeight=height;
         }
         return text_visible;
     }
-        public boolean toggleWordCloud(){
-                if (wordcloud_visible) {
+
+    public boolean toggleWordCloud() {
+        if (wordcloud_visible) {
             wordcloud_visible = false;
-          wordCloudPane.setVisible(wordcloud_visible);
+            wordCloudPane.setVisible(wordcloud_visible);
         } else {
             wordcloud_visible = true;
-          wordCloudPane.setVisible(wordcloud_visible);
+            wordCloudPane.setVisible(wordcloud_visible);
 
-            
+
         }
         return wordcloud_visible;
     }
-public void goUp(){
-    if(currentZoomLevel<maxZoomLevel){
-        int temp =zoomTable.get(currentZoomLevel+1)-zoomTable.get(currentZoomLevel);
-        curScale = zoomTable.get(currentZoomLevel+1);
-              if (FlowReader.split_toggle) {
-            zoom(-1, zoom_x / 2, zoom_y);
-        } else {
-            zoom(-1, zoom_x, zoom_y);
+
+    public void goUp() {
+        if (currentZoomLevel < maxZoomLevel) {
+            int temp = zoomTable.get(currentZoomLevel + 1) - zoomTable.get(currentZoomLevel);
+            curScale = zoomTable.get(currentZoomLevel + 1);
+            if (FlowReader.split_toggle) {
+                zoom(-1, zoom_x / 2, zoom_y);
+            } else {
+                zoom(-1, zoom_x, zoom_y);
+            }
+
         }
 
     }
 
-}
- 
-public void goDown(){
-        if(currentZoomLevel>1){
-             int temp =zoomTable.get(currentZoomLevel)-zoomTable.get(currentZoomLevel-1);
-        curScale = zoomTable.get(currentZoomLevel-1);
-              if (FlowReader.split_toggle) {
-            zoom(-1, zoom_x / 2, zoom_y);
-        } else {
-            zoom(-1, zoom_x, zoom_y);
-        }
+    public void goDown() {
+        if (currentZoomLevel > 1) {
+            int temp = zoomTable.get(currentZoomLevel) - zoomTable.get(currentZoomLevel - 1);
+            curScale = zoomTable.get(currentZoomLevel - 1);
+            if (FlowReader.split_toggle) {
+                zoom(-1, zoom_x / 2, zoom_y);
+            } else {
+                zoom(-1, zoom_x, zoom_y);
+            }
 
+        }
     }
-}
+
     public boolean toggleZoomCenter() {
         if (zoomAtMouse) {
             zoomAtMouse = false;
@@ -231,41 +236,43 @@ public void goDown(){
         verticalLock = lock;
     }
     // sets the scale needed for the correct level of precision and other stuff
-  public void createZoomTable(int zoomLevels) {
+
+    public void createZoomTable(int zoomLevels) {
         // first, find the final zoom level
 /*
-        int zoomTable_scale;
-        float percent;
-        for (int i = 1; i <= zoomLevels; i++) {
-            percent = 80 / (i * 100.0f - 60);
-            zoomTable_scale = (int) (percent * maxScale);
-            //           zoomTable_scale = (int) (10*i);
+         int zoomTable_scale;
+         float percent;
+         for (int i = 1; i <= zoomLevels; i++) {
+         percent = 80 / (i * 100.0f - 60);
+         zoomTable_scale = (int) (percent * maxScale);
+         //           zoomTable_scale = (int) (10*i);
 
-            System.out.println("put " + i + " " + zoomTable_scale);
-            zoomTable.put(i, zoomTable_scale);
-        }
+         System.out.println("put " + i + " " + zoomTable_scale);
+         zoomTable.put(i, zoomTable_scale);
+         }
 
         
-        */
-         //set the percentage linear increment
-         int inc = (int) (maxScale*0.85 / (zoomLevels-1));
-         //walk the increments to 100 building the table
-         int tmpScale = 1;
-         int currLevel = zoomLevels;
-         
-                
-         for (int i = zoomLevels; i >= 1; i--){
-         zoomTable.put(currLevel, tmpScale);
-         System.out.println("put "+currLevel+" "+tmpScale);
-         tmpScale = tmpScale + inc;
-         currLevel--;
-            
-         }
-         
+         */
+        //set the percentage linear increment
+        int inc = (int) (maxScale * 0.85 / (zoomLevels - 1));
+        //walk the increments to 100 building the table
+        int tmpScale = 1;
+        int currLevel = zoomLevels;
+
+
+        for (int i = zoomLevels; i >= 1; i--) {
+            zoomTable.put(currLevel, tmpScale);
+            System.out.println("put " + currLevel + " " + tmpScale);
+            tmpScale = tmpScale + inc;
+            currLevel--;
+
+        }
+
 
         maxZoomLevel = zoomLevels;
         currentZoomLevel = maxZoomLevel;
     }
+
     public void checkCloudLevel() {
         int nextDown, nextUp;
         int zoomTable_minScale = zoomTable.get(minZoomLevel);
@@ -485,7 +492,7 @@ public void goDown(){
 
             Group page = PageViewFactory.getView(document.getPages().get(i));
             this.pagesGroup.getChildren().add(page);
-            page.relocate(x,y + 50 + (pageHeight / 3));
+            page.relocate(x, y + 50 + (pageHeight / 3));
 
             x += pageWidth + pageInterval;
             i++;
@@ -510,13 +517,13 @@ public void goDown(){
         this.defineRibbonEvents();
         this.setRibbonEvents(true);
 
-                    if (FlowReader.split_toggle) {
-                            zoom(-1, zoom_x / 2, zoom_y);      
-                    } else {
-                            zoom(-1, zoom_x, zoom_y);
-                    }
-                
-                    x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
+        if (FlowReader.split_toggle) {
+            zoom(-1, zoom_x / 2, zoom_y);
+        } else {
+            zoom(-1, zoom_x, zoom_y);
+        }
+
+        x_coord.set(-(VBox.getBoundsInLocal().getWidth() / 2));
 
 
     }
@@ -539,7 +546,7 @@ public void goDown(){
             //render each cloud on this level and add it to the group
             DiveWordCloud currentView = null;
             for (WordCloud wordCloud : currentLevelClouds) {
-                currentView = new DiveWordCloud(wordCloud, x,cloudHeight, cloudWidth, cloudHeight, i, this);
+                currentView = new DiveWordCloud(wordCloud, x, cloudHeight, cloudWidth, cloudHeight, i, this);
                 currentLevelViews.getChildren().add(currentView);
                 x += cloudWidth + cloudInterval;
             }
@@ -601,9 +608,9 @@ public void goDown(){
 
         // stackPane.getTransforms().add(t2);
 
-if(stackPane.getTransforms().size()>0){
-        stackPane.getTransforms().set(0, scale);}
-        else{
+        if (stackPane.getTransforms().size() > 0) {
+            stackPane.getTransforms().set(0, scale);
+        } else {
             stackPane.getTransforms().add(scale);
         }
     }
@@ -649,13 +656,13 @@ if(stackPane.getTransforms().size()>0){
                         if (verticalLock) {
                             dy = 0;
                         }/*
-                        TranslateTransition tt = new TranslateTransition(
-                                Duration.millis(100), FlowView.this.VBox);
-                        tt.setByX(dx);
-                        tt.setByY(dy);
-                        tt.setCycleCount(0);
-                        tt.setAutoReverse(true);
-                        tt.play();*/
+                         TranslateTransition tt = new TranslateTransition(
+                         Duration.millis(100), FlowView.this.VBox);
+                         tt.setByX(dx);
+                         tt.setByY(dy);
+                         tt.setCycleCount(0);
+                         tt.setAutoReverse(true);
+                         tt.play();*/
                         x_coord.set(x_coord.doubleValue() + dx);
                         y_coord.set(y_coord.doubleValue() + dy);
 

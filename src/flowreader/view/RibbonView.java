@@ -35,25 +35,32 @@ public class RibbonView extends StackPane {
         this.split_version = split_version;
 
     }
-            public void setPageWidth(int width){
-            newFlowPane.setPageWidth(width);
+
+    public void setPageWidth(int width) {
+        newFlowPane.setPageWidth(width);
     }
-            public void setPageHeight(int height){
-            newFlowPane.setPageHeight(height);
+
+    public void setPageHeight(int height) {
+        newFlowPane.setPageHeight(height);
     }
-                public boolean toggleWordCloud(){
-                return newFlowPane.toggleWordCloud();
+
+    public boolean toggleWordCloud() {
+        return newFlowPane.toggleWordCloud();
 
     }
-public boolean toggleText(){
+
+    public boolean toggleText() {
         return newFlowPane.toggleText();
     }
- public void goDown(){
+
+    public void goDown() {
         newFlowPane.goDown();
     }
-    public void goUp(){
+
+    public void goUp() {
         newFlowPane.goUp();
     }
+
     public boolean toggleZoomCenter() {
         return newFlowPane.toggleZoomCenter();
     }

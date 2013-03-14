@@ -821,6 +821,7 @@ public class MainView extends BorderPane {
 
     public void docOpenned(Document doc, RibbonView ribbon) {
         this.ribbon = ribbon;
+        ribbon.setPageWidth(FlowReader.page_width);
         BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
         this.ribbon.toBack();
         openFileButton.setDisable(true);
@@ -840,6 +841,7 @@ public class MainView extends BorderPane {
         pageWidthButton.setDisable(true);
         pageHeightButton.setDisable(true);
         closeDocButton.setDisable(false);
+        wordCloudButton.setDisable(false);
 
     }
 
@@ -867,6 +869,7 @@ public class MainView extends BorderPane {
         homeButton.fire();
 
         this.ribbon = new RibbonView();
+        
         System.gc();
         openFileButton.setDisable(false);
         homeButton.setDisable(true);
