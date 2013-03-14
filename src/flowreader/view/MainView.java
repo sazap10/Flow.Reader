@@ -508,8 +508,8 @@ upButton.setDisable(true);
                     fileReader.setFile(file);
                     DocumentCreationTask dct = new DocumentCreationTask(pi, fileReader, MainView.this, split_version);
                     pi.progressProperty().bind(fileReader.progressProperty());
-                    Thread t = new Thread(fileReader);
-                    t.start();
+                  //  Thread t = new Thread(fileReader);
+                //    t.start();
                     Thread t2 = new Thread(dct);
                     t2.start();
 
