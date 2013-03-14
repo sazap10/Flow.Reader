@@ -56,7 +56,7 @@ public class MainView extends BorderPane {
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
     public Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton,TextButton; // The buttons at the bottom of the page
+    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, normalThemeButton, matrixThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, ResetEffectButton, fullScreenButton, splitButton, zoomAtMouseButton,TextButton,upButton,downButton; // The buttons at the bottom of the page
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private Reader fileReader;
@@ -362,8 +362,22 @@ public class MainView extends BorderPane {
         TextButton.setId("topbarbutton");
         TextButton.setDisable(true);
         Tooltip TextButtonT = new Tooltip("Make text in Flow View visible/invisible");
-        zoomAtMouseT.getStyleClass().add("Tooltip");
+        TextButtonT.getStyleClass().add("Tooltip");
         TextButton.setTooltip(TextButtonT);
+        
+        upButton= new Button("-");
+        upButton.setId("topbarbutton");
+        upButton.setDisable(true);
+        Tooltip upButtonT = new Tooltip("Jump up to next word cloud");
+        upButtonT.getStyleClass().add("Tooltip");
+        upButton.setTooltip(upButtonT);
+        
+        downButton = new Button("+");
+        downButton.setId("topbarbutton");
+        downButton.setDisable(true);
+        Tooltip downButtonT = new Tooltip("Jump down to next word cloud");
+        downButtonT.getStyleClass().add("Tooltip");
+        downButton.setTooltip(downButtonT);
     }
 
     private void setUpButtonBar() {
@@ -387,11 +401,11 @@ public class MainView extends BorderPane {
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
             effectBtns.getChildren().addAll(GlowButton, ResetEffectButton);
-            configBtns.getChildren().addAll(zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton,TextButton, resetButton);
+            configBtns.getChildren().addAll(downButton,upButton,zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton,TextButton, resetButton);
 
         } else {
             effectBtns.getChildren().addAll(normalThemeButton, matrixThemeButton, GlowButton, ResetEffectButton);
-            configBtns.getChildren().addAll(fullScreenButton, zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton,TextButton, resetButton);
+            configBtns.getChildren().addAll(downButton,upButton,fullScreenButton, zoomLockButton, verticalLockButton, zoomAtMouseButton, readingModeButton, splitButton,TextButton, resetButton);
 
         }
 
@@ -482,7 +496,8 @@ public class MainView extends BorderPane {
                     ResetEffectButton.setDisable(true);
                     zoomAtMouseButton.setDisable(true);
 TextButton.setDisable(true);
-
+upButton.setDisable(true);
+                    downButton.setDisable(true);
                     File file = startFileChooser(primaryStage);
                     String name = file.getName();
                     if (name.endsWith(".txt")) {
@@ -672,6 +687,24 @@ TextButton.setText("Text: Off");
                 }
             }
         });
+        
+        upButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                
+                ribbon.goUp();
+        
+            }
+        });
+                downButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                
+                                ribbon.goDown();
+
+         
+            }
+        });
     }
 
     public void docOpenned(Document doc, RibbonView ribbon) {
@@ -691,6 +724,8 @@ TextButton.setText("Text: Off");
         ResetEffectButton.setDisable(false);
         zoomAtMouseButton.setDisable(false);
         TextButton.setDisable(false);
+         upButton.setDisable(false);
+        downButton.setDisable(false);
     }
 
     public File startFileChooser(Stage primaryStage) {

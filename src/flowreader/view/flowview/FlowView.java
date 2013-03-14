@@ -86,6 +86,9 @@ public class FlowView extends Group {
     private boolean split_version = false;
     private boolean zoomAtMouse = false;
 private boolean text_visible = true;
+
+double zoom_x = screenBounds.getWidth() / 2;
+        double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
     public FlowView(StackPane stackPane, boolean split_version) {
         this.pages = new ArrayList<PageView>();
         this.wordClouds = new ArrayList<Group>();
@@ -116,7 +119,32 @@ private boolean text_visible = true;
         }
         return text_visible;
     }
+public void goUp(){
+    if(currentZoomLevel<maxZoomLevel){
+        int temp =zoomTable.get(currentZoomLevel+1)-zoomTable.get(currentZoomLevel);
+        curScale = zoomTable.get(currentZoomLevel+1);
+              if (FlowReader.split_toggle) {
+            zoom(-1, zoom_x / 2, zoom_y);
+        } else {
+            zoom(-1, zoom_x, zoom_y);
+        }
 
+    }
+
+}
+ 
+public void goDown(){
+        if(currentZoomLevel>1){
+             int temp =zoomTable.get(currentZoomLevel)-zoomTable.get(currentZoomLevel-1);
+        curScale = zoomTable.get(currentZoomLevel-1);
+              if (FlowReader.split_toggle) {
+            zoom(-1, zoom_x / 2, zoom_y);
+        } else {
+            zoom(-1, zoom_x, zoom_y);
+        }
+
+    }
+}
     public boolean toggleZoomCenter() {
         if (zoomAtMouse) {
             zoomAtMouse = false;
@@ -452,9 +480,6 @@ private boolean text_visible = true;
         t.yProperty().bind(y_coord);
         this.defineRibbonEvents();
         this.setRibbonEvents(true);
-
-     double zoom_x = screenBounds.getWidth() / 2;
-                    double zoom_y = (screenBounds.getHeight() / 2) - (screenBounds.getHeight() * 0.35);
 
                     if (FlowReader.split_toggle) {
                             zoom(-1, zoom_x / 2, zoom_y);      

@@ -33,9 +33,19 @@ public class FlowViewScene extends StackPane {
         rb.buildRibbon(document);
         this.getChildren().add(rb);
     }
-public boolean toggleText(){
+
+    public boolean toggleText() {
         return rb.toggleText();
     }
+
+    public void goUp() {
+        rb.goUp();
+    }
+
+    public void goDown() {
+        rb.goDown();
+    }
+
     public boolean toggleZoomCenter() {
         return rb.toggleZoomCenter();
     }

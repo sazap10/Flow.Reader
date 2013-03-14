@@ -68,7 +68,7 @@ this.wordCloud = wc;
         this.cloud.setMinHeight(elementHeigth);
         this.cloud.setPrefHeight(elementHeigth);
         this.cloud.setMaxHeight(elementHeigth);
-
+ this.cloud.setPrefWrapLength(elementWidth);
         this.level = level;
         this.nfv = nfv;
 

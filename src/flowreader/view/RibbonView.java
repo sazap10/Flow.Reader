@@ -38,6 +38,12 @@ public class RibbonView extends StackPane {
 public boolean toggleText(){
         return newFlowPane.toggleText();
     }
+ public void goDown(){
+        newFlowPane.goDown();
+    }
+    public void goUp(){
+        newFlowPane.goUp();
+    }
     public boolean toggleZoomCenter() {
         return newFlowPane.toggleZoomCenter();
     }

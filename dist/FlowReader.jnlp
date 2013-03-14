@@ -11,7 +11,7 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="FlowReader.jar" size="177684" download="eager" />
+    <jar href="FlowReader.jar" size="178252" download="eager" />
     <jar href="lib/asm-3.0.jar" size="42710" download="eager" />
     <jar href="lib/asm-tree-3.0.jar" size="21512" download="eager" />
     <jar href="lib/cobertura.jar" size="453355" download="eager" />
