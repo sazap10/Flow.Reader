@@ -4,7 +4,6 @@
  */
 package flowreader.view.flowview;
 
-import flowreader.view.WordCloudView;
 import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.model.Page;
@@ -12,7 +11,7 @@ import flowreader.model.WordCloud;
 import flowreader.utils.PageViewFactory;
 import flowreader.view.PageView;
 import flowreader.view.TextPageView;
-import flowreader.view.diveview.*;
+import flowreader.view.WordCloudView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.animation.FadeTransition;
@@ -48,7 +47,6 @@ import javafx.util.Duration;
 public class FlowView extends Group {
 
     private ArrayList<PageView> pages;
-    private ArrayList<PageView> culledPages;
     private ArrayList<Group> wordClouds;
     private HashMap<Integer, Integer> zoomTable;
     int pageWidth = 500;
@@ -104,20 +102,6 @@ public class FlowView extends Group {
         this.split_version = split_version;
         this.pageWidth = width;
         this.pageHeight = height;
-
-    }
-
-    public FlowView(StackPane stackPane, boolean split_version) {
-        this.pages = new ArrayList<PageView>();
-        this.wordClouds = new ArrayList<Group>();
-        this.stackPane = stackPane;
-        pagesPane = new StackPane();
-        wordCloudPane = new StackPane();
-        this.zoomTable = new HashMap<Integer, Integer>();
-        this.currentZoomLevel = maxZoomLevel;
-        this.VBox = new VBox();
-        this.split_version = split_version;
-
 
     }
 
@@ -189,10 +173,6 @@ public class FlowView extends Group {
         return zoomAtMouse;
     }
 
-    public ArrayList<PageView> getPages() {
-        return this.pages;
-    }
-
     public boolean getOtherTransitionsFinished() {
         return otherTransitionsFinished;
     }
@@ -239,21 +219,6 @@ public class FlowView extends Group {
     // sets the scale needed for the correct level of precision and other stuff
 
     public void createZoomTable(int zoomLevels) {
-        // first, find the final zoom level
-/*
-         int zoomTable_scale;
-         float percent;
-         for (int i = 1; i <= zoomLevels; i++) {
-         percent = 80 / (i * 100.0f - 60);
-         zoomTable_scale = (int) (percent * maxScale);
-         //           zoomTable_scale = (int) (10*i);
-
-         System.out.println("put " + i + " " + zoomTable_scale);
-         zoomTable.put(i, zoomTable_scale);
-         }
-
-        
-         */
         //set the percentage linear increment
         int inc = (int) (maxScale * 0.85 / (zoomLevels - 1));
         //walk the increments to 100 building the table
@@ -263,7 +228,6 @@ public class FlowView extends Group {
 
         for (int i = zoomLevels; i >= 1; i--) {
             zoomTable.put(currLevel, tmpScale);
-            System.out.println("put " + currLevel + " " + tmpScale);
             tmpScale = tmpScale + inc;
             currLevel--;
 
@@ -314,16 +278,6 @@ public class FlowView extends Group {
         //index of list is one less than the level of the cloud, so no need to increase zoom level:
         final Node newLevel = wordClouds.get(level);
 
-        //need to switch out the current group from the stackpane
-        /*previous_x = this.getLayoutX();
-         previous_y = this.getLayoutY();
-         */
-
-        //final Node previous = wordCloudPane.getChildren().get(0);
-        /*if (!wordCloudPane.getChildren().contains(newLevel)) {
-         wordCloudPane.getChildren().add(newLevel);
-         }*/
-
         if (upOrDown == -1) {
             // Run the transition effects
             wordCloudPane.getChildren().clear();
@@ -338,20 +292,6 @@ public class FlowView extends Group {
 
                 }
             });
-            //dt.play();
-
-
-            // When the transition is finished we remove the previous level
-            /*dt.setOnFinished(new EventHandler<ActionEvent>() {
-             @Override
-             public void handle(ActionEvent event) {
-             wordCloudPane.getChildren().clear();
-             wordCloudPane.getChildren().add(newLevel);
-             otherTransitionsFinished = true; // Transition is finished
-
-             }
-             });*/
-
         } else {
             // Run the transition effects
             wordCloudPane.getChildren().clear();
@@ -366,22 +306,7 @@ public class FlowView extends Group {
 
                 }
             });
-            //dt.play();
-
-            // When the transition is finished we remove the previous level
-           /* dt.setOnFinished(new EventHandler<ActionEvent>() {
-             @Override
-             public void handle(ActionEvent event) {
-             wordCloudPane.getChildren().clear();
-             wordCloudPane.getChildren().add(newLevel);
-             otherTransitionsFinished = true; // Transition is finished
-
-             }
-             });*/
-
         }
-
-        //translatePages(level);
     }
 
     public ParallelTransition appearTransition(Node victim) {
@@ -400,61 +325,6 @@ public class FlowView extends Group {
         return pt;
     }
 
-    public ParallelTransition disappearTransition(Node victim) {
-        int duration = 550;
-
-        FadeTransition ft = new FadeTransition(Duration.millis(duration), victim);
-        ft.setFromValue(1.0);
-        ft.setToValue(0);
-        ft.setCycleCount(1);
-        ft.setAutoReverse(true);
-
-
-
-        ParallelTransition pt = new ParallelTransition();
-        pt.getChildren().addAll(ft);
-        pt.setCycleCount(1);
-        return pt;
-    }
-
-    //translates the pages appropriately to the wordcloud level they are on
-    public void translatePages(int level) {
-        //level is the level we are GOING TO
-        //so if going to level 2, we need to translate by 1 cloudheight = 2^0 = 2^ level-2
-        //if going to level 3, need to translate by 
-        double numOfHeights;
-        wordCloudPane.getTransforms().clear();
-
-        double magnitude;
-        if (level > 1) {
-            numOfHeights = Math.pow(2, level - 1) - 1;
-        } else {
-            numOfHeights = 0;
-
-        }
-        magnitude = (pageHeight + 20);
-        //System.out.println("translating down by " + (magnitude/(pageHeight/3)) +" cloud heights");
-
-        Translate translate = new Translate(0, magnitude);
-        System.out.println("magnitude! : " + magnitude);
-        wordCloudPane.getTransforms().add(translate);
-        System.out.println("transformation : " + wordCloudPane.getTransforms().toString());
-
-    }
-
-    //function to replace all clouds currently displayed with double the amount (smaller ones from lower level)
-    public void scaleCloudDown() {
-        //index of list is one less than the level of the cloud, so no need decrease current level by 2:
-        Group newLevel = wordClouds.get(currentZoomLevel - 1);
-        //need to switch out the current group from the stackpane
-        this.wordCloudPane.getChildren().clear();
-        this.wordCloudPane.getChildren().add(newLevel);
-        this.getChildren().clear();
-        this.getChildren().add(pagesGroup);
-        this.getChildren().add(newLevel);
-
-    }
-
     public void buildRibbon(Document document) {
         int i = 0;
         int x = 0;
@@ -463,12 +333,6 @@ public class FlowView extends Group {
         VBox.getChildren().add(pagesPane);
         VBox.getChildren().add(wordCloudPane);
         VBox.setSpacing(1);
-
-        //                VBox.getChildren().get(0).setLayoutY(0);
-        //VBox.getChildren().get(1).setLayoutY(VBox.getChildren().get(0).getBoundsInLocal().getHeight());
-        //StackPane.setAlignment(wordCloudPane,Pos.TOP_CENTER);
-        //StackPane.setAlignment(pagesPane, Pos.CENTER);
-
 
         // set up zoom levels
         createZoomTable(document.getWordClouds().size());
@@ -565,20 +429,6 @@ public class FlowView extends Group {
 
     }
 
-    public void switchToWordCloud() {
-        this.getChildren().clear();
-        for (int i = 0; i < this.wordClouds.size(); i++) {
-            this.getChildren().add(this.wordClouds.get(i));
-        }
-    }
-
-    public void switchToPages() {
-        this.getChildren().clear();
-        for (int i = 0; i < this.pages.size(); i++) {
-            this.getChildren().add(this.pages.get(i));
-        }
-    }
-
     public void zoom(double deltaY, double x, double y) {
         if (deltaY <= 0) {
             if (curScale < minScale + 1) {
@@ -601,41 +451,13 @@ public class FlowView extends Group {
 
         double ori_pos_x = stackPane.getLayoutX();
         double ori_pos_y = stackPane.getLayoutY();
-        //Translate t1 = new Translate(-x,-y);
-//stackPane.getTransforms().add(t1);
+
         checkCloudLevel();
-        //stackPane.getTransforms().add(scale);
-        //                        Translate t2 = new Translate(x,y);
-
-        // stackPane.getTransforms().add(t2);
-
         if (stackPane.getTransforms().size() > 0) {
             stackPane.getTransforms().set(0, scale);
         } else {
             stackPane.getTransforms().add(scale);
         }
-    }
-
-    public void setEffect() {
-        double opacity;
-        opacity = curScale / (double) opaqueScale;
-        //pagesPane.setOpacity(opacity);
-        //wordCloudPane.setOpacity(1-opacity);
-        double x = (maxScale - curScale) / 100f * 200f;
-        System.out.println(Math.round(x));
-        System.out.println("- " + x);
-
-        VBox.setEffect(null);
-        VBox.setEffect(new BoxBlur(x, x, 1));
-
-    }
-
-    public double getPageWidth() {
-        return pageWidth;
-    }
-
-    public double getPageHeight() {
-        return pageHeight;
     }
 
     private void defineRibbonEvents() {
@@ -647,23 +469,15 @@ public class FlowView extends Group {
                 if (otherTransitionsFinished) {
                     if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
                         previousEvent = event;
-                        // System.out.println("PRESSED");
                     } else if (event.getEventType()
                             .equals(MouseEvent.MOUSE_DRAGGED)) {
 
-                        // System.out.println("DRAGGED");
                         double dx = event.getX() - previousEvent.getX();
                         double dy = event.getY() - previousEvent.getY();
                         if (verticalLock) {
                             dy = 0;
-                        }/*
-                         TranslateTransition tt = new TranslateTransition(
-                         Duration.millis(100), FlowView.this.VBox);
-                         tt.setByX(dx);
-                         tt.setByY(dy);
-                         tt.setCycleCount(0);
-                         tt.setAutoReverse(true);
-                         tt.play();*/
+                        }
+
                         x_coord.set(x_coord.doubleValue() + dx);
                         y_coord.set(y_coord.doubleValue() + dy);
 
@@ -745,56 +559,5 @@ public class FlowView extends Group {
             }
         }
 
-    }
-
-    public void setPageDragEvent(boolean setFlag) {
-        EventHandler<MouseEvent> dragHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Dragboard drag = ((Node) event.getSource())
-                        .startDragAndDrop(TransferMode.ANY);
-                ClipboardContent content = new ClipboardContent();
-                content.putString(((Page) event.getSource()).getText());
-                drag.setContent(content);
-
-                event.consume();
-            }
-        };
-        int pageNum = 0;
-        while (pageNum < pages.size()) {
-            if (setFlag) {
-                pages.get(pageNum).setOnDragDetected(dragHandler);
-                // System.out.println(page.getOnDragDetected().toString());
-            } else {
-                pages.get(pageNum).setOnDragDetected(null);
-            }
-            pageNum++;
-        }
-
-    }
-
-    public ArrayList<PageView> culling(double sceneWidth) {
-        ArrayList<PageView> clippedPages = new ArrayList<PageView>();
-        double culling_pageWidth = clippedPages.get(0).getPageWidth();
-        int noOfPages = (int) Math.ceil(sceneWidth / culling_pageWidth);
-        if (noOfPages < pages.size()) {
-            noOfPages = pages.size();
-        }
-        boolean found = false;
-        for (int i = 0; i < this.pages.size(); i++) {
-            if (noOfPages == 0) {
-                break;
-            }
-            if (this.pages.get(i).getX() > -(culling_pageWidth)
-                    && this.pages.get(i).getX() < (culling_pageWidth)) {
-                found = true;
-            }
-            if (found && noOfPages > 0) {
-                clippedPages.add(this.pages.get(i));
-                noOfPages--;
-                continue;
-            }
-        }
-        return clippedPages;
     }
 }
