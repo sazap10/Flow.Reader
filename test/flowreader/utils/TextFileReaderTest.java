@@ -70,7 +70,7 @@ public class TextFileReaderTest {
 
         Document expResult = new Document(pages, llwc);
 
-        Document result = this.tfr.readFile(TextPageView.textBoundWidth, TextPageView.textBoundHeight);
+        Document result = this.tfr.readFile(Parameters.textBoundWidth, Parameters.textBoundHeight);
         assertEquals(expResult.getPages().get(0).getText(), result.getPages().get(0).getText());
         
         ArrayList<ArrayList<WordCloud>> expclouds = expResult.getWordClouds();

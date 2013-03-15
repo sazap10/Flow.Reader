@@ -5,6 +5,7 @@
 package flowreader.view;
 
 import flowreader.model.PDFPage;
+import flowreader.utils.Parameters;
 import javafx.scene.image.ImageView;
 
 /**
@@ -17,8 +18,8 @@ public class PDFPageView extends PageView {
      public PDFPageView(PDFPage page){
         super(0,0);
         this.image = new ImageView(page.getImage());
-        this.image.setFitWidth(PageView.width);
-        this.image.setFitHeight(PageView.height);
+        this.image.setFitWidth(Parameters.pageWidth);
+        this.image.setFitHeight(Parameters.pageHeight);
         this.getChildren().add(this.image);
     }
      

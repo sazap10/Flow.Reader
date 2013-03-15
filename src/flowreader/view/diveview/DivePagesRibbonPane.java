@@ -7,6 +7,7 @@ package flowreader.view.diveview;
 import flowreader.view.RibbonElement;
 import flowreader.model.Page;
 import flowreader.utils.PageViewFactory;
+import flowreader.utils.Parameters;
 import flowreader.view.PageView;
 import flowreader.view.TextPageView;
 import java.util.ArrayList;
@@ -24,12 +25,12 @@ import javafx.util.Duration;
 public class DivePagesRibbonPane extends DiveRibbonPane {
 
     public DivePagesRibbonPane(int index, ArrayList<Page> pages, double x, double y) {
-        super(index, x, y, TextPageView.width, TextPageView.height);
+        super(index, x, y, Parameters.pageWidth, Parameters.pageHeight);
         // Creation of the pages
         for (Page p : pages) {
             System.out.println("pages ");
             PageView pv = PageViewFactory.getPageView(p); 
-            pv.relocate(x,y + 50 + (PageView.height / 3));
+            pv.relocate(x,y + 50 + (Parameters.pageHeight / 3));
             this.ribbonElts.add(pv);
             x = x + this.elementWidth + this.elementInterval;
         }

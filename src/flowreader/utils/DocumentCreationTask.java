@@ -29,7 +29,7 @@ public class DocumentCreationTask extends Task {
 
     @Override
     protected Document call() throws Exception {
-        document = fileReader.readFile(TextPageView.textBoundWidth, TextPageView.textBoundHeight);
+        document = fileReader.readFile(Parameters.textBoundWidth, Parameters.textBoundHeight);
         RibbonView ribbon = new RibbonView(document, split_version);
         mv.docOpenned(document, ribbon);
         return this.document;

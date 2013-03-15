@@ -3,6 +3,7 @@ package flowreader;
 import flowreader.view.MainView;
 import flowreader.view.RibbonView;
 import flowreader.view.TextPageView;
+import flowreader.utils.Parameters;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -104,7 +105,6 @@ public class FlowReader extends Application {
         mainView2.maxHeightProperty().bind(rootPane2.maxHeightProperty());
 
         root.getChildren().add(rootPane);
-        TextPageView.setUpPageSize(500, 700);
 
         scene.getStylesheets().add(FlowReader.class.getResource("stylesheet.css").toExternalForm());
         scene.widthProperty().addListener(
@@ -269,7 +269,6 @@ public class FlowReader extends Application {
     }
 
     public void setPageWidth(final RibbonView ribbon) {
-
         final Stage dialog = new Stage(StageStyle.TRANSPARENT);
         dialog.initOwner(priStage);
 
@@ -305,8 +304,9 @@ public class FlowReader extends Application {
                         dialog.close();
                     }
                     int width = Integer.valueOf(input);
-                    page_width = width;
-                    TextPageView.setUpPageSize(page_width, 700);
+                    flowreader.utils.Parameters.pageWidth = width;
+                    flowreader.utils.Parameters.textBoundWidth = width*0.8;
+                    //TextPageView.setUpPageSize(page_width, 700);
                     //ribbon.setPageWidth(width);
                     priStage.getScene().getRoot().setEffect(null);
                     dialog.close();
@@ -327,8 +327,8 @@ public class FlowReader extends Application {
                     dialog.close();
                 }
                 int width = Integer.valueOf(input);
-                page_width = width;
-                TextPageView.setUpPageSize(page_width, 700);
+                flowreader.utils.Parameters.pageWidth = width;
+                flowreader.utils.Parameters.textBoundWidth = width*0.8;
                 //ribbon.setPageWidth(width);
                 priStage.getScene().getRoot().setEffect(null);
                 dialog.close();

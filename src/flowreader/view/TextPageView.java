@@ -5,6 +5,7 @@
 package flowreader.view;
 
 import flowreader.model.Page;
+import flowreader.utils.Parameters;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -17,13 +18,13 @@ public class TextPageView extends PageView {
 
     private Rectangle textBound;
     private Text pageText;
-    public static double textBoundWidth;
-    public static double textBoundHeight;
+    //public static double textBoundWidth;
+    //public static double textBoundHeight;
 
     public TextPageView(double x, double y, String text) {
         super(x, y);
 
-        textBound = new Rectangle(textBoundWidth, textBoundHeight);
+        textBound = new Rectangle(Parameters.textBoundWidth, Parameters.textBoundHeight);
         textBound.setFill(Color.TRANSPARENT);
         pageText = new Text();
         pageText.setId("page_text");
@@ -36,7 +37,7 @@ public class TextPageView extends PageView {
 
     public TextPageView(Page page) {
         super(0, 0);
-        textBound = new Rectangle(textBoundWidth, textBoundHeight);
+        textBound = new Rectangle(Parameters.textBoundWidth, Parameters.textBoundHeight);
         textBound.setFill(Color.TRANSPARENT);
         pageText = new Text();
         pageText.setId("page_text");
@@ -51,11 +52,11 @@ public class TextPageView extends PageView {
         pageText.setVisible(visible);
     }
 
-    public static void setUpPageSize(double width, double height) {
+    /**public static void setUpPageSize(double width, double height) {
         PageView.setUpPageSize(width, height);
         TextPageView.textBoundWidth = width * 0.8;
         TextPageView.textBoundHeight = height * 0.8;
-    }
+    }*/
 
     public void setText(String text) {
         pageText.setText(text);
@@ -66,13 +67,13 @@ public class TextPageView extends PageView {
 
     }
 
-    public double getTextBoundWidth() {
+    /*public double getTextBoundWidth() {
         return textBoundWidth;
     }
 
     public double gettextBoundHeight() {
         return textBoundHeight;
-    }
+    }*/
 
     public Rectangle getTextBound() {
         return textBound;
