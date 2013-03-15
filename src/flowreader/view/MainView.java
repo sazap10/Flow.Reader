@@ -7,8 +7,8 @@ package flowreader.view;
 import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
-import flowreader.utils.PdfFileReader;
 import flowreader.utils.FileReader;
+import flowreader.utils.PdfFileReader;
 import flowreader.utils.TextFileReader;
 import java.io.File;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ import javafx.stage.StageStyle;
  *
  * @author D-Day
  */
-public class MainView extends BorderPane {
+public final class MainView extends BorderPane {
 
     public HBox topBtnsBar; // the button bar at the top of the screen
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
@@ -77,7 +77,7 @@ public class MainView extends BorderPane {
     public MainView(FlowReader fr, Stage primaryStage, Scene scene, Boolean split_version) {
         this.setId("mainview");
         this.split_version = split_version;
-        this.setUpEvents(fr);
+        this.setUpKeyEvents(fr);
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
         this.setUpButtonBar();
         this.setButtonEvents(primaryStage, scene, fr);
@@ -95,7 +95,10 @@ public class MainView extends BorderPane {
         configButton.fire();
     }
 
-    public void buildHomeView() {
+    /**
+     * Build the homepage when we start the application
+     */
+    private void buildHomeView() {
         home = new StackPane();
         Group g = new Group();
         Bloom bloom = new Bloom();
@@ -139,7 +142,11 @@ public class MainView extends BorderPane {
         introBox.setAlignment(Pos.CENTER);
     }
 
-    private void setUpEvents(final FlowReader fr) {
+    /**
+     * Creates all the key events of the application
+     * @param fr 
+     */
+    private void setUpKeyEvents(final FlowReader fr) {
         keyHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -244,6 +251,9 @@ public class MainView extends BorderPane {
         };
     }
 
+    /**
+     * Creates all the buttons of the application
+     */
     private void setUpButtons() {
         int minWidth = 200;
         closeBtn = new Button("x");
@@ -414,6 +424,9 @@ public class MainView extends BorderPane {
         wordCloudButton.setMinWidth(minWidth);
     }
 
+    /**
+     * Set up all the buttons (top, bottom and side) bar of the application
+     */
     private void setUpButtonBar() {
         this.setUpButtons();
 
@@ -458,6 +471,12 @@ public class MainView extends BorderPane {
         configBtns.setAlignment(Pos.CENTER_RIGHT);
     }
 
+    /**
+     * Set up events listener for all the buttons
+     * @param primaryStage
+     * @param scene
+     * @param fr 
+     */
     private void setButtonEvents(final Stage primaryStage, final Scene scene, final FlowReader fr) {
 
         closeBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -734,17 +753,6 @@ public class MainView extends BorderPane {
                 dialog.initOwner(primaryStage);
 
                 dialog.initModality(Modality.WINDOW_MODAL);
-                /*
-                 EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
-                 public void handle(KeyEvent event) {
-                 if (event.getCode().equals(event.getCode().DIGIT1)) {
-                 primaryStage.getScene().getRoot().setEffect(null);
-                 dialog.close();
-                 event.consume();
-                 }
-                 }
-                 };
-                 */
                 final TextArea ta = new TextArea();
                 ta.setPrefColumnCount(5);
                 ta.setPrefRowCount(1);
@@ -815,6 +823,11 @@ public class MainView extends BorderPane {
 
     }
 
+    /**
+     * Activate everything that should be activated when a document is open
+     * @param doc
+     * @param ribbon 
+     */
     public void docOpenned(Document doc, RibbonView ribbon) {
         this.ribbon = ribbon;
         ribbon.setPageWidth(FlowReader.page_width);
@@ -841,31 +854,14 @@ public class MainView extends BorderPane {
 
     }
 
-    public File startFileChooser(Stage primaryStage) {
-        //start file chooser
-        File f = new File(System.getProperty("user.dir"));
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Please choose a text file to read");
-        fileChooser.setInitialDirectory(f);
-
-        //Set extension filter
-        ArrayList<String> extensions = new ArrayList<>();
-        extensions.add("*.pdf");
-        extensions.add("*.txt");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf), Text files (*.txt)", extensions);
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        //Show save file dialog
-        f = fileChooser.showOpenDialog(primaryStage);
-        return f;
-
-    }
-
+    /**
+     * Desactivate all that should be desactivated when we close a document
+     */
     public void docClosed() {
         homeButton.fire();
 
         this.ribbon = new RibbonView();
-        
+
         System.gc();
         openFileButton.setDisable(false);
         homeButton.setDisable(true);
@@ -885,5 +881,30 @@ public class MainView extends BorderPane {
         pageWidthButton.setDisable(false);
         closeDocButton.setDisable(true);
         wordCloudButton.setDisable(true);
+    }
+    
+    /**
+     * Creates and start a file chooser.
+     * @param primaryStage
+     * @return 
+     */
+    public File startFileChooser(Stage primaryStage) {
+        //start file chooser
+        File f = new File(System.getProperty("user.dir"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Please choose a text file to read");
+        fileChooser.setInitialDirectory(f);
+
+        //Set extension filter
+        ArrayList<String> extensions = new ArrayList<>();
+        extensions.add("*.pdf");
+        extensions.add("*.txt");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf), Text files (*.txt)", extensions);
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        //Show save file dialog
+        f = fileChooser.showOpenDialog(primaryStage);
+        return f;
+
     }
 }
