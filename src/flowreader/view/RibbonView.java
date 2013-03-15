@@ -42,7 +42,8 @@ public class RibbonView extends StackPane {
 
     /**
      * Set the page width in the flowpane
-     * @param width 
+     *
+     * @param width
      */
     public void setPageWidth(int width) {
         newFlowPane.setPageWidth(width);
@@ -50,7 +51,8 @@ public class RibbonView extends StackPane {
 
     /**
      * Set the page height in the flowpane
-     * @param height 
+     *
+     * @param height
      */
     public void setPageHeight(int height) {
         newFlowPane.setPageHeight(height);
@@ -112,16 +114,32 @@ public class RibbonView extends StackPane {
         newFlowPane.setVerticalLock(lock);
     }
 
+    /**
+     * Restart the document viewing from the biggest point of view (one word
+     * cloud)
+     */
     public void reset() {
         this.getChildren().clear();
-        newFlowPane = new FlowViewScene(document, split_version);
-        newFlowPane.setPageWidth(flowreader.FlowReader.page_width);
-        this.getChildren().add(newFlowPane);
+        if (currentView.equals("FlowView")) {
+            newFlowPane = new FlowViewScene(document, split_version);
+            newFlowPane.setPageWidth(flowreader.FlowReader.page_width);
+            this.getChildren().add(newFlowPane);
+        } else if (currentView.equals("DiveView")) {
+            this.diveViewPane = new DiveViewScene(document);
+            this.getChildren().add(this.diveViewPane);
+        }
     }
 
+    /**
+     * Go to the point where you can read the document page by page
+     */
     public void goToReadingMode() {
         if (initialsed) {
-            newFlowPane.goToReadingMode();
+            if (currentView.equals("FlowView")) {
+                newFlowPane.goToReadingMode();
+            } else if (currentView.equals("DiveView")) {
+                this.diveViewPane.goToReadingMode();
+            }
         }
     }
 

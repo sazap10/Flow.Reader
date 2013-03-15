@@ -305,10 +305,10 @@ public final class MainView extends BorderPane {
         zoomLockButton.setTooltip(zoomLockT);
         zoomLockButton.setMinWidth(minWidth);
 
-        resetButton = new Button("Reset");
+        resetButton = new Button("Overview mode");
         resetButton.setId("topbarbutton");
         resetButton.setDisable(true);
-        Tooltip resetT = new Tooltip("Reset: restart FlowReader with the current book");
+        Tooltip resetT = new Tooltip("Top view(only one word cloud) of the document");
         resetT.getStyleClass().add("Tooltip");
         resetButton.setTooltip(resetT);
 
@@ -447,13 +447,13 @@ public final class MainView extends BorderPane {
         configBtns = new VBox(10);
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
-            effectBtns.getChildren().addAll(GlowButton, readingModeButton, resetButton);
-            configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
+            effectBtns.getChildren().addAll(resetButton, readingModeButton);
+            configBtns.getChildren().addAll(GlowButton, downButton, upButton, zoomLockButton, verticalLockButton,
                     zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
 
         } else {
-            effectBtns.getChildren().addAll(ThemeButton, GlowButton, readingModeButton, resetButton);
-            configBtns.getChildren().addAll(downButton, upButton, fullScreenButton, zoomLockButton,
+            effectBtns.getChildren().addAll(resetButton, readingModeButton);
+            configBtns.getChildren().addAll(GlowButton, ThemeButton, downButton, upButton, fullScreenButton, zoomLockButton,
                     verticalLockButton, zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
 
         }

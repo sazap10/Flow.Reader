@@ -24,6 +24,7 @@ public class DiveViewScene extends StackPane {
 
     private ArrayList<DiveRibbonPane> levels;
     private int currentLevel;
+    private int previousindex;
     private BorderPane bp;
     private StackPane contentPane;
     private LiftPane lp;
@@ -210,5 +211,36 @@ public class DiveViewScene extends StackPane {
             }
         };
         //this.addEventHandler(ZoomEvent.ZOOM, diveInZoomHandler);
+    }
+
+    public void goToReadingMode() {
+        if (this.currentLevel != 0) {
+            DiveViewScene.this.otherTransitionsFinished = false;
+            DiveRibbonPane previous = this.levels.get(this.currentLevel);
+            this.previousindex = this.currentLevel;
+            this.currentLevel = 0;
+            ArrayList<Integer> ali = new ArrayList<Integer>();
+            ali.add(0); // we select the index selected on the previous level
+            DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
+            current.createRibbon(ali);
+
+            //We add the current level in the scene
+            DiveViewScene.this.contentPane.getChildren().add(current);
+
+            // Run the transition effects
+            ParallelTransition at = current.appearTransitionDiveIn();
+            ParallelTransition dt = previous.disappearTransitionDiveIn();
+            at.play();
+            dt.play();
+
+            // When the transition is finished we remove the previous level
+            dt.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.previousindex));
+                    DiveViewScene.this.otherTransitionsFinished = true; // Transition is finished
+                }
+            });
+        }
     }
 }
