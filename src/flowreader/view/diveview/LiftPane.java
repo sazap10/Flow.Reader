@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
- *
+ * Represent the pane with the lift on the right side
  * @author D-Day
  */
 public class LiftPane extends VBox{
@@ -39,6 +39,10 @@ public class LiftPane extends VBox{
         }
     }
     
+    /**
+     * Hightight the index i and lowlight others
+     * @param i 
+     */
     public void setHighLight(int i){
         int k = this.levels.size()-(i+1);
         for(int j=0; j<this.levels.size(); j++){

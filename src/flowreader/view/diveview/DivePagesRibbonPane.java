@@ -4,22 +4,20 @@
  */
 package flowreader.view.diveview;
 
-import flowreader.view.RibbonElement;
 import flowreader.model.Page;
 import flowreader.utils.PageViewFactory;
 import flowreader.utils.Parameters;
 import flowreader.view.PageView;
-import flowreader.view.TextPageView;
+import flowreader.view.RibbonElement;
 import java.util.ArrayList;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 
 /**
- *
+ * Represent a ribbon of pages
  * @author D-Day
  */
 public class DivePagesRibbonPane extends DiveRibbonPane {
@@ -28,7 +26,6 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         super(index, x, y, Parameters.pageWidth, Parameters.pageHeight);
         // Creation of the pages
         for (Page p : pages) {
-            System.out.println("pages ");
             PageView pv = PageViewFactory.getPageView(p); 
             pv.relocate(x,y + 50 + (Parameters.pageHeight / 3));
             this.ribbonElts.add(pv);
@@ -76,6 +73,9 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         return focusPoint;
     }
 
+    /**
+     * Create and manage the swipe event
+     */
     private void swipe() {
         EventHandler<MouseEvent> swipeHandler = new EventHandler<MouseEvent>() {
             MouseEvent previousEvent;
@@ -84,12 +84,9 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
             public void handle(MouseEvent event) {
                 if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
                     previousEvent = event;
-                    // System.out.println("PRESSED");
                 } else if (event.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
 
-                    // System.out.println("DRAGGED");
                     double dx = event.getX() - previousEvent.getX();
-                    //double dy = event.getY() - previousEvent.getY();
                     move(dx, 0);
                     ArrayList<Integer> cullresult = culling();
                     for (int i = 0; i < ribbonElts.size(); i++) {
@@ -119,6 +116,9 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         this.addEventHandler(MouseEvent.MOUSE_RELEASED, swipeHandler);
     }
 
+    /**
+     * @return the pages that should be displayed at any moment
+     */
     private ArrayList<Integer> culling() {
         int numberOfPagesInScreen = (int) (Screen.getPrimary().getBounds().getWidth()/this.elementWidth);
         int numberOfPages = (numberOfPagesInScreen*3);

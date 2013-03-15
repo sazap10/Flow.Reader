@@ -17,7 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
 /**
- *
+ * Scene for the dive view
  * @author D-Day
  */
 public class DiveViewScene extends StackPane {
@@ -63,6 +63,9 @@ public class DiveViewScene extends StackPane {
         this.setEvents();
     }
 
+    /**
+     * Dive in effect
+     */
     private void diveIn() {
         // if not on the last level and an index is selected
         if (DiveViewScene.this.currentLevel != 0 && DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel).getSelectedIndexes().size() > 0) {
@@ -105,6 +108,9 @@ public class DiveViewScene extends StackPane {
         }
     }
 
+    /**
+     * Dive out effect
+     */
     private void diveOut() {
         // if not on the first level and an index is selected
         if (DiveViewScene.this.currentLevel != DiveViewScene.this.levels.size() - 1 && DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel).getSelectedIndexes().size() > 0) {
@@ -137,6 +143,11 @@ public class DiveViewScene extends StackPane {
         }
     }
 
+    /**
+     * @param previousSelectedIndex
+     * @param level
+     * @return the indexes where you dive in based on the previous index selected
+     */
     private ArrayList<Integer> getIndexesCurrentLevelDiveIn(int previousSelectedIndex, int level) {
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -149,6 +160,11 @@ public class DiveViewScene extends StackPane {
         return temp;
     }
 
+    /**
+     * @param previousSelectedIndex
+     * @param level
+     * @return the indexes where you dive out based on the previous index selected
+     */
     private ArrayList<Integer> getIndexesCurrentLevelDiveOut(int previousSelectedIndex, int level) {
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -165,6 +181,9 @@ public class DiveViewScene extends StackPane {
         return temp;
     }
 
+    /**
+     * Set up diving events
+     */
     private void setEvents() {
         EventHandler<ScrollEvent> diveOutScrollHandler = new EventHandler<ScrollEvent>() {
             @Override
@@ -213,6 +232,9 @@ public class DiveViewScene extends StackPane {
         //this.addEventHandler(ZoomEvent.ZOOM, diveInZoomHandler);
     }
 
+    /**
+     * Go to the pages level
+     */
     public void goToReadingMode() {
         if (this.currentLevel != 0) {
             DiveViewScene.this.otherTransitionsFinished = false;

@@ -12,13 +12,11 @@ import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
- *
+ * Represents a ribbon of RibbonElement
  * @author D-Day
  */
 public abstract class DiveRibbonPane extends StackPane {
@@ -43,18 +41,25 @@ public abstract class DiveRibbonPane extends StackPane {
         this.index = index;
     }
 
+    /**
+     * Create the ribbon with the element having the indexes contains in indexes
+     * @param indexes 
+     */
     public abstract void createRibbon(ArrayList<Integer> indexes);
 
-    public void setNewPosition(double posX, double posY) {
-        this.ribbon.setLayoutX(posX);
-        this.ribbon.setLayoutY(posY);
-    }
-
+    /**
+     * Move the entire ribbon
+     * @param dX
+     * @param dY 
+     */
     public void move(double dX, double dY) {
         this.ribbon.setLayoutX(this.ribbon.getLayoutX() + dX);
         this.ribbon.setLayoutY(this.ribbon.getLayoutY() + dY);
     }
 
+    /**
+     * Create the event handler for the selection of an element
+     */
     private void elementSelection() {
         EventHandler<MouseEvent> hoveringHandler = new EventHandler<MouseEvent>() {
             @Override
@@ -65,24 +70,11 @@ public abstract class DiveRibbonPane extends StackPane {
             }
         };
         this.addEventHandler(MouseEvent.MOUSE_MOVED, hoveringHandler);
-        
-        EventHandler<ScrollEvent> selectionHandler = new EventHandler<ScrollEvent>() {
-            @Override
-            public void handle(ScrollEvent event) {
-                DiveRibbonPane.this.highlightSelected();
-            }
-        };
-        //this.addEventHandler(ScrollEvent.SCROLL, selectionHandler);
-        
-        EventHandler<ZoomEvent> selectionZoomHandler = new EventHandler<ZoomEvent>() {
-            @Override
-            public void handle(ZoomEvent event) {
-                DiveRibbonPane.this.highlightSelected();
-            }
-        };
-        //this.addEventHandler(ZoomEvent.ZOOM, selectionZoomHandler);
     }
 
+    /**
+     * Hightlight the elements selected
+     */
     public void highlightSelected() {
         this.selected.clear();
         for (int i = 0; i < this.ribbonElts.size(); i++) {
@@ -96,16 +88,28 @@ public abstract class DiveRibbonPane extends StackPane {
         }
     }
 
+    /**
+     * @return the indexes selected
+     */
     public ArrayList<Integer> getSelectedIndexes() {
         return this.selected;
     }
 
+    /**
+     * @return the total number of elements
+     */
     public int getNumberOfElements() {
         return this.ribbonElts.size();
     }
 
+    /**
+     * @return the point where the view should focus according to the selected elements
+     */
     public abstract double getFocusPoint();
 
+    /**
+     * @return a transiton of a ribbon appearing during a dive in
+     */
     public ParallelTransition appearTransitionDiveIn() {
         int duration = 1000;
 
@@ -129,6 +133,9 @@ public abstract class DiveRibbonPane extends StackPane {
         return pt;
     }
 
+    /**
+     * @return a transiton of a ribbon disappearing during a dive in
+     */
     public ParallelTransition disappearTransitionDiveIn() {
         int duration = 1000;
 
@@ -150,6 +157,9 @@ public abstract class DiveRibbonPane extends StackPane {
         return pt;
     }
 
+    /**
+     * @return a transiton of a ribbon appearing during a dive out
+     */
     public ParallelTransition appearTransitionDiveOut() {
         int duration = 1000;
 
@@ -173,6 +183,9 @@ public abstract class DiveRibbonPane extends StackPane {
         return pt;
     }
 
+    /**
+     * @return a transiton of a ribbon disappearing during a dive out
+     */
     public ParallelTransition disappearTransitionDiveOut() {
         int duration = 1000;
 

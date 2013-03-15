@@ -4,12 +4,12 @@
  */
 package flowreader.view.diveview;
 
-import flowreader.view.WordCloudView;
 import flowreader.model.WordCloud;
+import flowreader.view.WordCloudView;
 import java.util.ArrayList;
 
 /**
- *
+ * Represents a ribbon of word clouds
  * @author D-Day
  */
 public class DiveWcRibbonPane extends DiveRibbonPane{
