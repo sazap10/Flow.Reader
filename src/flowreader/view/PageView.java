@@ -5,51 +5,34 @@
 package flowreader.view;
 
 import flowreader.utils.Parameters;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- *
+ * Visual representation of a page
  * @author D-Day
  */
 public abstract class PageView extends RibbonElement {
-
     protected Rectangle pageBoundary;
-    //public static double width;
-    //public static double height;
 
     public PageView(double x, double y) {
         pageBoundary = new Rectangle(x, y, Parameters.pageWidth, Parameters.pageHeight);
-        //pageBoundary.setFill(Color.FLORALWHITE);
         pageBoundary.setId("page_background");
         this.getChildren().add(pageBoundary);
     }
 
-    public void setPageWidth(double width) {
-        pageBoundary.setWidth(width);
-    }
-
-    public void setPageHeight(double height) {
-        pageBoundary.setHeight(height);
-    }
-
-    /*public static void setUpPageSize(double width, double height) {
-        PageView.width = width;
-        PageView.height = height;
-    }*/
-
+    /**
+     * @return the width of a page
+     */
     public double getPageWidth() {
         return pageBoundary.getWidth();
     }
-
-    public double getPageHeight() {
-        return pageBoundary.getHeight();
-    }
     
+    /**
+     * @return the x coordinate of a page
+     */
     public double getX() {
         return pageBoundary.getX();
     }
-    
     
     @Override
     public void setHighlight(boolean on) {

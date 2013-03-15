@@ -11,33 +11,15 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 /**
- *
+ * Visual representation of a page of a text file
  * @author D-Day
  */
 public class TextPageView extends PageView {
-
-    private Rectangle textBound;
     private Text pageText;
-    //public static double textBoundWidth;
-    //public static double textBoundHeight;
-
-    public TextPageView(double x, double y, String text) {
-        super(x, y);
-
-        textBound = new Rectangle(Parameters.textBoundWidth, Parameters.textBoundHeight);
-        textBound.setFill(Color.TRANSPARENT);
-        pageText = new Text();
-        pageText.setId("page_text");
-
-        pageText.setX(pageBoundary.getX() + ((pageBoundary.getWidth() - textBound.getWidth()) * 0.5));
-        pageText.setY(pageBoundary.getY() + ((pageBoundary.getHeight() - textBound.getHeight()) * 0.5));
-        this.getChildren().add(pageText);
-        pageText.setText(text);
-    }
 
     public TextPageView(Page page) {
         super(0, 0);
-        textBound = new Rectangle(Parameters.textBoundWidth, Parameters.textBoundHeight);
+        Rectangle textBound = new Rectangle(Parameters.textBoundWidth, Parameters.textBoundHeight);
         textBound.setFill(Color.TRANSPARENT);
         pageText = new Text();
         pageText.setId("page_text");
@@ -48,47 +30,11 @@ public class TextPageView extends PageView {
         pageText.setText(page.getText());
     }
 
+    /**
+     * if visible displays the text in the page, else don't display the text
+     * @param visible 
+     */
     public void toggleTextVisible(boolean visible) {
         pageText.setVisible(visible);
-    }
-
-    /**public static void setUpPageSize(double width, double height) {
-        PageView.setUpPageSize(width, height);
-        TextPageView.textBoundWidth = width * 0.8;
-        TextPageView.textBoundHeight = height * 0.8;
-    }*/
-
-    public void setText(String text) {
-        pageText.setText(text);
-    }
-
-    public String getText() {
-        return pageText.getText();
-
-    }
-
-    /*public double getTextBoundWidth() {
-        return textBoundWidth;
-    }
-
-    public double gettextBoundHeight() {
-        return textBoundHeight;
-    }*/
-
-    public Rectangle getTextBound() {
-        return textBound;
-    }
-
-    @Override
-    public void setPageWidth(double width) {
-        pageBoundary.setWidth(width);
-        textBound.setWidth(width * 0.8);
-
-    }
-
-    @Override
-    public void setPageHeight(double height) {
-        pageBoundary.setHeight(height);
-        textBound.setHeight(height * 0.8);
     }
 }

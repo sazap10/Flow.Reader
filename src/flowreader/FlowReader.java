@@ -2,8 +2,6 @@ package flowreader;
 
 import flowreader.view.MainView;
 import flowreader.view.RibbonView;
-import flowreader.view.TextPageView;
-import flowreader.utils.Parameters;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
