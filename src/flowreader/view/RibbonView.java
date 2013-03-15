@@ -12,6 +12,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 
 /**
+ * The ribbon view is the main area in flowReader where you can manipulate
+ * ribbon elements
  *
  * @author D-Day
  */
@@ -38,10 +40,18 @@ public class RibbonView extends StackPane {
 
     }
 
+    /**
+     * Set the page width in the flowpane
+     * @param width 
+     */
     public void setPageWidth(int width) {
         newFlowPane.setPageWidth(width);
     }
 
+    /**
+     * Set the page height in the flowpane
+     * @param height 
+     */
     public void setPageHeight(int height) {
         newFlowPane.setPageHeight(height);
     }
@@ -67,12 +77,18 @@ public class RibbonView extends StackPane {
         return newFlowPane.toggleZoomCenter();
     }
 
+    /**
+     * Put the diveview in the ribbonview
+     */
     public void switchToDiveView() {
         this.getChildren().clear();
         this.getChildren().add(this.diveViewPane);
         currentView = "DiveView";
     }
 
+    /**
+     * Put the flowview in the ribbonview
+     */
     public void switchToFlowView() {
         this.getChildren().clear();
         this.getChildren().add(this.newFlowPane);
