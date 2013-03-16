@@ -144,7 +144,8 @@ public final class MainView extends BorderPane {
 
     /**
      * Creates all the key events of the application
-     * @param fr 
+     *
+     * @param fr
      */
     private void setUpKeyEvents(final FlowReader fr) {
         keyHandler = new EventHandler<KeyEvent>() {
@@ -271,35 +272,31 @@ public final class MainView extends BorderPane {
 
         homeButton = new Button("Home");
         homeButton.setId("topbarbutton");
-        homeButton.setDisable(true);
         Tooltip homeT = new Tooltip("Switch to Home");
         homeT.getStyleClass().add("Tooltip");
         homeButton.setTooltip(homeT);
 
         flowViewSceneButton = new Button("Flowing");
         flowViewSceneButton.setId("topbarbutton");
-        flowViewSceneButton.setDisable(true);
         Tooltip flowViewSceneT = new Tooltip("Switch to Flow View");
         flowViewSceneT.getStyleClass().add("Tooltip");
         flowViewSceneButton.setTooltip(flowViewSceneT);
 
         diveViewSceneButton = new Button("Diving");
         diveViewSceneButton.setId("topbarbutton");
-        diveViewSceneButton.setDisable(true);
         Tooltip diveViewSceneT = new Tooltip("Switch to Dive View");
         diveViewSceneT.getStyleClass().add("Tooltip");
         diveViewSceneButton.setTooltip(diveViewSceneT);
 
         ThemeButton = new Button("Change Theme");
         ThemeButton.setId("topbarbutton");
-        ThemeButton.setDisable(true);
         Tooltip matrixThemeT = new Tooltip("Change theme style");
         matrixThemeT.getStyleClass().add("Tooltip");
         ThemeButton.setTooltip(matrixThemeT);
+        ThemeButton.setMinWidth(minWidth);
 
         zoomLockButton = new Button("Zoom Lock: Off");
         zoomLockButton.setId("topbarbutton");
-        zoomLockButton.setDisable(true);
         Tooltip zoomLockT = new Tooltip("Toggle waiting for next word cloud level transition");
         zoomLockT.getStyleClass().add("Tooltip");
         zoomLockButton.setTooltip(zoomLockT);
@@ -307,14 +304,12 @@ public final class MainView extends BorderPane {
 
         resetButton = new Button("Overview mode");
         resetButton.setId("topbarbutton");
-        resetButton.setDisable(true);
         Tooltip resetT = new Tooltip("Top view(only one word cloud) of the document");
         resetT.getStyleClass().add("Tooltip");
         resetButton.setTooltip(resetT);
 
         verticalLockButton = new Button("Vertical Lock: Off");
         verticalLockButton.setId("topbarbutton");
-        verticalLockButton.setDisable(true);
         Tooltip verticalLockT = new Tooltip("Toggle enabling/disabling moving the ribbon vertically");
         verticalLockT.getStyleClass().add("Tooltip");
         verticalLockButton.setTooltip(verticalLockT);
@@ -322,21 +317,19 @@ public final class MainView extends BorderPane {
 
         readingModeButton = new Button("Reading Mode");
         readingModeButton.setId("topbarbutton");
-        readingModeButton.setDisable(true);
         Tooltip readingModeT = new Tooltip("Zoom in to the beginning");
         readingModeT.getStyleClass().add("Tooltip");
         readingModeButton.setTooltip(readingModeT);
 
         GlowButton = new Button("Glow!");
         GlowButton.setId("topbarbutton");
-        GlowButton.setDisable(true);
         Tooltip glowT = new Tooltip("Add the Glow effect!");
         glowT.getStyleClass().add("Tooltip");
         GlowButton.setTooltip(glowT);
+        GlowButton.setMinWidth(minWidth);
 
         fullScreenButton = new Button("FullScreen: On");
         fullScreenButton.setId("topbarbutton");
-        fullScreenButton.setDisable(false);
         Tooltip fullScreenT = new Tooltip("Toggle full screen");
         fullScreenT.getStyleClass().add("Tooltip");
         fullScreenButton.setTooltip(fullScreenT);
@@ -344,7 +337,6 @@ public final class MainView extends BorderPane {
 
         splitButton = new Button("Split!");
         splitButton.setId("topbarbutton");
-        splitButton.setDisable(false);
         Tooltip splitT = new Tooltip("Create another instance of flowreader -- FlowReader x 2!");
         splitT.getStyleClass().add("Tooltip");
         splitButton.setTooltip(splitT);
@@ -353,7 +345,6 @@ public final class MainView extends BorderPane {
 
         zoomAtMouseButton = new Button("Zoom: Center");
         zoomAtMouseButton.setId("topbarbutton");
-        zoomAtMouseButton.setDisable(true);
         Tooltip zoomAtMouseT = new Tooltip("Toggle between centering the zoom position at default screen location or at cursor position");
         zoomAtMouseT.getStyleClass().add("Tooltip");
         zoomAtMouseButton.setTooltip(zoomAtMouseT);
@@ -361,7 +352,6 @@ public final class MainView extends BorderPane {
 
         TextButton = new Button("Text: On");
         TextButton.setId("topbarbutton");
-        TextButton.setDisable(true);
         Tooltip TextButtonT = new Tooltip("Make text in Flow View visible/invisible");
         TextButtonT.getStyleClass().add("Tooltip");
         TextButton.setTooltip(TextButtonT);
@@ -369,7 +359,6 @@ public final class MainView extends BorderPane {
 
         upButton = new Button("-");
         upButton.setId("topbarbutton");
-        upButton.setDisable(true);
         Tooltip upButtonT = new Tooltip("Jump up to next word cloud");
         upButtonT.getStyleClass().add("Tooltip");
         upButton.setTooltip(upButtonT);
@@ -377,7 +366,6 @@ public final class MainView extends BorderPane {
 
         downButton = new Button("+");
         downButton.setId("topbarbutton");
-        downButton.setDisable(true);
         Tooltip downButtonT = new Tooltip("Jump down to next word cloud");
         downButtonT.getStyleClass().add("Tooltip");
         downButton.setTooltip(downButtonT);
@@ -385,7 +373,6 @@ public final class MainView extends BorderPane {
 
         pageWidthButton = new Button("Set Page Width");
         pageWidthButton.setId("topbarbutton");
-        pageWidthButton.setDisable(false);
         Tooltip pageWidthButtonT = new Tooltip("Set page width in Flow View");
         pageWidthButtonT.getStyleClass().add("Tooltip");
         pageWidthButton.setTooltip(pageWidthButtonT);
@@ -393,7 +380,6 @@ public final class MainView extends BorderPane {
 
         pageHeightButton = new Button("Set Page Height");
         pageHeightButton.setId("topbarbutton");
-        pageHeightButton.setDisable(false);
         Tooltip pageHeightButtonT = new Tooltip("Set page height in Flow View");
         pageHeightButtonT.getStyleClass().add("Tooltip");
         pageHeightButton.setTooltip(pageHeightButtonT);
@@ -401,7 +387,6 @@ public final class MainView extends BorderPane {
 
         closeDocButton = new Button("Close Document");
         closeDocButton.setId("topbarbutton");
-        closeDocButton.setDisable(true);
         Tooltip closeDocButtonT = new Tooltip("Close the current document");
         closeDocButtonT.getStyleClass().add("Tooltip");
         closeDocButton.setTooltip(closeDocButtonT);
@@ -409,7 +394,6 @@ public final class MainView extends BorderPane {
 
         configButton = new Button("Show config");
         configButton.setId("topbarbutton");
-        configButton.setDisable(false);
         Tooltip configButtonT = new Tooltip("Show/hide config buttons");
         configButtonT.getStyleClass().add("Tooltip");
         configButton.setTooltip(configButtonT);
@@ -417,11 +401,33 @@ public final class MainView extends BorderPane {
 
         wordCloudButton = new Button("Word Cloud: On");
         wordCloudButton.setId("topbarbutton");
-        wordCloudButton.setDisable(true);
         Tooltip wordCloudButtonT = new Tooltip("Show/hide word clouds in Flow View");
         wordCloudButtonT.getStyleClass().add("Tooltip");
         wordCloudButton.setTooltip(wordCloudButtonT);
         wordCloudButton.setMinWidth(minWidth);
+
+        openFileButton.setDisable(false);
+        homeButton.setDisable(true);
+        flowViewSceneButton.setDisable(true);
+        diveViewSceneButton.setDisable(true);
+
+        resetButton.setDisable(true);
+        readingModeButton.setDisable(true);
+
+        ThemeButton.setDisable(false);
+        GlowButton.setDisable(false);
+        pageWidthButton.setDisable(true);
+        pageHeightButton.setDisable(true);
+        closeDocButton.setDisable(false);
+        fullScreenButton.setDisable(false);
+
+        zoomLockButton.setDisable(true);
+        verticalLockButton.setDisable(true);
+        zoomAtMouseButton.setDisable(true);
+        TextButton.setDisable(true);
+        upButton.setDisable(true);
+        downButton.setDisable(true);
+        wordCloudButton.setDisable(true);
     }
 
     /**
@@ -448,13 +454,13 @@ public final class MainView extends BorderPane {
         mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
             effectBtns.getChildren().addAll(resetButton, readingModeButton);
-            configBtns.getChildren().addAll(GlowButton, downButton, upButton, zoomLockButton, verticalLockButton,
-                    zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
+            configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
+                    zoomAtMouseButton, TextButton, wordCloudButton, pageWidthButton, GlowButton, splitButton, configButton);
 
         } else {
             effectBtns.getChildren().addAll(resetButton, readingModeButton);
-            configBtns.getChildren().addAll(GlowButton, ThemeButton, downButton, upButton, fullScreenButton, zoomLockButton,
-                    verticalLockButton, zoomAtMouseButton, pageWidthButton, splitButton, TextButton, wordCloudButton, closeDocButton, configButton);
+            configBtns.getChildren().addAll(downButton, upButton, zoomLockButton,
+                    verticalLockButton, zoomAtMouseButton, TextButton, wordCloudButton, pageWidthButton, GlowButton, splitButton, ThemeButton, fullScreenButton, configButton);
 
         }
 
@@ -473,9 +479,10 @@ public final class MainView extends BorderPane {
 
     /**
      * Set up events listener for all the buttons
+     *
      * @param primaryStage
      * @param scene
-     * @param fr 
+     * @param fr
      */
     private void setButtonEvents(final Stage primaryStage, final Scene scene, final FlowReader fr) {
 
@@ -526,6 +533,7 @@ public final class MainView extends BorderPane {
             @Override
             public void handle(ActionEvent e) {
                 try {
+                    docClosed();
                     homeButton.fire();
                     pi = new ProgressIndicator(0.0);
                     pi.setStyle(" -fx-progress-color: #005888;");
@@ -559,9 +567,30 @@ public final class MainView extends BorderPane {
         homeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                //MainView.this.getChildren().clear();
                 MainView.this.setCenter(home);
                 ribbon.setCurrentView("HomeView");
+                openFileButton.setDisable(false);
+                homeButton.setDisable(false);
+                flowViewSceneButton.setDisable(false);
+                diveViewSceneButton.setDisable(false);
+
+                resetButton.setDisable(true);
+                readingModeButton.setDisable(true);
+
+                ThemeButton.setDisable(false);
+                GlowButton.setDisable(false);
+                pageWidthButton.setDisable(true);
+                pageHeightButton.setDisable(true);
+                closeDocButton.setDisable(false);
+                fullScreenButton.setDisable(false);
+
+                zoomLockButton.setDisable(true);
+                verticalLockButton.setDisable(true);
+                zoomAtMouseButton.setDisable(true);
+                TextButton.setDisable(true);
+                upButton.setDisable(true);
+                downButton.setDisable(true);
+                wordCloudButton.setDisable(true);
 
             }
         });
@@ -572,6 +601,29 @@ public final class MainView extends BorderPane {
 
                 MainView.this.setCenter(ribbon);
                 ribbon.switchToDiveView();
+                openFileButton.setDisable(false);
+                homeButton.setDisable(false);
+                flowViewSceneButton.setDisable(false);
+                diveViewSceneButton.setDisable(false);
+
+                resetButton.setDisable(false);
+                readingModeButton.setDisable(false);
+
+                ThemeButton.setDisable(false);
+                GlowButton.setDisable(false);
+                pageWidthButton.setDisable(true);
+                pageHeightButton.setDisable(true);
+                closeDocButton.setDisable(false);
+                fullScreenButton.setDisable(false);
+
+                zoomLockButton.setDisable(true);
+                verticalLockButton.setDisable(true);
+                zoomAtMouseButton.setDisable(true);
+                TextButton.setDisable(true);
+                upButton.setDisable(true);
+                downButton.setDisable(true);
+                wordCloudButton.setDisable(true);
+
             }
         });
 
@@ -582,6 +634,31 @@ public final class MainView extends BorderPane {
 
                 MainView.this.setCenter(ribbon);
                 ribbon.switchToFlowView();
+
+                openFileButton.setDisable(false);
+                homeButton.setDisable(false);
+                flowViewSceneButton.setDisable(false);
+                diveViewSceneButton.setDisable(false);
+
+                resetButton.setDisable(false);
+                readingModeButton.setDisable(false);
+
+                ThemeButton.setDisable(false);
+                GlowButton.setDisable(false);
+                pageWidthButton.setDisable(true);
+                pageHeightButton.setDisable(true);
+                closeDocButton.setDisable(false);
+                fullScreenButton.setDisable(false);
+
+                zoomLockButton.setDisable(false);
+                verticalLockButton.setDisable(false);
+                zoomAtMouseButton.setDisable(false);
+                TextButton.setDisable(false);
+                upButton.setDisable(false);
+                downButton.setDisable(false);
+                wordCloudButton.setDisable(false);
+
+
             }
         });
 
@@ -825,33 +902,15 @@ public final class MainView extends BorderPane {
 
     /**
      * Activate everything that should be activated when a document is open
+     *
      * @param doc
-     * @param ribbon 
+     * @param ribbon
      */
     public void docOpenned(Document doc, RibbonView ribbon) {
         this.ribbon = ribbon;
         ribbon.setPageWidth(FlowReader.page_width);
         BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
         this.ribbon.toBack();
-        openFileButton.setDisable(true);
-        homeButton.setDisable(false);
-        flowViewSceneButton.setDisable(false);
-        diveViewSceneButton.setDisable(false);
-        ThemeButton.setDisable(false);
-        zoomLockButton.setDisable(false);
-        resetButton.setDisable(false);
-        verticalLockButton.setDisable(false);
-        readingModeButton.setDisable(false);
-        GlowButton.setDisable(false);
-        zoomAtMouseButton.setDisable(false);
-        TextButton.setDisable(false);
-        upButton.setDisable(false);
-        downButton.setDisable(false);
-        pageWidthButton.setDisable(true);
-        pageHeightButton.setDisable(true);
-        closeDocButton.setDisable(false);
-        wordCloudButton.setDisable(false);
-
     }
 
     /**
@@ -882,11 +941,12 @@ public final class MainView extends BorderPane {
         closeDocButton.setDisable(true);
         wordCloudButton.setDisable(true);
     }
-    
+
     /**
      * Creates and start a file chooser.
+     *
      * @param primaryStage
-     * @return 
+     * @return
      */
     public File startFileChooser(Stage primaryStage) {
         //start file chooser
