@@ -241,6 +241,7 @@ public class DiveViewScene extends StackPane {
             DiveRibbonPane previous = this.levels.get(this.currentLevel);
             this.previousindex = this.currentLevel;
             this.currentLevel = 0;
+            DiveViewScene.this.lp.setHighLight(currentLevel);
             ArrayList<Integer> ali = new ArrayList<Integer>();
             ali.add(0); // we select the index selected on the previous level
             DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
