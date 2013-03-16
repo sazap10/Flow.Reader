@@ -66,9 +66,9 @@ public class WordCloudView extends RibbonElement {
         this.getChildren().addAll(wordCloudBoundary, cloud);
         cloud.setAlignment(Pos.TOP_CENTER);
         flowview = true;
-        if (flowview) {
+        /*if (flowview) {
             setNumOfWordsInCloud(level);
-        }
+        }*/
         renderWordCloud();
     }
 

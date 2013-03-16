@@ -18,6 +18,7 @@ import javafx.util.Duration;
 
 /**
  * Represent a ribbon of pages
+ *
  * @author D-Day
  */
 public class DivePagesRibbonPane extends DiveRibbonPane {
@@ -26,8 +27,8 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         super(index, x, y, Parameters.pageWidth, Parameters.pageHeight);
         // Creation of the pages
         for (Page p : pages) {
-            PageView pv = PageViewFactory.getPageView(p); 
-            pv.relocate(x,y + 50 + (Parameters.pageHeight / 3));
+            PageView pv = PageViewFactory.getPageView(p);
+            pv.relocate(x, y + 50 + (Parameters.pageHeight / 3));
             this.ribbonElts.add(pv);
             x = x + this.elementWidth + this.elementInterval;
         }
@@ -35,7 +36,7 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         for (RibbonElement dre : this.ribbonElts) {
             dre.setOpacity(0);
         }
-        
+
         this.getChildren().clear();
         this.ribbon.getChildren().clear();
         this.ribbon.getChildren().addAll(this.ribbonElts);
@@ -85,26 +86,27 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
                 if (event.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
                     previousEvent = event;
                 } else if (event.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
-
-                    double dx = event.getX() - previousEvent.getX();
-                    move(dx, 0);
-                    ArrayList<Integer> cullresult = culling();
-                    for (int i = 0; i < ribbonElts.size(); i++) {
-                        if (cullresult.contains(i)) {
-                            ribbonElts.get(i).setOpacity(1);
-                            //ribbonElts.get(i).setVisible(true);
-                        } else {
-                            ribbonElts.get(i).setOpacity(0);
-                            //ribbonElts.get(i).setVisible(false);
+                    if (selected.size() >= 1) {
+                        double dx = event.getX() - previousEvent.getX();
+                        move(dx, 0);
+                        ArrayList<Integer> cullresult = culling();
+                        for (int i = 0; i < ribbonElts.size(); i++) {
+                            if (cullresult.contains(i)) {
+                                ribbonElts.get(i).setOpacity(1);
+                                //ribbonElts.get(i).setVisible(true);
+                            } else {
+                                ribbonElts.get(i).setOpacity(0);
+                                //ribbonElts.get(i).setVisible(false);
+                            }
                         }
-                    }
 
-                    TranslateTransition tt = new TranslateTransition(Duration.millis(100), DivePagesRibbonPane.this);
-                    tt.setByX(dx);
-                    //tt.setByY(dy);
-                    tt.setCycleCount(0);
-                    tt.setAutoReverse(true);
-                    tt.play();
+                        TranslateTransition tt = new TranslateTransition(Duration.millis(100), DivePagesRibbonPane.this);
+                        tt.setByX(dx);
+                        //tt.setByY(dy);
+                        tt.setCycleCount(0);
+                        tt.setAutoReverse(true);
+                        tt.play();
+                    }
                 }
                 previousEvent = event;
                 event.consume();
@@ -120,10 +122,10 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
      * @return the pages that should be displayed at any moment
      */
     private ArrayList<Integer> culling() {
-        int numberOfPagesInScreen = (int) (Screen.getPrimary().getBounds().getWidth()/this.elementWidth);
-        int numberOfPages = (numberOfPagesInScreen*3);
-        if(numberOfPages%2==0){
-            numberOfPages+=1;
+        int numberOfPagesInScreen = (int) (Screen.getPrimary().getBounds().getWidth() / this.elementWidth);
+        int numberOfPages = (numberOfPagesInScreen * 3);
+        if (numberOfPages % 2 == 0) {
+            numberOfPages += 1;
         }
         ArrayList<Integer> indexToDisplay = new ArrayList<Integer>();
         Integer select = this.selected.get(0);
