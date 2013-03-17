@@ -8,7 +8,7 @@ import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.utils.DocumentCreationTask;
 import flowreader.utils.FileReader;
-import flowreader.utils.PdfFileReader;
+import flowreader.utils.PDFFileReader;
 import flowreader.utils.TextFileReader;
 import java.io.File;
 import java.util.ArrayList;
@@ -550,7 +550,7 @@ public final class MainView extends BorderPane {
                     if (name.endsWith(".txt")) {
                         fileReader = new TextFileReader(file);
                     } else if (name.endsWith(".pdf")) {
-                        fileReader = new PdfFileReader(file);
+                        fileReader = new PDFFileReader(file);
                     }
                     DocumentCreationTask dct = new DocumentCreationTask(fileReader, MainView.this, split_version);
                     pi.progressProperty().bind(fileReader.progressProperty());

@@ -25,9 +25,9 @@ import org.apache.pdfbox.util.PDFTextStripper;
  * Read a PDF file and transform it in a Document object
  * @author D-Day
  */
-public class PdfFileReader extends FileReader {
+public class PDFFileReader extends FileReader {
 
-    public PdfFileReader(File file) {
+    public PDFFileReader(File file) {
         super(file);
     }
 
