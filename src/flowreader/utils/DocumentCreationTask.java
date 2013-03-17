@@ -32,6 +32,7 @@ public class DocumentCreationTask extends Task {
         document = fileReader.readFile(Parameters.textBoundWidth, Parameters.textBoundHeight);
         RibbonView ribbon = new RibbonView(document, split_version);
         mv.docOpenned(document, ribbon);
+        mv.homeButton.fire();
         return this.document;
     }
 }

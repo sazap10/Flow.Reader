@@ -14,7 +14,9 @@
 #page_text{
     -fx-fill: #00CC00;
 }
-
+.customProgressIndicator .percentage {
+    -fx-fill: #FFFFFF;
+}
 #closeBtn{
     -fx-background-color: #C70A0A;
     -fx-background-radius: 0;

@@ -292,7 +292,7 @@ public class FlowReader extends Application {
                 }
             }
         });
-        
+
         EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
             public void handle(KeyEvent event) {
                 if (event.getCode().equals(event.getCode().ENTER)) {
@@ -303,9 +303,8 @@ public class FlowReader extends Application {
                     }
                     int width = Integer.valueOf(input);
                     flowreader.utils.Parameters.pageWidth = width;
-                    flowreader.utils.Parameters.textBoundWidth = width*0.8;
-                    //TextPageView.setUpPageSize(page_width, 700);
-                    //ribbon.setPageWidth(width);
+                    flowreader.utils.Parameters.textBoundWidth = width * 0.8;
+                    flowreader.FlowReader.page_width = width;
                     priStage.getScene().getRoot().setEffect(null);
                     dialog.close();
                 }
@@ -326,8 +325,8 @@ public class FlowReader extends Application {
                 }
                 int width = Integer.valueOf(input);
                 flowreader.utils.Parameters.pageWidth = width;
-                flowreader.utils.Parameters.textBoundWidth = width*0.8;
-                //ribbon.setPageWidth(width);
+                flowreader.utils.Parameters.textBoundWidth = width * 0.8;
+                flowreader.FlowReader.page_width = width;
                 priStage.getScene().getRoot().setEffect(null);
                 dialog.close();
 

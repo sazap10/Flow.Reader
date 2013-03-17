@@ -58,7 +58,8 @@ public final class MainView extends BorderPane {
     public HBox bottomBtnsBar; // the button bar at the bottom of the screen
     public VBox sideBtnsBar;
     public Button minBtn, closeBtn; // The buttons at the top of the page
-    private Button homeButton, openFileButton, flowViewSceneButton, diveViewSceneButton, ThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
+    private Button openFileButton, flowViewSceneButton, diveViewSceneButton, ThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
+    public Button homeButton;
     private RibbonView ribbon; // The ribbon at the center of the page
     private ProgressIndicator pi;
     private FileReader fileReader;
@@ -390,7 +391,6 @@ public final class MainView extends BorderPane {
         Tooltip closeDocButtonT = new Tooltip("Close the current document");
         closeDocButtonT.getStyleClass().add("Tooltip");
         closeDocButton.setTooltip(closeDocButtonT);
-        closeDocButton.setMinWidth(minWidth);
 
         configButton = new Button("Show config");
         configButton.setId("topbarbutton");
@@ -416,9 +416,9 @@ public final class MainView extends BorderPane {
 
         ThemeButton.setDisable(false);
         GlowButton.setDisable(false);
-        pageWidthButton.setDisable(true);
+        pageWidthButton.setDisable(false);
         pageHeightButton.setDisable(true);
-        closeDocButton.setDisable(false);
+        closeDocButton.setDisable(true);
         fullScreenButton.setDisable(false);
 
         zoomLockButton.setDisable(true);
@@ -451,7 +451,7 @@ public final class MainView extends BorderPane {
         mainBtns = new HBox(10);
         effectBtns = new HBox(10);
         configBtns = new VBox(10);
-        mainBtns.getChildren().addAll(openFileButton, homeButton, diveViewSceneButton, flowViewSceneButton);
+        mainBtns.getChildren().addAll(openFileButton,closeDocButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
             effectBtns.getChildren().addAll(resetButton, readingModeButton);
             configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
@@ -534,7 +534,6 @@ public final class MainView extends BorderPane {
             public void handle(ActionEvent e) {
                 try {
                     docClosed();
-                    homeButton.fire();
                     pi = new ProgressIndicator(0.0);
                     pi.setStyle(" -fx-progress-color: #005888;");
                     // changing size without css
