@@ -955,7 +955,7 @@ public final class MainView extends BorderPane {
         fileChooser.setInitialDirectory(f);
 
         //Set extension filter
-        ArrayList<String> extensions = new ArrayList<>();
+        ArrayList<String> extensions = new ArrayList<String>();
         extensions.add("*.pdf");
         extensions.add("*.txt");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf), Text files (*.txt)", extensions);

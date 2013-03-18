@@ -35,7 +35,7 @@ public class PDFFileReader extends FileReader {
     public Document readFile(double a, double b) throws IOException {
         ArrayList<String> pageText;
         ArrayList<ArrayList<WordCloud>> clouds = new ArrayList<ArrayList<WordCloud>>();
-        ArrayList<Page> pages = new ArrayList<>();
+        ArrayList<Page> pages = new ArrayList<Page>();
         try {
             if (file != null) {
 
@@ -89,7 +89,7 @@ public class PDFFileReader extends FileReader {
      * @throws IOException 
      */
     public ArrayList<String> getText(PDDocument document, int numOfPages) throws IOException {
-        ArrayList<String> pages = new ArrayList<>();
+        ArrayList<String> pages = new ArrayList<String>();
         ByteArrayOutputStream bout;
         OutputStreamWriter writer;
         try {
@@ -119,8 +119,8 @@ public class PDFFileReader extends FileReader {
      * @return wordClouds from page text
      */
     public ArrayList<ArrayList<WordCloud>> makeWordClouds(ArrayList<String> pages) {
-        ArrayList<WordCloud> firstPages = new ArrayList<>();
-        ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<>();
+        ArrayList<WordCloud> firstPages = new ArrayList<WordCloud>();
+        ArrayList<ArrayList<WordCloud>> wordCloudLevels = new ArrayList<ArrayList<WordCloud>>();
         HashMap<String, Integer> wordsOccurrences;
 
         //create the first level
