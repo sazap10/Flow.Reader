@@ -706,8 +706,8 @@ public final class MainView extends BorderPane {
             @Override
             public void handle(ActionEvent e) {
                 ribbon.reset();
-                verticalLockButton.setText("Vertical Lock: On");
-                zoomLockButton.setText("Zoom Lock: On");
+                verticalLockButton.setText("Vertical Lock: Off");
+                zoomLockButton.setText("Zoom Lock: Off");
             }
         });
         verticalLockButton.setOnAction(new EventHandler<ActionEvent>() {

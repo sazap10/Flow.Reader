@@ -211,7 +211,7 @@ public class FlowReader extends Application {
         Scene dialog_scene = new Scene(
                 HBoxBuilder.create().styleClass("modal-dialog").children(
                 LabelBuilder.create().text("\n\nKeyboard shortcuts:\nF: Toggle fullscreen\nB: hide/show buttons\nH: Home\nW: Zoom In\nS: Zoom Out\nA: Move Left\nD: Move Right"
-                + "\nT: Change Theme\nG: Glow!\nQ: Switch View\nR: Reset\nC: Reading Mode\nL: Vertical Lock\nZ: Zoom Lock\n Y: Split").textFill(Color.WHITE).build(),
+                + "\nT: Change Theme\nG: Glow!\nQ: Switch View\nR: Reset\nC: Reading Mode\nV: Vertical Lock\nZ: Zoom Lock\n Y: Split").textFill(Color.WHITE).build(),
                 ButtonBuilder.create().id("ok").text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
