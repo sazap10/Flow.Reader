@@ -1,5 +1,6 @@
 package flowreader;
 
+import flowreader.model.Document;
 import flowreader.view.MainView;
 import flowreader.view.RibbonView;
 import java.util.ArrayList;
@@ -8,9 +9,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.SplitPane;
@@ -20,7 +24,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -350,6 +356,16 @@ public class FlowReader extends Application {
 
     }
 
+    public void createErrorDialog(Document document){
+       /*Stage dialogStage = new Stage();
+            dialogStage.initOwner(priStage);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setScene(new Scene(VBoxBuilder.create().
+            children(new Text(document.getErrorMsg()), new Button("Ok.")).
+            alignment(Pos.CENTER).padding(new Insets(5)).build()));
+            dialogStage.showAndWait();*/
+    }
+    
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be

@@ -40,7 +40,7 @@ public class PDFFileReader extends FileReader {
             if (file != null) {
                
                 PDDocument pdfDocument = PDDocument.load(file);
-                if (pdfDocument.getNumberOfPages() > 300){ //too big - will cause heap overflow
+                if (pdfDocument.getNumberOfPages() <= 300){ //too big - will cause heap overflow
                     pageText = getText(pdfDocument, pdfDocument.getNumberOfPages());
                     for (int i = 0; i < pdfDocument.getNumberOfPages(); i++) {
                         PDPage pDPage = (PDPage) pdfDocument.getDocumentCatalog().getAllPages().get(i);
@@ -54,10 +54,14 @@ public class PDFFileReader extends FileReader {
                     return new Document(pages, clouds);
                 }
                 else{
+                    pdfDocument.close();
                     return new Document("File contains too many pages to be loaded, please choose a smaller file");
+                    
                 }
             } else {
                 return new Document("File is null");
+                
+                
             }
 
         } catch (IOException ex) {

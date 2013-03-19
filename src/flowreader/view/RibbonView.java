@@ -4,12 +4,29 @@
  */
 package flowreader.view;
 
+import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
 import flowreader.view.flowview.FlowViewScene;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBuilder;
+import javafx.scene.control.LabelBuilder;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBoxBuilder;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * The ribbon view is the main area in flowReader where you can manipulate
@@ -30,13 +47,21 @@ public class RibbonView extends StackPane {
     public RibbonView() {
     }
 
-    public RibbonView(Document document, Boolean split_version) {
-        this.initialsed = true;
-        this.diveViewPane = new DiveViewScene(document);
-        this.newFlowPane = new FlowViewScene(document, split_version);
-        this.getChildren().add(this.diveViewPane);
-        this.document = document;
-        this.split_version = split_version;
+    public RibbonView(FlowReader flowReader,Document document, Boolean split_version) {
+            System.out.println(document.isEmpty() + "HAHAHAHAHA");
+        if (document.isEmpty()) {
+            //make a popup with document.getErrorMsq()
+            System.out.println("making error popup");
+            /*;*/
+           flowReader.createErrorDialog(document);
+        } else {
+            this.initialsed = true;
+            this.diveViewPane = new DiveViewScene(document);
+            this.newFlowPane = new FlowViewScene(document, split_version);
+            this.getChildren().add(this.diveViewPane);
+            this.document = document;
+            this.split_version = split_version;
+        }
 
     }
 

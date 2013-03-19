@@ -14,21 +14,28 @@ public class Document {
     
     private ArrayList<ArrayList<WordCloud>> wordClouds;
     private ArrayList<Page> pages;
-    private boolean isEmpty;
-    private String errorMsg;
+    private boolean empty = false;
+    private String errorMsg = "";
     public Document(ArrayList<Page> pages, ArrayList<ArrayList<WordCloud>> wordClouds){
         this.pages = pages;
         this.wordClouds = wordClouds;
-        this.isEmpty = false;
-        this.errorMsg = "";
+
     }
     
     //document constructor for aborted readfile, e.g. for a pdf which is too large
     public Document(String errorMsg){
         this.pages = new ArrayList<>();
         this.wordClouds = new ArrayList<>();
-        this.isEmpty = true;
+        this.empty = true;
         this.errorMsg = errorMsg;
+    }
+    
+    public boolean isEmpty(){
+        return this.empty;
+    }
+    
+    public String getErrorMsg(){
+        return this.errorMsg;
     }
     
     /**

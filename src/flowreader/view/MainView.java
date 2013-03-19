@@ -202,7 +202,9 @@ public final class MainView extends BorderPane {
                         break;
 
                     case T:
-                        ThemeButton.fire();
+                        if (!split_version) {
+                            ThemeButton.fire();
+                        }
                         break;
 
                     case G:
@@ -451,7 +453,7 @@ public final class MainView extends BorderPane {
         mainBtns = new HBox(10);
         effectBtns = new HBox(10);
         configBtns = new VBox(10);
-        mainBtns.getChildren().addAll(openFileButton,closeDocButton, homeButton, diveViewSceneButton, flowViewSceneButton);
+        mainBtns.getChildren().addAll(openFileButton, closeDocButton, homeButton, diveViewSceneButton, flowViewSceneButton);
         if (split_version) {
             effectBtns.getChildren().addAll(resetButton, readingModeButton);
             configBtns.getChildren().addAll(downButton, upButton, zoomLockButton, verticalLockButton,
@@ -552,7 +554,7 @@ public final class MainView extends BorderPane {
                     } else if (name.endsWith(".pdf")) {
                         fileReader = new PDFFileReader(file);
                     }
-                    DocumentCreationTask dct = new DocumentCreationTask(fileReader, MainView.this, split_version);
+                    DocumentCreationTask dct = new DocumentCreationTask(fr, fileReader, MainView.this, split_version);
                     pi.progressProperty().bind(fileReader.progressProperty());
                     Thread t = new Thread(dct);
                     t.start();
