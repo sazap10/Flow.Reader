@@ -38,21 +38,26 @@ public class PDFFileReader extends FileReader {
         ArrayList<Page> pages = new ArrayList<Page>();
         try {
             if (file != null) {
-
+               
                 PDDocument pdfDocument = PDDocument.load(file);
-                pageText = getText(pdfDocument, pdfDocument.getNumberOfPages());
-                for (int i = 0; i < pdfDocument.getNumberOfPages(); i++) {
-                    PDPage pDPage = (PDPage) pdfDocument.getDocumentCatalog().getAllPages().get(i);
-                    WritableImage image = this.BufferedToWritable(pDPage.convertToImage(BufferedImage.TYPE_USHORT_555_RGB, 60));
-                    pages.add(new PDFPage(pageText.get(i), image));
-                    this.updateProgress(i + 1, pdfDocument.getNumberOfPages());
-                }
-                clouds = makeWordClouds(pageText);
+                if (pdfDocument.getNumberOfPages() > 300){ //too big - will cause heap overflow
+                    pageText = getText(pdfDocument, pdfDocument.getNumberOfPages());
+                    for (int i = 0; i < pdfDocument.getNumberOfPages(); i++) {
+                        PDPage pDPage = (PDPage) pdfDocument.getDocumentCatalog().getAllPages().get(i);
+                        WritableImage image = this.BufferedToWritable(pDPage.convertToImage(BufferedImage.TYPE_USHORT_555_RGB, 60));
+                        pages.add(new PDFPage(pageText.get(i), image));
+                        this.updateProgress(i + 1, pdfDocument.getNumberOfPages());
+                    }
+                    clouds = makeWordClouds(pageText);
 
-                pdfDocument.close();
-                return new Document(pages, clouds);
+                    pdfDocument.close();
+                    return new Document(pages, clouds);
+                }
+                else{
+                    return new Document("File contains too many pages to be loaded, please choose a smaller file");
+                }
             } else {
-                System.out.println("file is null");
+                return new Document("File is null");
             }
 
         } catch (IOException ex) {
