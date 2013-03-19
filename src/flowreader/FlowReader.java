@@ -364,6 +364,34 @@ public class FlowReader extends Application {
             children(new Text(document.getErrorMsg()), new Button("Ok.")).
             alignment(Pos.CENTER).padding(new Insets(5)).build()));
             dialogStage.showAndWait();*/
+        System.out.println("in flow reader creating dialog");
+        final Stage dialog = new Stage(StageStyle.TRANSPARENT);
+                dialog.initOwner(priStage);
+
+                dialog.initModality(Modality.WINDOW_MODAL);
+                dialog.setScene(
+                        new Scene(
+                        HBoxBuilder.create().styleClass("modal-dialog").children(
+                        LabelBuilder.create().text("Are you sure you want to quit FlowReader?").textFill(Color.WHITE).build(),
+                        ButtonBuilder.create().id("ok").text("OK").defaultButton(true).onAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        // take action and close the dialog.
+                        //System.exit(0);
+                    }
+                }).build(),
+                        ButtonBuilder.create().id("cancel").text("Cancel").cancelButton(true).onAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        // abort action and close the dialog.
+                        dialog.close();
+                        cancelled = true;
+                        priStage.getScene().getRoot().setEffect(null);
+                    }
+                }).build()).build(), Color.TRANSPARENT));
+                dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
+                priStage.getScene().getRoot().setEffect(new BoxBlur());
+                dialog.showAndWait();
     }
     
     /**
