@@ -674,9 +674,9 @@ public final class MainView extends BorderPane {
             @Override
             public void handle(ActionEvent e) {
 
-                fr.current_theme = (fr.current_theme + 1) % fr.themes.size();
+                fr.currentTheme = (fr.currentTheme + 1) % fr.themes.size();
 
-                String theme = fr.themes.get(fr.current_theme);
+                String theme = fr.themes.get(fr.currentTheme);
                 FlowReader.scene.getStylesheets().clear();
                 if (FlowReader.split_toggle) {
                     FlowReader.scene.getStylesheets().add(FlowReader.class.getResource(theme).toExternalForm());
@@ -915,7 +915,7 @@ public final class MainView extends BorderPane {
      */
     public void docOpenned(Document doc, RibbonView ribbon) {
         this.ribbon = ribbon;
-        ribbon.setPageWidth(FlowReader.page_width);
+        ribbon.setPageWidth(FlowReader.pageWidth);
         BorderPane.setAlignment(ribbon, Pos.CENTER_LEFT);
         this.ribbon.toBack();
     }

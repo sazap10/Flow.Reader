@@ -6,7 +6,6 @@ package flowreader.utils;
 
 import flowreader.model.Document;
 import flowreader.model.WordCloud;
-import flowreader.view.TextPageView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,7 +52,6 @@ public abstract class FileReader extends Task {
      * commonWords.txt file
      */
     public final HashMap<String, Integer> getCommonWords() {
-        StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
         try {
             InputStream f;
@@ -89,14 +87,13 @@ public abstract class FileReader extends Task {
      */
     public ArrayList<ArrayList<WordCloud>> makeCloudLevels(ArrayList<WordCloud> clouds) {
         ArrayList<ArrayList<WordCloud>> localLevels = new ArrayList<ArrayList<WordCloud>>();
-        ArrayList<ArrayList<WordCloud>> otherLevels = new ArrayList<ArrayList<WordCloud>>();
+        ArrayList<ArrayList<WordCloud>> otherLevels;
         //updateProgress(1, 10);
         localLevels.add(clouds);
 
         ArrayList<WordCloud> currentLevel = new ArrayList<WordCloud>();
         WordCloud cloudB = null;
         boolean haveB = false;
-        int listCount = 0;
         int lastIndex = clouds.size() - 1;
 
         // there is only one word cloud on the previous level

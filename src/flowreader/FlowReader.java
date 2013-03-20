@@ -9,12 +9,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.SplitPane;
@@ -24,9 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -47,11 +42,11 @@ public class FlowReader extends Application {
     public static Pane rootPane2;
     private SplitPane splitPane;
     public Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-    private Stage priStage;
+    private Stage primaryStage;
     public static boolean split_toggle = false, cancelled = false;
-    public static int page_width = 500;
-    public static int page_height = 700;
-    public static int current_theme = 0;
+    public static int pageWidth = 500;
+    public static int pageHeight = 700;
+    public static int currentTheme = 0;
     public static ArrayList<String> themes = new ArrayList<String>();
 
     @Override
@@ -59,7 +54,7 @@ public class FlowReader extends Application {
         themes.add("stylesheet.css");
         themes.add("stylesheet_matrix.css");
 
-        this.priStage = primaryStage;
+        this.primaryStage = primaryStage;
         primaryStage.setTitle("Flow Reader");
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
             primaryStage.setFullScreen(false);
@@ -134,6 +129,7 @@ public class FlowReader extends Application {
         splitPane.getItems().add(rootPane);
         splitPane.getItems().add(rootPane2);
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
             public void handle(WindowEvent e) {
                 mainView.closeBtn.fire();
                 if (cancelled) {
@@ -200,14 +196,14 @@ public class FlowReader extends Application {
 
     public void showShortcuts() {
         final Stage dialog = new Stage(StageStyle.TRANSPARENT);
-        dialog.initOwner(priStage);
+        dialog.initOwner(primaryStage);
 
         dialog.initModality(Modality.WINDOW_MODAL);
 
         EventHandler<KeyEvent> keyHandler = new EventHandler<KeyEvent>() {
             public void handle(KeyEvent event) {
                 if (event.getCode().equals(event.getCode().DIGIT1)) {
-                    priStage.getScene().getRoot().setEffect(null);
+                    primaryStage.getScene().getRoot().setEffect(null);
                     dialog.close();
                     event.consume();
                 }
@@ -222,7 +218,7 @@ public class FlowReader extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // take action and close the dialog.
-                priStage.getScene().getRoot().setEffect(null);
+                primaryStage.getScene().getRoot().setEffect(null);
                 dialog.close();
 
             }
@@ -232,7 +228,7 @@ public class FlowReader extends Application {
         dialog.setScene(dialog_scene);
 
         dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
-        priStage.getScene().getRoot().setEffect(new BoxBlur());
+        primaryStage.getScene().getRoot().setEffect(new BoxBlur());
         dialog.showAndWait();
 
     }
@@ -274,7 +270,7 @@ public class FlowReader extends Application {
 
     public void setPageWidth(final RibbonView ribbon) {
         final Stage dialog = new Stage(StageStyle.TRANSPARENT);
-        dialog.initOwner(priStage);
+        dialog.initOwner(primaryStage);
 
         dialog.initModality(Modality.WINDOW_MODAL);
 
@@ -310,8 +306,8 @@ public class FlowReader extends Application {
                     int width = Integer.valueOf(input);
                     flowreader.utils.Parameters.pageWidth = width;
                     flowreader.utils.Parameters.textBoundWidth = width * 0.8;
-                    flowreader.FlowReader.page_width = width;
-                    priStage.getScene().getRoot().setEffect(null);
+                    flowreader.FlowReader.pageWidth = width;
+                    primaryStage.getScene().getRoot().setEffect(null);
                     dialog.close();
                 }
             }
@@ -332,8 +328,8 @@ public class FlowReader extends Application {
                 int width = Integer.valueOf(input);
                 flowreader.utils.Parameters.pageWidth = width;
                 flowreader.utils.Parameters.textBoundWidth = width * 0.8;
-                flowreader.FlowReader.page_width = width;
-                priStage.getScene().getRoot().setEffect(null);
+                flowreader.FlowReader.pageWidth = width;
+                primaryStage.getScene().getRoot().setEffect(null);
                 dialog.close();
 
             }
@@ -343,7 +339,7 @@ public class FlowReader extends Application {
                 // abort action and close the dialog.
                 dialog.close();
                 cancelled = true;
-                priStage.getScene().getRoot().setEffect(null);
+                primaryStage.getScene().getRoot().setEffect(null);
             }
         }).build()).build(), Color.TRANSPARENT);
         ta.addEventHandler(KeyEvent.KEY_PRESSED, keyHandler);
@@ -351,7 +347,7 @@ public class FlowReader extends Application {
         dialog.setScene(dialog_scene);
 
         dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
-        priStage.getScene().getRoot().setEffect(new BoxBlur());
+        primaryStage.getScene().getRoot().setEffect(new BoxBlur());
         dialog.showAndWait();
 
     }
@@ -366,7 +362,7 @@ public class FlowReader extends Application {
             dialogStage.showAndWait();*/
         System.out.println("in flow reader creating dialog");
         final Stage dialog = new Stage(StageStyle.TRANSPARENT);
-                dialog.initOwner(priStage);
+                dialog.initOwner(primaryStage);
 
                 dialog.initModality(Modality.WINDOW_MODAL);
                 dialog.setScene(
@@ -386,11 +382,11 @@ public class FlowReader extends Application {
                         // abort action and close the dialog.
                         dialog.close();
                         cancelled = true;
-                        priStage.getScene().getRoot().setEffect(null);
+                        primaryStage.getScene().getRoot().setEffect(null);
                     }
                 }).build()).build(), Color.TRANSPARENT));
                 dialog.getScene().getStylesheets().add(FlowReader.class.getResource("modal-dialog.css").toExternalForm());
-                priStage.getScene().getRoot().setEffect(new BoxBlur());
+                primaryStage.getScene().getRoot().setEffect(new BoxBlur());
                 dialog.showAndWait();
     }
     

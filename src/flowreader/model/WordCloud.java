@@ -21,8 +21,8 @@ public class WordCloud {
     private HashMap<String, Double> wordsFrequencies;
     private TreeMap<String, Double> sortedWordsFrequencies;
     // frequency of each word / frequency of this word in the document
-    private HashMap<String, Double> wordsFrequenciesOnTotalDocument;
-    private TreeMap<String, Double> sortedWordsFrequenciesOnTotalDocument;
+    private HashMap<String, Double> wordsFrequenciesInDocument;
+    private TreeMap<String, Double> sortedWordsFrequenciesInDocument;
 
     public WordCloud(HashMap<String, Integer> wordsOccurrences) {
         this.wordsOccurrences = wordsOccurrences;
@@ -87,16 +87,16 @@ public class WordCloud {
      * @return the frequency of each word divided by the frequency of this word in the document
      */
     public HashMap<String, Double> getWordsFrequenciesOnTotalDocument(HashMap<String, Double> totalDocumentWordFrequencies) {
-        if (this.wordsFrequenciesOnTotalDocument == null) {
-            this.wordsFrequenciesOnTotalDocument = new HashMap<String, Double>();
+        if (this.wordsFrequenciesInDocument == null) {
+            this.wordsFrequenciesInDocument = new HashMap<String, Double>();
 
             for (Entry e : this.wordsFrequencies.entrySet()) {
                 String key = e.getKey().toString();
                 Double value = (Double) (((Double) e.getValue()) / (Double) totalDocumentWordFrequencies.get(key));
-                this.wordsFrequenciesOnTotalDocument.put(key, value);
+                this.wordsFrequenciesInDocument.put(key, value);
             }
         }
-        return this.wordsFrequenciesOnTotalDocument;
+        return this.wordsFrequenciesInDocument;
     }
 
     /**
@@ -104,10 +104,10 @@ public class WordCloud {
      * @return the frequency of each word divided by the frequency of this word in the document
      */
     public TreeMap<String, Double> getSortedWordsFrequenciesOnTotalDocument(HashMap<String, Double> totalDocumentWordFrequencies) {
-        if (this.sortedWordsFrequenciesOnTotalDocument == null) {
-            this.sortedWordsFrequenciesOnTotalDocument = this.sortFrequencies(this.getWordsFrequenciesOnTotalDocument(totalDocumentWordFrequencies));
+        if (this.sortedWordsFrequenciesInDocument == null) {
+            this.sortedWordsFrequenciesInDocument = this.sortFrequencies(this.getWordsFrequenciesOnTotalDocument(totalDocumentWordFrequencies));
         }
-        return this.sortedWordsFrequenciesOnTotalDocument;
+        return this.sortedWordsFrequenciesInDocument;
     }
     
     /**

@@ -24,8 +24,6 @@ public class Page {
     @Override
     public String toString() {
         String s = "PAGE \n " + text + "\n";
-
-    
         return s + "\n";
     }
 }

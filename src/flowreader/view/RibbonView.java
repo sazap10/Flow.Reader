@@ -147,7 +147,7 @@ public class RibbonView extends StackPane {
         this.getChildren().clear();
         if (currentView.equals("FlowView")) {
             newFlowPane = new FlowViewScene(document, split_version);
-            newFlowPane.setPageWidth(flowreader.FlowReader.page_width);
+            newFlowPane.setPageWidth(flowreader.FlowReader.pageWidth);
             this.getChildren().add(newFlowPane);
         } else if (currentView.equals("DiveView")) {
             this.diveViewPane = new DiveViewScene(document);
