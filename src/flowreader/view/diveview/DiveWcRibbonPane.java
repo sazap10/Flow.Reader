@@ -19,7 +19,7 @@ public class DiveWcRibbonPane extends DiveRibbonPane{
         
         // Creation of the word clouds
         for(WordCloud wc : wordClouds){
-            this.ribbonElts.add(new WordCloudView(wc, x, y, this.elementWidth, this.elementHeight));
+            this.ribbonElements.add(new WordCloudView(wc, x, y, this.elementWidth, this.elementHeight));
             x = x + this.elementWidth + this.elementInterval;
         }
     }
@@ -29,7 +29,7 @@ public class DiveWcRibbonPane extends DiveRibbonPane{
         this.getChildren().clear();
         this.ribbon.getChildren().clear();
         for (Integer i : indexes) {
-            this.ribbon.getChildren().add(this.ribbonElts.get(i));
+            this.ribbon.getChildren().add(this.ribbonElements.get(i));
         }
         this.selected = indexes;
         this.getChildren().add(this.ribbon);

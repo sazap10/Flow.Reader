@@ -8,25 +8,9 @@ import flowreader.FlowReader;
 import flowreader.model.Document;
 import flowreader.view.diveview.DiveViewScene;
 import flowreader.view.flowview.FlowViewScene;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBuilder;
-import javafx.scene.control.LabelBuilder;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBoxBuilder;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  * The ribbon view is the main area in flowReader where you can manipulate
@@ -41,7 +25,7 @@ public class RibbonView extends StackPane {
     private Document document;
     private String currentView = "";
     private Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-    private boolean split_version;
+    private boolean splitVersion;
     private boolean initialsed = false;
 
     public RibbonView() {
@@ -60,7 +44,7 @@ public class RibbonView extends StackPane {
             this.newFlowPane = new FlowViewScene(document, split_version);
             this.getChildren().add(this.diveViewPane);
             this.document = document;
-            this.split_version = split_version;
+            this.splitVersion = split_version;
         }
 
     }
@@ -145,13 +129,16 @@ public class RibbonView extends StackPane {
      */
     public void reset() {
         this.getChildren().clear();
-        if (currentView.equals("FlowView")) {
-            newFlowPane = new FlowViewScene(document, split_version);
-            newFlowPane.setPageWidth(flowreader.FlowReader.pageWidth);
-            this.getChildren().add(newFlowPane);
-        } else if (currentView.equals("DiveView")) {
-            this.diveViewPane = new DiveViewScene(document);
-            this.getChildren().add(this.diveViewPane);
+        switch (currentView) {
+            case "FlowView":
+                newFlowPane = new FlowViewScene(document, splitVersion);
+                newFlowPane.setPageWidth(flowreader.FlowReader.pageWidth);
+                this.getChildren().add(newFlowPane);
+                break;
+            case "DiveView":
+                this.diveViewPane = new DiveViewScene(document);
+                this.getChildren().add(this.diveViewPane);
+                break;
         }
     }
 
@@ -160,10 +147,13 @@ public class RibbonView extends StackPane {
      */
     public void goToReadingMode() {
         if (initialsed) {
-            if (currentView.equals("FlowView")) {
-                newFlowPane.goToReadingMode();
-            } else if (currentView.equals("DiveView")) {
-                this.diveViewPane.goToReadingMode();
+            switch (currentView) {
+                case "FlowView":
+                    newFlowPane.goToReadingMode();
+                    break;
+                case "DiveView":
+                    this.diveViewPane.goToReadingMode();
+                    break;
             }
         }
     }

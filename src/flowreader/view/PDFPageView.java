@@ -19,8 +19,8 @@ public class PDFPageView extends PageView {
     public PDFPageView(PDFPage page) {
         super(0, 0);
         this.image = new ImageView(page.getImage());
-        this.image.setFitWidth(Parameters.pageWidth);
-        this.image.setFitHeight(Parameters.pageHeight);
+        this.image.setFitWidth(Parameters.PAGE_WIDTH);
+        this.image.setFitHeight(Parameters.PAGE_HEIGHT);
         this.getChildren().add(this.image);
     }
 

@@ -22,7 +22,7 @@ import javafx.util.Duration;
 public abstract class DiveRibbonPane extends StackPane {
 
     protected Group ribbon;
-    protected ArrayList<RibbonElement> ribbonElts;
+    protected ArrayList<RibbonElement> ribbonElements;
     protected int elementInterval = 5;
     protected double elementWidth;
     protected double elementHeight;
@@ -31,7 +31,7 @@ public abstract class DiveRibbonPane extends StackPane {
 
     public DiveRibbonPane(int index, double x, double y, double elementWidth, double elementHeight) {
         this.ribbon = new Group();
-        this.ribbonElts = new ArrayList<RibbonElement>();
+        this.ribbonElements = new ArrayList<RibbonElement>();
         this.ribbon.setLayoutX(x);
         this.ribbon.setLayoutY(y);
         this.elementWidth = elementWidth;
@@ -73,12 +73,12 @@ public abstract class DiveRibbonPane extends StackPane {
     }
 
     /**
-     * Hightlight the elements selected
+     * Highlight the elements selected
      */
     public void highlightSelected() {
         this.selected.clear();
-        for (int i = 0; i < this.ribbonElts.size(); i++) {
-            RibbonElement dre = this.ribbonElts.get(i);
+        for (int i = 0; i < this.ribbonElements.size(); i++) {
+            RibbonElement dre = this.ribbonElements.get(i);
             if (dre.isHover()) {
                 dre.setHighlight(true);
                 this.selected.add(i);
@@ -99,7 +99,7 @@ public abstract class DiveRibbonPane extends StackPane {
      * @return the total number of elements
      */
     public int getNumberOfElements() {
-        return this.ribbonElts.size();
+        return this.ribbonElements.size();
     }
 
     /**
@@ -108,7 +108,7 @@ public abstract class DiveRibbonPane extends StackPane {
     public abstract double getFocusPoint();
 
     /**
-     * @return a transiton of a ribbon appearing during a dive in
+     * @return a transition of a ribbon appearing during a dive in
      */
     public ParallelTransition appearTransitionDiveIn() {
         int duration = 1000;
@@ -134,7 +134,7 @@ public abstract class DiveRibbonPane extends StackPane {
     }
 
     /**
-     * @return a transiton of a ribbon disappearing during a dive in
+     * @return a transition of a ribbon disappearing during a dive in
      */
     public ParallelTransition disappearTransitionDiveIn() {
         int duration = 1000;
@@ -158,7 +158,7 @@ public abstract class DiveRibbonPane extends StackPane {
     }
 
     /**
-     * @return a transiton of a ribbon appearing during a dive out
+     * @return a transition of a ribbon appearing during a dive out
      */
     public ParallelTransition appearTransitionDiveOut() {
         int duration = 1000;
@@ -184,7 +184,7 @@ public abstract class DiveRibbonPane extends StackPane {
     }
 
     /**
-     * @return a transiton of a ribbon disappearing during a dive out
+     * @return a transition of a ribbon disappearing during a dive out
      */
     public ParallelTransition disappearTransitionDiveOut() {
         int duration = 1000;

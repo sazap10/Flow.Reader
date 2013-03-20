@@ -304,8 +304,8 @@ public class FlowReader extends Application {
                         dialog.close();
                     }
                     int width = Integer.valueOf(input);
-                    flowreader.utils.Parameters.pageWidth = width;
-                    flowreader.utils.Parameters.textBoundWidth = width * 0.8;
+                    flowreader.utils.Parameters.PAGE_WIDTH = width;
+                    flowreader.utils.Parameters.TEXT_BOUND_WIDTH = width * 0.8;
                     flowreader.FlowReader.pageWidth = width;
                     primaryStage.getScene().getRoot().setEffect(null);
                     dialog.close();
@@ -326,8 +326,8 @@ public class FlowReader extends Application {
                     dialog.close();
                 }
                 int width = Integer.valueOf(input);
-                flowreader.utils.Parameters.pageWidth = width;
-                flowreader.utils.Parameters.textBoundWidth = width * 0.8;
+                flowreader.utils.Parameters.PAGE_WIDTH = width;
+                flowreader.utils.Parameters.TEXT_BOUND_WIDTH = width * 0.8;
                 flowreader.FlowReader.pageWidth = width;
                 primaryStage.getScene().getRoot().setEffect(null);
                 dialog.close();

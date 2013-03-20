@@ -24,20 +24,20 @@ public class DiveViewScene extends StackPane {
 
     private ArrayList<DiveRibbonPane> levels;
     private int currentLevel;
-    private int previousindex;
-    private BorderPane bp;
+    private int previousIndex;
+    private BorderPane borderPane;
     private StackPane contentPane;
-    private LiftPane lp;
+    private LiftPane liftPane;
     private boolean otherTransitionsFinished = true;
 
     public DiveViewScene(Document document) {
-        bp = new BorderPane();
+        borderPane = new BorderPane();
         this.contentPane = new StackPane();
 
         ArrayList<ArrayList<WordCloud>> wordClouds = document.getWordClouds();
         ArrayList<Page> pages = document.getPages();
 
-        lp = new LiftPane(wordClouds.size() + 1);
+        liftPane = new LiftPane(wordClouds.size() + 1);
 
         double x = 0, y = 0;
         this.levels = new ArrayList<DiveRibbonPane>();
@@ -56,10 +56,10 @@ public class DiveViewScene extends StackPane {
         this.levels.get(this.currentLevel).createRibbon(ali);
 
         this.contentPane.getChildren().add(this.levels.get(this.currentLevel));
-        bp.setCenter(this.contentPane);
-        this.lp.setHighLight(currentLevel);
-        bp.setRight(lp);
-        this.getChildren().add(bp);
+        borderPane.setCenter(this.contentPane);
+        this.liftPane.setHighLight(currentLevel);
+        borderPane.setRight(liftPane);
+        this.getChildren().add(borderPane);
         this.setEvents();
     }
 
@@ -77,7 +77,7 @@ public class DiveViewScene extends StackPane {
 
             // Set up current level
             DiveViewScene.this.currentLevel -= 1;
-            DiveViewScene.this.lp.setHighLight(currentLevel);
+            DiveViewScene.this.liftPane.setHighLight(currentLevel);
             DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
 
             if (DiveViewScene.this.currentLevel == 0) { // if we are on the pages
@@ -122,7 +122,7 @@ public class DiveViewScene extends StackPane {
 
             // Set up current level
             DiveViewScene.this.currentLevel += 1;
-            DiveViewScene.this.lp.setHighLight(currentLevel);
+            DiveViewScene.this.liftPane.setHighLight(currentLevel);
             DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
 
             current.createRibbon(getIndexesCurrentLevelDiveOut(previousSelectedIndex, DiveViewScene.this.currentLevel));
@@ -239,9 +239,9 @@ public class DiveViewScene extends StackPane {
         if (this.currentLevel != 0) {
             DiveViewScene.this.otherTransitionsFinished = false;
             DiveRibbonPane previous = this.levels.get(this.currentLevel);
-            this.previousindex = this.currentLevel;
+            this.previousIndex = this.currentLevel;
             this.currentLevel = 0;
-            DiveViewScene.this.lp.setHighLight(currentLevel);
+            DiveViewScene.this.liftPane.setHighLight(currentLevel);
             ArrayList<Integer> ali = new ArrayList<Integer>();
             ali.add(0); // we select the index selected on the previous level
             DiveRibbonPane current = DiveViewScene.this.levels.get(DiveViewScene.this.currentLevel);
@@ -260,7 +260,7 @@ public class DiveViewScene extends StackPane {
             dt.setOnFinished(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.previousindex));
+                    DiveViewScene.this.contentPane.getChildren().remove(DiveViewScene.this.levels.get(DiveViewScene.this.previousIndex));
                     DiveViewScene.this.otherTransitionsFinished = true; // Transition is finished
                 }
             });

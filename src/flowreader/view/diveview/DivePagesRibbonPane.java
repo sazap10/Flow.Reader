@@ -24,22 +24,22 @@ import javafx.util.Duration;
 public class DivePagesRibbonPane extends DiveRibbonPane {
 
     public DivePagesRibbonPane(int index, ArrayList<Page> pages, double x, double y) {
-        super(index, x, y, Parameters.pageWidth, Parameters.pageHeight);
+        super(index, x, y, Parameters.PAGE_WIDTH, Parameters.PAGE_HEIGHT);
         // Creation of the pages
         for (Page p : pages) {
             PageView pv = PageViewFactory.getPageView(p);
-            pv.relocate(x, y + 50 + (Parameters.pageHeight / 3));
-            this.ribbonElts.add(pv);
+            pv.relocate(x, y + 50 + (Parameters.PAGE_HEIGHT / 3));
+            this.ribbonElements.add(pv);
             x = x + this.elementWidth + this.elementInterval;
         }
 
-        for (RibbonElement dre : this.ribbonElts) {
+        for (RibbonElement dre : this.ribbonElements) {
             dre.setOpacity(0);
         }
 
         this.getChildren().clear();
         this.ribbon.getChildren().clear();
-        this.ribbon.getChildren().addAll(this.ribbonElts);
+        this.ribbon.getChildren().addAll(this.ribbonElements);
         this.getChildren().add(this.ribbon);
         this.swipe();
     }
@@ -51,12 +51,12 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         double focusPoint = this.getFocusPoint();
         double x = (Screen.getPrimary().getBounds().getWidth() / 2) - focusPoint;
         ArrayList<Integer> cullresult = this.culling();
-        for (int i = 0; i < this.ribbonElts.size(); i++) {
+        for (int i = 0; i < this.ribbonElements.size(); i++) {
             if (cullresult.contains(i)) {
-                this.ribbonElts.get(i).setOpacity(1);
+                this.ribbonElements.get(i).setOpacity(1);
                 //this.ribbonElts.get(i).setVisible(true);
             } else {
-                this.ribbonElts.get(i).setOpacity(0);
+                this.ribbonElements.get(i).setOpacity(0);
                 //this.ribbonElts.get(i).setVisible(false);
             }
         }
@@ -90,12 +90,12 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
                         double dx = event.getX() - previousEvent.getX();
                         move(dx, 0);
                         ArrayList<Integer> cullresult = culling();
-                        for (int i = 0; i < ribbonElts.size(); i++) {
+                        for (int i = 0; i < ribbonElements.size(); i++) {
                             if (cullresult.contains(i)) {
-                                ribbonElts.get(i).setOpacity(1);
+                                ribbonElements.get(i).setOpacity(1);
                                 //ribbonElts.get(i).setVisible(true);
                             } else {
-                                ribbonElts.get(i).setOpacity(0);
+                                ribbonElements.get(i).setOpacity(0);
                                 //ribbonElts.get(i).setVisible(false);
                             }
                         }
@@ -138,7 +138,7 @@ public class DivePagesRibbonPane extends DiveRibbonPane {
         indexToDisplay.add(select);
         for (int i = 0; i < (numberOfPages / 2); i++) {
             int indexToAdd = select + (i + 1);
-            if (indexToAdd < this.ribbonElts.size()) {
+            if (indexToAdd < this.ribbonElements.size()) {
                 indexToDisplay.add(indexToAdd);
             }
         }

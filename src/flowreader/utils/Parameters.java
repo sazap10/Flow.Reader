@@ -9,8 +9,8 @@ package flowreader.utils;
  * @author D-Day
  */
 public class Parameters {
-    public static double pageWidth = 500; // Width of a page
-    public static double pageHeight = 700; // Height of a page
-    public static double textBoundWidth = pageWidth*0.8; // Width of the text in a page
-    public static double textBoundHeight = pageHeight*0.8; // Heigth of a text in a page
+    public static double PAGE_WIDTH = 500; // Width of a page
+    public static double PAGE_HEIGHT = 700; // Height of a page
+    public static double TEXT_BOUND_WIDTH = PAGE_WIDTH*0.8; // Width of the text in a page
+    public static double TEXT_BOUND_HEIGHT = PAGE_HEIGHT*0.8; // Heigth of a text in a page
 }

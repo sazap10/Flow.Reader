@@ -35,8 +35,8 @@ public class WordCloudView extends RibbonElement {
     public static double width = 500;
     public static double heigth = 500;
     public int level = 1;
-    private FlowView nfv;
-    private boolean flowview = false;
+    private FlowView flowView;
+    private boolean inFlowView = false;
 
     public WordCloudView(WordCloud wc, double x, double y, double elementWidth, double elementHeigth) {
         wordCloudBoundary = new Rectangle(x, y, elementWidth, elementHeigth);
@@ -61,11 +61,11 @@ public class WordCloudView extends RibbonElement {
         this.cloud.setLayoutY(wordCloudBoundary.getY());
         this.cloud.setPrefWrapLength(elementWidth);
         this.level = level;
-        this.nfv = nfv;
+        this.flowView = nfv;
 
         this.getChildren().addAll(wordCloudBoundary, cloud);
         cloud.setAlignment(Pos.TOP_CENTER);
-        flowview = true;
+        inFlowView = true;
         /*if (flowview) {
             setNumOfWordsInCloud(level);
         }*/
@@ -149,7 +149,7 @@ public class WordCloudView extends RibbonElement {
         int adjustMaxFontSize = this.maxFontSize - this.minFontSize;
         int adjustCurrentFontSize = (percent * adjustMaxFontSize) / 100;
         int currentFontSize = (adjustCurrentFontSize + this.minFontSize) * (int) Math.pow(2, (level - 1));
-        if (flowview) {
+        if (inFlowView) {
             currentFontSize = (int) ((adjustCurrentFontSize + this.minFontSize) * getFontSize(level));
         }
         word.setFont(new Font(currentFontSize));
@@ -161,7 +161,7 @@ public class WordCloudView extends RibbonElement {
      */
     public double getFontSize(int level) {
         double maximumFontSize = 6;
-        int maxWordCloudLevel = nfv.getMaxZoomLevel();
+        int maxWordCloudLevel = flowView.getMaxZoomLevel();
         if (maxWordCloudLevel < maximumFontSize + 1) {
             maximumFontSize = maxWordCloudLevel - 1;
         }

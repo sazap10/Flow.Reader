@@ -19,7 +19,7 @@ public class TextPageView extends PageView {
 
     public TextPageView(Page page) {
         super(0, 0);
-        Rectangle textBound = new Rectangle(Parameters.textBoundWidth, Parameters.textBoundHeight);
+        Rectangle textBound = new Rectangle(Parameters.TEXT_BOUND_WIDTH, Parameters.TEXT_BOUND_HEIGHT);
         textBound.setFill(Color.TRANSPARENT);
         pageText = new Text();
         pageText.setId("page_text");

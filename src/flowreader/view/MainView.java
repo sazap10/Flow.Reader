@@ -63,7 +63,7 @@ public final class MainView extends BorderPane {
     private Button openFileButton, flowViewSceneButton, diveViewSceneButton, ThemeButton, zoomLockButton, resetButton, verticalLockButton, readingModeButton, GlowButton, fullScreenButton, splitButton, zoomAtMouseButton, TextButton, upButton, downButton, pageWidthButton, pageHeightButton, closeDocButton, wordCloudButton, configButton; // The buttons at the bottom of the page
     public Button homeButton;
     private RibbonView ribbon; // The ribbon at the center of the page
-    private ProgressIndicator pi;
+    private ProgressIndicator progressIndicator;
     private FileReader fileReader;
     Rectangle2D screenBounds = Screen.getPrimary().getBounds();
     private EventHandler<KeyEvent> keyHandler;
@@ -86,13 +86,13 @@ public final class MainView extends BorderPane {
         this.setButtonEvents(primaryStage, scene, fr);
 
         ribbon = new RibbonView();
-        this.pi = new ProgressIndicator(0.0);
-        pi.getStyleClass().add("customProgressIndicator");
-        pi.setStyle(" -fx-progress-color: #005888;");
+        this.progressIndicator = new ProgressIndicator(0.0);
+        progressIndicator.getStyleClass().add("customProgressIndicator");
+        progressIndicator.setStyle(" -fx-progress-color: #005888;");
         // changing size without css
-        pi.setPrefSize(100, 100);
-        pi.setMinSize(100, 100);
-        pi.setMaxSize(100, 100);
+        progressIndicator.setPrefSize(100, 100);
+        progressIndicator.setMinSize(100, 100);
+        progressIndicator.setMaxSize(100, 100);
         this.buildHomeView();
         this.setCenter(home);
         configButton.fire();
@@ -138,7 +138,7 @@ public final class MainView extends BorderPane {
             g.getChildren().add(text2);
         }
         introBox = new VBox(10);
-        introBox.getChildren().add(pi);
+        introBox.getChildren().add(progressIndicator);
         introBox.getChildren().add(text);
         //home.getChildren().add(g);
          Image logo = new Image(this.getClass().getResource("logo.png").toExternalForm(),true);
@@ -158,101 +158,96 @@ public final class MainView extends BorderPane {
         keyHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+                OUTER:
                 switch (event.getCode()) {
-                    case DIGIT1:
-                        if (!split_version) {
-                            fr.showShortcuts();
-                        }
-                        break;
-
-                    case F:
-                        if (!split_version) {
-                            fullScreenButton.fire();
-                        }
-                        break;
-                    case B:
-                        if (toggle_buttons) {
-                            topBtnsBar.setVisible(true);
-                            sideBtnsBar.setVisible(true);
-                            bottomBtnsBar.setVisible(true);
-                            toggle_buttons = false;
-                        } else {
-                            topBtnsBar.setVisible(false);
-                            sideBtnsBar.setVisible(false);
-                            bottomBtnsBar.setVisible(false);
-                            toggle_buttons = true;
-                        }
-                        break;
-                    case W:
-                    case UP:
-                    case KP_UP:
-                        ribbon.zoom(1);
-                        break;
-
-                    case S:
-                    case DOWN:
-                    case KP_DOWN:
-                        ribbon.zoom(-1);
-                        break;
-
-                    case A:
-                    case LEFT:
-                    case KP_LEFT:
-                        ribbon.swipe("left");
-                        break;
-
-                    case D:
-                    case RIGHT:
-                    case KP_RIGHT:
-                        ribbon.swipe("right");
-                        break;
-
-                    case T:
-                        if (!split_version) {
-                            ThemeButton.fire();
-                        }
-                        break;
-
-                    case G:
-                        GlowButton.fire();
-                        break;
-                    case R:
-                        resetButton.fire();
+                case DIGIT1:
+                    if (!split_version) {
+                        fr.showShortcuts();
+                    }
+                    break;
+                case F:
+                    if (!split_version) {
+                        fullScreenButton.fire();
+                    }
+                    break;
+                case B:
+                    if (toggle_buttons) {
+                        topBtnsBar.setVisible(true);
+                        sideBtnsBar.setVisible(true);
+                        bottomBtnsBar.setVisible(true);
+                        toggle_buttons = false;
+                    } else {
+                        topBtnsBar.setVisible(false);
+                        sideBtnsBar.setVisible(false);
+                        bottomBtnsBar.setVisible(false);
+                        toggle_buttons = true;
+                    }
+                    break;
+                case W:
+                case UP:
+                case KP_UP:
+                    ribbon.zoom(1);
+                    break;
+                case S:
+                case DOWN:
+                case KP_DOWN:
+                    ribbon.zoom(-1);
+                    break;
+                case A:
+                case LEFT:
+                case KP_LEFT:
+                    ribbon.swipe("left");
+                    break;
+                case D:
+                case RIGHT:
+                case KP_RIGHT:
+                    ribbon.swipe("right");
+                    break;
+                case T:
+                    if (!split_version) {
+                        ThemeButton.fire();
+                    }
+                    break;
+                case G:
+                    GlowButton.fire();
+                    break;
+                case R:
+                    resetButton.fire();
 
 
-                        break;
-
-                    case Y:
-                        if (!split_version) {
-                            splitButton.fire();
-                        }
-                        break;
-
-                    case V:
-                        verticalLockButton.fire();
-                        break;
-
-                    case Z:
-                        zoomLockButton.fire();
-                        break;
-                    case H:
-                        homeButton.fire();
-                        break;
-                    case C:
-                        readingModeButton.fire();
-                        break;
+                    break;
+                case Y:
+                    if (!split_version) {
+                        splitButton.fire();
+                    }
+                    break;
+                case V:
+                    verticalLockButton.fire();
+                    break;
+                case Z:
+                    zoomLockButton.fire();
+                    break;
+                case H:
+                    homeButton.fire();
+                    break;
+                case C:
+                    readingModeButton.fire();
+                    break;
                     case Q:
                         if (!homeButton.disableProperty().get()) {
-                            if (ribbon.getCurrentView().equals("")) {
-                                diveViewSceneButton.fire();
-                                break;
-                            } else if (ribbon.getCurrentView().equals("DiveView")) {
-                                flowViewSceneButton.fire();
-
-                            } else if (ribbon.getCurrentView().equals("FlowView")) {
-                                homeButton.fire();
-                            } else if (ribbon.getCurrentView().equals("HomeView")) {
-                                diveViewSceneButton.fire();
+                            switch (ribbon.getCurrentView()) {
+                                case "":
+                                    diveViewSceneButton.fire();
+                                    break OUTER;
+                                case "DiveView":
+                                    flowViewSceneButton.fire();
+                                    break;
+                                case "FlowView":
+                                    homeButton.fire();
+                                    break;
+                                case "HomeView":
+                                    diveViewSceneButton.fire();
+                                    break;
                             }
                         }
                 }
@@ -520,7 +515,7 @@ public final class MainView extends BorderPane {
                     public void handle(ActionEvent actionEvent) {
                         // abort action and close the dialog.
                         dialog.close();
-                        fr.cancelled = true;
+                        FlowReader.cancelled = true;
                         primaryStage.getScene().getRoot().setEffect(null);
                     }
                 }).build()).build(), Color.TRANSPARENT));
@@ -542,15 +537,15 @@ public final class MainView extends BorderPane {
             public void handle(ActionEvent e) {
                 try {
                     docClosed();
-                    pi = new ProgressIndicator(0.0);
-                    pi.setStyle(" -fx-progress-color: #005888;");
+                    progressIndicator = new ProgressIndicator(0.0);
+                    progressIndicator.setStyle(" -fx-progress-color: #005888;");
                     // changing size without css
-                    pi.setPrefSize(100, 100);
-                    pi.setMinSize(100, 100);
-                    pi.setMaxSize(100, 100);
-                    pi.getStyleClass().add("customProgressIndicator");
+                    progressIndicator.setPrefSize(100, 100);
+                    progressIndicator.setMinSize(100, 100);
+                    progressIndicator.setMaxSize(100, 100);
+                    progressIndicator.getStyleClass().add("customProgressIndicator");
 
-                    introBox.getChildren().set(0, pi);
+                    introBox.getChildren().set(0, progressIndicator);
 
                     //setCenter(pi);
                     File file = startFileChooser(primaryStage);
@@ -561,7 +556,7 @@ public final class MainView extends BorderPane {
                         fileReader = new PDFFileReader(file);
                     }
                     DocumentCreationTask dct = new DocumentCreationTask(fr, fileReader, MainView.this, split_version);
-                    pi.progressProperty().bind(fileReader.progressProperty());
+                    progressIndicator.progressProperty().bind(fileReader.progressProperty());
                     Thread t = new Thread(dct);
                     t.start();
 
@@ -674,9 +669,9 @@ public final class MainView extends BorderPane {
             @Override
             public void handle(ActionEvent e) {
 
-                fr.currentTheme = (fr.currentTheme + 1) % fr.themes.size();
+                FlowReader.currentTheme = (FlowReader.currentTheme + 1) % FlowReader.themes.size();
 
-                String theme = fr.themes.get(fr.currentTheme);
+                String theme = FlowReader.themes.get(FlowReader.currentTheme);
                 FlowReader.scene.getStylesheets().clear();
                 if (FlowReader.split_toggle) {
                     FlowReader.scene.getStylesheets().add(FlowReader.class.getResource(theme).toExternalForm());

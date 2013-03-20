@@ -6,7 +6,6 @@ package flowreader.view.flowview;
 
 import flowreader.FlowReader;
 import flowreader.model.Document;
-import flowreader.model.Page;
 import flowreader.model.WordCloud;
 import flowreader.utils.PageViewFactory;
 import flowreader.view.PageView;
@@ -26,12 +25,8 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -418,10 +413,9 @@ public class FlowView extends Group {
 
             //add the group, and double dimensions
             wordClouds.add(currentLevelViews);
-            double ratio = 1;
+            double ratio = 2;
 
             //ratio = (Math.pow((double)2, currentView.calculateFontSizeFromLevel(i)))/(Math.pow((double)2, currentView.calculateFontSizeFromLevel(i-1)));
-            ratio = 2;
             cloudWidth *= ratio;
             cloudHeight *= ratio;
             cloudInterval *= ratio;

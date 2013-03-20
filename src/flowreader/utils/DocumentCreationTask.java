@@ -31,7 +31,7 @@ public class DocumentCreationTask extends Task {
 
     @Override
     protected Document call() throws Exception {
-        document = fileReader.readFile(Parameters.textBoundWidth, Parameters.textBoundHeight);
+        document = fileReader.readFile(Parameters.TEXT_BOUND_WIDTH, Parameters.TEXT_BOUND_HEIGHT);
         RibbonView ribbon = new RibbonView(flowReader,document, splitVersion);
         mainView.docOpenned(document, ribbon);
         mainView.homeButton.fire();

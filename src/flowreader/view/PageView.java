@@ -15,7 +15,7 @@ public abstract class PageView extends RibbonElement {
     protected Rectangle pageBoundary;
 
     public PageView(double x, double y) {
-        pageBoundary = new Rectangle(x, y, Parameters.pageWidth, Parameters.pageHeight);
+        pageBoundary = new Rectangle(x, y, Parameters.PAGE_WIDTH, Parameters.PAGE_HEIGHT);
         pageBoundary.setId("page_background");
         this.getChildren().add(pageBoundary);
     }
