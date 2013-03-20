@@ -29,6 +29,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -139,6 +141,10 @@ public final class MainView extends BorderPane {
         introBox.getChildren().add(pi);
         introBox.getChildren().add(text);
         //home.getChildren().add(g);
+         Image logo = new Image(this.getClass().getResource("logo.png").toExternalForm(),true);
+        ImageView iv = new ImageView();
+        iv.setImage(logo);
+        home.getChildren().add(iv);
         home.getChildren().add(introBox);
         introBox.setAlignment(Pos.CENTER);
     }
